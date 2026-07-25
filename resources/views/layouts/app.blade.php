@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>@yield('title', 'Business-Ex')</title>
+    <title>@yield('title', 'Business for Sale & Investors in India - Business-Ex')</title>
     
 
     <!-- Favicons -->
@@ -36,7 +36,6 @@
     <!-- Footer -->
     @include('partials.footer')
 
-    <!-- Vendor JS Files -->
     <!-- Vendor JS Files -->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>

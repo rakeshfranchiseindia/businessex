@@ -15,13 +15,19 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Verify email address at the time regisration
+Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail']);
+
+
+// routing for static pages start here
+Route::view('/about-us', 'statics.about');
+Route::view('/disclaimer', 'statics.disclaimer');
+Route::view('/privacy-policy', 'statics.privacy');
+Route::view('/terms', 'statics.terms');
+Route::view('/contact-us', 'statics.contact');
+Route::view('/sitemap', 'statics.sitemap');
 
 
 
-Route::post('/register-custom', function (Request $request) {
-    // Handle form submission here
-    // Example: dump the request data
-    // dd($request->all());
 
-    return back()->with('success', 'Form submitted successfully!');
-})->name('register.custom');
+

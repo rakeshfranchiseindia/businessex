@@ -1,8 +1,6 @@
 {{-- resources/views/businessex/index.blade.php --}}
 @extends('layouts.app')
 
-@section('title', 'Business for Sale & Investors in India - Business-Ex')
-
 @section('content')
       <!-- ======= Search Section ======= -->
       <div class="click-closed"></div>
@@ -266,6 +264,14 @@
                      <div class="bex-card-main">
                         <div class="bex-form-section-main">
                            <h5>REGISTER FOR FREE</h5>
+                           @if(session('email_error'))
+                              <div class="text-danger">{{ session('email_error') }}</div>
+                           @endif
+                           @if(session('success'))
+                              <div class="alert alert-success">
+                                 {{ session('success') }}
+                              </div>
+                           @endif
                         </div>
                      </div>
                      <div>
@@ -348,7 +354,7 @@
          </div>
       </section>
 
-<main id="main">
+
     <!-- ======= Why Business-Ex Section ======= -->
      <section class="section-business-ex section-t2 nav-arrow-a">
             <div class="container-fluid">
@@ -368,10 +374,7 @@
                         <div class="bex-bussiness-section">
                            <img src="{{ asset('assets/img/business-ex.jpg') }}" alt="Business Ex" />
                            <h4>Single Platform For Entire Ecosystem</h4>
-                           <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                              sed diam nonumy eirmod tempor invidunt ut Lorem
-                              ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                              diam nonumy eirmod tempor invidunt ut
+                           <p>An online interactive platform connecting Businesses, Startups, Investos, Mentors, Lenders, Incubators and Brokers, across industries and geographies.
                            </p>
                         </div>
                      </div>
@@ -380,11 +383,17 @@
                      <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                            <img src="{{ asset('assets/img/business-ex.jpg') }}" alt="Business Ex" />
-                           <h4>Single Platform For Entire Ecosystem</h4>
-                           <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                              sed diam nonumy eirmod tempor invidunt ut Lorem
-                              ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                              diam nonumy eirmod tempor invidunt ut
+                           <h4>Help Companies Scale Up</h4>
+                           <p>BusinessEx offers a platform for high-growth potential companies to promote their investment opportunities to investors or to gain expertise from renowned mentors, in a secure environment</p>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="carousel-item-a">
+                     <div class="business-ex-box">
+                        <div class="bex-bussiness-section">
+                           <img src="{{ asset('assets/img/business-ex.jpg') }}" alt="Business Ex" />
+                           <h4>A Connected Network</h4>
+                           <p>Provides an opportunity to connect to a broader network to share deals and grow your connections, while keeping your important details confidential.
                            </p>
                         </div>
                      </div>
@@ -393,11 +402,8 @@
                      <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                            <img src="{{ asset('assets/img/business-ex.jpg') }}" alt="Business Ex" />
-                           <h4>Single Platform For Entire Ecosystem</h4>
-                           <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                              sed diam nonumy eirmod tempor invidunt ut Lorem
-                              ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                              diam nonumy eirmod tempor invidunt ut
+                           <h4>Put Your Mark On It</h4>
+                           <p>Our platform is fully customizable. You decide the information you want to share. Automatically receive recommendations based on your profile and preferences.
                            </p>
                         </div>
                      </div>
@@ -406,25 +412,8 @@
                      <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                            <img src="{{ asset('assets/img/business-ex.jpg') }}" alt="Business Ex" />
-                           <h4>Single Platform For Entire Ecosystem</h4>
-                           <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                              sed diam nonumy eirmod tempor invidunt ut Lorem
-                              ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                              diam nonumy eirmod tempor invidunt ut
-                           </p>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section">
-                           <img src="{{ asset('assets/img/business-ex.jpg') }}" alt="Business Ex" />
-                           <h4>Single Platform For Entire Ecosystem</h4>
-                           <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                              sed diam nonumy eirmod tempor invidunt ut Lorem
-                              ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                              diam nonumy eirmod tempor invidunt ut
-                           </p>
+                           <h4>Authentic Community</h4>
+                           <p>Meet and interact with genuine and interested customers registered with BusinessEx, and deepen relationship</p>
                         </div>
                      </div>
                   </div>
@@ -432,11 +421,8 @@
                      <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                            <img src="./assets/img/business-ex.jpg" alt="" />
-                           <h4>Single Platform For Entire Ecosystem</h4>
-                           <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                              sed diam nonumy eirmod tempor invidunt ut Lorem
-                              ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                              diam nonumy eirmod tempor invidunt ut
+                           <h4>Portfolio Management Made Easy</h4>
+                           <p>Keep track of all your conversations and proposals in one place. Track user preferences (location, industry, investment) and receive curated opportunities.
                            </p>
                         </div>
                      </div>
@@ -2462,4 +2448,3 @@
             </div>
          </section>
          <!-- end footer widget Section -->
-        </main>
