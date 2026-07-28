@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('index');
@@ -26,6 +27,11 @@ Route::view('/privacy-policy', 'statics.privacy');
 Route::view('/terms', 'statics.terms');
 Route::view('/contact-us', 'statics.contact');
 Route::view('/sitemap', 'statics.sitemap');
+
+//Shivani Chauhan
+Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change.password');
+    // Update Password
+Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('update.password');
 
 
 
