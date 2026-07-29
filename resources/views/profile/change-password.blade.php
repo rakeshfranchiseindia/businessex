@@ -164,7 +164,6 @@
                             <label class="col-xs-12 col-sm-6 col-md-4 control-label">
                                 Old Password
                                 <span class="star">*</span>
-                                <span>:</span>
                             </label>
 
 
@@ -198,8 +197,6 @@
 
                                 New Password
                                 <span class="star">*</span>
-                                <span>:</span>
-
                             </label>
 
 
@@ -236,11 +233,7 @@
 
                                 Confirm Password
                                 <span class="star">*</span>
-                                <span>:</span>
-
                             </label>
-
-
 
                             <div class="col-xs-12 col-sm-6 col-md-7">
 
