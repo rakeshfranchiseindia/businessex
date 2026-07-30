@@ -54,10 +54,7 @@ class AuthController extends Controller
         
     }
 
-    // Show login form
-    public function showLogin() {
-        return view('login');
-    }
+    
 
     // Handle login
     public function login(Request $request) {
@@ -68,15 +65,15 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/dashboard');
+            return redirect('/dashboard/myaccount');
         }
 
-        return back()->withErrors(['email' => 'Invalid credentials'])->onlyInput('email');
+        return back()->withErrors(['login_email' => 'Invalid email address or password'])->onlyInput('email');
     }
 
-    // Dashboard
-    public function dashboard() {
-        return view('dashboard');
+    // My Account
+    public function myaccount() {
+        return view('dashboard.myaccount', ['user' => Auth::user()]);
     }
 
     // Logout
@@ -84,19 +81,19 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect('/');
     }
 
 
     public function verifyEmail($token) {
-            $user = UserAccount::where('verification_token', $token)->first();
+            $user = UserAccount::where('verify_token', $token)->first();
 
             if (!$user) {
                 return redirect('/')->with('error', 'Invalid verification link.');
             }
 
             $user->email_verified_at = now();
-            $user->verification_token = null;
+            $user->verify_token = null;
             $user->save();
 
             return redirect('/login')->with('success', 'Your email has been verified. You can now log in.');

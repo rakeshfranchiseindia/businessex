@@ -8,11 +8,10 @@ Route::get('/', function () {
 });
 
 
-Route::get('/register', [AuthController::class, 'showRegister']);
-Route::post('/quick-register', [AuthController::class, 'quickRegister'])->name('quick.register');;
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth');
+
+Route::post('/quick-register', [AuthController::class, 'quickRegister'])->name('quick.register');
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/dashboard/myaccount', [AuthController::class, 'myaccount'])->middleware('auth')->name('myaccount');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Verify email address at the time regisration
