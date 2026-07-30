@@ -14,17 +14,17 @@ class VerifyEmailMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $token;
+    public $resetLink;
 
-    public function __construct($token)
+    public function __construct($resetLink)
     {
-        $this->token = $token;
+        $this->resetLink = $resetLink;
     }
 
     public function build()
     {
         return $this->subject('Verify Your Email Address')
                     ->view('emails.verify')
-                    ->with(['token' => $this->token]);
+                    ->with(['token' => $this->resetLink]);
     }
 }

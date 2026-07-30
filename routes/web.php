@@ -12,7 +12,7 @@ Route::get('/', function () {
 Route::get('/register', [AuthController::class, 'showRegister']);
 Route::post('/quick-register', [AuthController::class, 'quickRegister'])->name('quick.register');;
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->name('loginForm');
 Route::get('/dashboard', [AuthController::class, 'dashboard'])->middleware('auth');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -30,8 +30,11 @@ Route::view('/sitemap', 'statics.sitemap');
 
 //Shivani Chauhan
 Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change.password');
-    // Update Password
 Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('update.password');
+Route::get('/forgot-password', [ProfileController::class, 'forgotPassword'])->name('forgot.password');
+Route::post('/forgot-password-submit', [ProfileController::class, 'forgotPasswordSubmit'])->name('forgot.password.submit');
+Route::get('/reset-password/{token}', [ProfileController::class, 'showResetPasswordForm'])->name('reset.password');
+Route::post('/reset-password-submit', [ProfileController::class, 'resetPasswordSubmit'])->name('reset.password.submit');
 
 
 
