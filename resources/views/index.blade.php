@@ -2796,7 +2796,7 @@
                         <div class="text-sm-center text-md-center text-lg-left text-xl-left">
                            <h2>Subscribe Now</h2>
                            <p>Get updated through our mails</p>
-                           <form action="" method="post">
+                           <form action=" " method="post">
                               <input type="email" name="email"><input type="submit" value="Subscribe">
                            </form>
                         </div>

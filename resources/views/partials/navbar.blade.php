@@ -10,8 +10,8 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link active" href="{{ url('/') }}">Home</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="bxlistingDropdown" role="button" 
-                       data-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="bxlistingDropdown" role="button"
+                        data-toggle="dropdown" aria-expanded="false">
                         Bx Listings
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="bxlistingDropdown">
@@ -23,8 +23,8 @@
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="registrationDropdown" role="button" 
-                       data-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="registrationDropdown" role="button"
+                        data-toggle="dropdown" aria-expanded="false">
                         Registration
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="registrationDropdown">
@@ -39,15 +39,16 @@
                 <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
                 <li class="nav-item"><a class="nav-link" href="#">Bx Insights</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" 
-                       data-toggle="dropdown" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button"
+                        data-toggle="dropdown" aria-expanded="false">
                         Services
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
                         <li><a class="dropdown-item" href="{{ url('/business-valuation') }}">Business Valuation</a></li>
                         <li><a class="dropdown-item" href="{{ url('/business-plan') }}">Business Plan</a></li>
                         <li><a class="dropdown-item" href="{{ url('/due-diligence') }}">Due Diligence</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/certified-business-broker') }}">Certified Business Broker</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/certified-business-broker') }}">Certified Business
+                                Broker</a></li>
                     </ul>
                 </li>
             </ul>
@@ -55,18 +56,19 @@
             <!-- Right Corner Button -->
             <div class="ml-auto">
                 @auth
-                     <!-- Logged in: show profile image -->
-        <a href="javascript:void(0)" onclick="openSidebar()">
-            <img src="{{ Auth::user()->profile_image 
-                        ? asset(Auth::user()->profile_image) 
-                        : asset('assets/img/profile-dflt.gif') }}" 
-                 alt="User Profile" class="userpro rounded-circle" width="40">
-        </a>
+                            <!-- Logged in: show profile image -->
+                            <a href="javascript:void(0)" onclick="openSidebar()">
+                                <img src="{{ Auth::user()->profile_image
+                    ? asset(Auth::user()->profile_image)
+                    : asset('assets/img/profile-dflt.gif') }}" alt="User Profile" class="userpro rounded-circle"
+                                    width="40">
+                            </a>
                 @endauth
 
                 @guest
                     <!-- If not logged in: show login button -->
-                    <button type="button" id="profileSidebar" class="btn btn-b-n mob1" data-toggle="modal" data-target="#login">
+                    <button type="button" id="profileSidebar" class="btn btn-b-n mob1" data-toggle="modal"
+                        data-target="#login">
                         <img src="{{ asset('assets/img/account_circle-24px.svg') }}" alt="Login">
                     </button>
                 @endguest
@@ -77,11 +79,12 @@
 </nav>
 
 <!-- User Profile Sidebar -->
-<div id="userSidebar" class="sidebar bg-white shadow-lg p-3"
-     style="width:300px; position:fixed; top:0; right:-300px; height:100%; 
+<div id="userSidebar" class="sidebar bg-white shadow-lg p-3" style="width:300px; position:fixed; top:0; right:-300px; height:100%; 
             overflow-y:auto; transition:right 0.3s; z-index:1050;">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <button class="btn btn-success btn-sm">Dashboard</button>
+        <a href="{{ route('myaccount') }}" class="btn btn-success btn-sm">
+            Dashboard
+        </a>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit" class="btn btn-success btn-sm">Logout</button>
@@ -118,12 +121,12 @@
 
 <!-- Sidebar Toggle Script -->
 <script>
-function openSidebar() {
-    document.getElementById('userSidebar').style.right = '0';
-    document.getElementById('sidebarOverlay').style.display = 'block';
-}
-function closeSidebar() {
-    document.getElementById('userSidebar').style.right = '-300px';
-    document.getElementById('sidebarOverlay').style.display = 'none';
-}
+    function openSidebar() {
+        document.getElementById('userSidebar').style.right = '0';
+        document.getElementById('sidebarOverlay').style.display = 'block';
+    }
+    function closeSidebar() {
+        document.getElementById('userSidebar').style.right = '-300px';
+        document.getElementById('sidebarOverlay').style.display = 'none';
+    }
 </script>

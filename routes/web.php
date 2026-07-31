@@ -34,6 +34,7 @@ Route::get('/forgot-password', [ProfileController::class, 'forgotPassword'])->na
 Route::post('/forgot-password-submit', [ProfileController::class, 'forgotPasswordSubmit'])->name('forgot.password.submit');
 Route::get('/reset-password/{token}', [ProfileController::class, 'showResetPasswordForm'])->name('reset.password');
 Route::post('/reset-password-submit', [ProfileController::class, 'resetPasswordSubmit'])->name('reset.password.submit');
+Route::get('/investor-details', [ProfileController::class,'getUserProfileDetails'])->name('get.user.details');
 
 
 

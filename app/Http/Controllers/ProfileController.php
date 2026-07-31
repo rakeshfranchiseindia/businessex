@@ -28,14 +28,12 @@ class ProfileController extends Controller
             ]
         ]);
         $user = User::where('email', 'shivani@gmail.com')->first();
-
         // $user = Auth::user();echo '<pre>'; print_r($user); die;
         // Check Old Password
         if (!Hash::check($request->old_password, $user->password)) {
             return back()->withErrors([
                 'old_password' => 'Old password is incorrect'
             ]);
-
         }
         $user->update([
             'password' => Hash::make($request->password)
@@ -44,7 +42,6 @@ class ProfileController extends Controller
             'success',
             'Password changed successfully'
         );
-
     }
     public function forgotPassword()
     {
@@ -67,7 +64,6 @@ class ProfileController extends Controller
             'token' => $token
         ]);
         Mail::to($user->email)->send(new VerifyEmailMail($resetLink));
-
         return back()->with(
             'success',
             'Mail Send successfully.'
@@ -96,6 +92,15 @@ class ProfileController extends Controller
         $user->reset_token_created_at = null;
         $user->save();
         return redirect('/forgot-password')->with('success', 'Password reset successfully. Please login.');
+    }
+    public function getUserProfileDetails(Request $request)
+    {
+        $user_id = Auth::id();
+        $user = UserAccount::select('name','email','location','company_name','designation','mobile')
+        ->where('user_id', $user_id)
+        ->first();
+        return view('profile.investor-profile',compact('user'));
+
     }
 
 }
