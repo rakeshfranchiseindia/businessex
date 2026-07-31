@@ -87,16 +87,13 @@ class AuthController extends Controller
 
     public function verifyEmail($token) {
             $user = UserAccount::where('verify_token', $token)->first();
-
             if (!$user) {
                 return redirect('/')->with('error', 'Invalid verification link.');
             }
-
             $user->email_verified_at = now();
             $user->verify_token = null;
             $user->save();
-
             return redirect('/login')->with('success', 'Your email has been verified. You can now log in.');
-    }
+            }
 
 }
