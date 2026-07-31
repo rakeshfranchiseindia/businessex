@@ -28,6 +28,7 @@ Route::view('/contact-us', 'statics.contact');
 Route::view('/sitemap', 'statics.sitemap');
 
 //Shivani Chauhan
+Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change.password');
 Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('update.password');
 Route::get('/forgot-password', [ProfileController::class, 'forgotPassword'])->name('forgot.password');
@@ -36,7 +37,7 @@ Route::get('/reset-password/{token}', [ProfileController::class, 'showResetPassw
 Route::post('/reset-password-submit', [ProfileController::class, 'resetPasswordSubmit'])->name('reset.password.submit');
 Route::get('/investor-details', [ProfileController::class,'getUserProfileDetails'])->name('get.user.details');
 
-
+});
 
 
 

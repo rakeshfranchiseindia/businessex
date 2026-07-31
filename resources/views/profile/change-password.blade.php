@@ -1,3 +1,8 @@
+@extends('layouts.app')
+
+@section('title', 'My Account')
+
+@section('content')
 <style>
     .bdr {
         max-width: 700px;
@@ -282,3 +287,4 @@
     </div>
 
 </div>
+@endsection

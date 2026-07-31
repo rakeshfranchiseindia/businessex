@@ -13,6 +13,7 @@ use App\Mail\VerifyEmailMail;
 
 class ProfileController extends Controller
 {
+    
     public function changePassword()
     {
         return view('profile.change-password');

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Mail\VerifyEmailMail;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Route;
 
 class AuthController extends Controller
 {
@@ -40,9 +40,7 @@ class AuthController extends Controller
             'company_name' => $request->company,
             'verify_token' =>$token
         ]);
-
         // Send custom verification email
-        
         try {
             Mail::to($user->email)->send(new VerifyEmailMail($token));
             return redirect()->back()->with('success', 'Registration submitted successfully!');
@@ -53,9 +51,6 @@ class AuthController extends Controller
         }
         
     }
-
-    
-
     // Handle login
     public function login(Request $request) {
         $credentials = $request->validate([

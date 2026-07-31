@@ -32,7 +32,10 @@
                         <a href="#" class="btn btn-success btn-block mb-3">My Plan</a>
 
                         <ul class="list-group text-left">
-                            <li class="list-group-item"><a href="{{ route('myaccount') }}" class="text-decoration-none text-dark d-block"><i class="fa fa-tachometer"></i> Dashboard</a></li>                            <li class="list-group-item"><i class="fa fa-eye"></i> Profile Views <span
+                            <li class="list-group-item"><a href="{{ route('myaccount') }}"
+                                    class="text-decoration-none text-dark d-block"><i class="fa fa-tachometer"></i>
+                                    Dashboard</a></li>
+                            <li class="list-group-item"><i class="fa fa-eye"></i> Profile Views <span
                                     class="badge badge-secondary float-right">0</span></li>
                             <li class="list-group-item">
                                 <a href="{{ route('get.user.details') }}" class="text-decoration-none text-dark d-block">
@@ -41,7 +44,11 @@
                             </li>
                             <li class="list-group-item"><i class="fa fa-envelope"></i> My Interactions</li>
                             <li class="list-group-item"><i class="fa fa-cog"></i> Manage</li>
-                            <li class="list-group-item"><i class="fa fa-key"></i> Change Password</li>
+                            <li class="list-group-item">
+                                <a href="{{ route('update.password') }}" class="text-decoration-none text-dark d-block">
+                                    <i class="fa fa-key"></i> Change Password
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
