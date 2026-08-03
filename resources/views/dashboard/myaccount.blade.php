@@ -16,10 +16,14 @@
                         <hr>
                         <p><i class="fa fa-envelope"></i> {{ $user->email }}</p>
                         <p><i class="fa fa-phone"></i> {{ $user->mobile ?? 'Not provided' }}</p>
+                        <a href="{{ route('user.edit.page') }}" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
                         <div class="mb-3">
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-google"></i></a>
                             <a href="#"><i class="fa fa-linkedin"></i></a>
+
                         </div>
 
                         <div class="form-group">
@@ -172,4 +176,5 @@
             </div>
         </div>
     </div>
+    
 @endsection

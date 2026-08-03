@@ -12,13 +12,15 @@ use Illuminate\Support\Facades\Route;
 class AuthController extends Controller
 {
     // Show registration form
-    public function showRegister() {
+    public function showRegister()
+    {
         return view('register');
     }
 
     // Handle registration
-    public function quickRegister(Request $request) {
-        
+    public function quickRegister(Request $request)
+    {
+
         $request->validate([
             'profile' => 'required|in:1,2,3,4',
             'name' => 'required|string|max:255',
@@ -29,30 +31,29 @@ class AuthController extends Controller
             'email' => 'required|email|unique:user_account,email',
             'company' => 'nullable|string|max:255',
         ]);
-
-        
         $token = Str::random(32);
-        $user  = UserAccount::create([
+        $user = UserAccount::create([
             'profile' => $request->profile,
             'name' => $request->name,
             'mobile' => $request->phone_number,
             'email' => $request->email,
             'company_name' => $request->company,
-            'verify_token' =>$token
+            'verify_token' => $token
         ]);
         // Send custom verification email
         try {
             Mail::to($user->email)->send(new VerifyEmailMail($token));
             return redirect()->back()->with('success', 'Registration submitted successfully!');
-        
+
         } catch (\Exception $e) {
             return redirect()->back()->with('email_error', 'Failed to send verification email. Please try again later.');
-           
+
         }
-        
+
     }
     // Handle login
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -67,28 +68,29 @@ class AuthController extends Controller
     }
 
     // My Account
-    public function myaccount() {
+    public function myaccount()
+    {
         return view('dashboard.myaccount', ['user' => Auth::user()]);
     }
 
     // Logout
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/');
     }
-
-
-    public function verifyEmail($token) {
-            $user = UserAccount::where('verify_token', $token)->first();
-            if (!$user) {
-                return redirect('/')->with('error', 'Invalid verification link.');
-            }
-            $user->email_verified_at = now();
-            $user->verify_token = null;
-            $user->save();
-            return redirect('/login')->with('success', 'Your email has been verified. You can now log in.');
-            }
+    public function verifyEmail($token)
+    {
+        $user = UserAccount::where('verify_token', $token)->first();
+        if (!$user) {
+            return redirect('/')->with('error', 'Invalid verification link.');
+        }
+        $user->email_verified_at = now();
+        $user->verify_token = null;
+        $user->save();
+        return redirect('/login')->with('success', 'Your email has been verified. You can now log in.');
+    }
 
 }

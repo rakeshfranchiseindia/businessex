@@ -103,5 +103,25 @@ class ProfileController extends Controller
         return view('profile.investor-profile',compact('user'));
 
     }
+    public function userEditPage(Request $request){
+         $user_id = Auth::id();
+         $user = UserAccount::findOrFail($user_id);
+        return view('profile.userEdit',compact('user'));
+    }
+    public function update(Request $request)
+    {
+         $user_id = Auth::id();
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'mobile' => 'required|string|max:15',
+            'location' => 'required|string|max:255',
+            'designation' => 'required|string|max:255',
+            'company_name' => 'required|string|max:255',
+        ]);
 
+        $user = UserAccount::findOrFail($user_id);
+        $user->update($request->all());
+        return redirect()->route('user.edit.page')
+                         ->with('success', 'User updated successfully!');    }
 }
