@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
-class UserProfile extends \Illuminate\Database\Eloquent\Model
+class ProfileVisitor extends \Illuminate\Database\Eloquent\Model
 {
-    protected $table = 'user_profiles';
+    protected $table = 'profile_visitors';
 
-    protected $primaryKey = 'user_prof_id';
+    protected $primaryKey = 'visitor_id';
 
     protected $fillable = [
-        'user_id',
+        'visitor_ip',
         'profile_id',
+        'user_id',
         'profile_type',
         'profile_str',
-        'profile_status',
     ];
 
 

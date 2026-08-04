@@ -2768,3 +2768,24 @@ ul.bex-footer-bottom-links {
 		height: 120vh;
 	}
 }
+
+// My Custom CSS paste here
+.bex-business-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.business-ex-box {
+  flex: 1 1 300px;
+  max-width: 350px;
+  text-align: center;
+}
+
+.business-ex-box img {
+  width: 100px;
+  height: auto;
+  margin-bottom: 20px;
+}

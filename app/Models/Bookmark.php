@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
-class UserProfile extends \Illuminate\Database\Eloquent\Model
+class Bookmark extends \Illuminate\Database\Eloquent\Model
 {
-    protected $table = 'user_profiles';
+    protected $table = 'bookmarks';
 
-    protected $primaryKey = 'user_prof_id';
+    protected $primaryKey = 'bookmark_id';
 
     protected $fillable = [
         'user_id',
         'profile_id',
         'profile_type',
         'profile_str',
-        'profile_status',
+        'bookmark_status',
     ];
 
 
