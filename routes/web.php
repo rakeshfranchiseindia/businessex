@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('index');
@@ -26,7 +27,20 @@ Route::view('/terms', 'statics.terms');
 Route::view('/contact-us', 'statics.contact');
 Route::view('/sitemap', 'statics.sitemap');
 
+//Shivani Chauhan
+Route::middleware(['auth', 'verified'])->group(function () {
+    
+Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change.password');
+Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('update.password');
+Route::get('/forgot-password', [ProfileController::class, 'forgotPassword'])->name('forgot.password');
+Route::post('/forgot-password-submit', [ProfileController::class, 'forgotPasswordSubmit'])->name('forgot.password.submit');
+Route::get('/reset-password/{token}', [ProfileController::class, 'showResetPasswordForm'])->name('reset.password');
+Route::post('/reset-password-submit', [ProfileController::class, 'resetPasswordSubmit'])->name('reset.password.submit');
+Route::get('/investor-details', [ProfileController::class,'getUserProfileDetails'])->name('get.user.details');
+Route::get('/user/edit', [ProfileController::class, 'userEditPage'])->name('user.edit.page');
+Route::put('/user', [ProfileController::class, 'update'])->name('user.update');
 
+});
 
 
 
