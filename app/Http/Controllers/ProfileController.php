@@ -152,5 +152,25 @@ class ProfileController extends Controller
 
         return redirect()->back()->with('success', 'Information updated successfully!');
     }
+    public function advert_detail($user_rand_id)
+    {
+        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        return view('profile.confidential_advert', compact('user'));
+    }
+    public function advertisement_add(Request $request, $user_rand_id)
+    {
+        // $request->validate([
+        //     'headline' => 'required|string|max:255',
+        //     'introduction' => 'nullable|string|max:1000',
+        // ]);
+
+        // $advertisement = ::where('user_rand_id', $user_rand_id)->firstOrFail();
+
+        // $advertisement->advertisement_headline = $request->headline;
+        // $advertisement->advertisement_intro = $request->introduction;
+        // $advertisement->save();
+        // return redirect()->back()->with('success', 'Advertisement details updated successfully!');
+    }
+
 
 }
