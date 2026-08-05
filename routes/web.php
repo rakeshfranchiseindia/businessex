@@ -50,6 +50,9 @@ Route::post('/reset-password-submit', [ProfileController::class, 'resetPasswordS
 Route::get('/investor-details', [ProfileController::class,'getUserProfileDetails'])->name('get.user.details');
 Route::get('/user/edit', [ProfileController::class, 'userEditPage'])->name('user.edit.page');
 Route::put('/user', [ProfileController::class, 'update'])->name('user.update');
+Route::get('/dashboard/mentorConfidentials/{user_rand_id}', [ProfileController::class, 'edit'])->name('confidential.edit');
+Route::post('/dashboard/mentorConfidentials{user_rand_id}', [ProfileController::class, 'updateConfidential_info'])->name('confidential.update');
+
 
 });
 
