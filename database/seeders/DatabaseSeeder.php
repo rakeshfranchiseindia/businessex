@@ -2,24 +2,176 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
+use Database\Seeders\AdminProfileRejectedTableSeeder;
+use Database\Seeders\AdminUserTableSeeder;
+use Database\Seeders\ArticleNewsImagesTableSeeder;
+use Database\Seeders\ArticlesCommentsTableSeeder;
+use Database\Seeders\BexShortsTableSeeder;
+use Database\Seeders\BookmarksTableSeeder;
+use Database\Seeders\BusinessBookmarksTableSeeder;
+use Database\Seeders\BusinessImagesTableSeeder;
+use Database\Seeders\BusinessexContactusTableSeeder;
+use Database\Seeders\BusinessexNewsletterTableSeeder;
+use Database\Seeders\BusinessexRiseconferenceTableSeeder;
+use Database\Seeders\BxArticlesTableSeeder;
+use Database\Seeders\BxAuthorTableSeeder;
+use Database\Seeders\BxCitiesTableSeeder;
+use Database\Seeders\BxCouponTableSeeder;
+use Database\Seeders\BxDfpBannerTableSeeder;
+use Database\Seeders\BxIndustryreportsTableSeeder;
+use Database\Seeders\BxNewsTableSeeder;
+use Database\Seeders\BxServicesTableSeeder;
+use Database\Seeders\ContactBrokerTableSeeder;
+use Database\Seeders\ContactBusinessTableSeeder;
+use Database\Seeders\ContactCommentTableSeeder;
+use Database\Seeders\ContactIncubatorTableSeeder;
+use Database\Seeders\ContactInvestorsTableSeeder;
+use Database\Seeders\ContactLenderTableSeeder;
+use Database\Seeders\ContactMentorTableSeeder;
+use Database\Seeders\ContactStartupTableSeeder;
+use Database\Seeders\ContentTagsTableSeeder;
+use Database\Seeders\ContentTagsAssignedTableSeeder;
+use Database\Seeders\ConversationReplyTableSeeder;
+use Database\Seeders\ConversationReplyAttachmentTableSeeder;
+use Database\Seeders\FiInvestorsTableSeeder;
+use Database\Seeders\HongkongTableSeeder;
+use Database\Seeders\IndPrefBrokerTableSeeder;
+use Database\Seeders\IndPrefBusinessTableSeeder;
+use Database\Seeders\IndPrefIncubatorTableSeeder;
+use Database\Seeders\IndPrefIncubatorBusinessTableSeeder;
+use Database\Seeders\IndPrefIncubatorExpertiseTableSeeder;
+use Database\Seeders\IndPrefIncubatorStartupTableSeeder;
+use Database\Seeders\IndPrefInvestorsTableSeeder;
+use Database\Seeders\IndPrefInvestorsFihlTableSeeder;
+use Database\Seeders\IndPrefLendersTableSeeder;
+use Database\Seeders\IndPrefMentorBusinessTableSeeder;
+use Database\Seeders\IndPrefMentorContactPageTableSeeder;
+use Database\Seeders\IndPrefMentorExpertiseTableSeeder;
+use Database\Seeders\IndPrefMentorStartupTableSeeder;
+use Database\Seeders\IndPrefMentorsTableSeeder;
+use Database\Seeders\IndustryCategoriesTableSeeder;
+use Database\Seeders\LocPrefBrokerTableSeeder;
+use Database\Seeders\LocPrefBusinessTableSeeder;
+use Database\Seeders\LocPrefIncubatorsTableSeeder;
+use Database\Seeders\LocPrefInvestorsTableSeeder;
+use Database\Seeders\LocPrefLendersTableSeeder;
+use Database\Seeders\MembershipPlansTableSeeder;
+use Database\Seeders\MentorCategoriesTableSeeder;
+use Database\Seeders\MentorExpertiseTableSeeder;
+use Database\Seeders\MobileVerificationTableSeeder;
+use Database\Seeders\NewsTableSeeder;
+use Database\Seeders\NewsCommentsTableSeeder;
+use Database\Seeders\NewsListTableSeeder;
+use Database\Seeders\OnlinePaymentsTableSeeder;
+use Database\Seeders\ProfileBrokerTableSeeder;
+use Database\Seeders\ProfileBusinessTableSeeder;
+use Database\Seeders\ProfileBusinessMgmtTableSeeder;
+use Database\Seeders\ProfileIncubatorProfExpTableSeeder;
+use Database\Seeders\ProfileIncubatorsTableSeeder;
+use Database\Seeders\ProfileInvestorTableSeeder;
+use Database\Seeders\ProfileLendersTableSeeder;
+use Database\Seeders\ProfileMembershipsTableSeeder;
+use Database\Seeders\ProfileMentorProfExpTableSeeder;
+use Database\Seeders\ProfileMentorsTableSeeder;
+use Database\Seeders\ProfileStartupFundRaisingTableSeeder;
+use Database\Seeders\ProfileStartupMgmtTableSeeder;
+use Database\Seeders\ProfileStartupsTableSeeder;
+use Database\Seeders\ProfileVisitorsTableSeeder;
+use Database\Seeders\RequestContactTableSeeder;
+use Database\Seeders\SeoTableSeeder;
+use Database\Seeders\StartupImagesTableSeeder;
+use Database\Seeders\UserAccountTableSeeder;
+use Database\Seeders\UserProfilesTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        // Seed tables in dependency order
+        $this->call([AdminProfileRejectedTableSeeder::class]);
+        $this->call([AdminUserTableSeeder::class]);
+        $this->call([ArticleNewsImagesTableSeeder::class]);
+        $this->call([ArticlesCommentsTableSeeder::class]);
+        $this->call([BexShortsTableSeeder::class]);
+        $this->call([BookmarksTableSeeder::class]);
+        $this->call([BusinessBookmarksTableSeeder::class]);
+        $this->call([BusinessImagesTableSeeder::class]);
+        $this->call([BusinessexContactusTableSeeder::class]);
+        $this->call([BusinessexNewsletterTableSeeder::class]);
+        $this->call([BusinessexRiseconferenceTableSeeder::class]);
+        $this->call([BxArticlesTableSeeder::class]);
+        $this->call([BxAuthorTableSeeder::class]);
+        $this->call([BxCitiesTableSeeder::class]);
+        $this->call([BxCouponTableSeeder::class]);
+        $this->call([BxDfpBannerTableSeeder::class]);
+        $this->call([BxIndustryreportsTableSeeder::class]);
+        $this->call([BxNewsTableSeeder::class]);
+        $this->call([BxServicesTableSeeder::class]);
+        $this->call([ContactBrokerTableSeeder::class]);
+        $this->call([ContactBusinessTableSeeder::class]);
+        $this->call([ContactCommentTableSeeder::class]);
+        $this->call([ContactIncubatorTableSeeder::class]);
+        $this->call([ContactInvestorsTableSeeder::class]);
+        $this->call([ContactLenderTableSeeder::class]);
+        $this->call([ContactMentorTableSeeder::class]);
+        $this->call([ContactStartupTableSeeder::class]);
+        $this->call([ContentTagsTableSeeder::class]);
+        $this->call([ContentTagsAssignedTableSeeder::class]);
+        $this->call([ConversationReplyTableSeeder::class]);
+        $this->call([ConversationReplyAttachmentTableSeeder::class]);
+        $this->call([FiInvestorsTableSeeder::class]);
+        $this->call([HongkongTableSeeder::class]);
+        $this->call([IndPrefBrokerTableSeeder::class]);
+        $this->call([IndPrefBusinessTableSeeder::class]);
+        $this->call([IndPrefIncubatorTableSeeder::class]);
+        $this->call([IndPrefIncubatorBusinessTableSeeder::class]);
+        $this->call([IndPrefIncubatorExpertiseTableSeeder::class]);
+        $this->call([IndPrefIncubatorStartupTableSeeder::class]);
+        $this->call([IndPrefInvestorsTableSeeder::class]);
+        $this->call([IndPrefInvestorsFihlTableSeeder::class]);
+        $this->call([IndPrefLendersTableSeeder::class]);
+        $this->call([IndPrefMentorBusinessTableSeeder::class]);
+        $this->call([IndPrefMentorContactPageTableSeeder::class]);
+        $this->call([IndPrefMentorExpertiseTableSeeder::class]);
+        $this->call([IndPrefMentorStartupTableSeeder::class]);
+        $this->call([IndPrefMentorsTableSeeder::class]);
+        $this->call([IndustryCategoriesTableSeeder::class]);
+        $this->call([LocPrefBrokerTableSeeder::class]);
+        $this->call([LocPrefBusinessTableSeeder::class]);
+        $this->call([LocPrefIncubatorsTableSeeder::class]);
+        $this->call([LocPrefInvestorsTableSeeder::class]);
+        $this->call([LocPrefLendersTableSeeder::class]);
+        $this->call([MembershipPlansTableSeeder::class]);
+        $this->call([MentorCategoriesTableSeeder::class]);
+        $this->call([MentorExpertiseTableSeeder::class]);
+        $this->call([MobileVerificationTableSeeder::class]);
+        $this->call([NewsTableSeeder::class]);
+        $this->call([NewsCommentsTableSeeder::class]);
+        $this->call([NewsListTableSeeder::class]);
+        $this->call([OnlinePaymentsTableSeeder::class]);
+        $this->call([ProfileBrokerTableSeeder::class]);
+        $this->call([ProfileBusinessTableSeeder::class]);
+        $this->call([ProfileBusinessMgmtTableSeeder::class]);
+        $this->call([ProfileIncubatorProfExpTableSeeder::class]);
+        $this->call([ProfileIncubatorsTableSeeder::class]);
+        $this->call([ProfileInvestorTableSeeder::class]);
+        $this->call([ProfileLendersTableSeeder::class]);
+        $this->call([ProfileMembershipsTableSeeder::class]);
+        $this->call([ProfileMentorProfExpTableSeeder::class]);
+        $this->call([ProfileMentorsTableSeeder::class]);
+        $this->call([ProfileStartupFundRaisingTableSeeder::class]);
+        $this->call([ProfileStartupMgmtTableSeeder::class]);
+        $this->call([ProfileStartupsTableSeeder::class]);
+        $this->call([ProfileVisitorsTableSeeder::class]);
+        $this->call([RequestContactTableSeeder::class]);
+        $this->call([SeoTableSeeder::class]);
+        $this->call([StartupImagesTableSeeder::class]);
+        $this->call([UserAccountTableSeeder::class]);
+        $this->call([UserProfilesTableSeeder::class]);
     }
 }

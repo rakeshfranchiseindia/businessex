@@ -1,40 +1,55 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
-    public function up(): void
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
     {
         Schema::create('user_account', function (Blueprint $table) {
-            $table->increments('user_id');
-            $table->string('user_rand_id', 20)->unique()->nullable();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('password', 60);
+            $table->integer('user_id')->unsigned()->autoIncrement();
+            $table->string('user_rand_id', 20)->nullable();
+            $table->string('name', 255)->nullable(false);
+            $table->string('email', 255)->nullable();
+            $table->string('password', 60)->nullable();
             $table->string('mobile', 20)->nullable();
-            $table->string('location');
+            $table->string('location', 60)->nullable();
             $table->string('timezone', 100)->nullable();
-            $table->string('company_name');
-            $table->string('designation');
+            $table->string('company_name', 255)->nullable(false);
+            $table->string('designation', 60)->nullable();
             $table->tinyInteger('is_active')->nullable();
             $table->tinyInteger('reg_source')->nullable();
             $table->string('reg_profile', 100)->nullable();
             $table->string('linkedin_id', 30)->nullable();
             $table->string('google_id', 100)->nullable();
             $table->string('facebook_id', 30)->nullable();
-            $table->string('profile_pic')->nullable();
-            $table->string('remember_token', 100)->nullable();
+            $table->string('profile_pic', 255)->nullable();
             $table->string('verify_token', 200)->nullable();
             $table->integer('contact_response')->nullable();
             $table->integer('contact_status')->nullable();
-            $table->timestamps();
             $table->timestamp('last_notify_at')->useCurrent();
-            $table->timestamp('last_login_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('last_login_at')->useCurrent();
+            $table->timestamps();
+            $table->rememberToken();
+            $table->unique('email');
+            $table->unique('user_rand_id');
         });
+
     }
 
-    public function down(): void
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
     {
         Schema::dropIfExists('user_account');
     }
