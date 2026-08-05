@@ -34,5 +34,8 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    'ipinfodb' => [
+        'key' => env('IPINFODB_API_KEY'),
+    ]
 
 ];
