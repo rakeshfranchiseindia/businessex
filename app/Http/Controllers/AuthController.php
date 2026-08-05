@@ -32,13 +32,16 @@ class AuthController extends Controller
             'company' => 'nullable|string|max:255',
         ]);
         $token = Str::random(32);
+        $password = Str::random(10);
         $user = UserAccount::create([
             'profile' => $request->profile,
             'name' => $request->name,
             'mobile' => $request->phone_number,
             'email' => $request->email,
             'company_name' => $request->company,
-            'verify_token' => $token
+            'verify_token' => $token,
+            'user_rand_id' => strtolower(Str::random(6)),
+            'password' => Hash::make($password),
         ]);
         // Send custom verification email
         try {

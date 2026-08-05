@@ -13,7 +13,7 @@ use App\Mail\VerifyEmailMail;
 
 class ProfileController extends Controller
 {
-    
+
     public function changePassword()
     {
         return view('profile.change-password');
@@ -97,20 +97,21 @@ class ProfileController extends Controller
     public function getUserProfileDetails(Request $request)
     {
         $user_id = Auth::id();
-        $user = UserAccount::select('name','email','location','company_name','designation','mobile')
-        ->where('user_id', $user_id)
-        ->first();
-        return view('profile.investor-profile',compact('user'));
+        $user = UserAccount::select('name', 'email', 'location', 'company_name', 'designation', 'mobile')
+            ->where('user_id', $user_id)
+            ->first();
+        return view('profile.investor-profile', compact('user'));
 
     }
-    public function userEditPage(Request $request){
-         $user_id = Auth::id();
-         $user = UserAccount::findOrFail($user_id);
-        return view('profile.userEdit',compact('user'));
+    public function userEditPage(Request $request)
+    {
+        $user_id = Auth::id();
+        $user = UserAccount::findOrFail($user_id);
+        return view('profile.userEdit', compact('user'));
     }
     public function update(Request $request)
     {
-         $user_id = Auth::id();
+        $user_id = Auth::id();
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email',
@@ -123,5 +124,33 @@ class ProfileController extends Controller
         $user = UserAccount::findOrFail($user_id);
         $user->update($request->all());
         return redirect()->route('user.edit.page')
-                         ->with('success', 'User updated successfully!');    }
+            ->with('success', 'User updated successfully!');
+    }
+    public function edit($user_rand_id)
+    {
+        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        return view('profile.confidential_info', compact('user'));
+
+    }
+    public function updateConfidential_info(Request $request, $user_rand_id)
+    {
+        // basic validation
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'mobile' => 'required|string|max:15',
+            'email' => 'required|email|max:255',
+            'location' => 'required|string|max:255',
+        ]);
+        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+
+        $user->update([
+            'name' => $request->name,
+            'mobile' => $request->mobile,
+            'email' => $request->email,
+            'location' => $request->location,
+        ]);
+
+        return redirect()->back()->with('success', 'Information updated successfully!');
+    }
+
 }
