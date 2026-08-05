@@ -142,7 +142,6 @@ class ProfileController extends Controller
             'location' => 'required|string|max:255',
         ]);
         $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
-
         $user->update([
             'name' => $request->name,
             'mobile' => $request->mobile,
