@@ -3,11 +3,22 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\InvestorController;
+use App\Http\Controllers\MentorController;
+use App\Http\Controllers\StartupController;
 
 Route::get('/', function () {
     return view('index');
 });
 
+//Route::get('/', [HomeController::class, 'home'])->name('home');
+
+Route::get('/businesslisting', [BusinessController::class, 'businessListing'])->name('business.listing');
+Route::get('/investorlisting', [InvestorController::class, 'investorListing'])->name('investor.listing');
+Route::get('/mentoringlisting', [MentorController::class, 'mentoringListing'])->name('mentoring.listing');
+Route::get('/startuplisting', [StartupController::class, 'startupListing'])->name('startup.listing');
 
 
 Route::post('/quick-register', [AuthController::class, 'quickRegister'])->name('quick.register');

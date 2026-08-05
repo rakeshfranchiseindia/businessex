@@ -23,6 +23,7 @@ use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class CommonController extends Controller
 {
@@ -110,31 +111,41 @@ class CommonController extends Controller
      * @param $decimalPoints
      * @return float|string
      */
-    public static function convertAmountToShort($rpVal, $decimalPoints)
-    {
-        if (!is_numeric($rpVal)) {
-            return $rpVal;
-        }
-        if ($rpVal > 1000 && $rpVal < 100000) {
-            $mod = round($rpVal / 1000, $decimalPoints);
-            $rpVal = $mod . " Thousand";
-        }
-        if ($rpVal >= 100000 && $rpVal < 10000000) {
-            $mod = round($rpVal / 100000, $decimalPoints);
-            $rpVal = $mod . " Lakhs";
-        }
-        if ($rpVal >= 10000000) {
-            $decimalPoints = ($decimalPoints == 0) ? 2 : $decimalPoints;
-            $mod = round($rpVal / 10000000, $decimalPoints);
-            $rpVal = $mod . " Crores";
-        }
+    public static function convertAmountToShort($rpVal, $decimalPoints = 0)
+{
+    // Ensure we have a numeric value
+    if (!is_numeric($rpVal)) {
         return $rpVal;
     }
+
+    // Ensure decimalPoints is an integer
+    $decimalPoints = (int) $decimalPoints;
+
+    if ($rpVal > 1000 && $rpVal < 100000) {
+        $mod = round($rpVal / 1000, $decimalPoints);
+        return $mod . " Thousand";
+    }
+
+    if ($rpVal >= 100000 && $rpVal < 10000000) {
+        $mod = round($rpVal / 100000, $decimalPoints);
+        return $mod . " Lakhs";
+    }
+
+    if ($rpVal >= 10000000) {
+        $decimalPoints = ($decimalPoints === 0) ? 2 : $decimalPoints;
+        $mod = round($rpVal / 10000000, $decimalPoints);
+        return $mod . " Crores";
+    }
+
+    // If less than 1000, just return the number
+    return $rpVal;
+}
+
 
     public static function UserUniqRandomStr()
     {
         $uniqId = mt_rand(5, 150000000);
-        $chkExists = User::query()->where('user_rand_id', $uniqId)->get()->first();
+        $chkExists = User::where('user_rand_id', $uniqId)->first(); // ✅ simplified
         if (empty($chkExists)) {
             return $uniqId;
         }
@@ -143,8 +154,8 @@ class CommonController extends Controller
 
     public static function profileUniqueStr()
     {
-        $uniqStr = strtolower(str_random(6));
-        $chkExists = UserProfile::query()->where('profile_str', $uniqStr)->get()->first();
+        $uniqStr = strtolower(Str::random(6)); // ✅ replaced str_random with Str::random
+        $chkExists = UserProfile::where('profile_str', $uniqStr)->first(); // ✅ simplified
         if (empty($chkExists)) {
             return strtolower($uniqStr);
         }
