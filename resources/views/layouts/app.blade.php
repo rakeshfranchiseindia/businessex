@@ -11,7 +11,7 @@
 
    <!-- Google Fonts -->
    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
-
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
    <!-- Vendor CSS Files -->
    <link href="{{ asset('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
    <link href="{{ asset('assets/vendor/ionicons/css/ionicons.min.css') }}" rel="stylesheet">
@@ -21,6 +21,9 @@
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
    <!-- Template Main CSS File -->
    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+   <link href="{{ asset('assets/css/article-style.css') }}" rel="stylesheet">
+   <link href="{{ asset('assets/css/article-detail.css') }}" rel="stylesheet">
+   <link href="{{ asset('assets/css/services.styles.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -179,14 +182,20 @@
       </div>
    </div>
    <!-- Vendor JS Files -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
-<script src="https://unpkg.com/scrollreveal"></script>
-<script src="{{ asset('assets/js/main.js') }}"></script>
+   <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+   <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+   <script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
+   <script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+   <!-- Add ScrollReveal -->
+   <script src="https://unpkg.com/scrollreveal"></script>
+   <!-- Your custom JS -->
+   <script src="{{ asset('assets/js/main.js') }}"></script>
+   <script src="{{ asset('assets/js/article-script.js') }}"></script>
+   <script src="{{ asset('assets/js/article-details.js') }}"></script>
+   <script src="{{ asset('assets/js/services.js') }}"></script>
+
+   
 
 
 </body>

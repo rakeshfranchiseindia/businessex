@@ -10,7 +10,7 @@
                         <a href="{{ url('/') }}">Home</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        Businesses for Sale
+                        Investors
                     </li>
                 </ol>
             </div>
@@ -32,12 +32,12 @@
         </div>
 
         <div class="row catfull">
-            @include('includes.catleftbusinesses')
+            @include('includes.catleft')
 
-            <div class="col-12 col-sm-9 col-md-9 mdy setheading">
+            <div class="col-12 col-sm-9 col-md-9 mdy">
                 <div class="row">
-                    <div class="col-12 col-sm-9 col-md-9">
-                        <h1 class="headblk">Businesses for Sale</h1>
+                    <div class="col-12 col-sm-9 col-md-9 setheading">
+                        <h1 class="headblk">Investors In India</h1>
                     </div>
                     <div class="col-12 col-sm-3 col-md-3 float-right setmob">
                         <div class="form-group">
@@ -52,59 +52,63 @@
                 </div>
 
                 <div class="row setvto">
-                    @if(isset($businesses) && $businesses->count() > 0)
-                        <ul class="listop otherlist">
-                            @foreach($businesses as $business)
+                    @if(isset($investors) && $investors->count() > 0)
+                        <ul class="listop">
+                            @foreach($investors as $investor)
                                 <li>
                                     <div class="ribbonblk">
-                                        <div class="ribbonblkinner">{{ $business->badge }}</div>
+                                        <div class="ribbonblkinner">{{ $investor->badge }}</div>
                                     </div>
 
-                                    <div class="fullban">
-                                        <a href="#"><img src="{{ $business->image }}" alt="Business Image"></a>
+                                    <div class="fullb settmar">
+                                        <div class="fbleft">
+                                            <div class="cname">
+                                                <div class="cnameinner">{{ $investor->name }}</div>
+                                            </div>
+                                        </div>
+                                        <div class="fbright">
+                                            <div class="compper">
+                                                <img src="{{ $investor->image }}" alt="Investor Image">
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div class="fullb cattxt">
-                                        <span>{{ $business->category }}</span>
-                                        {{ $business->title }}
-                                    </div>
-
-                                    <div class="fullb contxt">
-                                        {{ $business->description }}
-                                    </div>
+                                    <div class="fullb contxt">{{ $investor->description }}</div>
 
                                     <div class="sdd">
                                         <div class="sddinner"><img src="{{ asset('assets/img/phone.svg') }}"> <span>Phone</span></div>
                                         <div class="sddinner"><img src="{{ asset('assets/img/email.svg') }}"> <span>Email</span></div>
+                                        <div class="sddinner"><img src="{{ asset('assets/img/phone.svg') }}"> <span>LinkedIn</span></div>
                                     </div>
 
-                                    <div class="fullb citytxt">
-                                        {{ $business->location }}
+                                    <div class="fullb summtxt">
+                                        <span>Summary</span>
+                                        {{ $investor->summary }}
                                     </div>
+
+                                    <div class="fullb citytxt">{{ $investor->location }}</div>
 
                                     <div class="tagv">
-                                        @foreach($business->tags as $tag)
+                                        @foreach($investor->tags as $tag)
                                             <div class="tagvinner">{{ $tag }}</div>
                                         @endforeach
                                     </div>
 
                                     <div class="backv">
-                                        <div class="inblk">Asking price <span><i class="fas fa-rupee-sign"></i> {{ $business->asking_price }}</span></div>
-                                        <div class="inblk">Annual sale <span><i class="fas fa-rupee-sign"></i> {{ $business->annual_sale }}</span></div>
-                                        <div class="inblk">Establishment year <span>{{ $business->est_year }}</span></div>
-                                        <div class="inblk">Employee count <span>{{ $business->employee_count }}</span></div>
-                                        <div class="inblk">Entity type <span>{{ $business->entity_type }}</span></div>
-                                        <div class="inblk">Business type <span>{{ $business->business_type }}</span></div>
+                                        <div class="inblk">Investment Preference <span>{{ $investor->investment_preference }}</span></div>
+                                        <div class="inblk">Investment Size <span>{{ $investor->investment_size }}</span></div>
+                                        <div class="inblk">Industry Preference <span>{{ $investor->industry_preference }}</span></div>
+                                        <div class="inblk">Location Preference <span>{{ $investor->location_preference }}</span></div>
                                     </div>
 
-                                    <div class="inbtn"><a href="#">Contact Business</a></div>
+                                    <div class="inbtn"><a href="#">Send Proposal</a></div>
                                 </li>
                             @endforeach
                         </ul>
 
-                        {{ $businesses->links('pagination::bootstrap-4') }}
+                        {{ $investors->links('pagination::bootstrap-4') }}
                     @else
-                        <div class="alert alert-info">No businesses found at the moment.</div>
+                        <div class="alert alert-info">No investors found at the moment.</div>
                     @endif
                 </div>
             </div>

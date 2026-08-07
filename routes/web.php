@@ -9,16 +9,42 @@ use App\Http\Controllers\InvestorController;
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\StartupController;
 
+use App\Http\Controllers\BusinessProfileController;
+use App\Http\Controllers\InvestorProfileController;
+use App\Http\Controllers\MentorProfileController;
+use App\Http\Controllers\StartupProfileController;
+use App\Http\Controllers\PriceController;
+use App\Http\Controllers\ServiceListingController;
+use App\Http\Controllers\BxInsightController;
+
+
 Route::get('/', function () {
     return view('index');
-});
+})->name('home');
 
 //Route::get('/', [HomeController::class, 'home'])->name('home');
 
 Route::get('/businesslisting', [BusinessController::class, 'businessListing'])->name('business.listing');
 Route::get('/investorlisting', [InvestorController::class, 'investorListing'])->name('investor.listing');
-Route::get('/mentoringlisting', [MentorController::class, 'mentoringListing'])->name('mentoring.listing');
+Route::get('/mentorlisting', [MentorController::class, 'mentorListing'])->name('mentor.listing');
 Route::get('/startuplisting', [StartupController::class, 'startupListing'])->name('startup.listing');
+
+
+Route::get('/registration/create-mentor-profile', [MentorProfileController::class, 'createMentorProfile'])->name('register.create-mentor-profile');
+Route::get('/registration/create-business-profile', [BusinessProfileController::class, 'createBusinessProfile'])->name('register.create-business-profile');
+Route::get('/registration/create-investor-profile', [InvestorProfileController::class, 'createInvestorProfile'])->name('register.create-investor-profile');
+Route::get('/registration/create-startup-profile', [StartupProfileController::class, 'createStartupProfile'])->name('register.create-startup-profile');
+
+Route::get('/pricing', [PriceController::class, 'priceListing'])->name('pricing.listing');
+
+Route::get('/articles', [BxInsightController::class, 'index'])->name('bxinsight.index');
+Route::get('/articles/{id}', [BxInsightController::class, 'show'])->name('bxinsight.show');
+
+Route::get('/service/business-valuation', [ServiceListingController::class, 'businessValuation'])->name('service.business-valuation');
+Route::get('/service/business-plan', [ServiceListingController::class, 'businessPlan'])->name('service.business-plan');
+Route::get('/service/due-diligence', [ServiceListingController::class, 'dueDiligence'])->name('service.due-diligence');
+Route::get('/service/certified-business-broker', [ServiceListingController::class, 'certifiedBusinessBroker'])->name('service.certified-business-broker');
+
 
 
 Route::post('/quick-register', [AuthController::class, 'quickRegister'])->name('quick.register');

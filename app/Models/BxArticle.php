@@ -46,4 +46,20 @@ class BxArticle extends \Illuminate\Database\Eloquent\Model
         return $this->hasMany(ContentTagAssigned::class, 'content_id', 'article_id');
     }
 
+
+    public function scopePublished($query)
+    {
+        return $query->where('article_status', 1);
+    }
+
+    public function scopeMostRead($query)
+    {
+        return $query->orderBy('article_views', 'desc');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(IndustryCategory::class, 'category_id', 'cat_id');
+    }
+
 }
