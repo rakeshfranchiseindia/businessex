@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\ProfileInvestor;
 use Illuminate\Support\Str;
 use App\Models\UserAccount;
 use Illuminate\Support\Facades\Mail;
@@ -142,7 +143,6 @@ class ProfileController extends Controller
             'location' => 'required|string|max:255',
         ]);
         $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
-
         $user->update([
             'name' => $request->name,
             'mobile' => $request->mobile,
@@ -152,5 +152,55 @@ class ProfileController extends Controller
 
         return redirect()->back()->with('success', 'Information updated successfully!');
     }
+    // public function advert_detail($user_rand_id)
+    // {
+    //     $user = ProfileInvestor::where('inv_profile_str', $user_rand_id)->firstOrFail();
+    //     return view('profile.confidential_advert', compact('user'));
+    // }
+    // public function advertisement_add(Request $request, $user_rand_id)
+    // {
+
+    // }
+    public function getInvestorAdvertisementDetails($investorUniqueId)
+    {
+        $invAdvRecord = ProfileInvestor::query()
+            ->select('inv_profile_str', 'inv_headline', 'inv_intro')
+            ->where('inv_profile_str', '=', $investorUniqueId)
+            ->first();
+
+        return view('profile.confidential_advert', compact('invAdvRecord'));
+    }
+
+    public function updateInvestorProfileDetails(Request $request, $uniqueid)
+    {
+        $request->validate([
+            'inv_headline' => 'required|string|max:255',
+            'inv_intro' => 'nullable|string',
+        ]);
+
+        // record find karo
+        $investorupdate = ProfileInvestor::where('inv_profile_str', $uniqueid)->first();
+
+        if (!$investorupdate) {
+            // agar record nahi mila to 404 return karo
+            return response()->json([
+                'code' => 404,
+                'message' => 'No records found'
+            ], 404);
+        }
+
+        // agar record mila to update karo
+        $investorupdate->update([
+            'inv_headline' => $request->inv_headline,
+            'inv_intro' => $request->inv_intro,
+        ]);
+
+        return response()->json([
+            'code' => 200,
+            'message' => 'Investor Profile Updated Successfully',
+            'data' => $investorupdate
+        ], 200);
+    }
+
 
 }
