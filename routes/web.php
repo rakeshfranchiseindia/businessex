@@ -54,8 +54,8 @@ Route::get('/dashboard/mentorConfidentials/{user_rand_id}', [ProfileController::
 Route::post('/dashboard/mentorConfidentials/{user_rand_id}', [ProfileController::class, 'updateConfidential_info'])->name('confidential.update');
 Route::get('/dashboard/investorAdvertisement/{user_rand_id?}', [ProfileController::class, 'getInvestorAdvertisementDetails'])->name('confidential.advert_detail');
 Route::post('/dashboard/investorAdvertisement/{user_rand_id?}', [ProfileController::class, 'updateInvestorProfileDetails'])->name('advertisement.save');
-
-
+Route::get('/dashboard/preferences', [ProfileController::class, 'showPreferences'])->name('preferences');
+Route::post('/dashboard/preferences/save', [ProfileController::class, 'savePreferences'])->name('preferences.save');
 });
 
 

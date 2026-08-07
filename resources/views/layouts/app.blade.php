@@ -179,14 +179,14 @@
       </div>
    </div>
    <!-- Vendor JS Files -->
-   <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
-   <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-   <script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
-   <script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
-   <!-- Add ScrollReveal -->
-   <script src="https://unpkg.com/scrollreveal"></script>
-   <!-- Your custom JS -->
-   <script src="{{ asset('assets/js/main.js') }}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
+<script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
+<script src="https://unpkg.com/scrollreveal"></script>
+<script src="{{ asset('assets/js/main.js') }}"></script>
 
 
 </body>

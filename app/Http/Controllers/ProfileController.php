@@ -195,6 +195,11 @@ class ProfileController extends Controller
         }
         return redirect()->back()->with('success', $message);
     }
+    public function showPreferences()
+    {
+        return view('profile.preferences');
+    }
+
 
 }
 
