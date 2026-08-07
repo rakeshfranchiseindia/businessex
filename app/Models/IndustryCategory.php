@@ -26,4 +26,14 @@ class IndustryCategory extends \Illuminate\Database\Eloquent\Model
         return $this->hasMany(IndustryCategory::class, 'parent_id', 'cat_id');
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('category_status', 1);
+    }
+
+    public function scopeOrdered($query)
+    {
+        return $query->orderBy('category_name', 'asc');
+    }
+
 }

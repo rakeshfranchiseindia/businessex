@@ -15,10 +15,10 @@
                         Bx Listings
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="bxlistingDropdown">
-                        <li><a class="dropdown-item" href="{{ url('/individual-registration') }}">Business</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/business-registration') }}">Startup</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/partner-registration') }}">Investor</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/partner-registration') }}">Mentor</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/businesslisting') }}">Business</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/startuplisting') }}">Startup</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/investorlisting') }}">Investor</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/mentorlisting') }}">Mentor</a></li>
                         <li><a class="dropdown-item" href="https://www.franchiseindia.com/">Franchise</a></li>
                     </ul>
                 </li>
@@ -28,26 +28,26 @@
                         Registration
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="registrationDropdown">
-                        <li><a class="dropdown-item" href="{{ url('/individual-registration') }}">Business</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/business-registration') }}">Investor</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/partner-registration') }}">Mentor</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/partner-registration') }}">Startup</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/partner-registration') }}">Lender</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/registration/create-business-profile') }}">Business</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/registration/create-investor-profile') }}">Investor</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/registration/create-mentor-profile') }}">Mentor</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/registration/create-startup-profile') }}">Startup</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/registration/create-lender-profile') }}">Lender</a></li>
                         <li><a class="dropdown-item" href="https://www.franchiseindia.com/">Franchise</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Bx Insights</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/pricing') }}">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url('/articles') }}">Bx Insights</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button"
                         data-toggle="dropdown" aria-expanded="false">
                         Services
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                        <li><a class="dropdown-item" href="{{ url('/business-valuation') }}">Business Valuation</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/business-plan') }}">Business Plan</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/due-diligence') }}">Due Diligence</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/certified-business-broker') }}">Certified Business
+                        <li><a class="dropdown-item" href="{{ url('/service/business-valuation') }}">Business Valuation</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/service/business-plan') }}">Business Plan</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/service/due-diligence') }}">Due Diligence</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/service/certified-business-broker') }}">Certified Business
                                 Broker</a></li>
                     </ul>
                 </li>

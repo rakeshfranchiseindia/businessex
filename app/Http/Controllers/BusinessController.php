@@ -8,7 +8,7 @@ class BusinessController extends Controller
 {
     public function businessListing(Request $request)
     {
-        
-        return view('businesslist');
+        $businesses = collect(); 
+        return view('businesslist', compact('businesses'));
     }
 }

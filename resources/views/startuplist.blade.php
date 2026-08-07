@@ -10,7 +10,7 @@
                         <a href="{{ url('/') }}">Home</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        Businesses for Sale
+                        Start-UPs Looking for Investments
                     </li>
                 </ol>
             </div>
@@ -32,14 +32,15 @@
         </div>
 
         <div class="row catfull">
-            @include('includes.catleftbusinesses')
+            <div class="filter" id="showftr">Apply Filter</div>
+            @include('includes.catleftstartup')
 
-            <div class="col-12 col-sm-9 col-md-9 mdy setheading">
+            <div class="col-12 col-sm-9 col-md-9 mdy">
                 <div class="row">
-                    <div class="col-12 col-sm-9 col-md-9">
-                        <h1 class="headblk">Businesses for Sale</h1>
+                    <div class="col-12 col-sm-6 col-md-9 setheading">
+                        <h1 class="headblk">Start-UPs Looking for Investments</h1>
                     </div>
-                    <div class="col-12 col-sm-3 col-md-3 float-right setmob">
+                    <div class="col-12 col-sm-6 col-md-3 float-right setmob">
                         <div class="form-group">
                             <select class="form-control modysel myselectclass" id="Industry">
                                 <option>Recently Listed</option>
@@ -51,26 +52,34 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>
+                            BusinessEx offers 547 Start-ups in 13 various industries. Start-ups are looking to sell their business from all over India in 13 various industries. The Start-ups listed are planning to sell. The Start-ups are available in 13 various industries which includes Web & mobile development, Beauty Salons, Education Supplies etc. For listing your Start-up, we recommend creating a Startup profile in BusinessEx.
+                        </p>
+                    </div>
+                </div>
+
                 <div class="row setvto">
-                    @if(isset($businesses) && $businesses->count() > 0)
+                    @if(isset($startups) && $startups->count() > 0)
                         <ul class="listop otherlist">
-                            @foreach($businesses as $business)
+                            @foreach($startups as $startup)
                                 <li>
                                     <div class="ribbonblk">
-                                        <div class="ribbonblkinner">{{ $business->badge }}</div>
+                                        <div class="ribbonblkinner">{{ $startup->badge }}</div>
                                     </div>
 
                                     <div class="fullban">
-                                        <a href="#"><img src="{{ $business->image }}" alt="Business Image"></a>
+                                        <a href="#"><img src="{{ $startup->image }}" alt="Startup Image"></a>
                                     </div>
 
                                     <div class="fullb cattxt">
-                                        <span>{{ $business->category }}</span>
-                                        {{ $business->title }}
+                                        <span>{{ $startup->category }}</span>
+                                        {{ $startup->title }}
                                     </div>
 
                                     <div class="fullb contxt">
-                                        {{ $business->description }}
+                                        {{ $startup->description }}
                                     </div>
 
                                     <div class="sdd">
@@ -79,22 +88,22 @@
                                     </div>
 
                                     <div class="fullb citytxt">
-                                        {{ $business->location }}
+                                        {{ $startup->location }}
                                     </div>
 
                                     <div class="tagv">
-                                        @foreach($business->tags as $tag)
+                                        @foreach($startup->tags as $tag)
                                             <div class="tagvinner">{{ $tag }}</div>
                                         @endforeach
                                     </div>
 
                                     <div class="backv">
-                                        <div class="inblk">Asking price <span><i class="fas fa-rupee-sign"></i> {{ $business->asking_price }}</span></div>
-                                        <div class="inblk">Annual sale <span><i class="fas fa-rupee-sign"></i> {{ $business->annual_sale }}</span></div>
-                                        <div class="inblk">Establishment year <span>{{ $business->est_year }}</span></div>
-                                        <div class="inblk">Employee count <span>{{ $business->employee_count }}</span></div>
-                                        <div class="inblk">Entity type <span>{{ $business->entity_type }}</span></div>
-                                        <div class="inblk">Business type <span>{{ $business->business_type }}</span></div>
+                                        <div class="inblk">Seeking Investment <span><i class="fas fa-rupee-sign"></i> {{ $startup->investment }}</span></div>
+                                        <div class="inblk">Requirement <span>{{ $startup->requirement }}</span></div>
+                                        <div class="inblk">Establishment year <span>{{ $startup->est_year }}</span></div>
+                                        <div class="inblk">Employee count <span>{{ $startup->employee_count }}</span></div>
+                                        <div class="inblk">Entity type <span>{{ $startup->entity_type }}</span></div>
+                                        <div class="inblk">Business type <span>{{ $startup->business_type }}</span></div>
                                     </div>
 
                                     <div class="inbtn"><a href="#">Contact Business</a></div>
@@ -102,9 +111,9 @@
                             @endforeach
                         </ul>
 
-                        {{ $businesses->links('pagination::bootstrap-4') }}
+                        {{ $startups->links('pagination::bootstrap-4') }}
                     @else
-                        <div class="alert alert-info">No businesses found at the moment.</div>
+                        <div class="alert alert-info">No startups found at the moment.</div>
                     @endif
                 </div>
             </div>
