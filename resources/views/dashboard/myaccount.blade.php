@@ -56,14 +56,21 @@ use Illuminate\Support\Facades\Auth;
                                 </a>
                             </li>
                             <li class="list-group-item">
-                           @if(Auth::check() && Auth::user()->user_rand_id)
-                           <a href="{{ route('confidential.edit', Auth::user()->user_rand_id) }}" class="text-decoration-none text-dark d-block">
-                            Open Confidential Page
-                        </a>
-                        @endif
-
+                                @if(Auth::check() && Auth::user()->user_rand_id)
+                                    <a href="{{ route('confidential.edit', Auth::user()->user_rand_id) }}"
+                                        class="text-decoration-none text-dark d-block">
+                                        Open Confidential Page
+                                    </a>
+                                @endif
                             </li>
-
+                             <li class="list-group-item">
+                                 @if(Auth::check() && Auth::user()->user_rand_id)
+                                    <a href="{{ route('confidential.advert_detail', Auth::user()->user_rand_id) }}"
+                                        class="text-decoration-none text-dark d-block">
+                                        Advertisement Details
+                                    </a>
+                                @endif
+                             </li>
                         </ul>
                     </div>
                 </div>

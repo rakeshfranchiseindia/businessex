@@ -149,58 +149,52 @@ class ProfileController extends Controller
             'email' => $request->email,
             'location' => $request->location,
         ]);
-
         return redirect()->back()->with('success', 'Information updated successfully!');
     }
-    // public function advert_detail($user_rand_id)
-    // {
-    //     $user = ProfileInvestor::where('inv_profile_str', $user_rand_id)->firstOrFail();
-    //     return view('profile.confidential_advert', compact('user'));
-    // }
-    // public function advertisement_add(Request $request, $user_rand_id)
-    // {
 
-    // }
-    public function getInvestorAdvertisementDetails($investorUniqueId)
+    public function getInvestorAdvertisementDetails($investorUniqueId = null)
     {
-        $invAdvRecord = ProfileInvestor::query()
-            ->select('inv_profile_str', 'inv_headline', 'inv_intro')
-            ->where('inv_profile_str', '=', $investorUniqueId)
+        $invAdvRecord = ProfileInvestor::select(
+            'inv_profile_str',
+            'inv_headline',
+            'inv_intro'
+        )
+            ->where('inv_profile_str', $investorUniqueId)
             ->first();
 
-        return view('profile.confidential_advert', compact('invAdvRecord'));
+        $user = UserAccount::where('user_id', Auth::id())->firstOrFail();
+        return view('profile.confidential_advert', compact('invAdvRecord', 'user'));
     }
-
-    public function updateInvestorProfileDetails(Request $request, $uniqueid)
+    public function updateInvestorProfileDetails(Request $request, $uniqueid = null)
     {
         $request->validate([
             'inv_headline' => 'required|string|max:255',
             'inv_intro' => 'nullable|string',
         ]);
-
-        // record find karo
-        $investorupdate = ProfileInvestor::where('inv_profile_str', $uniqueid)->first();
-
-        if (!$investorupdate) {
-            // agar record nahi mila to 404 return karo
-            return response()->json([
-                'code' => 404,
-                'message' => 'No records found'
-            ], 404);
+        $user = UserAccount::where('user_id', Auth::id())->firstOrFail();
+        $profile = ProfileInvestor::where('user_id', Auth::id())
+            ->where('inv_profile_str', $uniqueid ?? $user->user_rand_id)
+            ->first();
+        if ($profile) {
+            // Update
+            $profile->update([
+                'inv_headline' => $request->inv_headline,
+                'inv_intro' => $request->inv_intro,
+                'inv_profile_status' => 1,
+            ]);
+            $message = 'Investor Profile Updated Successfully';
+        } else {
+            ProfileInvestor::create([
+                'user_id' => Auth::id(),
+                'inv_profile_str' => $uniqueid ?? $user->user_rand_id,
+                'inv_headline' => $request->inv_headline,
+                'inv_intro' => $request->inv_intro,
+                'inv_profile_status' => 1,
+            ]);
+            $message = 'Investor Profile Created Successfully';
         }
-
-        // agar record mila to update karo
-        $investorupdate->update([
-            'inv_headline' => $request->inv_headline,
-            'inv_intro' => $request->inv_intro,
-        ]);
-
-        return response()->json([
-            'code' => 200,
-            'message' => 'Investor Profile Updated Successfully',
-            'data' => $investorupdate
-        ], 200);
+        return redirect()->back()->with('success', $message);
     }
 
-
 }
+
