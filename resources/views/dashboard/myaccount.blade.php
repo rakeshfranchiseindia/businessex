@@ -25,18 +25,14 @@ use Illuminate\Support\Facades\Auth;
                             <a href="#"><i class="fa fa-facebook"></i></a>
                             <a href="#"><i class="fa fa-google"></i></a>
                             <a href="#"><i class="fa fa-linkedin"></i></a>
-
                         </div>
-
                         <div class="form-group">
                             <label>Profile Type</label>
                             <select class="form-control">
                                 <option selected>{{ $user->reg_profile ?? 'Member' }}</option>
                             </select>
                         </div>
-
                         <a href="#" class="btn btn-success btn-block mb-3">My Plan</a>
-
                         <ul class="list-group text-left">
                             <li class="list-group-item"><a href="{{ route('myaccount') }}"
                                     class="text-decoration-none text-dark d-block"><i class="fa fa-tachometer"></i>
@@ -56,14 +52,21 @@ use Illuminate\Support\Facades\Auth;
                                 </a>
                             </li>
                             <li class="list-group-item">
-                           @if(Auth::check() && Auth::user()->user_rand_id)
-                           <a href="{{ route('confidential.edit', Auth::user()->user_rand_id) }}" class="text-decoration-none text-dark d-block">
-                            Open Confidential Page
-                        </a>
-                        @endif
-
+                                @if(Auth::check() && Auth::user()->user_rand_id)
+                                    <a href="{{ route('confidential.edit', Auth::user()->user_rand_id) }}"
+                                        class="text-decoration-none text-dark d-block">
+                                        Open Confidential Page
+                                    </a>
+                                @endif
                             </li>
-
+                             <li class="list-group-item">
+                                 @if(Auth::check() && Auth::user()->user_rand_id)
+                                    <a href="{{ route('confidential.advert_detail', Auth::user()->user_rand_id) }}"
+                                        class="text-decoration-none text-dark d-block">
+                                        Advertisement Details
+                                    </a>
+                                @endif
+                             </li>
                         </ul>
                     </div>
                 </div>
