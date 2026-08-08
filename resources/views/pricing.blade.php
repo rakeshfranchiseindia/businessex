@@ -1,4 +1,3 @@
-{{-- resources/views/pricing/index.blade.php --}}
 @extends('layouts.app')
 
 @section('content')
@@ -394,7 +393,7 @@
                     </div>
                 </div>
 
-            </div>{{-- /.priclist --}}
+            </div>
 
             {{-- ==================== PLAN COMPARISON TABLE ==================== --}}
             <div class="feblkcontainer">
@@ -483,29 +482,129 @@
                         </li>
                     </ul>
                 </div>
-            </div>{{-- /.feblkcontainer --}}
+            </div>
             
-        </form>{{-- /.frmall --}}
-    </div>{{-- /.container.bex-main --}}
+        </form>
+    </div>
+    @include('includes.groupcompany')
+    @include('includes.newsletter')
+    @include('includes.categorylinkfooter')
 </main>
 
 @push('styles')
 <style>
-    /* Additional pricing page specific styles */
+    /* ========== FORCE ALL CARDS IN SINGLE ROW - IMPORTANT ========== */
+.priclist {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;      /* CRITICAL: No wrapping allowed */
+    gap: 15px !important;
+    overflow-x: auto !important;       /* Scroll horizontally if needed */
+    justify-content: center !important;
+    align-items: stretch !important;   /* Make all cards same height */
+    padding: 10px 0 !important;
+    width: 100% !important;
+}
+
+/* Force each card to fit within available space */
+.priclistinner {
+    flex: 0 1 auto !important;         /* Don't grow, allow shrink */
+    min-width: 0 !important;           /* Remove min-width constraint */
+    max-width: 25% !important;         /* Max 25% = 4 cards per row exactly */
+    width: calc(25% - 12px) !important; /* Calculate exact width minus gap */
+    
+    /* Ensure content doesn't overflow */
+    overflow: hidden !important;
+    
+    /* Keep existing styles */
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+/* Make internal elements responsive */
+.priclistinner .inhieght,
+.priclistinner .pritxt,
+.priclistinner .bntls {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    padding: 10px !important;
+}
+
+/* Reduce font sizes slightly on smaller screens */
+@media screen and (max-width: 1200px) {
     .priclistinner {
-        transition: all 0.3s ease;
-        cursor: pointer;
+        max-width: 25% !important;
+        width: calc(25% - 12px) !important;
     }
     
-    .priclistinner:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    .priclistinner .shead {
+        font-size: 18px !important;
     }
     
-    .priclistinner.active {
-        border: 2px solid #007bff !important;
-        position: relative;
+    .priclistinner .mainpri {
+        font-size: 22px !important;
     }
+    
+    .priclistinner .pritxt li {
+        font-size: 12px !important;
+        line-height: 1.4 !important;
+    }
+}
+
+/* Tablet - Still keep single row with smaller text */
+@media screen and (max-width: 992px) {
+    .priclistinner {
+        max-width: 25% !important;
+        width: calc(25% - 10px) !important;
+    }
+    
+    .priclistinner .shead {
+        font-size: 16px !important;
+    }
+    
+    .priclistinner .mainpri {
+        font-size: 20px !important;
+    }
+    
+    .priclistinner .pritxt li {
+        font-size: 11px !important;
+        padding: 5px 0 !important;
+    }
+    
+    .priclistinner .dll,
+    .priclistinner .savcol,
+    .priclistinner .mtxt {
+        font-size: 12px !important;
+    }
+}
+
+/* Mobile - Horizontal scroll or smaller cards */
+@media screen and (max-width: 768px) {
+    .priclist {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .priclistinner {
+        flex: 0 0 auto !important;
+        min-width: 260px !important;
+        max-width: 260px !important;
+        width: 260px !important;
+        scroll-snap-align: start;
+    }
+    
+    /* Hide scrollbar for cleaner look */
+    .priclist::-webkit-scrollbar {
+        height: 4px;
+    }
+    
+    .priclist::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,0.2);
+        border-radius: 2px;
+    }
+}
     
     .btnpric {
         cursor: pointer;

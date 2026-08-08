@@ -122,9 +122,12 @@
 
             <!-- Right Column -->
             <div class="col-12 col-sm-3 col-md-3 frmdfy2">
-                {{--@include('includes.faqsright')--}}
+                @include('includes.faqsright')
             </div>
         </div>
     </div>
 </main>
+  @include('includes.groupcompany')
+  @include('includes.newsletter')
+  @include('includes.categorylinkfooter')
 @endsection

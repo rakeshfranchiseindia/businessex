@@ -443,13 +443,14 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+            </div>
+            
+        </div>
+        
 
                         {{-- ===== MANAGEMENT TEAM INFO ===== --}}
-                        <div class="frmcheading marftop">Management Team Information</div>
-                        
-                        {{-- Team Member Name --}}
-                        <div class="row marsettop">
-                            <label class="col-12 col-sm-6 col-md-4 frmtxt" for="team_member_name">Name</label> 
-                            <div class="d-none d-md-block col-md-1">:</div>
-                            <div class="col-12 col-sm-6 col-md-6">
-                                <input type="text" name="team_member_name[]" id="team
+                        @include('includes.groupcompany')
+                        @include('includes.newsletter')
+                        @include('includes.categorylinkfooter')
+                    @endsection
