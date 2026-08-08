@@ -1,3 +1,9 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+    $user = Auth::user();
+@endphp
+
+
 <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
     <div class="container-fluid">
         <!-- Logo -->
@@ -28,11 +34,16 @@
                         Registration
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="registrationDropdown">
-                        <li><a class="dropdown-item" href="{{ url('/registration/create-business-profile') }}">Business</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/registration/create-investor-profile') }}">Investor</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/registration/create-mentor-profile') }}">Mentor</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/registration/create-startup-profile') }}">Startup</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/registration/create-lender-profile') }}">Lender</a></li>
+                        <li><a class="dropdown-item"
+                                href="{{ url('/registration/create-business-profile') }}">Business</a></li>
+                        <li><a class="dropdown-item"
+                                href="{{ url('/registration/create-investor-profile') }}">Investor</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/registration/create-mentor-profile') }}">Mentor</a>
+                        </li>
+                        <li><a class="dropdown-item"
+                                href="{{ url('/registration/create-startup-profile') }}">Startup</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/registration/create-lender-profile') }}">Lender</a>
+                        </li>
                         <li><a class="dropdown-item" href="https://www.franchiseindia.com/">Franchise</a></li>
                     </ul>
                 </li>
@@ -44,10 +55,12 @@
                         Services
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
-                        <li><a class="dropdown-item" href="{{ url('/service/business-valuation') }}">Business Valuation</a></li>
+                        <li><a class="dropdown-item" href="{{ url('/service/business-valuation') }}">Business
+                                Valuation</a></li>
                         <li><a class="dropdown-item" href="{{ url('/service/business-plan') }}">Business Plan</a></li>
                         <li><a class="dropdown-item" href="{{ url('/service/due-diligence') }}">Due Diligence</a></li>
-                        <li><a class="dropdown-item" href="{{ url('/service/certified-business-broker') }}">Certified Business
+                        <li><a class="dropdown-item" href="{{ url('/service/certified-business-broker') }}">Certified
+                                Business
                                 Broker</a></li>
                     </ul>
                 </li>
@@ -96,16 +109,16 @@
 
     <div class="text-center">
         <img src="{{ asset('assets/images/profile-dflt.gif') }}" class="rounded mb-2" width="120" alt="Profile">
-        <p class="mb-0"><i class="fa fa-map-marker"></i> North Delhi</p>
-        <h6 class="font-weight-bold">Billiehie Billiehieic</h6>
+        <p class="mb-0"><i class="fa fa-map-marker"></i>{{ $user->location ?? 'Not Set' }}</p>
+        <h6 class="font-weight-bold">{{ $user->name ?? 'N/A' }}</h6>
     </div>
 
     <div class="mt-3 p-3 bg-light rounded">
         <p class="mb-1"><i class="fa fa-envelope"></i> <strong>Email</strong></p>
-        <p class="text-muted mb-2">techsupport@franchiseindia.com</p>
+        <p class="text-muted mb-2">{{ $user->email ?? 'N/A' }}</p>
 
         <p class="mb-1"><i class="fa fa-phone"></i> <strong>Phone</strong></p>
-        <p class="text-muted mb-2">9899811050</p>
+        <p class="text-muted mb-2">{{ $user->mobile ?? 'N/A' }}</p>
 
         <div class="mt-2">
             <a href="#" class="text-success mr-2"><i class="fa fa-facebook"></i></a>

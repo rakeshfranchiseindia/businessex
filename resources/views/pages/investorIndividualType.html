@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Individual Investor Details - BusinessEx</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+
+<header class="top-header">
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <a class="navbar-brand" href="myaccount.html"><img src="https://www.businessex.com/assets/img/logo.svg" alt="BusinessEx" height="40"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav"><span class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a class="nav-link" href="myaccount.html">Home</a></li>
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Bx Listings</a></li>
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Registration</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Bx Insights</a></li>
+          <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Services</a></li>
+        </ul>
+        <div class="header-icons d-flex align-items-center">
+          <a href="#"><i class="fab fa-whatsapp"></i></a><a href="#"><i class="fas fa-phone-alt"></i></a><a href="#"><i class="fas fa-user"></i></a><a href="#"><i class="fas fa-bell"></i></a>
+          <img src="https://via.placeholder.com/32" alt="User" class="rounded-circle ml-2" width="32" height="32">
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="container-fluid py-4">
+  <div class="row">
+    <aside class="col-lg-3 mb-4">
+      <div class="dashboard-sidebar">
+        <div class="user-profile-card">
+          <div class="profile-image-container"><img src="https://via.placeholder.com/100" alt="Profile" class="profile-image"><div class="profile-edit-icon"><i class="fas fa-pencil-alt"></i></div></div>
+          <p class="user-location"><i class="fas fa-map-marker-alt"></i> North Delhi</p>
+          <h5 class="user-name">Billiehic Billiehic</h5>
+          <div class="user-contact"><p><i class="far fa-envelope"></i> techsupport@franchiseindia.com</p><p><i class="fas fa-phone"></i> 9899811050</p></div>
+          <div class="social-links mt-3"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#" class="linkedin"><i class="fab fa-linkedin-in"></i></a><a href="#" style="background:#1da1f2"><i class="fa-brands fa-x-twitter"></i></a></div>
+        </div>
+        <div class="profile-type-select"><label style="font-size:12px; font-weight:600; color:#666;">PROFILE</label><select onchange="changeProfileType(this)"><option value="investor" selected>Investor</option><option value="mentor">Mentor</option><option value="lender">Lender</option></select></div>
+        <button class="btn-my-plan">MY PLAN</button>
+        <ul class="sidebar-menu">
+          <li><a href="myaccount.html"><i class="fas fa-th-large"></i> Dashboard</a></li>
+          <li><a href="profileview.html"><i class="far fa-eye"></i> Profile Views <span class="badge">0</span></a></li>
+          <li><a href="myinvestor.html"><i class="far fa-user"></i> My Profile</a></li>
+          <li class="has-submenu"><a href="#" onclick="toggleSubmenu(this)"><i class="far fa-comments"></i> My Interactions <i class="fas fa-chevron-down float-right mt-1"></i></a><ul class="submenu"><li><a href="contactHistory.html">Contact History</a></li><li><a href="instaResponse.html">Insta Response</a></li><li><a href="bxproposal.html">BX Proposal</a></li></ul></li>
+          <li class="has-submenu"><a href="#" onclick="toggleSubmenu(this)" class="active"><i class="fas fa-cog"></i> Manage <i class="fas fa-chevron-down float-right mt-1"></i></a><ul class="submenu show"><li><a href="investorConfidentials.html">Confidential Info</a></li><li><a href="investorAdvertisement.html">Advertisement</a></li><li><a href="investorIndividualType.html" class="active">Profile Information</a></li><li><a href="investorMultiPref.html">Preferences</a></li></ul></li>
+          <li><a href="#"><i class="fas fa-lock"></i> Change Password</a></li>
+        </ul>
+      </div>
+    </aside>
+
+    <main class="col-lg-9">
+      <div class="main-content">
+        <h5 class="page-title">MANAGE INDIVIDUAL INVESTOR INFORMATION</h5>
+        
+        <!-- Tabs -->
+        <ul class="nav custom-tabs">
+          <li class="nav-item"><a class="nav-link" data-tab="ind-tab1" onclick="switchTab('ind-tab1')">Confidential Information</a></li>
+          <li class="nav-item"><a class="nav-link" data-tab="ind-tab2" onclick="switchTab('ind-tab2')">Advertisement Details</a></li>
+          <li class="nav-item"><a class="nav-link active" data-tab="ind-tab3" onclick="switchTab('ind-tab3')">Profile Information</a></li>
+          <li class="nav-item"><a class="nav-link" data-tab="ind-tab4" onclick="switchTab('ind-tab4')">Preferences</a></li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div id="ind-tab3" class="tab-content">
+          <form class="needs-validation" novalidate>
+            <div class="form-group"><label>Company Name*</label><input type="text" class="form-control" placeholder="Enter Company Name" required></div>
+            <div class="form-group"><label>Designator*</label><input type="text" class="form-control" placeholder="Enter your Designation" required></div>
+            <div class="form-group">
+              <label class="checkbox-group"><input type="checkbox" checked> Investment Preference</label>
+              <label class="checkbox-group ml-4"><input type="checkbox"> Full Acquisition</label>
+            </div>
+            <div class="row">
+              <div class="col-md-6"><div class="form-group"><label>For Investment</label><input type="number" class="form-control" placeholder="0" value="0"></div></div>
+              <div class="col-md-6"><div class="form-group"><label>&nbsp;</label><input type="number" class="form-control" placeholder="0" value="0"></div></div>
+            </div>
+            <div class="form-group"><label>Investment Stake Preference</label><input type="text" class="form-control" placeholder="Enter %"></div>
+            <div class="form-group">
+              <label>Acquisition</label>
+              <div class="row">
+                <div class="col-md-6"><label>Acquiring Capacity:</label><input type="number" class="form-control" value="0"></div>
+                <div class="col-md-6"><input type="number" class="form-control" value="0"></div>
+              </div>
+            </div>
+            <div class="form-group"><label>About Yourself:</label><textarea class="form-control" rows="4" placeholder="Enter your Professional Summary"></textarea></div>
+            <div class="form-group"><label>Profile Pictures:</label><div class="file-upload-area"><i class="far fa-image"></i><p>Click or drag files here to upload</p><input type="file" accept="image/*" hidden><button type="button" class="file-upload-btn">Browse</button><small class="text-muted d-block mt-2">No file chosen</small></div><small class="text-muted">Accepted formats: .png, .jpg, .gif</small></div>
+            <div class="form-group"><label>Your LinkedIn Profile:</label><input type="url" class="form-control" placeholder="Enter URL"></div>
+            <button type="submit" class="btn-submit">SUBMIT</button>
+          </form>
+        </div>
+
+        <div id="ind-tab1" class="tab-content" style="display:none;"><p class="text-muted">Confidential information form content...</p></div>
+        <div id="ind-tab2" class="tab-content" style="display:none;"><p class="text-muted">Advertisement details form content...</p></div>
+        <div id="ind-tab4" class="tab-content" style="display:none;"><p class="text-muted">Preferences form content...</p></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<footer class="footer-section">
+  <div class="container-fluid">
+    <div class="group-companies"><h4>Our Group Companies</h4><div class="company-logos"><img src="https://via.placeholder.com/150x60/fff/d32f2f?text=franchiseindia.com" class="company-logo"><img src="https://via.placeholder.com/150x60/673ab7/fff?text=Dealer+India" class="company-logo"><img src="https://via.placeholder.com/150x60/fff/c62828?text=IndianRetailer" class="company-logo"><img src="https://via.placeholder.com/150x60/fff/d32f2f?text=RESTAURANT+INDIA" class="company-logo"><img src="https://via.placeholder.com/150x60/fff/1976d2?text=FranCorp" class="company-logo"><img src="https://via.placeholder.com/150x60/fff/00897b?text=FranGlobal" class="company-logo"><img src="https://via.placeholder.com/150x60/212121/fff?text=Entrepreneur" class="company-logo"><img src="https://via.placeholder.com/150x60/fff/0277bd?text=LICENSE+INDIA" class="company-logo"><img src="https://via.placeholder.com/150x60/fff/455a64?text=ISFA" class="company-logo"></div></div>
+    <div class="newsletter-section"><div class="row align-items-center"><div class="col-md-6"><h3>Get Industry First Insights</h3><p>Sign up for our exclusive Newsletter</p></div><div class="col-md-6"><form class="newsletter-form row"><div class="col-sm-6 mb-2"><input type="text" class="form-control" placeholder="Name"></div><div class="col-sm-6 mb-2"><input type="email" class="form-control" placeholder="Email"></div><div class="col-sm-6 mb-2"><input type="tel" class="form-control" placeholder="Contact No."></div><div class="col-sm-6 mb-2"><input type="text" class="form-control" placeholder="City"></div><div class="col-12 text-center mt-2"><button type="submit" class="btn-subscribe">Subscribe Now</button></div></form></div></div></div>
+    <div class="footer-bottom"><div class="container-fluid"><div class="row align-items-center"><div class="col-md-6"><strong>Follow BusinessEx</strong><div class="social-links-footer mt-2"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a><a href="#"><i class="fab fa-youtube"></i></a></div></div><div class="col-md-6 text-right"><span>Stay tuned & get updated</span></div></div></div></div>
+    <div class="copyright"><p>Copyright © 2021 to 2025 BusinessEx</p></div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

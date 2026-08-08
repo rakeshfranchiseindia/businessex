@@ -35,7 +35,7 @@
       @yield('content')
    </main>
    <!-- Footer -->
-   @include('partials.footer')
+   @include('account_dashboard.footerDashboard')
    <!-- Registration/Login Modal -->
    <!-- login -->
    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
