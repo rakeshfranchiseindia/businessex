@@ -75,13 +75,15 @@ Route::post('/reset-password-submit', [ProfileController::class, 'resetPasswordS
 Route::get('/dashboard/investor-account', [ProfileController::class,'getUserProfileDetails'])->name('get.user.details');
 Route::get('dashboard/user/edit', [ProfileController::class, 'userEditPage'])->name('user.edit.page');
 Route::put('/user', [ProfileController::class, 'update'])->name('user.update');
-Route::get('/dashboard/profileview', [ProfileController::class, 'profileView'])->name('profileview');
+// Route::get('/dashboard/profileview', [ProfileController::class, 'profileView'])->name('profileview');
 Route::get('/dashboard/mentorConfidentials/{user_rand_id}', [ProfileController::class, 'edit'])->name('confidential.edit');
 Route::post('/dashboard/mentorConfidentials/{user_rand_id}', [ProfileController::class, 'updateConfidential_info'])->name('confidential.update');
 Route::get('/dashboard/investorAdvertisement/{user_rand_id?}', [ProfileController::class, 'getInvestorAdvertisementDetails'])->name('confidential.advert_detail');
 Route::post('/dashboard/investorAdvertisement/{user_rand_id?}', [ProfileController::class, 'updateInvestorProfileDetails'])->name('advertisement.save');
 Route::get('/dashboard/preferences', [ProfileController::class, 'showPreferences'])->name('preferences');
 Route::post('/dashboard/preferences/save', [ProfileController::class, 'savePreferences'])->name('preferences.save');
+Route::get('/dashboard/profileview', [ProfileController::class, 'getVisitor'])->name('profileview');
+
 });
 
 

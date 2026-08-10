@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 use App\Models\UserAccount;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VerifyEmailMail;
-
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
@@ -204,10 +204,19 @@ class ProfileController extends Controller
     {
         return view('profile.preferences');
     }
-
-    public function profileView()
+    public function getVisitor(Request $request)
     {
-     return view('account_dashboard.profileview');
+        $userId = Auth::id();
+        $visitor = DB::table('profile_visitors as pv')
+            ->join('user_profiles as up', function ($join) {
+                $join->on('up.profile_str', '=', 'pv.profile_str')
+                    ->on('up.profile_type', '=', 'pv.profile_type');
+            })
+            ->where('up.user_id', $userId)
+            ->where('pv.user_id', $userId)
+            ->selectRaw('COUNT(DISTINCT pv.profile_id) AS unique_profile_visitors')
+            ->first();
+        return view('account_dashboard.profileview', compact('visitor'));
     }
 }
 
