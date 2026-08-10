@@ -16,4 +16,12 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_startup_profile_route_redirects_to_the_registration_form(): void
+    {
+        $response = $this->get('/registration/create-startup-profile');
+
+        $response->assertStatus(200);
+        $response->assertSee('Create your Start-up Profile');
+    }
 }

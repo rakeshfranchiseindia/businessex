@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Initialize all components
   initNavbar();
-  initForms();
+  //initForms();
   initAccordion();
   initSmoothScroll();
   initAnimations();
-  initNewsletterForm();
+  //initNewsletterForm();
 });
 
 /**
@@ -64,9 +64,9 @@ function initForms() {
     heroForm.addEventListener('submit', function(e) {
       e.preventDefault();
       
-      if (validateForm(this)) {
-        submitForm(this, 'hero-form');
-      }
+      // if (validateForm(this)) {
+      //   submitForm(this, 'hero-form');
+      // }
     });
   }
   
@@ -88,27 +88,27 @@ function initForms() {
 /**
  * Validate form fields
  */
-function validateForm(form) {
-  let isValid = true;
-  const requiredFields = form.querySelectorAll('[required]');
+// function validateForm(form) {
+//   let isValid = true;
+//   const requiredFields = form.querySelectorAll('[required]');
   
-  requiredFields.forEach(field => {
-    removeError(field);
+//   requiredFields.forEach(field => {
+//     removeError(field);
     
-    if (!field.value.trim()) {
-      showError(field, 'This field is required');
-      isValid = false;
-    } else if (field.type === 'email' && !isValidEmail(field.value)) {
-      showError(field, 'Please enter a valid email address');
-      isValid = false;
-    } else if (field.type === 'tel' && !isValidPhone(field.value)) {
-      showError(field, 'Please enter a valid phone number');
-      isValid = false;
-    }
-  });
+//     if (!field.value.trim()) {
+//       showError(field, 'This field is required');
+//       isValid = false;
+//     } else if (field.type === 'email' && !isValidEmail(field.value)) {
+//       showError(field, 'Please enter a valid email address');
+//       isValid = false;
+//     } else if (field.type === 'tel' && !isValidPhone(field.value)) {
+//       showError(field, 'Please enter a valid phone number');
+//       isValid = false;
+//     }
+//   });
   
-  return isValid;
-}
+//   return isValid;
+// }
 
 /**
  * Show error message for form field
@@ -270,100 +270,7 @@ function initAnimations() {
   }
 }
 
-/**
- * Newsletter form handling
- */
-function initNewsletterForm() {
-  const newsletterForm = document.querySelector('.newsletter-form');
-  
-  if (newsletterForm) {
-    newsletterForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const emailInput = this.querySelector('input[type="email"]');
-      const nameInput = this.querySelector('input[type="text"]');
-      
-      if (emailInput && emailInput.value && isValidEmail(emailInput.value)) {
-        showNotification('Successfully subscribed to our newsletter!', 'success');
-        this.reset();
-      } else if (emailInput) {
-        showNotification('Please enter a valid email address.', 'error');
-        emailInput.focus();
-      }
-    });
-  }
-}
 
-/**
- * Show notification toast
- */
-function showNotification(message, type = 'info') {
-  // Remove existing notifications
-  const existingNotification = document.querySelector('.notification-toast');
-  if (existingNotification) {
-    existingNotification.remove();
-  }
-  
-  // Create notification element
-  const notification = document.createElement('div');
-  notification.className = `notification-toast notification-${type}`;
-  notification.innerHTML = `
-    <div class="notification-content">
-      <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-      <span>${message}</span>
-      <button class="notification-close">&times;</button>
-    </div>
-  `;
-  
-  // Add styles
-  notification.style.cssText = `
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    background-color: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
-    color: white;
-    padding: 15px 25px;
-    border-radius: 8px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-    z-index: 9999;
-    transform: translateX(120%);
-    transition: transform 0.3s ease;
-    max-width: 400px;
-  `;
-  
-  document.body.appendChild(notification);
-  
-  // Animate in
-  setTimeout(() => {
-    notification.style.transform = 'translateX(0)';
-  }, 10);
-  
-  // Close button handler
-  const closeBtn = notification.querySelector('.notification-close');
-  closeBtn.style.cssText = `
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    margin-left: 15px;
-    padding: 0;
-    line-height: 1;
-  `;
-  
-  closeBtn.addEventListener('click', () => {
-    notification.style.transform = 'translateX(120%)';
-    setTimeout(() => notification.remove(), 300);
-  });
-  
-  // Auto-remove after 5 seconds
-  setTimeout(() => {
-    if (notification.parentNode) {
-      notification.style.transform = 'translateX(120%)';
-      setTimeout(() => notification.remove(), 300);
-    }
-  }, 5000);
-}
 
 /**
  * Footer tabs functionality

@@ -16,13 +16,15 @@ use App\Http\Controllers\StartupProfileController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ServiceListingController;
 use App\Http\Controllers\BxInsightController;
+use App\Http\Controllers\SubscribeController;
 
 
-Route::get('/', function () {
-    return view('index');
-})->name('home');
+// Route::get('/', function () {
+//     return view('index');
+// })->name('home');
 
-//Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubscribe'])->name('newsLetterSubscribe');
 
 Route::get('/businesslisting', [BusinessController::class, 'businessListing'])->name('business.listing');
 Route::get('/investorlisting', [InvestorController::class, 'investorListing'])->name('investor.listing');

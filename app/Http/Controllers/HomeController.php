@@ -26,6 +26,7 @@ use App\Models\IndPrefMentorExpertise;
 use App\Models\IndPrefMentor;
 use App\Models\BxAuthor;
 use App\Models\BxArticle;
+use App\Models\Testimonial;
 use Carbon\Carbon;
 
 
@@ -43,12 +44,15 @@ class HomeController extends Controller
 
     public function home()
     {
-        return $this->getBxNewsHomeListing();
-        // [$businessList, $parentChild] = $this->getIndustrySeller();
-        // return [
-        //     'industrySeller' => $businessList,
-        //     'parentChildCategoryId' => $parentChild
-        // ];
+         $testimonials = Testimonial::all();
+        //return view('index', compact('testimonials'));
+        //return $this->getBxNewsHomeListing();
+        [$businessList, $parentChild] = $this->getIndustrySeller();
+        return view('index', [
+            'industrySeller' => $businessList,
+            'parentChildCategoryId' => $parentChild,
+            'testimonials' => $testimonials
+        ]);
 
     }
         

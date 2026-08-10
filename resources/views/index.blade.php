@@ -1568,57 +1568,53 @@
         </div>
 
         <!-- View Opportunities By Industry -->
-        <div class="mb-5">
-            <h3 class="h5 font-weight-bold mb-3">View Opportunities By Industry</h3>
-            <ul class="list-unstyled row">
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/food-beverage-businesses-for-sale/6/s0/st0') }}">Food & Beverage</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/industrial-machinery-manufacturing-businesses-for-sale/13/s0/st0') }}">Machinery & Manufacturing</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}">Energy & Environment</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/education-businesses-for-sale/3/s0/st0') }}">Education</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/beauty-health-wellness-businesses-for-sale/4/s0/st0') }}">Beauty, Health & Wellness</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/automobile-businesses-for-sale/1/s0/st0') }}">Automobile</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/finance-businesses-for-sale/11/s0/st0') }}">Finance</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-services-businesses-for-sale/5/s0/st0') }}">Business Services</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/retail-businesses-for-sale/14/s0/st0') }}">Retail</a></li>
-            </ul>
-        </div>
+      <div class="industry-section mb-5">
+      <h3 class="h5 font-weight-bold mb-3">View Opportunities By Industry</h3>
+      <ul class="list-unstyled d-flex flex-wrap gap-2">
+        <li><a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}" class="industry-btn">Energy & Environment</a></li>
+        <li><a href="{{ url('/businesslisting/business-services-businesses-for-sale/5/s0/st0') }}" class="industry-btn">Business Services</a></li>
+        <li><a href="{{ url('/businesslisting/retail-businesses-for-sale/14/s0/st0') }}" class="industry-btn">Retail</a></li>
+        <li><a href="{{ url('/businesslisting/finance-businesses-for-sale/11/s0/st0') }}" class="industry-btn">Finance</a></li>
+        <li><a href="{{ url('/businesslisting/food-beverage-businesses-for-sale/6/s0/st0') }}" class="industry-btn">Food & Beverage</a></li>
+        <li><a href="{{ url('/businesslisting/travel-tourism-businesses-for-sale/9/s0/st0') }}" class="industry-btn">Travel & Tourism</a></li>
+        <li><a href="{{ url('/businesslisting/construction-maintenance-businesses-for-sale/10/s0/st0') }}" class="industry-btn">Construction & Maintenance</a></li>
+        <li><a href="{{ url('/businesslisting/automobile-businesses-for-sale/1/s0/st0') }}" class="industry-btn">Automobile</a></li>
+        <li><a href="{{ url('/businesslisting/fmcg-businesses-for-sale/15/s0/st0') }}" class="industry-btn">FMCG</a></li>
+    </ul>
+</div>
+
 
         <!-- View Opportunities By Location -->
-        <div class="mb-5">
-            <h3 class="h5 font-weight-bold mb-3">View Opportunities By Location</h3>
-            <ul class="list-unstyled row">
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting') }}">All India (1500+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-delhi/c0/s0/DL') }}">Delhi (150+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-maharashtra/c0/s0/MH') }}">Maharashtra (200+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-karnataka/c0/s0/KA') }}">Karnataka (190+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-tamil-nadu/c0/s0/TN') }}">Tamil Nadu (100+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-uttar-pradesh/c0/s0/UP') }}">Uttar Pradesh (80+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-haryana/c0/s0/HR') }}">Haryana (80+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-west-bengal/c0/s0/WB') }}">West Bengal (20+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-rajasthan/c0/s0/RJ') }}">Rajasthan (20+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-kerala/c0/s0/KL') }}">Kerala (15+)</a></li>
-                <!-- Add more states as needed -->
-            </ul>
-        </div>
+        <div class="industry-section mb-5">
+      <h3 class="h5 font-weight-bold mb-3">View Opportunities By Location</h3>
+         <ul class="list-unstyled d-flex flex-wrap gap-2">
+         <li><a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}" class="industry-btn">Energy & Environment</a></li>
+         <li><a href="{{ url('/businesslisting/business-services-businesses-for-sale/5/s0/st0') }}" class="industry-btn">Business Services</a></li>
+         <li><a href="{{ url('/businesslisting/retail-businesses-for-sale/14/s0/st0') }}" class="industry-btn">Retail</a></li>
+         <li><a href="{{ url('/businesslisting/finance-businesses-for-sale/11/s0/st0') }}" class="industry-btn">Finance</a></li>
+         <li><a href="{{ url('/businesslisting/food-beverage-businesses-for-sale/6/s0/st0') }}" class="industry-btn">Food & Beverage</a></li>
+         <li><a href="{{ url('/businesslisting/travel-tourism-businesses-for-sale/9/s0/st0') }}" class="industry-btn">Travel & Tourism</a></li>
+         <li><a href="{{ url('/businesslisting/construction-maintenance-businesses-for-sale/10/s0/st0') }}" class="industry-btn">Construction & Maintenance</a></li>
+         <li><a href="{{ url('/businesslisting/automobile-businesses-for-sale/1/s0/st0') }}" class="industry-btn">Automobile</a></li>
+         <li><a href="{{ url('/businesslisting/fmcg-businesses-for-sale/15/s0/st0') }}" class="industry-btn">FMCG</a></li>
+      </ul>
+      </div>
 
         <!-- View Opportunities By Investment -->
-        <div>
-            <h3 class="h5 font-weight-bold mb-3">View Opportunities By Investment</h3>
-            <ul class="list-unstyled row">
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-50k-2lakh') }}">₹50K – ₹2 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-2lakh-5lakh') }}">₹2 Lakh – ₹5 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-5lakh-10lakh') }}">₹5 Lakh – ₹10 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-10lakh-20lakh') }}">₹10 Lakh – ₹20 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-20lakh-30lakh') }}">₹20 Lakh – ₹30 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-30lakh-50lakh') }}">₹30 Lakh – ₹50 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-50lakh-1cr') }}">₹50 Lakh – ₹1 Cr</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-1cr-2cr') }}">₹1 Cr – ₹2 Cr</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-2cr-5cr') }}">₹2 Cr – ₹5 Cr</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-5cr-10cr') }}">₹5 Cr – ₹10 Cr</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-10cr-20cr') }}">₹10 Cr – ₹20 Cr</a></li>
-            </ul>
-        </div>
-    </div>
+        <div class="industry-section mb-5">
+      <h3 class="h5 font-weight-bold mb-3">View Opportunities By Investment</h3>
+         <ul class="list-unstyled d-flex flex-wrap gap-2">
+         <li><a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}" class="industry-btn">Energy & Environment</a></li>
+         <li><a href="{{ url('/businesslisting/business-services-businesses-for-sale/5/s0/st0') }}" class="industry-btn">Business Services</a></li>
+         <li><a href="{{ url('/businesslisting/retail-businesses-for-sale/14/s0/st0') }}" class="industry-btn">Retail</a></li>
+         <li><a href="{{ url('/businesslisting/finance-businesses-for-sale/11/s0/st0') }}" class="industry-btn">Finance</a></li>
+         <li><a href="{{ url('/businesslisting/food-beverage-businesses-for-sale/6/s0/st0') }}" class="industry-btn">Food & Beverage</a></li>
+         <li><a href="{{ url('/businesslisting/travel-tourism-businesses-for-sale/9/s0/st0') }}" class="industry-btn">Travel & Tourism</a></li>
+         <li><a href="{{ url('/businesslisting/construction-maintenance-businesses-for-sale/10/s0/st0') }}" class="industry-btn">Construction & Maintenance</a></li>
+         <li><a href="{{ url('/businesslisting/automobile-businesses-for-sale/1/s0/st0') }}" class="industry-btn">Automobile</a></li>
+         <li><a href="{{ url('/businesslisting/fmcg-businesses-for-sale/15/s0/st0') }}" class="industry-btn">FMCG</a></li>
+      </ul>
+      </div>
 </section>
 
 
@@ -2755,186 +2751,131 @@
          <!-- ======= Did You Find Anything Interested Section ======= -->
          <section class="section-business-ex section-t2 section-b2 nav-arrow-a b-white">
             <div class="container-fluid">
-            <div class="row">
-               <div class="col-md-12 text-center">
-                  <div class="title-wrap justify-content-between">
-                     <div class="title-box ">
-                        <h1 class="bex-title-a">Did You Find Anything Interested ?
-                        </h1>
-                        <h5>Why Wait, Create Your Profile Now.</h5>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main">
-            <div class="row">
-               <div class="col-xl-6 offset-xs-12 offset-md-12 offset-lg-12 offset-xl-3 align-self-center">
-                  <form>
-                     <div class="input-group">
-                        <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                           <option selected>Select a profile...</option>
-                           <option value="1">Business | Looking To Sell</option>
-                           <option value="2">Startup | Looking For Funds</option>
-                           <option value="3">Investor | Looking To Invest/Buy</option>
-                           <option value="4">Mentor | Looking To Guide/Coach </option>
-                        </select>
-                        <div class="input-group-append">
-                           <button class="btn  btn-success-main" type="button">CREATE PROFILE</button>
-                        </div>
-                  </form>
-                  </div>
-               </div>
-            </div>
-         </section>
-         <!-- Did You Find Anything Interested Section -->
-         <!-- ======= Did You Find Anything Interested Section ======= -->
-         <section class="section-business-ex section-t2 section-b2 nav-arrow-a b-white">
-            <div class="container-fluid">
-               <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main">
-                  <div class="row">
-                     <div class="col-xs-12 col-sm-12 col-md-6 footer-newsletter">
-                        <div class="text-sm-center text-md-center text-lg-left text-xl-left">
-                           <h2>Subscribe Now</h2>
-                           <p>Get updated through our mails</p>
-                           <form action=" " method="post">
-                              <input type="email" name="email"><input type="submit" value="Subscribe">
-                           </form>
-                        </div>
-                     </div>
-                     <div class="col-xs-12 col-sm-12 col-md-6 ">
-                        <div class="text-sm-center text-md-center text-lg-right text-xl-right">
-                           <h2>Follow Business-Ex</h2>
-                           <p>Stay tuned & get updated</p>
-                           <div class="social-links text-center text-md-right pt-3 pt-md-0">
-                              <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-                              <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-                              <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
-                              <a href="#" class="google-plus"><i class="fa fa-youtube"></i></a>
-                              <!-- <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a> -->
+               <div class="row">
+                     <div class="col-md-12 text-center">
+                        <div class="title-wrap justify-content-between">
+                           <div class="title-box ">
+                                 <h1 class="bex-title-a">Did You Find Anything Interested ?</h1>
+                                 <h5>Why Wait, Create Your Profile Now.</h5>
                            </div>
                         </div>
                      </div>
-                  </div>
+               </div>
+               <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main">
+                     <div class="row">
+                        <div class="col-xl-6 offset-xs-12 offset-md-12 offset-lg-12 offset-xl-3 align-self-center">
+                           <form id="profileForm">
+                                 <div class="input-group">
+                                    <select class="custom-select" id="profileSelect" aria-label="Select profile type">
+                                       <option value="" selected>Select a profile...</option>
+                                       <option value="business">Business | Looking To Sell</option>
+                                       <option value="startup">Startup | Looking For Funds</option>
+                                       <option value="investor">Investor | Looking To Invest/Buy</option>
+                                       <option value="mentor">Mentor | Looking To Guide/Coach</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                       <button class="btn btn-success-main" type="button" id="createProfileBtn">
+                                             CREATE PROFILE
+                                       </button>
+                                    </div>
+                                 </div>
+                           </form>
+                        </div>
+                     </div>
                </div>
             </div>
          </section>
-         <!-- Did You Find Anything Interested Section -->
-         <!-- ======= About us Section ======= -->
-         <section class="section-business-ex section-t2 nav-arrow-a">
-            <div class="container-fluid">
-            <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main about-us">
-            <div class="row">
-               <div class="col-md-12">
-                  <p><b>About Business Ex</b></p>
-                  BusinessEx is an online interactive platform to connect Businesses and Startups with Investors, Mentors,
-                  Incubators, Lenders and Brokers, across industries and geographies.<br />
-                  1500+ Businesses, 1400+ Startups, 1800+ Investors, 200+ Mentors and 50+ Incubators are registered in our
-                  community so far!<br />
-                  In addition, we also provide Business Services such as B-Plan assistance, Business Valuations, Due
-                  Diligence and Legal Checks. BusinessEx has partnered with BizEquity - the world’s only patented and the
-                  largest provider of business valuations, having valued over 33 Million Private Businesses
-                  globally.<br /><br />
-                  We have also ventured into events with our flagship event called BEx Guruwaar, held every Thursday in
-                  major cities across India. BEx Guruwaar is aimed at bringing together the startup community and
-                  celebrating the power of entrepreneurship. Our mission is to help early stage startups and aspiring
-                  entrepreneurs by providing them with the guidance, mentorship and support that they need to turn their
-                  entrepreneurial dreams into reality.
+      <!-- Testmonials section start here -->
+      <div class="title-box">
+           <h2 class="bex-title-a">What What Our Clients say</h2>
+      </div>
+         <div id="clientssay" class="owl-carousel owl-theme">
+            @foreach($testimonials as $testimonial)
+               <div class="item d-flex flex-wrap">
+                     <div class="card shadow-sm" style="background:#fff; border-radius:8px; padding:20px;">
+                        <div class="card-body">
+                           <p class="card-text mb-3" style="font-style: italic; color:#333;">
+                                 "{{ $testimonial['text'] }}"
+                           </p>
+                           <div class="d-flex align-items-center">
+                                 <div>
+                                    <h6 class="mb-0" style="font-weight:600;">{{ $testimonial['name'] }}</h6>
+                                    <small class="text-muted">{{ $testimonial['designation'] }}</small>
+                                 </div>
+                           </div>
+                        </div>
+                     </div>
                </div>
-            </div>
-         </section>
-         <!-- About us Section -->
-         <!-- ======= footer widget Section ======= -->
-         <section class="section-business-ex section-t2 nav-arrow-a">
-            <div class="container-fluid">
-            <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main about-us">
-            <div class="row">
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-            </div>
-         </section>
+            @endforeach
+         </div>
+         @include('includes.groupcompany')
+         @include('includes.newsletter')
+         @include('includes.categorylinkfooter')
+         @push('styles')
+         <style>
+            .industry-section {
+               background-color: #fff;
+               padding: 20px;
+            }
 
-         <!-- footer widget Section -->
-         <!-- ======= footer widget Section ======= -->
-         <section class="section-business-ex section-t2 section-b2 nav-arrow-a">
-            <div class="container-fluid">
-            <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main about-us">
-            <div class="row">
-               <div class="col-md-12">
-                  <p><b>Popular Searches</b></p>
-                  <ul class="bex-popular-search-section">
-                     <li> <a href="#">Automobile</a></li>
-                     <li> <a href="#">Business Services </a></li>
-                     <li> <a href="#">Fmcg </a></li>
-                     <li> <a href="#">Education </a></li>
-                     <li> <a href="#">Beauty, Health & Wellness </a></li>
-                     <li> <a href="#">Food & Beverage </a></li>
-                     <li> <a href="#">Fashion </a></li>
-                     <li> <a href="#">Building Construction & Home Products </a></li>
-                     <li> <a href="#">Travel & Tourism </a></li>
-                     <li> <a href="#">Leisure & Entertainment </a></li>
-                     <li> <a href="#">Finance </a></li>
-                     <li> <a href="#">Industrial Machinery & Manufacturing </a></li>
-                     <li> <a href="#">Retail </a></li>
-                  </ul>
-               </div>
-            </div>
-         </section>
-         <!-- end footer widget Section -->
+            .industry-btn {
+               display: inline-block;
+               background-color: #fbe6d4; /* soft beige tone */
+               color: #000;
+               padding: 8px 16px;
+               border-radius: 10px;
+               text-decoration: none;
+               font-weight: 500;
+               transition: all 0.2s ease-in-out;
+               margin: 5px; /* adds space between buttons */
+            }
+
+            .industry-btn:hover {
+               background-color: #f3d6b8;
+               color: #000;
+               text-decoration: none;
+            }
+         </style>
+         @endpush
+         <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const createProfileBtn = document.getElementById('createProfileBtn');
+    const profileSelect = document.getElementById('profileSelect');
+
+    if (!createProfileBtn || !profileSelect) {
+        return;
+    }
+
+    createProfileBtn.addEventListener('click', function () {
+        const selected = profileSelect.value;
+
+        if (!isLoggedIn) {
+            const loginModal = new bootstrap.Modal(document.getElementById('login'));
+            loginModal.show();
+        } else {
+            let url = '/registration/create-startup-profile';
+
+            switch (selected) {
+                case 'startup':
+                    url = '/registration/create-startup-profile';
+                    break;
+                case 'business':
+                    url = '/registration/create-business-profile';
+                    break;
+                case 'investor':
+                    url = '/registration/create-investor-profile';
+                    break;
+                case 'mentor':
+                    url = '/registration/create-mentor-profile';
+                    break;
+                default:
+                    url = '/registration/create-startup-profile';
+            }
+
+            window.location.href = url;
+        }
+    });
+});
+
+</script>
+         
