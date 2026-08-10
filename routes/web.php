@@ -65,19 +65,19 @@ Route::view('/privacy-policy', 'statics.privacy');
 Route::view('/terms', 'statics.terms');
 Route::view('/contact-us', 'statics.contact');
 Route::view('/sitemap', 'statics.sitemap');
-
 //Shivani Chauhan
 Route::middleware(['auth', 'verified'])->group(function () {
     
-Route::get('/change-password', [ProfileController::class, 'changePassword'])->name('change.password');
+Route::get('dashboard/change-password', [ProfileController::class, 'changePassword'])->name('change.password');
 Route::post('/change-password', [ProfileController::class, 'updatePassword'])->name('update.password');
 Route::get('/forgot-password', [ProfileController::class, 'forgotPassword'])->name('forgot.password');
 Route::post('/forgot-password-submit', [ProfileController::class, 'forgotPasswordSubmit'])->name('forgot.password.submit');
 Route::get('/reset-password/{token}', [ProfileController::class, 'showResetPasswordForm'])->name('reset.password');
 Route::post('/reset-password-submit', [ProfileController::class, 'resetPasswordSubmit'])->name('reset.password.submit');
-Route::get('/investor-details', [ProfileController::class,'getUserProfileDetails'])->name('get.user.details');
-Route::get('/user/edit', [ProfileController::class, 'userEditPage'])->name('user.edit.page');
+Route::get('/dashboard/investor-account', [ProfileController::class,'getUserProfileDetails'])->name('get.user.details');
+Route::get('dashboard/user/edit', [ProfileController::class, 'userEditPage'])->name('user.edit.page');
 Route::put('/user', [ProfileController::class, 'update'])->name('user.update');
+Route::get('/dashboard/profileview', [ProfileController::class, 'profileView'])->name('profileview');
 Route::get('/dashboard/mentorConfidentials/{user_rand_id}', [ProfileController::class, 'edit'])->name('confidential.edit');
 Route::post('/dashboard/mentorConfidentials/{user_rand_id}', [ProfileController::class, 'updateConfidential_info'])->name('confidential.update');
 Route::get('/dashboard/investorAdvertisement/{user_rand_id?}', [ProfileController::class, 'getInvestorAdvertisementDetails'])->name('confidential.advert_detail');

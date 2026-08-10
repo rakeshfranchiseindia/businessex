@@ -17,7 +17,7 @@ class ProfileController extends Controller
 
     public function changePassword()
     {
-        return view('profile.change-password');
+        return view('account_dashboard.changePassword');
     }
     public function updatePassword(Request $request)
     {
@@ -101,14 +101,18 @@ class ProfileController extends Controller
         $user = UserAccount::select('name', 'email', 'location', 'company_name', 'designation', 'mobile')
             ->where('user_id', $user_id)
             ->first();
-        return view('profile.investor-profile', compact('user'));
+        $profile = ProfileInvestor::select('company_summary', 'inv_headline', 'inv_intro', 'invest_size_min', 'invest_size_max', 'linkedin_profile')
+            ->where('user_id', $user_id)
+            ->first();
+
+        return view('account_dashboard.myinvestor', compact('user', 'profile'));
 
     }
     public function userEditPage(Request $request)
     {
         $user_id = Auth::id();
         $user = UserAccount::findOrFail($user_id);
-        return view('profile.userEdit', compact('user'));
+        return view('account_dashboard.profile_edit', compact('user'));
     }
     public function update(Request $request)
     {
@@ -130,7 +134,8 @@ class ProfileController extends Controller
     public function edit($user_rand_id)
     {
         $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
-        return view('profile.confidential_info', compact('user'));
+        // return view('profile.confidential_info', compact('user'));
+        return view('account_dashboard.investorConfidentials', compact('user'));
 
     }
     public function updateConfidential_info(Request $request, $user_rand_id)
@@ -163,7 +168,7 @@ class ProfileController extends Controller
             ->first();
 
         $user = UserAccount::where('user_id', Auth::id())->firstOrFail();
-        return view('profile.confidential_advert', compact('invAdvRecord', 'user'));
+        return view('account_dashboard.investorConfidentials', compact('invAdvRecord', 'user'));
     }
     public function updateInvestorProfileDetails(Request $request, $uniqueid = null)
     {
@@ -200,6 +205,9 @@ class ProfileController extends Controller
         return view('profile.preferences');
     }
 
-
+    public function profileView()
+    {
+     return view('account_dashboard.profileview');
+    }
 }
 

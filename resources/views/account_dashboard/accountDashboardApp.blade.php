@@ -25,7 +25,6 @@
    <link href="{{ asset('assets/css/article-style.css') }}" rel="stylesheet">
    <link href="{{ asset('assets/css/article-detail.css') }}" rel="stylesheet">
    <link href="{{ asset('assets/css/services.styles.css') }}" rel="stylesheet">
-   @stack('styles')
 </head>
 
 <body>
@@ -36,7 +35,7 @@
       @yield('content')
    </main>
    <!-- Footer -->
-   @include('partials.footer')
+   @include('account_dashboard.footerDashboard')
    <!-- Registration/Login Modal -->
    <!-- login -->
    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
@@ -188,62 +187,19 @@
    <script src="{{ asset('assets/js/user_main.js') }}"></script>
    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
    <script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
+   <script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
    <!-- Add ScrollReveal -->
    <script src="https://unpkg.com/scrollreveal"></script>
    <!-- Your custom JS -->
-   <script>
-$(document).ready(function(){
-    $('#clientssay').owlCarousel({
-        loop:true,
-        margin:10,
-        nav:true,
-        dots:true,
-        autoplay:true,
-        autoplayTimeout:3000,
-        responsive:{
-            0:{ items:1 },
-            600:{ items:2 },
-            1000:{ items:3 }
-        }
-    });
-});
-</script>
    <script src="{{ asset('assets/js/main.js') }}"></script>
-<script>
-    // Laravel auth check exposed to JS
-    const isLoggedIn = @json(auth()->check());
+   <script src="{{ asset('assets/js/article-script.js') }}"></script>
+   <script src="{{ asset('assets/js/article-details.js') }}"></script>
+   <script src="{{ asset('assets/js/services.js') }}"></script>
 
-    document.addEventListener("DOMContentLoaded", function() {
-        // Get current URL path
-        const path = window.location.pathname;
-
-        // Profile registration URLs
-        const profileUrls = [
-            "/registration/create-startup-profile",
-            "/registration/create-business-profile",
-            "/registration/create-investor-profile",
-            "/registration/create-mentor-profile"
-        ];
-
-        if (profileUrls.includes(path)) {
-            // If not logged in, show login modal
-            if (!isLoggedIn) {
-                const loginModal = new bootstrap.Modal(document.getElementById('login'));
-                loginModal.show();
-
-                // Switch to Register tab
-                const registerTab = document.querySelector('a[href="#Register"]');
-                if (registerTab) {
-                    const tab = new bootstrap.Tab(registerTab);
-                    tab.show();
-                }
-            }
-        }
-    });
-</script>
-@stack('scripts')
    
-   
+
+
 </body>
+
 </html>

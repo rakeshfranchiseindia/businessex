@@ -8,69 +8,7 @@ use Illuminate\Support\Facades\Auth;
     <div class="container-fluid mt-5">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-3">
-                <div class="card shadow-sm">
-                    <div class="card-body text-center">
-                        <img src="{{ asset('assets/images/profile-dflt.gif') }}" class="rounded-circle mb-2" width="80"
-                            alt="Profile">
-                        <h5 class="mb-0">{{ $user->name }}</h5>
-                        <small class="text-muted">{{ $user->location ?? 'Location not set' }}</small>
-                        <hr>
-                        <p><i class="fa fa-envelope"></i> {{ $user->email }}</p>
-                        <p><i class="fa fa-phone"></i> {{ $user->mobile ?? 'Not provided' }}</p>
-                        <a href="{{ route('user.edit.page') }}" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                            <i class="bi bi-pencil-square"></i>
-                        </a>
-                        <div class="mb-3">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-google"></i></a>
-                            <a href="#"><i class="fa fa-linkedin"></i></a>
-                        </div>
-                        <div class="form-group">
-                            <label>Profile Type</label>
-                            <select class="form-control">
-                                <option selected>{{ $user->reg_profile ?? 'Member' }}</option>
-                            </select>
-                        </div>
-                        <a href="#" class="btn btn-success btn-block mb-3">My Plan</a>
-                        <ul class="list-group text-left">
-                            <li class="list-group-item"><a href="{{ route('myaccount') }}"
-                                    class="text-decoration-none text-dark d-block"><i class="fa fa-tachometer"></i>
-                                    Dashboard</a></li>
-                            <li class="list-group-item"><i class="fa fa-eye"></i> Profile Views <span
-                                    class="badge badge-secondary float-right">0</span></li>
-                            <li class="list-group-item">
-                                <a href="{{ route('get.user.details') }}" class="text-decoration-none text-dark d-block">
-                                    <i class="fa fa-user"></i> My Profile
-                                </a>
-                            </li>
-                            <li class="list-group-item"><i class="fa fa-envelope"></i> My Interactions</li>
-                            <li class="list-group-item"><i class="fa fa-cog"></i> Manage</li>
-                            <li class="list-group-item">
-                                <a href="{{ route('update.password') }}" class="text-decoration-none text-dark d-block">
-                                    <i class="fa fa-key"></i> Change Password
-                                </a>
-                            </li>
-                            <li class="list-group-item">
-                                @if(Auth::check() && Auth::user()->user_rand_id)
-                                    <a href="{{ route('confidential.edit', Auth::user()->user_rand_id) }}"
-                                        class="text-decoration-none text-dark d-block">
-                                        Open Confidential Page
-                                    </a>
-                                @endif
-                            </li>
-                             <li class="list-group-item">
-                                 @if(Auth::check() && Auth::user()->user_rand_id)
-                                    <a href="{{ route('confidential.advert_detail', Auth::user()->user_rand_id) }}"
-                                        class="text-decoration-none text-dark d-block">
-                                        Advertisement Details
-                                    </a>
-                                @endif
-                             </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+           @include('partials.sidebar')
 
             <!-- Main Content -->
             <div class="col-md-6">

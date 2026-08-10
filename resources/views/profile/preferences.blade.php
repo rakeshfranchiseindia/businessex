@@ -4,9 +4,6 @@
 <div class="container py-5">
     <div class="card shadow-sm p-4">
         <h4 class="mb-4 text-center">MANAGE PREFERENCE INFORMATION</h4>
-
-        
-
         <form id="preferenceForm">
             @csrf
             <div class="mb-3">
@@ -23,7 +20,6 @@
                 <label for="location_preference" class="form-label fw-bold">Location Preference *</label>
                 <input type="text" id="location_preference" name="location_preference" class="form-control" placeholder="Enter location">
             </div>
-
             <div class="text-center">
                 <button type="submit" class="btn btn-success px-5 py-2">SUBMIT</button>
             </div>
