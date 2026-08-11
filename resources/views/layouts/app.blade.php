@@ -188,7 +188,7 @@
    <script src="{{ asset('assets/js/user_main.js') }}"></script>
    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
    <script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+   
    <!-- Add ScrollReveal -->
    <script src="https://unpkg.com/scrollreveal"></script>
    <!-- Your custom JS -->

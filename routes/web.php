@@ -29,7 +29,7 @@ Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubs
 Route::get('/businesslisting', [BusinessController::class, 'businessListing'])->name('business.listing');
 Route::get('/investorlisting', [InvestorController::class, 'investorListing'])->name('investor.listing');
 Route::get('/mentorlisting', [MentorController::class, 'mentorListing'])->name('mentor.listing');
-Route::get('/startuplisting', [StartupController::class, 'startupListing'])->name('startup.listing');
+Route::get('/startupslisting', [StartupController::class, 'startupListing'])->name('startup.listing');
 
 
 Route::get('/registration/create-mentor-profile', [MentorProfileController::class, 'createMentorProfile'])->name('register.create-mentor-profile');

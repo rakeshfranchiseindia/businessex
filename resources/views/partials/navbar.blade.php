@@ -73,7 +73,7 @@
                             <a href="javascript:void(0)" onclick="openSidebar()">
                                 <img src="{{ Auth::user()->profile_image
                     ? asset(Auth::user()->profile_image)
-                    : asset('assets/img/profile-dflt.gif') }}" alt="User Profile" class="userpro rounded-circle"
+                    : asset('assets/img/mentor.png') }}" alt="User Profile" class="userpro rounded-circle"
                                     width="40">
                             </a>
                 @endauth
@@ -108,7 +108,7 @@
     </div>
 
     <div class="text-center">
-        <img src="{{ asset('assets/images/profile-dflt.gif') }}" class="rounded mb-2" width="120" alt="Profile">
+        <img src="{{ asset('images/default-mentor.jpg') }}" class="rounded mb-2" width="120" alt="Profile">
         <p class="mb-0"><i class="fa fa-map-marker"></i>{{ $user->location ?? 'Not Set' }}</p>
         <h6 class="font-weight-bold">{{ $user->name ?? 'N/A' }}</h6>
     </div>

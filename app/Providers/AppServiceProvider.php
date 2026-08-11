@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Str;
 use App\Models\Testimonial;
 use App\Models\IndustryCategory;
+use App\Models\BxArticle;
+
 use App\Http\Controllers\CommonController; 
 use Illuminate\Auth\Middleware\Authenticate;
 
@@ -27,11 +29,17 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $testimonials = Testimonial::all();
+        $homepageArticles = BxArticle::with('author')->published()
+            ->latest('created_at')
+            ->take(4)
+            ->get();
+        
         [$businessList, $parentChild] = $this->getIndustrySeller();
         View::share([
             'industrySeller' => $businessList,
             'parentChildCategoryId' => $parentChild,
-            'testimonials' => $testimonials
+            'testimonials' => $testimonials,
+            'homepageArticles' => $homepageArticles
         ]);
         
         Authenticate::redirectUsing(function ($request) {

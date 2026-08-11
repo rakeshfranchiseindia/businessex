@@ -128,4 +128,6 @@ class User extends \Illuminate\Database\Eloquent\Model
         return $this->hasMany(RequestContact::class, 'receiver', 'user_id');
     }
 
+    
+
 }

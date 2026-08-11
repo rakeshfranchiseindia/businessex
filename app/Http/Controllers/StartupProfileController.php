@@ -8,6 +8,6 @@ class StartupProfileController extends Controller
 {
     public function createStartupProfile()
     {
-        return view('index');
+        return view('registration.create-startup-profile');
     }
 }

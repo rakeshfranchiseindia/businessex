@@ -36,22 +36,45 @@ use Illuminate\Support\Facades\Http;
 use App\Helper\CacheHelper;
 use App\Mail\InvRegVerify;
 use App\Mail\ProfileCreation;
+
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
 
     public function home()
     {
-         $testimonials = Testimonial::all();
+
+        $businessSalesOpportunities = $this->getBusinessSalesOpportunities();
+        
+        $featuredInvestors = $this->getFeaturedInvestors();
+        //dd($featuredInvestors);
+        $highGrowthStartups = ProfileStartup::with(['management', 'fundraising','industrySector','images'])
+            ->where('startup_profile_status', config('constants.ProfileStatus.Active'))
+            ->where('membership_paid', 1)
+            ->where('membership_plan', '!=', 0)
+            ->take(10)
+            ->get();
+
+        $worldClassMentors = ProfileMentor::with(['experience','expertise'])->where('mentor_profile_status', config('constants.ProfileStatus.Active'))
+            ->where('membership_paid', 1)
+            ->where('membership_plan', '!=', 0)->take(10)->get();
+
+        $testimonials = Testimonial::all();
         //return view('index', compact('testimonials'));
         //return $this->getBxNewsHomeListing();
         [$businessList, $parentChild] = $this->getIndustrySeller();
         return view('index', [
             'industrySeller' => $businessList,
             'parentChildCategoryId' => $parentChild,
-            'testimonials' => $testimonials
+            'testimonials' => $testimonials,
+            'worldClassMentors' => $worldClassMentors,
+            'highGrowthStartups' => $highGrowthStartups,
+            'featuredInvestors' => $featuredInvestors,
+            'businessSalesOpportunities' => $businessSalesOpportunities
         ]);
 
     }
@@ -67,7 +90,6 @@ class HomeController extends Controller
             ->where('parent_id','!=',0)
             ->get();
 
-            //dd($industrySeller->toArray());
 
         $parentChild = [];
 
@@ -109,29 +131,29 @@ class HomeController extends Controller
 
 
     // Featured Investors data for home page
-    public function getFeaturedInvestors()
-    {
-        // Check cache first
-        if (config('constants.isCachingOn')) {
-            $featuredInvestors = Cache::get('featured_investors');
-            if (!empty($featuredInvestors)) {
-                return response()->json([
-                    'featuredInvestorsData' => $featuredInvestors
-                ]);
+
+        public function getFeaturedInvestors()
+        {
+            if (config('constants.isCachingOn')) {
+                $featuredInvestors = Cache::get('featured_investors');
+                if (!empty($featuredInvestors)) {
+                    // Always return consistent array
+                    return [
+                        'featuredInvestorsData' => $featuredInvestors,
+                        'total' => ProfileInvestor::where('inv_profile_status', config('constants.ProfileStatus.Active'))->count()
+                    ];
+                }
             }
-        }
 
-        // Count total active investors
-        $totalInvestors = ProfileInvestor::where('inv_profile_status', config('constants.ProfileStatus.Active'))
-            ->count();
+            $totalInvestors = ProfileInvestor::where('inv_profile_status', config('constants.ProfileStatus.Active'))
+                ->count();
 
-        // Fetch featured investors
-        $investors = ProfileInvestor::select(
-                'investor_id', 'user_id', 'inv_profile_str', 'inv_name', 'inv_state', 'inv_city',
-                'inv_headline', 'inv_type', 'invest_pref', 'full_acquisition', 'company_name',
-                'company_designation', 'invest_size_min', 'invest_size_max', 'purchase_capacity_min',
-                'purchase_capacity_max', 'company_logo_path', 'inv_profile_pic_path', 'inv_country',
-                'inv_abt_urself', 'membership_paid', 'membership_plan', 'last_login_at'
+            $investors = ProfileInvestor::select(
+                'investor_id','user_id','inv_profile_str','inv_name','inv_state','inv_city',
+                'inv_headline','inv_type','invest_pref','full_acquisition','company_name',
+                'company_designation','invest_size_min','invest_size_max','purchase_capacity_min',
+                'purchase_capacity_max','company_logo_path','inv_profile_pic_path','inv_country',
+                'inv_abt_urself','membership_paid','membership_plan','last_login_at'
             )
             ->where('inv_profile_status', config('constants.ProfileStatus.Active'))
             ->whereIn('inv_profile_str', [
@@ -143,52 +165,122 @@ class HomeController extends Controller
             ->limit(12)
             ->get();
 
-        $featuredInvestors = $investors->map(function ($investor) {
-            [$minInvestment, $maxInvestment] = CommonController::getInvestmentRange($investor);
-            $slugUrl = CommonController::getSlugUrl($investor, $minInvestment, $maxInvestment);
+            $featuredInvestors = $investors->map(function ($investor) {
+                [$minInvestment, $maxInvestment] = CommonController::getInvestmentRange($investor);
+                $slugUrl = CommonController::getSlugUrl($investor, $minInvestment, $maxInvestment);
+
+                return [
+                    'investorName'     => $investor->inv_name,
+                    'investorType'     => config('constants.investorType.' . $investor->inv_type),
+                    'invheadline'      => $investor->inv_headline,
+                    'investorCountry'  => $investor->inv_country,
+                    'companyName'      => $investor->company_name,
+                    'designation'      => $investor->company_designation,
+                    'investmentPref'   => CommonController::getInvestmentPreference($investor),
+                    'minInvestment'    => $minInvestment,
+                    'maxInvestment'    => $maxInvestment,
+                    'investorStr'      => strtolower($investor->inv_profile_str),
+                    'investorCity'     => $investor->inv_city,
+                    'investorState'    => config('constants.statesIndia.' . $investor->inv_state),
+                    'investorSummary'  => $investor->inv_abt_urself,
+                    'investorProfPic'  => ($investor->membership_paid == 1 && $investor->inv_profile_pic_path)
+                        ? config('constants.ImageCDN') . '/' . $investor->inv_profile_pic_path
+                        : 'assets/img/mentor.png',
+                    'companyLogo'      => !empty($investor->company_logo_path)
+                        ? config('constants.ImageCDN') . '/' . $investor->company_logo_path
+                        : '',
+                    'membership_paid'  => $investor->membership_paid,
+                    'membership_plan'  => $investor->membership_plan,
+                    'lastLogin'        => $investor->last_login_at,
+                    'investorPlan'     => config('constants.planType.' . $investor->membership_plan),
+                    'mobVerifyStatus'  => MobileVerification::isMobileNoVerified($investor->user_id),
+                    'investorurl'      => Str::slug(trim(strtolower(CommonController::cleanSpecialChar($slugUrl))), "-"),
+                ];
+            });
+
+            if (config('constants.isCachingOn')) {
+                Cache::put('featured_investors', $featuredInvestors, now()->addMinutes(30));
+            }
 
             return [
-                'investorName'     => $investor->inv_name,
-                'investorType'     => config('constants.investorType.' . $investor->inv_type),
-                'invheadline'      => $investor->inv_headline,
-                'locations'        => '',
-                'locationDetails'  => '',
-                'sectorPreference' => '',
-                'investorCountry'  => $investor->inv_country,
-                'companyName'      => $investor->company_name,
-                'designation'      => $investor->company_designation,
-                'investmentPref'   => CommonController::getInvestmentPreference($investor),
-                'minInvestment'    => $minInvestment,
-                'maxInvestment'    => $maxInvestment,
-                'investorStr'      => strtolower($investor->inv_profile_str),
-                'investorCity'     => $investor->inv_city,
-                'investorSate'     => config('constants.statesIndia.' . $investor->inv_state),
-                'investorSummary'  => $investor->inv_abt_urself,
-                'investorProfPic'  => ($investor->membership_paid == 1 && $investor->inv_profile_pic_path)
-                    ? config('constants.ImageCDN') . '/' . $investor->inv_profile_pic_path
-                    : 'assets/images/profile-dflt.jpg',
-                'companyLogo'      => !empty($investor->company_logo_path)
-                    ? config('constants.ImageCDN') . '/' . $investor->company_logo_path
-                    : '',
-                'membership_paid'  => $investor->membership_paid,
-                'membership_plan'  => $investor->membership_plan,
-                'lastLogin'        => $investor->last_login_at,
-                'investorPlan'     => config('constants.planType.' . $investor->membership_plan),
-                'mobVerifyStatus'  => MobileVerification::isMobileNoVerified($investor->user_id),
-                'investorurl'      => Str::slug(trim(strtolower(CommonController::cleanSpecialChar($slugUrl))), "-"),
+                'featuredInvestorsData' => $featuredInvestors,
+                'total' => $totalInvestors
             ];
-        });
-
-        // Store in cache
-        if (config('constants.isCachingOn')) {
-            Cache::put('featured_investors', $featuredInvestors, now()->addMinutes(30));
         }
 
-        return response()->json([
-            'featuredInvestorsData' => $featuredInvestors,
-            'total' => $totalInvestors
-        ]);
-    }
+
+
+
+    // Business Sales Opportunities data for home page
+            public function getBusinessSalesOpportunities()
+            {
+                if (config('constants.isCachingOn')) {
+                    $businessOpportunities = Cache::get('business_sales_opportunities');
+                    if (!empty($businessOpportunities)) {
+                        return [
+                            'salesOpportunitiesData'   => $businessOpportunities,
+                            'totalSalesOpportunities'  => ProfileBusiness::where('business_profile_status', config('constants.ProfileStatus.Active'))->count()
+                        ];
+                    }
+                }
+
+                $totalSalesOpportunities = ProfileBusiness::where('business_profile_status', config('constants.ProfileStatus.Active'))
+                    ->count();
+
+                $salesOpportunities = ProfileBusiness::select(
+                    'business_id','user_id','business_profile_str','seller_name','ofc_state','ofc_city',
+                    'advmt_headline','business_type','seller_company',
+                    'seller_designation','seller_prof_pic','ofc_country',
+                    'membership_paid','membership_plan','last_login_at'
+                )
+                ->where('business_profile_status', config('constants.ProfileStatus.Active'))
+                ->whereIn('business_profile_str', [
+                    '5l1xvp','jcahys','zuiizc','kmebfr','h0un4g','r7unm0',
+                    'nwyawl','4idnbw','sucyej','zpjzfi','n29zph','6zhvhj'
+                ])
+                ->orderByDesc('last_login_at')
+                ->orderByDesc('activated_at')
+                ->limit(12)
+                ->get();
+
+                $featuredSalesOpportunities = $salesOpportunities->map(function ($opportunity) {
+                    [$minInvestment, $maxInvestment] = CommonController::getInvestmentRange($opportunity);
+                    $slugUrl = CommonController::getSlugUrl($opportunity, $minInvestment, $maxInvestment);
+
+                    return [
+                        'sellerName'        => $opportunity->seller_name,
+                        'businessType'      => config('constants.businessType.' . $opportunity->business_type),
+                        'headline'          => $opportunity->advmt_headline,
+                        'country'           => $opportunity->ofc_country,
+                        'companyName'       => $opportunity->seller_company,
+                        'designation'       => $opportunity->seller_designation,
+                        'investmentPref'    => CommonController::getInvestmentPreference($opportunity),
+                        'minInvestment'     => $minInvestment,
+                        'maxInvestment'     => $maxInvestment,
+                        'businessStr'       => strtolower($opportunity->business_profile_str),
+                        'city'              => $opportunity->ofc_city,
+                        'state'             => config('constants.statesIndia.' . $opportunity->ofc_state),
+                        'sellerProfPic'     => ($opportunity->membership_paid == 1 && $opportunity->seller_prof_pic)
+                            ? config('constants.ImageCDN') . '/' . $opportunity->seller_prof_pic
+                            : asset('assets/img/mentor.png'),
+                        'membership_paid'   => $opportunity->membership_paid,
+                        'membership_plan'   => $opportunity->membership_plan,
+                        'lastLogin'         => $opportunity->last_login_at,
+                        'planType'          => config('constants.planType.' . $opportunity->membership_plan),
+                        'mobVerifyStatus'   => MobileVerification::isMobileNoVerified($opportunity->user_id),
+                        'opportunityUrl'    => Str::slug(trim(strtolower(CommonController::cleanSpecialChar($slugUrl))), "-"),
+                    ];
+                });
+
+                if (config('constants.isCachingOn')) {
+                    Cache::put('business_sales_opportunities', $featuredSalesOpportunities, now()->addMinutes(30));
+                }
+
+                return [
+                    'salesOpportunitiesData'   => $featuredSalesOpportunities,
+                    'totalSalesOpportunities'  => $totalSalesOpportunities
+                ];
+            }
 
 
 
