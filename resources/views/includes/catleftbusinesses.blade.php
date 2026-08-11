@@ -66,30 +66,54 @@
           </div>
           <div id="collapseLocation" class="collapse" data-parent="#filterAccordion">
             <div class="card-body py-2 pl-4">
-              <!-- Haryana -->
-              <div id="locationAccordion">
-                <div class="card border-0">
-                  <div class="card-header bg-white p-0" id="headingHaryana">
-                    <h6 class="mb-0">
-                      <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
-                         data-toggle="collapse" href="#collapseHaryana" aria-expanded="false" aria-controls="collapseHaryana">
-                        <div>
-                          <input type="checkbox" class="mr-2"> Haryana
-                        </div>
-                        <span class="arrow">&#9662;</span>
-                      </a>
-                    </h6>
-                  </div>
-                  <div id="collapseHaryana" class="collapse" data-parent="#locationAccordion">
-                    <div class="card-body py-2 pl-4">
-                      <ul class="list-unstyled mb-0">
-                        <li><input type="checkbox" class="mr-2"> Rohtak</li>
-                        <li><input type="checkbox" class="mr-2"> Gurgaon</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div><!-- /locationAccordion -->
+              @php
+                  $locationGroups = collect($locations ?? [])->groupBy(function ($item) {
+                      return trim((string) ($item->state ?? $item['state'] ?? ''));
+                  })->filter(function ($cities, $state) {
+                      return trim((string) $state) !== '';
+                  })->sortKeys();
+              @endphp
+
+              @if($locationGroups->isNotEmpty())
+                  <div id="locationAccordion">
+                      @foreach($locationGroups as $stateName => $cities)
+                          @php
+                              $stateKey = \Illuminate\Support\Str::slug($stateName . '-' . $loop->index);
+                              $cityList = collect($cities)->map(function ($item) {
+                                  return trim((string) ($item->city ?? $item['city'] ?? ''));
+                              })->filter()->unique()->values();
+                          @endphp
+
+                          <div class="card border-0 mb-2">
+                              <div class="card-header bg-white p-0" id="headingLocation-{{ $stateKey }}">
+                                  <h6 class="mb-0">
+                                      <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                                         data-toggle="collapse" href="#collapseLocation-{{ $stateKey }}" aria-expanded="false" aria-controls="collapseLocation-{{ $stateKey }}">
+                                          <div>
+                                              <input type="checkbox" class="mr-2"> {{ $stateName }}
+                                          </div>
+                                          <span class="arrow">&#9662;</span>
+                                      </a>
+                                  </h6>
+                              </div>
+
+                              <div id="collapseLocation-{{ $stateKey }}" class="collapse" data-parent="#locationAccordion">
+                                  <div class="card-body py-2 pl-4">
+                                      <ul class="list-unstyled mb-0">
+                                          @foreach($cityList as $city)
+                                              <li class="mb-1">
+                                                  <label class="mb-0">
+                                                      <input type="checkbox" class="mr-2"> {{ $city }}
+                                                  </label>
+                                              </li>
+                                          @endforeach
+                                      </ul>
+                                  </div>
+                              </div>
+                          </div>
+                      @endforeach
+                  </div><!-- /locationAccordion -->
+              @endif
             </div>
           </div>
         </div>
@@ -107,42 +131,53 @@
           </div>
           <div id="collapseIndustry" class="collapse" data-parent="#filterAccordion">
             <div id="industryAccordion" class="card-body py-2 pl-4">
+              @php
+                  $industryGroups = collect($industrySeller ?? [])
+                      ->filter(function ($item) {
+                          return trim((string) ($item['industry'] ?? '')) !== '';
+                      })
+                      ->groupBy('industry')
+                      ->sortKeys();
+              @endphp
 
-              <!-- Automobile -->
-              <div class="card border-0">
-                <div class="card-header bg-white p-0" id="headingAuto">
-                  <h6 class="mb-0">
-                    <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
-                       data-toggle="collapse" href="#collapseAuto" aria-expanded="false" aria-controls="collapseAuto">
-                      <div>
-                        <input type="checkbox" class="mr-2"> Automobile
+              @if($industryGroups->isNotEmpty())
+                  @foreach($industryGroups as $industryName => $industryItems)
+                      @php
+                          $industryKey = \Illuminate\Support\Str::slug($industryName . '-' . $loop->index);
+                          $subIndustries = collect($industryItems)->map(function ($item) {
+                              return trim((string) ($item['subindustry'] ?? ''));
+                          })->filter()->unique()->values();
+                      @endphp
+
+                      <div class="card border-0 mb-2">
+                          <div class="card-header bg-white p-0" id="headingIndustry-{{ $industryKey }}">
+                              <h6 class="mb-0">
+                                  <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                                     data-toggle="collapse" href="#collapseIndustry-{{ $industryKey }}" aria-expanded="false" aria-controls="collapseIndustry-{{ $industryKey }}">
+                                      <div>
+                                          <input type="checkbox" class="mr-2"> {{ $industryName }}
+                                      </div>
+                                      <span class="arrow">&#9662;</span>
+                                  </a>
+                              </h6>
+                          </div>
+
+                          <div id="collapseIndustry-{{ $industryKey }}" class="collapse" data-parent="#industryAccordion">
+                              <div class="card-body py-2 pl-4">
+                                  <ul class="list-unstyled mb-0">
+                                      @foreach($subIndustries as $subIndustry)
+                                          <li class="mb-1">
+                                              <label class="mb-0">
+                                                  <input type="checkbox" class="mr-2"> {{ $subIndustry }}
+                                              </label>
+                                          </li>
+                                      @endforeach
+                                  </ul>
+                              </div>
+                          </div>
                       </div>
-                      <span class="arrow">&#9662;</span>
-                    </a>
-                  </h6>
-                </div>
-                <div id="collapseAuto" class="collapse" data-parent="#industryAccordion">
-                  <div class="card-body py-2 pl-4">
-                    <ul class="list-unstyled mb-0">
-                      <li><input type="checkbox" class="mr-2"> Automobile Accessories</li>
-                      <li><input type="checkbox" class="mr-2"> Automobile Electric Vehicles</li>
-                      <li><input type="checkbox" class="mr-2"> Automobile Insurance</li>
-                      <li><input type="checkbox" class="mr-2"> Automobile Maintenance</li>
-                      <li><input type="checkbox" class="mr-2"> Automobile Manufacturing</li>
-                      <li><input type="checkbox" class="mr-2"> Automobile Reselling</li>
-                      <li><input type="checkbox" class="mr-2"> Automobile Showrooms</li>
-                      <li><input type="checkbox" class="mr-2"> Automobile Parts</li>
-                      <li><input type="checkbox" class="mr-2"> Automobile Wash</li>
-                      <li><input type="checkbox" class="mr-2"> Car Wash For Sale</li>
-                      <li><input type="checkbox" class="mr-2"> Car Workshop For Sale</li>
-                      <li><input type="checkbox" class="mr-2"> Car Service Center For Sale</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Add more industry categories here following the same pattern -->
-
+                  @endforeach
+              @endif
             </div>
           </div>
         </div>

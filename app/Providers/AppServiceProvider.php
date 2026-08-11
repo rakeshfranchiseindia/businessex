@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\Testimonial;
 use App\Models\IndustryCategory;
 use App\Models\BxArticle;
+use App\Models\BxCity;
 
 use App\Http\Controllers\CommonController; 
 use Illuminate\Auth\Middleware\Authenticate;
@@ -29,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $testimonials = Testimonial::all();
+        $locations    = BxCity::all();
+        
         $homepageArticles = BxArticle::with('author')->published()
             ->latest('created_at')
             ->take(4)
@@ -39,7 +42,8 @@ class AppServiceProvider extends ServiceProvider
             'industrySeller' => $businessList,
             'parentChildCategoryId' => $parentChild,
             'testimonials' => $testimonials,
-            'homepageArticles' => $homepageArticles
+            'homepageArticles' => $homepageArticles,
+            'locations'=>$locations
         ]);
         
         Authenticate::redirectUsing(function ($request) {
