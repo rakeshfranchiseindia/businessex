@@ -39,7 +39,7 @@
         </div>
 
         <div class="mt-4 p-3 bg-light rounded text-center">
-          <strong>TOTAL PROFILE VISITS: 0</strong>
+          <strong>TOTAL PROFILE VISITS: {{ $visitor->unique_profile_visitors}}</strong>
         </div>
 
         <div class="empty-state mt-4">
