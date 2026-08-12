@@ -378,5 +378,12 @@ return array(
         3 => '5999',
         0 => '999'
     ],
-    'ImageCDN'=>'https://media.businessex.com'
+    'ImageCDN'=>'https://media.businessex.com',
+
+    'global_filter' => array(
+            "startupslisting"=>array("All", "Buyers","Investor","Lender","Mentorship"),
+            "businesslisting"=>array("All", "Sale","Investor","Loan"),
+            "investorlisting"=>array("Individual Investor", " Investment Firm"),
+            "mentorlisting"=>array("Education Professional", "Corporate Professional")
+    )
 );

@@ -30,50 +30,97 @@
                     
                 </div>
 
+                @php
+                    $selectedLocationIds = collect(request()->input('location', []))->map(fn ($value) => (int) $value)->all();
+                    $selectedIndustryIds = collect(request()->input('industry', []))->map(fn ($value) => (int) $value)->all();
+
+                    $selectedLocationNames = collect($locations ?? [])->filter(function ($item) use ($selectedLocationIds) {
+                        $id = (int) ($item->id ?? $item['id'] ?? 0);
+                        return in_array($id, $selectedLocationIds, true);
+                    })->map(function ($item) {
+                        return trim((string) ($item->city ?? $item['city'] ?? ''));
+                    })->filter()->values()->all();
+
+                    $selectedIndustryNames = collect($industrySeller ?? [])->filter(function ($item) use ($selectedIndustryIds) {
+                        $id = (int) ($item['subIndustryid'] ?? 0);
+                        return in_array($id, $selectedIndustryIds, true);
+                    })->map(function ($item) {
+                        return trim((string) ($item['subindustry'] ?? ''));
+                    })->filter()->values()->all();
+
+                    $selectedFilters = array_merge(
+                        $selectedLocationNames,
+                        $selectedIndustryNames
+                    );
+                @endphp
+
+                @if(!empty($selectedFilters) || ($businessType ?? 'all') !== 'all')
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="d-flex flex-wrap align-items-center gap-2 p-3 border rounded bg-light">
+                                <strong class="mr-2">Selected filters:</strong>
+
+                                @if(($businessType ?? 'all') !== 'all')
+                                    <span class="badge badge-primary mr-2">{{ ucfirst($businessType) }}</span>
+                                @endif
+
+                                @foreach($selectedFilters as $selectedFilter)
+                                    <span class="badge badge-secondary mr-2">{{ $selectedFilter }}</span>
+                                @endforeach
+
+                                <a href="{{ route('business.listing') }}" class="btn btn-sm btn-outline-secondary ml-auto">Reset</a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="row setvto">
                     @if(isset($businesses) && $businesses->count() > 0)
                         <ul class="listop otherlist">
                             @foreach($businesses as $business)
+                                @php
+                                    $businessImage = $business->images()->first();
+                                    $imageUrl = $businessImage && $businessImage->image_path ? $businessImage->image_path : asset('assets/img/default-business.jpg');
+                                    $headline = $business->advmt_headline ?: $business->seller_company ?: 'Business Listing';
+                                    $location = trim(($business->ofc_city ?? '') . (empty($business->ofc_city) || empty($business->ofc_state) ? '' : ', ') . ($business->ofc_state ?? ''));
+                                    $annualSales = $business->annual_sales ? '₹ ' . number_format((float) $business->annual_sales, 2) : 'N/A';
+                                @endphp
                                 <li>
                                     <div class="ribbonblk">
-                                        <div class="ribbonblkinner">{{ $business->badge }}</div>
+                                        <div class="ribbonblkinner">
+                                            {{ $business->business_type ? config('constants.businessType.' . $business->business_type) : 'Business' }}
+                                        </div>
                                     </div>
 
                                     <div class="fullban">
-                                        <a href="#"><img src="{{ $business->image }}" alt="Business Image"></a>
+                                        <a href="#"><img src="{{ $imageUrl }}" alt="Business Image"></a>
                                     </div>
 
                                     <div class="fullb cattxt">
-                                        <span>{{ $business->category }}</span>
-                                        {{ $business->title }}
+                                        <span>{{ $business->seller_company ?: 'Business' }}</span>
+                                        {{ $headline }}
                                     </div>
 
                                     <div class="fullb contxt">
-                                        {{ $business->description }}
+                                        {{ $business->seller_intro ?: $business->company_summary ?: 'Business profile details available.' }}
                                     </div>
 
                                     <div class="sdd">
-                                        <div class="sddinner"><img src="{{ asset('assets/img/phone.svg') }}"> <span>Phone</span></div>
-                                        <div class="sddinner"><img src="{{ asset('assets/img/email.svg') }}"> <span>Email</span></div>
+                                        <div class="sddinner"><img src="{{ asset('assets/img/phone.svg') }}"> <span>{{ $business->seller_mobile ?: 'Phone' }}</span></div>
+                                        <div class="sddinner"><img src="{{ asset('assets/img/email.svg') }}"> <span>{{ $business->seller_email ?: 'Email' }}</span></div>
                                     </div>
 
                                     <div class="fullb citytxt">
-                                        {{ $business->location }}
-                                    </div>
-
-                                    <div class="tagv">
-                                        @foreach($business->tags as $tag)
-                                            <div class="tagvinner">{{ $tag }}</div>
-                                        @endforeach
+                                        {{ $location ?: 'Location not specified' }}
                                     </div>
 
                                     <div class="backv">
-                                        <div class="inblk">Asking price <span><i class="fas fa-rupee-sign"></i> {{ $business->asking_price }}</span></div>
-                                        <div class="inblk">Annual sale <span><i class="fas fa-rupee-sign"></i> {{ $business->annual_sale }}</span></div>
-                                        <div class="inblk">Establishment year <span>{{ $business->est_year }}</span></div>
-                                        <div class="inblk">Employee count <span>{{ $business->employee_count }}</span></div>
-                                        <div class="inblk">Entity type <span>{{ $business->entity_type }}</span></div>
-                                        <div class="inblk">Business type <span>{{ $business->business_type }}</span></div>
+                                        <div class="inblk">Asking price <span><i class="fas fa-rupee-sign"></i> {{ $business->buyer_sell_price ? number_format((float) $business->buyer_sell_price, 2) : 'N/A' }}</span></div>
+                                        <div class="inblk">Annual sale <span><i class="fas fa-rupee-sign"></i> {{ $annualSales }}</span></div>
+                                        <div class="inblk">Establishment year <span>{{ $business->estb_year ?: 'N/A' }}</span></div>
+                                        <div class="inblk">Employee count <span>{{ $business->emp_count ?: 'N/A' }}</span></div>
+                                        <div class="inblk">Entity type <span>{{ $business->entity_type ?: 'N/A' }}</span></div>
+                                        <div class="inblk">Business type <span>{{ $business->business_type ?: 'N/A' }}</span></div>
                                     </div>
 
                                     <div class="inbtn"><a href="#">Contact Business</a></div>
@@ -81,13 +128,19 @@
                             @endforeach
                         </ul>
 
-                        {{ $businesses->links('pagination::bootstrap-4') }}
+                        <div class="col-12 mt-3">
+                            {{ $businesses->links('pagination::bootstrap-4') }}
+                        </div>
                     @else
                         <div class="alert alert-info">No businesses found at the moment.</div>
                     @endif
                 </div>
+                
             </div>
         </div>
+        @include("includes.groupcompany")
+        @include("includes.newsletter")
     </div>
+    @include("includes.categorylinkfooter")
 </main>
 @endsection
