@@ -60,58 +60,166 @@
                     <div id="conf-tab2" class="tab-content" style="display:none;">
                         <form action="{{ route('advertisement.save', $user->user_rand_id) }}" method="POST">
                             @csrf
-                            <div class="form-group"><label>Advertisement Headline*</label> <input type="text" name="inv_headline" class="form-control"
-                        value="{{ old('inv_headline', $invAdvRecord->inv_headline ?? '') }}"
-                        placeholder="Enter Advertisement Headline" required></div>
-                            <div class="form-group"><label>Introduction :</label><textarea name="inv_intro" class="form-control" rows="4"
-                        placeholder="Enter introduction details here...">{{ old('inv_intro', $invAdvRecord->inv_intro ?? '') }}</textarea></div>
+                            <div class="form-group"><label>Advertisement Headline*</label> <input type="text"
+                                    name="inv_headline" class="form-control"
+                                    value="{{ old('inv_headline', $invAdvRecord->inv_headline ?? '') }}"
+                                    placeholder="Enter Advertisement Headline" required></div>
+                            <div class="form-group"><label>Introduction :</label><textarea name="inv_intro"
+                                    class="form-control" rows="4"
+                                    placeholder="Enter introduction details here...">{{ old('inv_intro', $invAdvRecord->inv_intro ?? '') }}</textarea>
+                            </div>
                             <button type="submit" class="btn-submit">SUBMIT</button>
                         </form>
                     </div>
 
                     <!-- Tab Content 3 -->
                     <div id="conf-tab3" class="tab-content" style="display:none;">
-                        <form class="needs-validation" novalidate>
-                            <div class="form-group"><label>Company Name*</label><input type="text" class="form-control"
-                                    placeholder="Enter Company Name" required></div>
-                            <div class="form-group"><label>Designation*</label><input type="text" class="form-control"
-                                    placeholder="Enter your Designation" required></div>
+                        <form method="POST" action="{{ route('investor.update', $user->user_rand_id) }}"
+                            enctype="multipart/form-data">
+
+                            @csrf
+
+                            <!-- Company Name -->
                             <div class="form-group">
-                                <label class="checkbox-group"><input type="checkbox" checked> Investment Preference</label>
-                                <label class="checkbox-group ml-4"><input type="checkbox"> Full Acquisition</label>
+                                <label>Company Name*:</label>
+                                <input type="text" class="form-control" placeholder="Enter Company Name" required>
                             </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group"><label>For Investment</label>
-                                        <div class="input-group"><input type="number" class="form-control" placeholder="0"
+
+                            <!-- Designation -->
+                            <div class="form-group">
+                                <label>Designation*:</label>
+                                <input type="text" class="form-control" placeholder="Enter your Designation" required>
+                            </div>
+
+                            <!-- Investment Preference -->
+                            <div class="form-group">
+                                <label>Investment Preference*:</label>
+
+                                <div class="preference-checkboxes">
+                                    <label class="checkbox-group">
+                                        <input type="checkbox" name="investment_preference" value="investment" checked>
+                                        <span>Investment</span>
+                                    </label>
+
+                                    <label class="checkbox-group">
+                                        <input type="checkbox" name="investment_preference" value="full_acquisition"
+                                            checked>
+                                        <span>Full Acquisition</span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+                            <!-- For Investment -->
+                            <div class="investment-section">
+
+                                <h4>For Investment</h4>
+
+                                <div class="form-group">
+                                    <label>Investment Size :</label>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="number" class="form-control" name="investment_min" placeholder="0"
                                                 value="0">
-                                            <div class="input-group-append"><span class="input-group-text">₹</span></div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <input type="number" class="form-control" name="investment_max" placeholder="0"
+                                                value="0">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group"><label>&nbsp;</label>
-                                        <div class="input-group"><input type="number" class="form-control" placeholder="0"
+
+                                <!-- Investment Stake -->
+                                <div class="form-group">
+                                    <label>Investment Stake Preference :</label>
+
+                                    <input type="number" class="form-control" name="investment_stake" placeholder="Enter %">
+                                </div>
+
+                            </div>
+
+
+                            <!-- Acquisition -->
+                            <div class="acquisition-section">
+
+                                <h4>Acquisition</h4>
+
+                                <div class="form-group">
+                                    <label>Purchasing Capacity :</label>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="number" class="form-control" name="purchase_min" placeholder="0"
                                                 value="0">
-                                            <div class="input-group-append"><span class="input-group-text">₹</span></div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <input type="number" class="form-control" name="purchase_max" placeholder="0"
+                                                value="0">
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
-                            <div class="form-group"><label>Investment Stake Preference</label><input type="text"
-                                    class="form-control" placeholder="Enter %"></div>
-                            <div class="form-group"><label>About Yourself:</label><textarea class="form-control" rows="4"
-                                    placeholder="Enter your Professional Summary"></textarea></div>
-                            <div class="form-group"><label>Profile Pictures:</label>
-                                <div class="file-upload-area"><i class="far fa-image"></i>
-                                    <p>Click or drag files here to upload</p><input type="file" accept="image/*"
-                                        hidden><button type="button" class="file-upload-btn">Choose File</button><small
-                                        class="text-muted d-block mt-2">Accepted formats: .png, .jpg, .gif</small>
+
+
+                            <!-- About Yourself -->
+                            <div class="form-group">
+                                <label>About Yourself*:</label>
+
+                                <textarea class="form-control" name="about" rows="4"
+                                    placeholder="Enter your Professional Summary" required></textarea>
+                            </div>
+
+
+                            <!-- Profile Pictures -->
+                            <div class="form-group">
+                                <label>Profile Pictures:</label>
+
+                                <div class="file-upload-area">
+
+                                    <!-- Image Preview -->
+                                    <div id="profilePreview" class="profile-preview"></div>
+
+                                    <!-- Accepted Formats -->
+                                    <div class="accepted-formats">
+                                        Accepted formats - png, jpeg, gif
+                                    </div>
+
+                                    <!-- Browse Button -->
+                                    <div class="browse-area">
+                                        <button type="button" class="file-upload-btn"
+                                            onclick="document.getElementById('profileImage').click();">
+                                            Browse
+                                        </button>
+
+                                        <span id="fileName">
+                                            No file chosen
+                                        </span>
+
+                                        <input type="file" id="profileImage" name="profile_image"
+                                            accept=".png,.jpg,.jpeg,.gif" hidden>
+                                    </div>
+
                                 </div>
                             </div>
-                            <div class="form-group"><label>Your LinkedIn Profile:</label><input type="url"
-                                    class="form-control" placeholder="Enter URL"></div>
-                            <button type="submit" class="btn-submit">SUBMIT</button>
+
+
+                            <!-- LinkedIn -->
+                            <div class="form-group">
+                                <label>Your LinkedIn Profile :</label>
+
+                                <input type="url" class="form-control" name="linkedin" placeholder="Enter URL">
+                            </div>
+
+
+                            <!-- Submit -->
+                            <button type="submit" class="btn-submit">
+                                SUBMIT
+                            </button>
+
                         </form>
                     </div>
 
