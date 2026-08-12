@@ -61,7 +61,7 @@ $user = UserAccount::findOrFail($user_id);
       <li><a href="{{ route('confidential.advert_detail', ['user_rand_id' => auth()->user()->user_rand_id]) }}">Advert
           Detail</a></li>
       <li><a href="instaResponse.html">Preferences</a></li>
-      <li><a href="bxproposal.html" class="active">Profile Info</a></li>
+      <li><a href="{{ route('profileinfo', ['user_rand_id' => auth()->user()->user_rand_id]) }}" class="active">Profile Info</a></li>
     </ul>
     </li>
     <li><a href="{{ route('change.password') }}"><i class="fas fa-lock"></i> Change Password</a></li>
