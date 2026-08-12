@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initialize all components
   initSidebarToggle();
   initSubmenuToggle();
+  initAccordionFilters();
   initPageNavigation();
   initFormValidation();
   initTagsInput();
@@ -36,6 +37,52 @@ function initSubmenuToggle() {
         submenu.classList.toggle('show');
         this.querySelector('i').classList.toggle('fa-chevron-down');
         this.querySelector('i').classList.toggle('fa-chevron-up');
+      }
+    });
+  });
+}
+
+function initAccordionFilters() {
+  document.querySelectorAll('.accordion_head').forEach(function(head) {
+    head.addEventListener('click', function(e) {
+      if (e.target.closest('input')) {
+        return;
+      }
+
+      const content = head.nextElementSibling;
+      if (!content) {
+        return;
+      }
+
+      const isOpen = content.style.display !== 'none';
+      content.style.display = isOpen ? 'none' : 'block';
+
+      const icon = head.querySelector('.plusminus');
+      if (icon) {
+        icon.classList.toggle('minus', !isOpen);
+        icon.classList.toggle('add', isOpen);
+      }
+    });
+  });
+
+  document.querySelectorAll('.accordion_headmain').forEach(function(head) {
+    head.addEventListener('click', function(e) {
+      if (e.target.closest('input')) {
+        return;
+      }
+
+      const content = head.nextElementSibling;
+      if (!content || !content.classList.contains('accordion_bodymain')) {
+        return;
+      }
+
+      const isOpen = content.style.display !== 'none';
+      content.style.display = isOpen ? 'none' : 'block';
+
+      const icon = head.querySelector('.rightdown');
+      if (icon) {
+        icon.classList.toggle('downval', !isOpen);
+        icon.classList.toggle('rightval', isOpen);
       }
     });
   });
@@ -346,7 +393,7 @@ function searchContacts(query) {
   
   items.forEach(item => {
     const text = item.textContent.toLowerCase();
-    if (text.includes(query.toLowerCase()) {
+    if (text.includes(query.toLowerCase())) {
       item.style.display = 'flex';
     } else {
       item.style.display = 'none';

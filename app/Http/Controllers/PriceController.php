@@ -6,8 +6,19 @@ use Illuminate\Http\Request;
 
 class PriceController extends Controller
 {
-    public function priceListing()
+    public function priceListing(Request $request)
     {
-        return view('pricing');
+            $membership = $request->query('membership');
+            if (!$membership) {
+                return view('pricing');
+            }
+
+            // Allowed memberships
+            $allowed = ['platinum', 'gold', 'premium'];
+
+            if (!in_array($membership, $allowed)) {
+                abort(404);
+            }
+            return view('pricing', compact('membership'));
     }
 }

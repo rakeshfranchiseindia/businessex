@@ -15,20 +15,7 @@
                 </ol>
             </div>
 
-            <div class="col-md-12 pt-b15">
-                <div class="bex-search-section">
-                    <span>
-                        <i class="fa fa-bolt" aria-hidden="true"></i> Trending Searches:
-                    </span>
-                    <span>
-                        <ul class="bex-trending-search-tab">
-                            @foreach(['Hospitality','Hotels','Management','Education','Pre-School','Restaurants','Food Parlor'] as $search)
-                                <li><a href="#">{{ $search }}</a></li>
-                            @endforeach
-                        </ul>
-                    </span>
-                </div>
-            </div>
+           
         </div>
 
         <div class="row catfull">
@@ -36,19 +23,11 @@
 
             <div class="col-12 col-sm-9 col-md-9 mdy setheading">
                 <div class="row">
-                    <div class="col-12 col-sm-9 col-md-9">
-                        <h1 class="headblk">Businesses for Sale</h1>
+                    <div class="col-12 col-sm-12 col-md-12">
+                        <h1 class="headblk">Businesses For Sale and Buy in India</h1>
+                        <p>BusinessEx offers 1863 Businesses and 14 industries Businesses For Sale and Buy in India as on Aug 11, 2026. These include Businesses looking to Exit, Seek Investment or Loan. To sell your Business or raise funding at BusinessEx, we recommend you to create a Business Profile on BusinessEx .</p>
                     </div>
-                    <div class="col-12 col-sm-3 col-md-3 float-right setmob">
-                        <div class="form-group">
-                            <select class="form-control modysel myselectclass" id="Industry">
-                                <option>Recently Listed</option>
-                                @foreach(['Location1','Location2','Location3','Location4'] as $location)
-                                    <option>{{ $location }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                    
                 </div>
 
                 <div class="row setvto">

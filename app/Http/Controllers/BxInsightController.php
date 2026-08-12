@@ -10,7 +10,7 @@ use Illuminate\View\View;
 class BxInsightController extends Controller
 {
       public function index(Request $request): View
-{
+    {
     // Featured article
     $featuredArticle = BxArticle::published()
         ->latest('created_at')

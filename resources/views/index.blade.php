@@ -170,7 +170,7 @@
             </section>
          </div>
       </div>
-      <!-- Search Section -->>
+      <!-- Search Section -->
       <!-- ======= Header/Navbar ======= -->
       <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
          <div class="container-fluid">
@@ -792,12 +792,14 @@
                      <div class="title-box">
                         <h2 class="bex-title-a">Featured Investors</h2>
                         <h5>Business-Ex Offers 511 Start-Ups In 13 Various Industries</h5>
-                        <a href="#" class="bex-view-all-section">View All</a>
+                        <a href="/investorlisting" class="bex-view-all-section">View All</a>
                      </div>
                   </div>
                </div>
             </div>
             <div id="bex-featured-investors-carousel" class="owl-carousel owl-arrow bex-card-margin">
+               <?php //dd($featuredInvestors['featuredInvestorsData']); ?>
+               @foreach($featuredInvestors['featuredInvestorsData'] as $investor)
                <div class="carousel-item-a">
                   <div class="business-ex-box">
                      <div class="bex-bussiness-section card">
@@ -809,32 +811,26 @@
                               <div class="row">
                                  <div class="col-sm-8 col-md-8">
                                     <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
+                                       <h6>{{ $investor['investorName'] }}</h6>
+                                       <p>{{ $investor['companyName'] }}</p>
                                     </div>
                                  </div>
                                  <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
+                                    <img src="{{ $investor['investorProfPic'] ?? asset('assets/img/mentor.png') }}" 
+                                    alt="..." 
+                                    class="rounded-circle">
+                                                                  </div>
                                  <div class="col-sm-12 col-md-12">
                                     <div class="bex-bussiness-section-info-main">
                                        <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
+                                          <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Location</p>
                                        </div>
                                        <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
+                                       <div class="bex-summary-info">{{ $investor['investorSummary'] }}
                                        </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
+                                       <p><a href="#">{{ $investor['investorCity'] }}</a>, <a href="#">{{ $investor['investorState'] }}</a></p>
                                        <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
+                                          <li>{{ $investor['investorCity'] }}, {{ $investor['investorState'] }}</li>
                                        </ul>
                                     </div>
                                          <div class="bex-primary-btn">
@@ -847,405 +843,13 @@
                      </div>
                   </div>
                </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                         <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                         <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                         <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                         <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                         <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                         <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                         <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                         <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
+               @endforeach
             </div>
          </section>
          <!-- ======= End Featured Investors Section ======= -->
 
-
          <!-- Top Franchise Opportunities Section -->
-<section class="py-5 bg-light">
+   <section class="py-5 bg-light">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="font-weight-bold mb-0">Top Franchise Opportunities</h2>
@@ -1358,917 +962,175 @@
     </div>
 </section>
 
-
-<!-- High Growth Potential Startups Section -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="font-weight-bold mb-0">High Growth Potential Startups</h2>
-                <h5 class="text-muted mb-0">
-                    BusinessEx offers 678 startups in 16 industries as on Jul 27, 2026
-                </h5>
-            </div>
-            <a href="{{ url('/startupslisting') }}" class="text-success font-weight-bold">View All</a>
-        </div>
-
-        <!-- Carousel -->
-        <div id="startupCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-            <div class="carousel-inner">
-
-                <!-- Slide 1 -->
-                <div class="carousel-item active">
-                    <div class="row">
-                        <!-- Card 1 -->
-                        <div class="col-md-3">
-                            <div class="card shadow-sm h-100">
-                                <img src="https://media.businessex.com/business/pics/0127/1536978455.jpg" class="card-img-top" alt="Commercial Real Estate Rental Solutions">
-                                <div class="card-body">
-                                    <p class="text-muted mb-1">Business services / Financial services</p>
-                                    <h6 class="font-weight-bold">Looking For An Investor For Commercial Real Estate Rental Solutions</h6>
-                                    <p><strong>Seeking Investment:</strong> ₹7.5 Crores</p>
-                                    <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Mumbai</p>
-                                    <a href="{{ url('/startup/looking-for-an-investor-for-commercial-real-estate-rental-solutions/jm3ak7') }}" class="btn btn-outline-success btn-block">Enquire Now</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 2 -->
-                        <div class="col-md-3">
-                            <div class="card shadow-sm h-100">
-                                <img src="https://media.businessex.com/subCatImages/29/360_x_202/shutterstock_401309230.jpg" class="card-img-top" alt="Healthcare Industry">
-                                <div class="card-body">
-                                    <p class="text-muted mb-1">FMCG / Healthcare products</p>
-                                    <h6 class="font-weight-bold">Looking For An Investor For Health Care Industry</h6>
-                                    <p><strong>Seeking Investment:</strong> ₹20 Lakhs</p>
-                                    <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Hyderabad</p>
-                                    <a href="{{ url('/startup/looking-for-an-investor-for-health-care-industry/sibsjr') }}" class="btn btn-outline-success btn-block">Enquire Now</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 3 -->
-                        <div class="col-md-3">
-                            <div class="card shadow-sm h-100">
-                                <img src="https://media.businessex.com/subCatImages/170/360_x_202/shutterstock_559856737.jpg" class="card-img-top" alt="E Sports Arena">
-                                <div class="card-body">
-                                    <p class="text-muted mb-1">Leisure & Entertainment / Entertainment centres</p>
-                                    <h6 class="font-weight-bold">E Sports Arena starting from ₹70 Per person</h6>
-                                    <p><strong>Asking Price:</strong> ₹25 Crores</p>
-                                    <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Delhi</p>
-                                    <a href="{{ url('/startup/e-sports-arena-starting-from-70-per-person/fyrgy5') }}" class="btn btn-outline-success btn-block">Enquire Now</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Card 4 -->
-                        <div class="col-md-3">
-                            <div class="card shadow-sm h-100">
-                                <img src="https://media.businessex.com/business/pics/0204/49626903.jpg" class="card-img-top" alt="Cloud Kitchen">
-                                <div class="card-body">
-                                    <p class="text-muted mb-1">FMCG / Food & Beverage products</p>
-                                    <h6 class="font-weight-bold">Looking For An Investor For Cloud Kitchen</h6>
-                                    <p><strong>Seeking Investment:</strong> ₹1 Crore</p>
-                                    <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Navi Mumbai</p>
-                                    <a href="{{ url('/startup/looking-for-an-investor-for-cloud-kitchen/spjweq') }}" class="btn btn-outline-success btn-block">Enquire Now</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 2 -->
-                <div class="carousel-item">
-                    <div class="row">
-                        <!-- Add more startup cards here or loop dynamically -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Controls -->
-            <a class="carousel-control-prev" href="#startupCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#startupCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-    </div>
-</section>
-
-<!-- World Class Mentors Section -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="font-weight-bold mb-0">World Class Mentors</h2>
-                <h5 class="text-muted mb-0">
-                    BusinessEx offers 194 mentors as on Jul 27, 2026
-                </h5>
-            </div>
-            <a href="{{ url('/mentorlisting') }}" class="text-success font-weight-bold">View All</a>
-        </div>
-
-        <!-- Carousel -->
-        <div id="mentorCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-            <div class="carousel-inner">
-
-                <!-- Slide 1 -->
-                <div class="carousel-item active">
-                    <div class="row">
-                        <!-- Mentor Card 1 -->
-                        <div class="col-md-3">
-                            <div class="card shadow-sm h-100 text-center">
-                                <span class="badge badge-primary position-absolute" style="top:10px;left:10px;">Platinum</span>
-                                <img src="https://media.businessex.com/mentor/profile/202412/5772_1733199695.png" class="rounded-circle mx-auto mt-3" width="100" alt="Manish Jain">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold">Manish Jain</h6>
-                                    <p class="text-muted mb-1">ActionCOACH, ICF-ACC...</p>
-                                    <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Location</p>
-                                    <p class="small">35+ years of international experience, helping clients worldwide...</p>
-                                    <a href="{{ url('/mentor/moving-your-business-from-good-to-awesome/kyu1as') }}" class="btn btn-outline-success btn-block">Send Proposal</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mentor Card 2 -->
-                        <div class="col-md-3">
-                            <div class="card shadow-sm h-100 text-center">
-                                <span class="badge badge-warning position-absolute" style="top:10px;left:10px;">Gold</span>
-                                <img src="https://media.businessex.com/mentor/profile/202303/84364_1679389330.JPG" class="rounded-circle mx-auto mt-3" width="100" alt="Vinayak Gaonkar">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold">Vinayak Gaonkar</h6>
-                                    <p class="text-muted mb-1">Vinayak Gaonkar & Co.</p>
-                                    <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Thane</p>
-                                    <p class="small">House of professionals like Chartered Accountants...</p>
-                                    <a href="{{ url('/mentor/business-growth-partner/8mp9zg') }}" class="btn btn-outline-success btn-block">Send Proposal</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mentor Card 3 -->
-                        <div class="col-md-3">
-                            <div class="card shadow-sm h-100 text-center">
-                                <img src="{{ asset('assets/images/profile-dflt.jpg') }}" class="rounded-circle mx-auto mt-3" width="100" alt="Vikram Maini">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold">Vikram Maini</h6>
-                                    <p class="text-muted mb-1">Silver Oak Hospitality...</p>
-                                    <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Mumbai</p>
-                                    <p class="small">Experienced hospitality professional...</p>
-                                    <a href="{{ url('/mentor/i-am-a-corporate-professional-having-16-years-of-experience-in-different-business-sectors/zgw8sj') }}" class="btn btn-outline-success btn-block">Send Proposal</a>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Mentor Card 4 -->
-                        <div class="col-md-3">
-                            <div class="card shadow-sm h-100 text-center">
-                                <img src="{{ asset('assets/images/profile-dflt.jpg') }}" class="rounded-circle mx-auto mt-3" width="100" alt="SaiKalyan Chakravarthy">
-                                <div class="card-body">
-                                    <h6 class="font-weight-bold">SaiKalyan Chakravarthy</h6>
-                                    <p class="text-muted mb-1">Filesie Systems (India)...</p>
-                                    <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Hyderabad</p>
-                                    <p class="small">15 years of experience guiding startups...</p>
-                                    <a href="{{ url('/mentor/i-am-a-corporate-professional-in-sales-and-marketing-any-startups-or-smes-can-contact-for-guidance/klputt') }}" class="btn btn-outline-success btn-block">Send Proposal</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Slide 2 -->
-                <div class="carousel-item">
-                    <div class="row">
-                        <!-- Add more mentor cards here or loop dynamically -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Controls -->
-            <a class="carousel-control-prev" href="#mentorCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#mentorCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-    </div>
-</section>
-
-
-<!-- All Popular Business Opportunities Section -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="title-box mb-4">
-            <h2 class="font-weight-bold">All Popular Business Opportunities</h2>
-        </div>
-
-        <!-- View Opportunities By Industry -->
-        <div class="mb-5">
-            <h3 class="h5 font-weight-bold mb-3">View Opportunities By Industry</h3>
-            <ul class="list-unstyled row">
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/food-beverage-businesses-for-sale/6/s0/st0') }}">Food & Beverage</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/industrial-machinery-manufacturing-businesses-for-sale/13/s0/st0') }}">Machinery & Manufacturing</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}">Energy & Environment</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/education-businesses-for-sale/3/s0/st0') }}">Education</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/beauty-health-wellness-businesses-for-sale/4/s0/st0') }}">Beauty, Health & Wellness</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/automobile-businesses-for-sale/1/s0/st0') }}">Automobile</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/finance-businesses-for-sale/11/s0/st0') }}">Finance</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-services-businesses-for-sale/5/s0/st0') }}">Business Services</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/retail-businesses-for-sale/14/s0/st0') }}">Retail</a></li>
-            </ul>
-        </div>
-
-        <!-- View Opportunities By Location -->
-        <div class="mb-5">
-            <h3 class="h5 font-weight-bold mb-3">View Opportunities By Location</h3>
-            <ul class="list-unstyled row">
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting') }}">All India (1500+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-delhi/c0/s0/DL') }}">Delhi (150+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-maharashtra/c0/s0/MH') }}">Maharashtra (200+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-karnataka/c0/s0/KA') }}">Karnataka (190+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-tamil-nadu/c0/s0/TN') }}">Tamil Nadu (100+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-uttar-pradesh/c0/s0/UP') }}">Uttar Pradesh (80+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-haryana/c0/s0/HR') }}">Haryana (80+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-west-bengal/c0/s0/WB') }}">West Bengal (20+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-rajasthan/c0/s0/RJ') }}">Rajasthan (20+)</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/businesses-for-sale-in-kerala/c0/s0/KL') }}">Kerala (15+)</a></li>
-                <!-- Add more states as needed -->
-            </ul>
-        </div>
-
-        <!-- View Opportunities By Investment -->
-        <div>
-            <h3 class="h5 font-weight-bold mb-3">View Opportunities By Investment</h3>
-            <ul class="list-unstyled row">
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-50k-2lakh') }}">₹50K – ₹2 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-2lakh-5lakh') }}">₹2 Lakh – ₹5 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-5lakh-10lakh') }}">₹5 Lakh – ₹10 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-10lakh-20lakh') }}">₹10 Lakh – ₹20 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-20lakh-30lakh') }}">₹20 Lakh – ₹30 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-30lakh-50lakh') }}">₹30 Lakh – ₹50 Lakh</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-50lakh-1cr') }}">₹50 Lakh – ₹1 Cr</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-1cr-2cr') }}">₹1 Cr – ₹2 Cr</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-2cr-5cr') }}">₹2 Cr – ₹5 Cr</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-5cr-10cr') }}">₹5 Cr – ₹10 Cr</a></li>
-                <li class="col-md-3 mb-2"><a href="{{ url('/businesslisting/business-opportunities/business-under-10cr-20cr') }}">₹10 Cr – ₹20 Cr</a></li>
-            </ul>
-        </div>
-    </div>
-</section>
-
-
-
-
-         <!-- ======= Featured Start-Ups Section ======= -->
-         <section class="section-business-ex section-t2 nav-arrow-a">
-            <div class="container-fluid">
-               <div class="row">
-                  <div class="col-md-12">
-                     <div class="title-wrap d-flex justify-content-between">
-                        <div class="title-box">
-                           <h2 class="bex-title-a">Featured Start-Ups</h2>
-                           <h5>Business-Ex Offers 511 Start-Ups In 13 Various Industries</h5>
-                           <a href="#" class="bex-view-all-section">View All</a>
-                        </div>
+         <!-- High Growth Potential Startups Section -->
+         <section class="py-5 bg-light">
+            <div class="container">
+               <div class="d-flex justify-content-between align-items-center mb-4">
+                     <div>
+                        <h2 class="font-weight-bold mb-0">High Growth Potential Startups</h2>
+                        <h5 class="text-muted mb-0">
+                           BusinessEx offers 678 startups in 16 industries as on Jul 27, 2026
+                        </h5>
                      </div>
-                  </div>
+                     <a href="{{ url('/startupslisting') }}" class="text-success font-weight-bold">View All</a>
                </div>
-               <div id="bex-Featured-Start-Ups-carousel" class="owl-carousel owl-arrow bex-card-margin">
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section card">
-                           <div class="bex-features-section-main">
-                              <div id="ribbon-container">
-                                 <a href="#" id="ribbon">PLATINUM</a>
-                              </div>
-                              <img src="./assets/img/bex-main-why.jpg" alt="" />
-                           </div>
-                           <div class="bex-bussiness-section-info">
-                              <p>Food Parlors</p>
-                              <h6>Established & Renowned Milkshake Franchise for Sale</h6>
-                           </div>
-                           <div class="bex-bussiness-section-info-main">
-                              <div class="bex-main-info-card-timing">
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                 July</span>
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                 July</span>
-                              </div>
-                              <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                              <ul class="bex-service-tags">
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                              </ul>
-                           </div>
-                           <div class="bex-primary-btn">
-                              <a href="#">ENQUIRE NOW</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section card">
-                           <div class="bex-features-section-main">
-                              <div id="ribbon-container">
-                                 <a href="#" id="ribbon">PLATINUM</a>
-                              </div>
-                              <img src="./assets/img/bex-main-why.jpg" alt="" />
-                           </div>
-                           <div class="bex-bussiness-section-info">
-                              <p>Food Parlors</p>
-                              <h6>Established & Renowned Milkshake Franchise for Sale</h6>
-                           </div>
-                           <div class="bex-bussiness-section-info-main">
-                              <div class="bex-main-info-card-timing">
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                 July</span>
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                 July</span>
-                              </div>
-                              <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                              <ul class="bex-service-tags">
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                              </ul>
-                           </div>
-                           <div class="bex-primary-btn">
-                              <a href="#">ENQUIRE NOW</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section card">
-                           <div class="bex-features-section-main">
-                              <div id="ribbon-container">
-                                 <a href="#" id="ribbon">PLATINUM</a>
-                              </div>
-                              <img src="./assets/img/bex-main-why.jpg" alt="" />
-                           </div>
-                           <div class="bex-bussiness-section-info">
-                              <p>Food Parlors</p>
-                              <h6>Established & Renowned Milkshake Franchise for Sale</h6>
-                           </div>
-                           <div class="bex-bussiness-section-info-main">
-                              <div class="bex-main-info-card-timing">
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                 July</span>
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                 July</span>
-                              </div>
-                              <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                              <ul class="bex-service-tags">
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                              </ul>
-                           </div>
-                           <div class="bex-primary-btn">
-                              <a href="#">ENQUIRE NOW</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section card">
-                           <div class="bex-features-section-main">
-                              <div id="ribbon-container">
-                                 <a href="#" id="ribbon">PLATINUM</a>
-                              </div>
-                              <img src="./assets/img/bex-main-why.jpg" alt="" />
-                           </div>
-                           <div class="bex-bussiness-section-info">
-                              <p>Food Parlors</p>
-                              <h6>Established & Renowned Milkshake Franchise for Sale</h6>
-                           </div>
-                           <div class="bex-bussiness-section-info-main">
-                              <div class="bex-main-info-card-timing">
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                 July</span>
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                 July</span>
-                              </div>
-                              <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                              <ul class="bex-service-tags">
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                              </ul>
-                           </div>
-                           <div class="bex-primary-btn">
-                              <a href="#">ENQUIRE NOW</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section card">
-                           <div class="bex-features-section-main">
-                              <div id="ribbon-container">
-                                 <a href="#" id="ribbon">PLATINUM</a>
-                              </div>
-                              <img src="./assets/img/bex-main-why.jpg" alt="" />
-                           </div>
-                           <div class="bex-bussiness-section-info">
-                              <p>Food Parlors</p>
-                              <h6>Established & Renowned Milkshake Franchise for Sale</h6>
-                           </div>
-                           <div class="bex-bussiness-section-info-main">
-                              <div class="bex-main-info-card-timing">
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                 July</span>
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                 July</span>
-                              </div>
-                              <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                              <ul class="bex-service-tags">
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                              </ul>
-                           </div>
-                           <div class="bex-primary-btn">
-                              <a href="#">ENQUIRE NOW</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section card">
-                           <div class="bex-features-section-main">
-                              <div id="ribbon-container">
-                                 <a href="#" id="ribbon">PLATINUM</a>
-                              </div>
-                              <img src="./assets/img/bex-main-why.jpg" alt="" />
-                           </div>
-                           <div class="bex-bussiness-section-info">
-                              <p>Food Parlors</p>
-                              <h6>Established & Renowned Milkshake Franchise for Sale</h6>
-                           </div>
-                           <div class="bex-bussiness-section-info-main">
-                              <div class="bex-main-info-card-timing">
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                 July</span>
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                 July</span>
-                              </div>
-                              <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                              <ul class="bex-service-tags">
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                              </ul>
-                           </div>
-                           <div class="bex-primary-btn">
-                              <a href="#">ENQUIRE NOW</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section card">
-                           <div class="bex-features-section-main">
-                              <div id="ribbon-container">
-                                 <a href="#" id="ribbon">PLATINUM</a>
-                              </div>
-                              <img src="./assets/img/bex-main-why.jpg" alt="" />
-                           </div>
-                           <div class="bex-bussiness-section-info">
-                              <p>Food Parlors</p>
-                              <h6>Established & Renowned Milkshake Franchise for Sale</h6>
-                           </div>
-                           <div class="bex-bussiness-section-info-main">
-                              <div class="bex-main-info-card-timing">
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                 July</span>
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                 July</span>
-                              </div>
-                              <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                              <ul class="bex-service-tags">
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                              </ul>
-                           </div>
-                           <div class="bex-primary-btn">
-                              <a href="#">ENQUIRE NOW</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section card">
-                           <div class="bex-features-section-main">
-                              <div id="ribbon-container">
-                                 <a href="#" id="ribbon">PLATINUM</a>
-                              </div>
-                              <img src="./assets/img/bex-main-why.jpg" alt="" />
-                           </div>
-                           <div class="bex-bussiness-section-info">
-                              <p>Food Parlors</p>
-                              <h6>Established & Renowned Milkshake Franchise for Sale</h6>
-                           </div>
-                           <div class="bex-bussiness-section-info-main">
-                              <div class="bex-main-info-card-timing">
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                 July</span>
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                 July</span>
-                              </div>
-                              <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                              <ul class="bex-service-tags">
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                              </ul>
-                           </div>
-                           <div class="bex-primary-btn">
-                              <a href="#">ENQUIRE NOW</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="carousel-item-a">
-                     <div class="business-ex-box">
-                        <div class="bex-bussiness-section card">
-                           <div class="bex-features-section-main">
-                              <div id="ribbon-container">
-                                 <a href="#" id="ribbon">PLATINUM</a>
-                              </div>
-                              <img src="./assets/img/bex-main-why.jpg" alt="" />
-                           </div>
-                           <div class="bex-bussiness-section-info">
-                              <p>Food Parlors</p>
-                              <h6>Established & Renowned Milkshake Franchise for Sale</h6>
-                           </div>
-                           <div class="bex-bussiness-section-info-main">
-                              <div class="bex-main-info-card-timing">
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                 July</span>
-                                 <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                 July</span>
-                              </div>
-                              <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                              <ul class="bex-service-tags">
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                                 <li>Hospitality</li>
-                              </ul>
-                           </div>
-                           <div class="bex-primary-btn">
-                              <a href="#">ENQUIRE NOW</a>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </section>
-        <!-- ======= End Featured Start-Ups Section ======= -->
 
-        <!-- ======= Featured Mentors Section ======= -->
-         <section class="section-business-ex section-t2 nav-arrow-a">
-            <div class="container-fluid">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="title-wrap d-flex justify-content-between">
-                     <div class="title-box">
-                        <h2 class="bex-title-a">Featured Mentors</h2>
-                        <h5>Business-Ex Offers 150 Mentors As On Date…</h5>
-                        <a href="#" class="bex-view-all-section">View All</a>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div id="bex-Featured-mentors-carousel" class="owl-carousel owl-arrow bex-card-margin">
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                     <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                     <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                     <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                     <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-               <div class="carousel-item-a">
-                  <div class="business-ex-box">
-                     <div class="bex-bussiness-section card">
-                        <div class="bex-features-section-main">
-                           <div id="ribbon-container">
-                              <a href="#" id="ribbon">PLATINUM</a>
-                           </div>
-                           <div class="bex-mentor-section-main">
-                              <div class="row">
-                                 <div class="col-sm-8 col-md-8">
-                                    <div class="bex-mentor-section-info">
-                                       <h6>Anand Naresh Motwani</h6>
-                                       <p>Business Coach, Expandus Business Coaching Pvt. Ltd.</p>
-                                    </div>
-                                 </div>
-                                 <div class="col-sm-4 col-md-4">
-                                    <img src="./assets/img/mentor.png" alt="..." class="rounded-circle">
-                                 </div>
-                                 <div class="col-sm-12 col-md-12">
-                                    <div class="bex-bussiness-section-info-main">
-                                       <div class="bex-main-info-card-timing">
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/calendar.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                          <span class="bex-main-info-card-timing-img"><img src="./assets/img/clock.svg"> 11
-                                          July</span>
-                                       </div>
-                                       <div class="bex-summary">Summary</div>
-                                       <div class="bex-summary-info">Over 40 years of experience in Electrical Manufacturing
-                                          industry.
-                                       </div>
-                                       <p><a href="#">Gurgaon</a>, <a href="#">Haryana</a></p>
-                                       <ul class="bex-service-tags">
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                          <li>Hospitality</li>
-                                       </ul>
-                                    </div>
-                                     <div class="bex-primary-btn">
-                              <a href="#">Send Proposal</a>
-                           </div>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </section>
-         <!-- End Featured Mentors Section -->
+               <!-- Carousel -->
+               <div id="startupCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+                     <div class="carousel-inner">
 
-         <!-- ======= All Popular Business Opportunities Section ======= -->
-         <section class="section-business-ex section-t2 nav-arrow-a">
-            <div class="container-fluid">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="title-wrap d-flex justify-content-between">
-                     <div class="title-box">
-                        <h2 class="bex-title-a">All Popular Business Opportunities</h2>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main">
-            <div class="row">
-               <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main">
-                  <div class="row">
-                     <div class="col-md-4">
-                        <div class="card-box-b card-shadow news-box">
-                           <div class="img-box-b">
-                              <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
-                           </div>
-                           <div class="card-overlay">
-                              <div class="card-header-b bse-btn-overlay-w">
-                                 <div class="card-title-b">
-                                    <button type="button" class="btn btn-outline-bse">BY INDUSTRY</button>
+                        <!-- Slide 1 -->
+                        <div class="carousel-item active">
+                           <div class="row">
+                                 <!-- Card 1 -->
+                                 @foreach($highGrowthStartups as $startup)
+                                 <div class="col-md-3">
+                                    <div class="card shadow-sm h-100">
+                                       <img src="{{ $startup->images[0]->startup_img_name ?? asset('images/default_startup.jpg') }}" class="card-img-top" alt="Commercial Real Estate Rental Solutions">
+                                       <div class="card-body">
+                                             <p class="text-muted mb-1">{{ $startup->industrySector->category_name }}</p>
+                                             <h6 class="font-weight-bold">{{ $startup->advmt_headline }}</h6>
+                                             <p><strong>Seeking Investment:</strong> {{ $startup->inventory_value }}</p>
+                                             <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Mumbai</p>
+                                             <a href="{{ url('/startup/looking-for-an-investor-for-commercial-real-estate-rental-solutions/jm3ak7') }}" class="btn btn-outline-success btn-block">Enquire Now</a>
+                                       </div>
+                                    </div>
                                  </div>
-                              </div>
+                                 @endforeach
                            </div>
                         </div>
-                     </div>
-                     <div class="col-md-4">
-                        <div class="card-box-b card-shadow news-box">
-                           <div class="img-box-b">
-                              <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
-                           </div>
-                           <div class="card-overlay">
-                              <div class="card-header-b bse-btn-overlay-w">
-                                 <div class="card-title-b">
-                                    <button type="button" class="btn btn-outline-bse">BY LOCATION</button>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <div class="col-md-4">
-                        <div class="card-box-b card-shadow news-box">
-                           <div class="img-box-b">
-                              <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
-                           </div>
-                           <div class="card-overlay">
-                              <div class="card-header-b bse-btn-overlay-w">
-                                 <div class="card-title-b">
-                                    <button type="button" class="btn btn-outline-bse">BY INVESTMENT</button>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
+                        
+                     <!-- Controls -->
+                     <a class="carousel-control-prev" href="#startupCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                     </a>
+                     <a class="carousel-control-next" href="#startupCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                     </a>
                </div>
             </div>
          </section>
 
-         <!-- ======= End All Popular Business Opportunities Section ======= -->
+
+         <!-- World Class Mentors Section -->
+         <section class="py-5 bg-light">
+            <div class="container">
+               <div class="d-flex justify-content-between align-items-center mb-4">
+                     <div>
+                        <h2 class="font-weight-bold mb-0">World Class Mentors</h2>
+                        <h5 class="text-muted mb-0">
+                           BusinessEx offers 194 mentors as on Jul 27, 2026
+                        </h5>
+                     </div>
+                     <a href="{{ url('/mentorlisting') }}" class="text-success font-weight-bold">View All</a>
+               </div>
+
+               <!-- Carousel -->
+               <div id="mentorCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+                     <div class="carousel-inner">
+
+                        <!-- Slide 1 -->
+                        <div class="carousel-item active">
+                           <div class="row">
+                                 <!-- Mentor Card 1 -->
+                                 @foreach($worldClassMentors as $mentor)
+                                 <div class="col-md-3">
+                                    <div class="card shadow-sm h-100 text-center">
+                                       <span class="badge badge-primary position-absolute" style="top:10px;left:10px;">Platinum</span>
+                                       <img src="{{ $mentor->mentor_profile_pic ?: asset('images/default-mentor.jpg') }}" class="rounded-circle mx-auto mt-3" width="100" alt="{{ $mentor->mentor_name }}">
+                                       <div class="card-body">
+                                             <h6 class="font-weight-bold">{{$mentor->mentor_name}}</h6>
+                                             <p class="text-muted mb-1">{{ $mentor->mentor_adv_headline }}</p>
+                                             <p class="text-muted"><i class="fa fa-phone"></i> Phone <i class="fa fa-envelope"></i> Email <i class="fa fa-map-marker"></i> Location</p>
+                                             <p class="small">{{ $mentor->mentor_profile_summary }}</p>
+                                             <a href="{{ url('/mentor/moving-your-business-from-good-to-awesome/kyu1as') }}" class="btn btn-outline-success btn-block">Send Proposal</a>
+                                       </div>
+                                    </div>
+                                 </div>
+                                 @endforeach
+                           </div>
+                        </div>
+
+                        <!-- Slide 2 -->
+                        <div class="carousel-item">
+                           <div class="row">
+                                 <!-- Add more mentor cards here or loop dynamically -->
+                           </div>
+                        </div>
+                     </div>
+
+                     <!-- Controls -->
+                     <a class="carousel-control-prev" href="#mentorCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                     </a>
+                     <a class="carousel-control-next" href="#mentorCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                     </a>
+               </div>
+            </div>
+         </section>
+
+
+         <!-- All Popular Business Opportunities Section -->
+         <section class="py-5 bg-light">
+            <div class="container">
+               <div class="title-box mb-4">
+                     <h2 class="font-weight-bold">All Popular Business Opportunities</h2>
+               </div>
+
+               <!-- View Opportunities By Industry -->
+               <div class="industry-section mb-5">
+               <h3 class="h5 font-weight-bold mb-3">View Opportunities By Industry</h3>
+               <ul class="list-unstyled d-flex flex-wrap gap-2">
+               <li><a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}" class="industry-btn">Energy & Environment</a></li>
+               <li><a href="{{ url('/businesslisting/business-services-businesses-for-sale/5/s0/st0') }}" class="industry-btn">Business Services</a></li>
+               <li><a href="{{ url('/businesslisting/retail-businesses-for-sale/14/s0/st0') }}" class="industry-btn">Retail</a></li>
+               <li><a href="{{ url('/businesslisting/finance-businesses-for-sale/11/s0/st0') }}" class="industry-btn">Finance</a></li>
+               <li><a href="{{ url('/businesslisting/food-beverage-businesses-for-sale/6/s0/st0') }}" class="industry-btn">Food & Beverage</a></li>
+               <li><a href="{{ url('/businesslisting/travel-tourism-businesses-for-sale/9/s0/st0') }}" class="industry-btn">Travel & Tourism</a></li>
+               <li><a href="{{ url('/businesslisting/construction-maintenance-businesses-for-sale/10/s0/st0') }}" class="industry-btn">Construction & Maintenance</a></li>
+               <li><a href="{{ url('/businesslisting/automobile-businesses-for-sale/1/s0/st0') }}" class="industry-btn">Automobile</a></li>
+               <li><a href="{{ url('/businesslisting/fmcg-businesses-for-sale/15/s0/st0') }}" class="industry-btn">FMCG</a></li>
+            </ul>
+         </div>
+
+
+               <!-- View Opportunities By Location -->
+               <div class="industry-section mb-5">
+               <h3 class="h5 font-weight-bold mb-3">View Opportunities By Location</h3>
+                  <ul class="list-unstyled d-flex flex-wrap gap-2">
+                  <li><a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}" class="industry-btn">Energy & Environment</a></li>
+                  <li><a href="{{ url('/businesslisting/business-services-businesses-for-sale/5/s0/st0') }}" class="industry-btn">Business Services</a></li>
+                  <li><a href="{{ url('/businesslisting/retail-businesses-for-sale/14/s0/st0') }}" class="industry-btn">Retail</a></li>
+                  <li><a href="{{ url('/businesslisting/finance-businesses-for-sale/11/s0/st0') }}" class="industry-btn">Finance</a></li>
+                  <li><a href="{{ url('/businesslisting/food-beverage-businesses-for-sale/6/s0/st0') }}" class="industry-btn">Food & Beverage</a></li>
+                  <li><a href="{{ url('/businesslisting/travel-tourism-businesses-for-sale/9/s0/st0') }}" class="industry-btn">Travel & Tourism</a></li>
+                  <li><a href="{{ url('/businesslisting/construction-maintenance-businesses-for-sale/10/s0/st0') }}" class="industry-btn">Construction & Maintenance</a></li>
+                  <li><a href="{{ url('/businesslisting/automobile-businesses-for-sale/1/s0/st0') }}" class="industry-btn">Automobile</a></li>
+                  <li><a href="{{ url('/businesslisting/fmcg-businesses-for-sale/15/s0/st0') }}" class="industry-btn">FMCG</a></li>
+               </ul>
+               </div>
+
+               <!-- View Opportunities By Investment -->
+               <div class="industry-section mb-5">
+               <h3 class="h5 font-weight-bold mb-3">View Opportunities By Investment</h3>
+                  <ul class="list-unstyled d-flex flex-wrap gap-2">
+                  <li><a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}" class="industry-btn">Energy & Environment</a></li>
+                  <li><a href="{{ url('/businesslisting/business-services-businesses-for-sale/5/s0/st0') }}" class="industry-btn">Business Services</a></li>
+                  <li><a href="{{ url('/businesslisting/retail-businesses-for-sale/14/s0/st0') }}" class="industry-btn">Retail</a></li>
+                  <li><a href="{{ url('/businesslisting/finance-businesses-for-sale/11/s0/st0') }}" class="industry-btn">Finance</a></li>
+                  <li><a href="{{ url('/businesslisting/food-beverage-businesses-for-sale/6/s0/st0') }}" class="industry-btn">Food & Beverage</a></li>
+                  <li><a href="{{ url('/businesslisting/travel-tourism-businesses-for-sale/9/s0/st0') }}" class="industry-btn">Travel & Tourism</a></li>
+                  <li><a href="{{ url('/businesslisting/construction-maintenance-businesses-for-sale/10/s0/st0') }}" class="industry-btn">Construction & Maintenance</a></li>
+                  <li><a href="{{ url('/businesslisting/automobile-businesses-for-sale/1/s0/st0') }}" class="industry-btn">Automobile</a></li>
+                  <li><a href="{{ url('/businesslisting/fmcg-businesses-for-sale/15/s0/st0') }}" class="industry-btn">FMCG</a></li>
+               </ul>
+               </div>
+         </section>
 
          <!-- Start bx-insight Section -->
          <section id="bx-insight" class="bx-insight section-bg">
@@ -2278,102 +1140,43 @@
                      <div class="title-wrap d-flex justify-content-between">
                         <div class="title-box">
                            <h2 class="bex-title-a">Bx Insights</h2>
-                           <a href="#" class="bex-view-all-section2">View All</a>
+                           <a href="/articles" class="bex-view-all-section2">View All</a>
                         </div>
                      </div>
                   </div>
                   <div class="col-md-12">
                      <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                          <a class="nav-link active" id="News-tab" data-toggle="tab" href="#News" role="tab" aria-controls="News" aria-selected="true">News</a>
+                          <a class="nav-link active" id="News-tab" data-toggle="tab" href="#News" role="tab" aria-controls="News" aria-selected="true">Articles</a>
                         </li>
-                        <li class="nav-item">
-                          <a class="nav-link" id="Articles-tab" data-toggle="tab" href="#Articles" role="tab" aria-controls="Articles" aria-selected="false">Articles</a>
-                        </li>
-                        <li class="nav-item">
-                          <a class="nav-link" id="Testimonials-tab" data-toggle="tab" href="#Testimonials" role="tab" aria-controls="Testimonials" aria-selected="false">Testimonials</a>
-                        </li>
+                        
                       </ul>
                       <div class="tab-content" id="myTabContent">
+                        
                         <div class="tab-pane fade show active" id="News" role="tabpanel" aria-labelledby="News-tab">.
                            <div class="row">
+                              @foreach($homepageArticles as $article)
                               <div class="col-md-3">
                                  <div class="card bex-card-padding-tblr">
                                     <div class="card-box-b card-shadow news-box">
                                        <div class="img-box-b">
-                                          <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
+                                          <a href="{{ route('bxinsight.show', $article->article_id) }}">
+                                             <img src="{{ asset($article->image_path) }}" alt="" class="img-b img-fluid">
+                                          </a>
                                        </div>
                                        
                                     </div>
                                     <div class="bex-card-info-main">
-                                       <p class="bex-author-timeline">23 July 2020</p>
+                                       <p class="bex-author-timeline">{{$article->created_at->format('d M Y')}}</p>
                                        <p>
-                                          BusinessEx defines Business Valuation as a process of obtaining a
-                                          fair economic value of a business. This will benefit in figuring out
-                                          sale value, pitching to investors and developing business strategies…
+                                          {{ $article->short_desc}}
                                        </p>
-                                       <p class="bex-author-timeline"> By Jaspreet kaur</p>
-                                    </div>
-                                 </div>
-                              </div>
-                              <div class="col-md-3">
-                                 <div class="card bex-card-padding-tblr">
-                                    <div class="card-box-b card-shadow news-box">
-                                       <div class="img-box-b">
-                                          <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
-                                       </div>
                                        
-                                    </div>
-                                    <div class="bex-card-info-main">
-                                       <p class="bex-author-timeline">23 July 2020</p>
-                                       <p>
-                                          BusinessEx defines Business Valuation as a process of obtaining a
-                                          fair economic value of a business. This will benefit in figuring out
-                                          sale value, pitching to investors and developing business strategies…
-                                       </p>
-                                       <p class="bex-author-timeline"> By Jaspreet kaur</p>
+                                       <p class="bex-author-timeline">{{ $article->author->author_name }}</p>
                                     </div>
                                  </div>
                               </div>
-                              <div class="col-md-3">
-                                 <div class="card bex-card-padding-tblr">
-                                    <div class="card-box-b card-shadow news-box">
-                                       <div class="img-box-b">
-                                          <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
-                                       </div>
-                                       
-                                    </div>
-                                    <div class="bex-card-info-main">
-                                       <p class="bex-author-timeline">23 July 2020</p>
-                                       <p>
-                                          BusinessEx defines Business Valuation as a process of obtaining a
-                                          fair economic value of a business. This will benefit in figuring out
-                                          sale value, pitching to investors and developing business strategies…
-                                       </p>
-                                       <p class="bex-author-timeline"> By Jaspreet kaur</p>
-                                    </div>
-                                 </div>
-                              </div>
-                              <div class="col-md-3">
-                                 <div class="card bex-card-padding-tblr">
-                                    <div class="card-box-b card-shadow news-box">
-                                       <div class="img-box-b">
-                                          <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
-                                       </div>
-                                       
-                                    </div>
-                                    <div class="bex-card-info-main">
-                                       <p class="bex-author-timeline">23 July 2020</p>
-                                       <p>
-                                          BusinessEx defines Business Valuation as a process of obtaining a
-                                          fair economic value of a business. This will benefit in figuring out
-                                          sale value, pitching to investors and developing business strategies…
-                                       </p>
-                                       <p class="bex-author-timeline"> By Jaspreet kaur</p>
-                                    </div>
-                                 </div>
-                              </div>
-                              
+                              @endforeach
                            </div>
                         </div>
                         <div class="tab-pane fade" id="Articles" role="tabpanel" aria-labelledby="Articles-tab">
@@ -2570,8 +1373,8 @@
                               <div class="card-overlay">
                                  <div class="card-header-b bse-btn-overlay-w">
                                     <div class="card-title-b">
-                                       <button type="button" class="btn btn-outline-bse">CALCULATE BUSINESS VALUE
-                                       </button>
+                                       <a type="button" class="btn btn-outline-bse" href="{{ route('service.business-valuation') }}">+ EXPLORE MORE
+                                       </a>
                                     </div>
                                  </div>
                               </div>
@@ -2595,8 +1398,8 @@
                               <div class="card-overlay">
                                  <div class="card-header-b bse-btn-overlay-w">
                                     <div class="card-title-b">
-                                       <button type="button" class="btn btn-outline-bse">CALCULATE BUSINESS VALUE
-                                       </button>
+                                       <a type="button" class="btn btn-outline-bse" href="{{ route('service.business-plan') }}">+ EXPLORE MORE
+                                       </a>
                                     </div>
                                  </div>
                               </div>
@@ -2621,8 +1424,8 @@
                               <div class="card-overlay">
                                  <div class="card-header-b bse-btn-overlay-w">
                                     <div class="card-title-b">
-                                       <button type="button" class="btn btn-outline-bse">GET DUE DILIGENCE DONE
-                                       </button>
+                                       <a type="button" class="btn btn-outline-bse" href="{{ route('service.due-diligence') }}">+ EXPLORE MORE
+                                       </a>
                                     </div>
                                  </div>
                               </div>
@@ -2676,16 +1479,16 @@
                      </div>
                      <div class="bex-plans-card-bottom">
                         <p class="bex-most-popular-text">
-                           <b>Reach-out to 50 Business</b><br />
-                           <b>Buyers / Investors</b><br />
-                           10 Investment proposals<br />
-                           Email support
+                           <b>Reach-out to 50</b><br />
+                           <b>Businesses/Startups/Investors/Mentors Accept Unlimited Investment<br/> Proposals from registered users</b><br />
+                           <br />
+                           Unlock 10 Proposals from website visitors
                         </p>
                      </div>
                      <div class="bex-plans-btn">
-                        <button type="button" class="btn btn-outline-secondary btn-md"> <i class="fa fa-plus"></i> EXPLORE
+                        <a type="button" class="btn btn-outline-secondary btn-md" href="/pricing?membership=premium"> <i class="fa fa-plus"></i> EXPLORE
                         MORE
-                        </button>
+                        </a>
                      </div>
                   </div>
                </div>
@@ -2695,7 +1498,7 @@
                         <span>Most Popular</span>
                      </div>
                      <div class=" bex-card-margin bex-plans-main bex-premium-price-main">
-                        <h4>Premium</h4>
+                        <h4>Gold</h4>
                         <p>
                            <s> &#8377; 7,499</s>
                         </p>
@@ -2703,27 +1506,27 @@
                            &#8377; 4999
                         </h1>
                         <p>
-                           6 months
+                           12 months
                         </p>
                      </div>
                      <div class="bex-plans-card-bottom">
                         <p class="bex-most-popular-text">
-                           <b>Reach-out to 50 Business</b><br />
-                           <b>Buyers / Investors</b><br />
-                           10 Investment proposals<br />
-                           Email support
+                           <b>Reach out to 100</b><br />
+                           <b>Businesses/Startups/Investors/Mentors Accept Unlimited Investment<br/> Proposals from registered users</b><br />
+                           <br />
+                           Unlock 20 Proposals from website visitors
                         </p>
                      </div>
                      <div class="bex-plans-btn">
-                        <button type="button" class="btn btn-light btn-md"> <i class="fa fa-plus"></i> EXPLORE MORE
-                        </button>
+                        <a type="button" class="btn btn-light btn-md" href="/pricing?membership=gold"> <i class="fa fa-plus"></i> EXPLORE MORE
+                        </a>
                      </div>
                   </div>
                </div>
                <div class="col-md-4">
                   <div class="card text-center">
                      <div class=" bex-card-margin bex-plans-main">
-                        <h4>Premium</h4>
+                        <h4>Platinum</h4>
                         <p>
                            <s> &#8377; 15,000</s>
                         </p>
@@ -2736,16 +1539,16 @@
                      </div>
                      <div class="bex-plans-card-bottom">
                         <p class="bex-most-popular-text">
-                           <b>Reach-out to 50 Business</b><br />
-                           <b>Buyers / Investors</b><br />
-                           10 Investment proposals<br />
-                           Email support
+                           <b>Reach out to unlimited</b><br />
+                           <b>Businesses/Startups/Investors/Mentors Accept Unlimited Investment<br/> Proposals from registered users</b><br />
+                           <br />
+                           Unlock Unlimited Proposals from website visitors
                         </p>
                      </div>
                      <div class="bex-plans-btn">
-                        <button type="button" class="btn btn-outline-secondary btn-md"> <i class="fa fa-plus"></i> EXPLORE
+                        <a type="button" class="btn btn-outline-secondary btn-md" href="/pricing?membership=platinum"> <i class="fa fa-plus"></i> EXPLORE
                         MORE
-                        </button>
+                        </a>
                      </div>
                   </div>
                </div>
@@ -2755,186 +1558,131 @@
          <!-- ======= Did You Find Anything Interested Section ======= -->
          <section class="section-business-ex section-t2 section-b2 nav-arrow-a b-white">
             <div class="container-fluid">
-            <div class="row">
-               <div class="col-md-12 text-center">
-                  <div class="title-wrap justify-content-between">
-                     <div class="title-box ">
-                        <h1 class="bex-title-a">Did You Find Anything Interested ?
-                        </h1>
-                        <h5>Why Wait, Create Your Profile Now.</h5>
-                     </div>
-                  </div>
-               </div>
-            </div>
-            <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main">
-            <div class="row">
-               <div class="col-xl-6 offset-xs-12 offset-md-12 offset-lg-12 offset-xl-3 align-self-center">
-                  <form>
-                     <div class="input-group">
-                        <select class="custom-select" id="inputGroupSelect04" aria-label="Example select with button addon">
-                           <option selected>Select a profile...</option>
-                           <option value="1">Business | Looking To Sell</option>
-                           <option value="2">Startup | Looking For Funds</option>
-                           <option value="3">Investor | Looking To Invest/Buy</option>
-                           <option value="4">Mentor | Looking To Guide/Coach </option>
-                        </select>
-                        <div class="input-group-append">
-                           <button class="btn  btn-success-main" type="button">CREATE PROFILE</button>
-                        </div>
-                  </form>
-                  </div>
-               </div>
-            </div>
-         </section>
-         <!-- Did You Find Anything Interested Section -->
-         <!-- ======= Did You Find Anything Interested Section ======= -->
-         <section class="section-business-ex section-t2 section-b2 nav-arrow-a b-white">
-            <div class="container-fluid">
-               <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main">
-                  <div class="row">
-                     <div class="col-xs-12 col-sm-12 col-md-6 footer-newsletter">
-                        <div class="text-sm-center text-md-center text-lg-left text-xl-left">
-                           <h2>Subscribe Now</h2>
-                           <p>Get updated through our mails</p>
-                           <form action=" " method="post">
-                              <input type="email" name="email"><input type="submit" value="Subscribe">
-                           </form>
-                        </div>
-                     </div>
-                     <div class="col-xs-12 col-sm-12 col-md-6 ">
-                        <div class="text-sm-center text-md-center text-lg-right text-xl-right">
-                           <h2>Follow Business-Ex</h2>
-                           <p>Stay tuned & get updated</p>
-                           <div class="social-links text-center text-md-right pt-3 pt-md-0">
-                              <a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
-                              <a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
-                              <a href="#" class="instagram"><i class="fa fa-instagram"></i></a>
-                              <a href="#" class="google-plus"><i class="fa fa-youtube"></i></a>
-                              <!-- <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a> -->
+               <div class="row">
+                     <div class="col-md-12 text-center">
+                        <div class="title-wrap justify-content-between">
+                           <div class="title-box ">
+                                 <h1 class="bex-title-a">Did You Find Anything Interested ?</h1>
+                                 <h5>Why Wait, Create Your Profile Now.</h5>
                            </div>
                         </div>
                      </div>
-                  </div>
+               </div>
+               <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main">
+                     <div class="row">
+                        <div class="col-xl-6 offset-xs-12 offset-md-12 offset-lg-12 offset-xl-3 align-self-center">
+                           <form id="profileForm">
+                                 <div class="input-group">
+                                    <select class="custom-select" id="profileSelect" aria-label="Select profile type">
+                                       <option value="" selected>Select a profile...</option>
+                                       <option value="business">Business | Looking To Sell</option>
+                                       <option value="startup">Startup | Looking For Funds</option>
+                                       <option value="investor">Investor | Looking To Invest/Buy</option>
+                                       <option value="mentor">Mentor | Looking To Guide/Coach</option>
+                                    </select>
+                                    <div class="input-group-append">
+                                       <button class="btn btn-success-main" type="button" id="createProfileBtn">
+                                             CREATE PROFILE
+                                       </button>
+                                    </div>
+                                 </div>
+                           </form>
+                        </div>
+                     </div>
                </div>
             </div>
          </section>
-         <!-- Did You Find Anything Interested Section -->
-         <!-- ======= About us Section ======= -->
-         <section class="section-business-ex section-t2 nav-arrow-a">
-            <div class="container-fluid">
-            <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main about-us">
-            <div class="row">
-               <div class="col-md-12">
-                  <p><b>About Business Ex</b></p>
-                  BusinessEx is an online interactive platform to connect Businesses and Startups with Investors, Mentors,
-                  Incubators, Lenders and Brokers, across industries and geographies.<br />
-                  1500+ Businesses, 1400+ Startups, 1800+ Investors, 200+ Mentors and 50+ Incubators are registered in our
-                  community so far!<br />
-                  In addition, we also provide Business Services such as B-Plan assistance, Business Valuations, Due
-                  Diligence and Legal Checks. BusinessEx has partnered with BizEquity - the world’s only patented and the
-                  largest provider of business valuations, having valued over 33 Million Private Businesses
-                  globally.<br /><br />
-                  We have also ventured into events with our flagship event called BEx Guruwaar, held every Thursday in
-                  major cities across India. BEx Guruwaar is aimed at bringing together the startup community and
-                  celebrating the power of entrepreneurship. Our mission is to help early stage startups and aspiring
-                  entrepreneurs by providing them with the guidance, mentorship and support that they need to turn their
-                  entrepreneurial dreams into reality.
+      <!-- Testmonials section start here -->
+      <div class="title-box">
+           <h2 class="bex-title-a">What What Our Clients say</h2>
+      </div>
+         <div id="clientssay" class="owl-carousel owl-theme">
+            @foreach($testimonials as $testimonial)
+               <div class="item d-flex flex-wrap">
+                     <div class="card shadow-sm" style="background:#fff; border-radius:8px; padding:20px;">
+                        <div class="card-body">
+                           <p class="card-text mb-3" style="font-style: italic; color:#333;">
+                                 "{{ $testimonial['text'] }}"
+                           </p>
+                           <div class="d-flex align-items-center">
+                                 <div>
+                                    <h6 class="mb-0" style="font-weight:600;">{{ $testimonial['name'] }}</h6>
+                                    <small class="text-muted">{{ $testimonial['designation'] }}</small>
+                                 </div>
+                           </div>
+                        </div>
+                     </div>
                </div>
-            </div>
-         </section>
-         <!-- About us Section -->
-         <!-- ======= footer widget Section ======= -->
-         <section class="section-business-ex section-t2 nav-arrow-a">
-            <div class="container-fluid">
-            <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main about-us">
-            <div class="row">
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-               <div class="col-md-2">
-                  <p><b>Business</b></p>
-                  <ul class="bex-listing-section">
-                     <li>Investment seekers </li>
-                     <li>Acquisition seekers </li>
-                     <li>Lending seekers </li>
-                     <li>Mentorship seekers</li>
-                     <li>Incubation seekers</li>
-                  </ul>
-               </div>
-            </div>
-         </section>
+            @endforeach
+         </div>
+         @include('includes.groupcompany')
+         @include('includes.newsletter')
+         @include('includes.categorylinkfooter')
+         @push('styles')
+         <style>
+            .industry-section {
+               background-color: #fff;
+               padding: 20px;
+            }
 
-         <!-- footer widget Section -->
-         <!-- ======= footer widget Section ======= -->
-         <section class="section-business-ex section-t2 section-b2 nav-arrow-a">
-            <div class="container-fluid">
-            <div class="bex-card-margin justify-content-center bex-all-popular-bussiness-main about-us">
-            <div class="row">
-               <div class="col-md-12">
-                  <p><b>Popular Searches</b></p>
-                  <ul class="bex-popular-search-section">
-                     <li> <a href="#">Automobile</a></li>
-                     <li> <a href="#">Business Services </a></li>
-                     <li> <a href="#">Fmcg </a></li>
-                     <li> <a href="#">Education </a></li>
-                     <li> <a href="#">Beauty, Health & Wellness </a></li>
-                     <li> <a href="#">Food & Beverage </a></li>
-                     <li> <a href="#">Fashion </a></li>
-                     <li> <a href="#">Building Construction & Home Products </a></li>
-                     <li> <a href="#">Travel & Tourism </a></li>
-                     <li> <a href="#">Leisure & Entertainment </a></li>
-                     <li> <a href="#">Finance </a></li>
-                     <li> <a href="#">Industrial Machinery & Manufacturing </a></li>
-                     <li> <a href="#">Retail </a></li>
-                  </ul>
-               </div>
-            </div>
-         </section>
-         <!-- end footer widget Section -->
+            .industry-btn {
+               display: inline-block;
+               background-color: #fbe6d4; /* soft beige tone */
+               color: #000;
+               padding: 8px 16px;
+               border-radius: 10px;
+               text-decoration: none;
+               font-weight: 500;
+               transition: all 0.2s ease-in-out;
+               margin: 5px; /* adds space between buttons */
+            }
+
+            .industry-btn:hover {
+               background-color: #f3d6b8;
+               color: #000;
+               text-decoration: none;
+            }
+         </style>
+         @endpush
+         <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const createProfileBtn = document.getElementById('createProfileBtn');
+    const profileSelect = document.getElementById('profileSelect');
+
+    if (!createProfileBtn || !profileSelect) {
+        return;
+    }
+
+    createProfileBtn.addEventListener('click', function () {
+        const selected = profileSelect.value;
+
+        if (!isLoggedIn) {
+            const loginModal = new bootstrap.Modal(document.getElementById('login'));
+            loginModal.show();
+        } else {
+            let url = '/registration/create-startup-profile';
+
+            switch (selected) {
+                case 'startup':
+                    url = '/registration/create-startup-profile';
+                    break;
+                case 'business':
+                    url = '/registration/create-business-profile';
+                    break;
+                case 'investor':
+                    url = '/registration/create-investor-profile';
+                    break;
+                case 'mentor':
+                    url = '/registration/create-mentor-profile';
+                    break;
+                default:
+                    url = '/registration/create-startup-profile';
+            }
+
+            window.location.href = url;
+        }
+    });
+});
+
+</script>
+         

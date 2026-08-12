@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Models\IndustryCategory;
 
 class ProfileStartup extends \Illuminate\Database\Eloquent\Model
 {
@@ -124,6 +125,11 @@ class ProfileStartup extends \Illuminate\Database\Eloquent\Model
     public function contactRequests()
     {
         return $this->hasMany(ContactStartup::class, 'profile_id', 'startup_id');
+    }
+
+    public function industrySector()
+    {
+        return $this->belongsTo(IndustryCategory::class, 'industry_sector', 'cat_id');
     }
 
 }

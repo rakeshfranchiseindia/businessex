@@ -1,135 +1,188 @@
 <div class="col-md-3 catsh">
-    <div class="catleft">
-        <div id="closeftr" class="closebtn">
-            <i class="fa fa-times fa-2x" aria-hidden="true"></i>
-        </div>
-
-        <div class="mainleftdiv">
-            <div class="subhead">Filters</div>
-
-            <!-- Location -->
-            <div class="accordion_container">
-                <div class="accordion_head">
-                    <span class="plusminus minus"></span>
-                    <a href="#">Location</a>
-                </div>
-                <div class="accordion_body" style="display: block;">
-
-                    <!-- Haryana -->
-                    <div class="accordion_headmain">
-                        <input type="checkbox" value="2" name="brand[]" class="brand-filter">
-                        <a href="#">Haryana</a>
-                        <span class="rightdown downval"></span>
-                    </div>
-                    <div class="accordion_bodymain" style="display: block;">
-                        <ul class="sub-menu">
-                            <li><input type="checkbox" value="626" name="sub_sub_category" class="sub-gen"> Rohtak</li>
-                            <li><input type="checkbox" value="444" name="sub_sub_category" class="sub-gen"> Gurgaon</li>
-                        </ul>
-                    </div>
-
-                    <!-- Delhi -->
-                    <div class="accordion_headmain">
-                        <input type="checkbox" value="2" name="brand[]" class="brand-filter">
-                        <a href="#">Delhi</a>
-                        <span class="rightdown rightval"></span>
-                    </div>
-                    <div class="accordion_bodymain" style="display: none;">
-                        <ul class="sub-menu">
-                            <li><input type="checkbox" value="626" name="sub_sub_category" class="sub-gen"> New Delhi</li>
-                            <li><input type="checkbox" value="444" name="sub_sub_category" class="sub-gen"> South Delhi</li>
-                        </ul>
-                    </div>
-
-                    <!-- Madhya Pradesh -->
-                    <div class="accordion_headmain">
-                        <input type="checkbox" value="2" name="brand[]" class="brand-filter">
-                        <a href="#">Madhya Pradesh</a>
-                        <span class="rightdown rightval"></span>
-                    </div>
-                    <div class="accordion_bodymain" style="display: none;">
-                        <ul class="sub-menu">
-                            <li><input type="checkbox" value="626" name="sub_sub_category" class="sub-gen"> Gwalior</li>
-                            <li><input type="checkbox" value="444" name="sub_sub_category" class="sub-gen"> Shivpuri</li>
-                        </ul>
-                    </div>
-
-                    <div class="morcity"><a href="#">25 More</a></div>
-                </div>
-            </div>
-
-            <!-- Industries -->
-            <div class="accordion_container">
-                <div class="accordion_head">
-                    <a href="#">Industries</a>
-                    <span class="plusminus add"></span>
-                </div>
-                <div class="accordion_body" style="display: none;">
-                    <ul class="sub-menu">
-                        <li><input type="radio" value="6" name="sub_genre" class="sub-gen"> Investment</li>
-                        <li><input type="radio" value="7" name="sub_genre" class="sub-gen"> Acquisition</li>
-                        <li><input type="radio" value="8" name="sub_genre" class="sub-gen"> Lending</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Annual Sales -->
-            <div class="accordion_container">
-                <div class="accordion_head">
-                    <a href="#">Annual Sales</a>
-                    <span class="plusminus minus"></span>
-                </div>
-                <div class="accordion_body" style="display: block;">
-                    <div class="frmright">
-                        <select class="form-control">
-                            <option value="50 - 100 Crores">50 - 100 Crores</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Establishment Year -->
-            <div class="accordion_container">
-                <div class="accordion_head">
-                    <a href="#">Establishment Year</a>
-                    <span class="plusminus minus"></span>
-                </div>
-                <div class="accordion_body" style="display: block;">
-                    <div class="frmright">
-                        <select class="form-control">
-                            <option value="2001 - 2010">2001 - 2010</option>
-                            <option value="2011 - 2020">2011 - 2020</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Entity Type -->
-            <div class="accordion_container">
-                <div class="accordion_head">
-                    <a href="#">Entity Type</a>
-                    <span class="plusminus add"></span>
-                </div>
-                <div class="accordion_body" style="display: none;">More Filters</div>
-            </div>
-
-            <!-- Employee Count -->
-            <div class="accordion_container">
-                <div class="accordion_head">
-                    <a href="#">Employee Count</a>
-                    <span class="plusminus add"></span>
-                </div>
-                <div class="accordion_body" style="display: none;">More Filters</div>
-            </div>
-
-            <!-- Business Type -->
-            <div class="accordion_container">
-                <div class="accordion_head">
-                    <a href="#">Business Type</a>
-                    <span class="plusminus add"></span>
-                </div>
-                <div class="accordion_body" style="display: none;">More Filters</div>
-            </div>
-        </div>
+  <div class="catleft">
+    <div id="closeftr" class="closebtn">
+      <i class="fa fa-times fa-2x" aria-hidden="true"></i>
     </div>
+
+    <div class="mainleftdiv">
+      <div class="subhead font-weight-bold mb-3">Filters</div>
+
+      <div id="filterAccordion">
+
+        <!-- Business Looking For -->
+        <div class="card border-0">
+          <div class="card-header bg-white p-0" id="headingBusiness">
+            <h6 class="mb-2 font-weight-bold text-secondary">
+              <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                 data-toggle="collapse" href="#collapseBusiness" aria-expanded="true" aria-controls="collapseBusiness">
+                Business Looking For
+                <span class="arrow">&#9662;</span>
+              </a>
+            </h6>
+          </div>
+          <div id="collapseBusiness" class="collapse show" data-parent="#filterAccordion">
+            <div class="card-body py-2 pl-4">
+              <p><input type="radio" name="businessType"> All</p>
+              <p><input type="radio" name="businessType"> Sale</p>
+              <p><input type="radio" name="businessType"> Investor</p>
+              <p><input type="radio" name="businessType"> Loan</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Annual Sales -->
+        <div class="card border-0">
+          <div class="card-header bg-white p-0" id="headingSales">
+            <h6 class="mb-0">
+              <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                 data-toggle="collapse" href="#collapseSales" aria-expanded="false" aria-controls="collapseSales">
+                Annual Sales
+                <span class="arrow">&#9662;</span>
+              </a>
+            </h6>
+          </div>
+          <div id="collapseSales" class="collapse" data-parent="#filterAccordion">
+            <div class="card-body py-2 pl-4">
+              <label class="font-weight-bold text-secondary">ANNUAL SALES</label>
+              <div id="salesSlider"></div>
+              <div class="d-flex justify-content-between mt-2">
+                <span id="salesMin">0</span>
+                <span id="salesMax">100.00 cr</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="card border-0">
+          <div class="card-header bg-white p-0" id="headingLocation">
+            <h6 class="mb-0">
+              <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                 data-toggle="collapse" href="#collapseLocation" aria-expanded="false" aria-controls="collapseLocation">
+                Location
+                <span class="arrow">&#9662;</span>
+              </a>
+            </h6>
+          </div>
+          <div id="collapseLocation" class="collapse" data-parent="#filterAccordion">
+            <div class="card-body py-2 pl-4">
+              @php
+                  $locationGroups = collect($locations ?? [])->groupBy(function ($item) {
+                      return trim((string) ($item->state ?? $item['state'] ?? ''));
+                  })->filter(function ($cities, $state) {
+                      return trim((string) $state) !== '';
+                  })->sortKeys();
+              @endphp
+
+              @if($locationGroups->isNotEmpty())
+                  <div id="locationAccordion">
+                      @foreach($locationGroups as $stateName => $cities)
+                          @php
+                              $stateKey = \Illuminate\Support\Str::slug($stateName . '-' . $loop->index);
+                              $cityList = collect($cities)->map(function ($item) {
+                                  return trim((string) ($item->city ?? $item['city'] ?? ''));
+                              })->filter()->unique()->values();
+                          @endphp
+
+                          <div class="card border-0 mb-2">
+                              <div class="card-header bg-white p-0" id="headingLocation-{{ $stateKey }}">
+                                  <h6 class="mb-0">
+                                      <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                                         data-toggle="collapse" href="#collapseLocation-{{ $stateKey }}" aria-expanded="false" aria-controls="collapseLocation-{{ $stateKey }}">
+                                          <div>
+                                              <input type="checkbox" class="mr-2"> {{ $stateName }}
+                                          </div>
+                                          <span class="arrow">&#9662;</span>
+                                      </a>
+                                  </h6>
+                              </div>
+
+                              <div id="collapseLocation-{{ $stateKey }}" class="collapse" data-parent="#locationAccordion">
+                                  <div class="card-body py-2 pl-4">
+                                      <ul class="list-unstyled mb-0">
+                                          @foreach($cityList as $city)
+                                              <li class="mb-1">
+                                                  <label class="mb-0">
+                                                      <input type="checkbox" class="mr-2"> {{ $city }}
+                                                  </label>
+                                              </li>
+                                          @endforeach
+                                      </ul>
+                                  </div>
+                              </div>
+                          </div>
+                      @endforeach
+                  </div><!-- /locationAccordion -->
+              @endif
+            </div>
+          </div>
+        </div>
+
+        <!-- Industries -->
+        <div class="card border-0">
+          <div class="card-header bg-white p-0" id="headingIndustry">
+            <h6 class="mb-2 font-weight-bold text-secondary">
+              <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                 data-toggle="collapse" href="#collapseIndustry" aria-expanded="false" aria-controls="collapseIndustry">
+                Industry
+                <span class="arrow">&#9662;</span>
+              </a>
+            </h6>
+          </div>
+          <div id="collapseIndustry" class="collapse" data-parent="#filterAccordion">
+            <div id="industryAccordion" class="card-body py-2 pl-4">
+              @php
+                  $industryGroups = collect($industrySeller ?? [])
+                      ->filter(function ($item) {
+                          return trim((string) ($item['industry'] ?? '')) !== '';
+                      })
+                      ->groupBy('industry')
+                      ->sortKeys();
+              @endphp
+
+              @if($industryGroups->isNotEmpty())
+                  @foreach($industryGroups as $industryName => $industryItems)
+                      @php
+                          $industryKey = \Illuminate\Support\Str::slug($industryName . '-' . $loop->index);
+                          $subIndustries = collect($industryItems)->map(function ($item) {
+                              return trim((string) ($item['subindustry'] ?? ''));
+                          })->filter()->unique()->values();
+                      @endphp
+
+                      <div class="card border-0 mb-2">
+                          <div class="card-header bg-white p-0" id="headingIndustry-{{ $industryKey }}">
+                              <h6 class="mb-0">
+                                  <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                                     data-toggle="collapse" href="#collapseIndustry-{{ $industryKey }}" aria-expanded="false" aria-controls="collapseIndustry-{{ $industryKey }}">
+                                      <div>
+                                          <input type="checkbox" class="mr-2"> {{ $industryName }}
+                                      </div>
+                                      <span class="arrow">&#9662;</span>
+                                  </a>
+                              </h6>
+                          </div>
+
+                          <div id="collapseIndustry-{{ $industryKey }}" class="collapse" data-parent="#industryAccordion">
+                              <div class="card-body py-2 pl-4">
+                                  <ul class="list-unstyled mb-0">
+                                      @foreach($subIndustries as $subIndustry)
+                                          <li class="mb-1">
+                                              <label class="mb-0">
+                                                  <input type="checkbox" class="mr-2"> {{ $subIndustry }}
+                                              </label>
+                                          </li>
+                                      @endforeach
+                                  </ul>
+                              </div>
+                          </div>
+                      </div>
+                  @endforeach
+              @endif
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /filterAccordion -->
+    </div>
+  </div>
 </div>
