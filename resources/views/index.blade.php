@@ -245,108 +245,63 @@
 
             <!-- Carousel -->
             <div id="businessSaleCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-                <div class="carousel-inner">
-                    <!-- Slide 1 -->
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <!-- Card 1 -->
-                            <div class="col-md-3">
-                                <div class="card shadow-sm">
-                                    <div class="position-relative">
-                                        <img src="{{ asset('assets/img/1830542474.jpg') }}" class="card-img-top" alt="Coffee Vending Solutions">
-                                        <span class="badge badge-warning position-absolute" style="top:10px;left:10px;">Gold</span>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="text-muted mb-1">Food & Beverage / Tea and Coffee</p>
-                                        <h6 class="font-weight-bold">Seeking Investment For Coffee Vending Solutions Company Across...</h6>
-                                        <p class="mb-1"><strong>Asking Price:</strong> ₹ 6 Crores</p>
-                                        <p class="text-muted mb-2">
-                                            <i class="fa fa-phone"></i> Phone
-                                            <i class="fa fa-envelope"></i> Email
-                                            <i class="fa fa-map-marker"></i> Delhi
-                                        </p>
-                                        <a href="#" class="btn btn-outline-success btn-block">Contact Business</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 2 -->
-                            <div class="col-md-3">
-                                <div class="card shadow-sm">
-                                    <img src="{{ asset('assets/img/shutterstock_1030032883.jpg') }}" class="card-img-top" alt="Interior Design Company">
-                                    <div class="card-body">
-                                        <p class="text-muted mb-1">Building Construction & Home Products / Interior Design</p>
-                                        <h6 class="font-weight-bold">Interior Design and Architectural Services Company</h6>
-                                        <p class="mb-1"><strong>Asking Price:</strong> Undisclosed</p>
-                                        <p class="text-muted mb-2">
-                                            <i class="fa fa-phone"></i> Phone
-                                            <i class="fa fa-envelope"></i> Email
-                                            <i class="fa fa-map-marker"></i> New Delhi
-                                        </p>
-                                        <a href="#" class="btn btn-outline-success btn-block">Contact Business</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 3 -->
-                            <div class="col-md-3">
-                                <div class="card shadow-sm">
-                                    <div class="position-relative">
-                                        <img src="{{ asset('assets/img/shutterstock_531055792.jpg') }}" class="card-img-top" alt="Healthcare Business">
-                                        <span class="badge badge-primary position-absolute" style="top:10px;left:10px;">Platinum</span>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="text-muted mb-1">FMCG / Medical Products</p>
-                                        <h6 class="font-weight-bold">Seeking Investment For Established Healthcare Business</h6>
-                                        <p class="mb-1"><strong>Seeking Investment:</strong> ₹ 5 Crores</p>
-                                        <p class="text-muted mb-2">
-                                            <i class="fa fa-phone"></i> Phone
-                                            <i class="fa fa-envelope"></i> Email
-                                            <i class="fa fa-map-marker"></i> New Delhi
-                                        </p>
-                                        <a href="#" class="btn btn-outline-success btn-block">Contact Business</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 4 -->
-                            <div class="col-md-3">
-                                <div class="card shadow-sm">
-                                    <img src="{{ asset('assets/img/98789996.jpg') }}" class="card-img-top" alt="Gamers Assemble">
-                                    <div class="card-body">
-                                        <p class="text-muted mb-1">Food & Beverage / Aquaculture</p>
-                                        <h6 class="font-weight-bold">Gamers Assemble</h6>
-                                        <p class="mb-1"><strong>Seeking Investment:</strong> ₹ 5 Crores</p>
-                                        <p class="text-muted mb-2">
-                                            <i class="fa fa-phone"></i> Phone
-                                            <i class="fa fa-envelope"></i> Email
-                                            <i class="fa fa-map-marker"></i> New Delhi
-                                        </p>
-                                        <a href="#" class="btn btn-outline-success btn-block">Contact Business</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 2 (duplicate or dynamic data) -->
-                    <div class="carousel-item">
-                        <div class="row">
-                            <!-- Add more cards or loop dynamically -->
-                        </div>
-                    </div>
+    <div class="carousel-inner">
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+            <div class="row">
+    @foreach($salesOpportunitiesData as $opportunity)
+    <?php //print_r($opportunity); die;?>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="position-relative">
+                    <img src="{{ $opportunity['seller_prof_pic'] ?? asset('assets/img/default.jpg') }}" 
+                         class="card-img-top" 
+                         alt="{{ $opportunity['seller_company'] ?? 'Business Opportunity' }}">
+                    @if(!empty($opportunity['membership_plan']))
+                        <span class="badge badge-warning position-absolute" style="top:10px;left:10px;">
+                            {{ config('constants.membershipPlanType.' . $opportunity['membership_plan']) }}
+                        </span>
+                    @endif
                 </div>
-
-                <!-- Controls -->
-                <a class="carousel-control-prev" href="#businessSaleCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#businessSaleCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
+                <div class="card-body">
+                    <p class="text-muted mb-1">{{ $opportunity['industry_sector'] ?? 'N/A' }}</p>
+                    <h6 class="font-weight-bold">{{ $opportunity['advmt_headline'] ?? 'No headline available' }}</h6>
+                    <p class="mb-1"><strong>Seeking Investment:</strong> ₹ {{ $opportunity['buyer_sell_price'] ??'0' }}</p>
+                    <p class="text-muted mb-2">
+                        <i class="fa fa-phone"></i> Phone
+                        <i class="fa fa-envelope"></i> Email
+                        <i class="fa fa-map-marker"></i> {{ $opportunity['ofc_city'] ?? ''  }}
+                    </p>
+                    <a href="{{ url('/opportunity/'."sdfdf") }}" target="_blank" class="btn btn-outline-success btn-block">
+                        Contact Business
+                    </a>
+                </div>
             </div>
+        </div>
+    @endforeach
+</div>
+
+        </div>
+
+        <!-- Slide 2 (duplicate or dynamic data) -->
+        <div class="carousel-item">
+            <div class="row">
+                <!-- Add more cards or loop dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <a class="carousel-control-prev" href="#businessSaleCarousel" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#businessSaleCarousel" role="button" data-slide="next">
+        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+
         </div>
     </section>
     <!-- End Business For Sale Opportunities Section -->
@@ -359,7 +314,6 @@
                     <div class="title-wrap d-flex justify-content-between">
                         <div class="title-box">
                             <h2 class="bex-title-a">Upcoming & Past Events</h2>
-                            <h5>Put Some Base Line Here</h5>
                         </div>
                     </div>
                 </div>
@@ -398,7 +352,7 @@
                                             <p class="bex-author-conpany-info">Chairman, Franchise India Group</p>
                                         </div>
                                         <div class="bex-business-main-btn">
-                                            <a href="#">REGISTER NOW</a>
+                                            <a href="https://www.franchiseindia.com/event">REGISTER NOW</a>
                                         </div>
                                     </div>
                                 </div>
@@ -486,116 +440,92 @@
 
     <!-- ======= Top Franchise Opportunities Section ======= -->
     <section class="py-5 bg-light">
-        <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="font-weight-bold mb-0">Top Franchise Opportunities</h2>
-                <a href="https://www.franchiseindia.com/" target="_blank" class="text-success font-weight-bold">View All</a>
-            </div>
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="font-weight-bold mb-0">Top Franchise Opportunities</h2>
+      <a href="https://www.franchiseindia.com/" target="_blank" class="text-success font-weight-bold">View All</a>
+    </div>
 
-            <!-- Carousel -->
-            <div id="franchiseCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-                <div class="carousel-inner">
-                    <!-- Slide 1 -->
-                    <div class="carousel-item active">
-                        <div class="row">
-                            <!-- Card 1 -->
-                            <div class="col-md-3">
-                                <div class="card shadow-sm h-100">
-                                    <a href="https://www.franchiseindia.com/brands/kathi-junction-foods.6140" target="_blank">
-                                        <img src="https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/franchisor/kathi-junction-foods_1.jpg" class="card-img-top" alt="Kathi Junction">
-                                    </a>
-                                    <div class="card-body">
-                                        <p class="text-muted mb-1">Quick Service Restaurants</p>
-                                        <h6 class="font-weight-bold">
-                                            <a href="https://www.franchiseindia.com/brands/kathi-junction-foods.6140" target="_blank">Kathi Junction</a>
-                                        </h6>
-                                        <p><strong>Investment Range:</strong> ₹5 Lakh – 10 Lakh</p>
-                                        <p><strong>Space Required:</strong> 100 – 1500 Sq.ft</p>
-                                        <p class="text-muted">Delhi, Haryana, Himachal Pradesh, +16 More</p>
-                                        <a href="https://www.franchiseindia.com/brands/kathi-junction-foods.6140" target="_blank" class="btn btn-outline-success btn-block">Know More</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 2 -->
-                            <div class="col-md-3">
-                                <div class="card shadow-sm h-100">
-                                    <a href="https://www.franchiseindia.com/brands/podar-smarter-schools.72358" target="_blank">
-                                        <img src="https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/franchisor/podar-smarter-schools_1.jpg" class="card-img-top" alt="Podar Smarter Schools">
-                                    </a>
-                                    <div class="card-body">
-                                        <p class="text-muted mb-1">Schools</p>
-                                        <h6 class="font-weight-bold">
-                                            <a href="https://www.franchiseindia.com/brands/podar-smarter-schools.72358" target="_blank">Podar Smarter Schools</a>
-                                        </h6>
-                                        <p><strong>Investment Range:</strong> 2 Cr – 5 Cr</p>
-                                        <p><strong>Space Required:</strong> 65000 – 90000 Sq.ft</p>
-                                        <p class="text-muted">Haryana, Rajasthan, Chhattisgarh, +16 More</p>
-                                        <a href="https://www.franchiseindia.com/brands/podar-smarter-schools.72358" target="_blank" class="btn btn-outline-success btn-block">Know More</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 3 -->
-                            <div class="col-md-3">
-                                <div class="card shadow-sm h-100">
-                                    <a href="https://www.franchiseindia.com/brands/Sankalp.12355" target="_blank">
-                                        <img src="https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/franchisor/Sankalp_1.gif" class="card-img-top" alt="Sankalp Group">
-                                    </a>
-                                    <div class="card-body">
-                                        <p class="text-muted mb-1">Fine Dine Restaurants</p>
-                                        <h6 class="font-weight-bold">
-                                            <a href="https://www.franchiseindia.com/brands/Sankalp.12355" target="_blank">Sankalp Group</a>
-                                        </h6>
-                                        <p><strong>Investment Range:</strong> 50 Lakh – 1 Cr</p>
-                                        <p><strong>Space Required:</strong> 1500 – 2500 Sq.ft</p>
-                                        <p class="text-muted">Delhi, Haryana, Himachal Pradesh, Punjab, +11 More</p>
-                                        <a href="https://www.franchiseindia.com/brands/Sankalp.12355" target="_blank" class="btn btn-outline-success btn-block">Know More</a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 4 -->
-                            <div class="col-md-3">
-                                <div class="card shadow-sm h-100">
-                                    <a href="https://www.franchiseindia.com/brands/Prestige-Smart-Kitchen.2219" target="_blank">
-                                        <img src="https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/franchisor/Prestige-Smart-Kitchen_1.jpg" class="card-img-top" alt="TTK Prestige">
-                                    </a>
-                                    <div class="card-body">
-                                        <p class="text-muted mb-1">Kitchen</p>
-                                        <h6 class="font-weight-bold">
-                                            <a href="https://www.franchiseindia.com/brands/Prestige-Smart-Kitchen.2219" target="_blank">TTK Prestige</a>
-                                        </h6>
-                                        <p><strong>Investment Range:</strong> 20 Lakh – 30 Lakh</p>
-                                        <p><strong>Space Required:</strong> 400 – 1000 Sq.ft</p>
-                                        <p class="text-muted">Delhi, Haryana, Himachal Pradesh, Jammu & Kashmir, +15 More</p>
-                                        <a href="https://www.franchiseindia.com/brands/Prestige-Smart-Kitchen.2219" target="_blank" class="btn btn-outline-success btn-block">Know More</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Slide 2 -->
-                    <div class="carousel-item">
-                        <div class="row">
-                            <!-- Add more franchise cards here or loop dynamically -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Controls -->
-                <a class="carousel-control-prev" href="#franchiseCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#franchiseCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
+    <div class="row">
+      <!-- Card 1 -->
+      <div class="col-md-3">
+        <div class="card shadow-sm h-100">
+          <a href="https://www.franchiseindia.com/brands/kathi-junction-foods.6140" target="_blank">
+            <img src="https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/franchisor/kathi-junction-foods_1.jpg" class="card-img-top" alt="Kathi Junction">
+          </a>
+          <div class="card-body">
+            <p class="text-muted mb-1">Quick Service Restaurants</p>
+            <h6 class="font-weight-bold">
+              <a href="https://www.franchiseindia.com/brands/kathi-junction-foods.6140" target="_blank">Kathi Junction</a>
+            </h6>
+            <p><strong>Investment Range:</strong> ₹5 Lakh – 10 Lakh</p>
+            <p><strong>Space Required:</strong> 100 – 1500 Sq.ft</p>
+            <p class="text-muted">Delhi, Haryana, Himachal Pradesh, +16 More</p>
+            <a href="https://www.franchiseindia.com/brands/kathi-junction-foods.6140" target="_blank" class="btn btn-outline-success btn-block">Know More</a>
+          </div>
         </div>
-    </section>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="col-md-3">
+        <div class="card shadow-sm h-100">
+          <a href="https://www.franchiseindia.com/brands/podar-smarter-schools.72358" target="_blank">
+            <img src="https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/franchisor/podar-smarter-schools_1.jpg" class="card-img-top" alt="Podar Smarter Schools">
+          </a>
+          <div class="card-body">
+            <p class="text-muted mb-1">Schools</p>
+            <h6 class="font-weight-bold">
+              <a href="https://www.franchiseindia.com/brands/podar-smarter-schools.72358" target="_blank">Podar Smarter Schools</a>
+            </h6>
+            <p><strong>Investment Range:</strong> 2 Cr – 5 Cr</p>
+            <p><strong>Space Required:</strong> 65000 – 90000 Sq.ft</p>
+            <p class="text-muted">Haryana, Rajasthan, Chhattisgarh, +16 More</p>
+            <a href="https://www.franchiseindia.com/brands/podar-smarter-schools.72358" target="_blank" class="btn btn-outline-success btn-block">Know More</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="col-md-3">
+        <div class="card shadow-sm h-100">
+          <a href="https://www.franchiseindia.com/brands/Sankalp.12355" target="_blank">
+            <img src="https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/franchisor/Sankalp_1.gif" class="card-img-top" alt="Sankalp Group">
+          </a>
+          <div class="card-body">
+            <p class="text-muted mb-1">Fine Dine Restaurants</p>
+            <h6 class="font-weight-bold">
+              <a href="https://www.franchiseindia.com/brands/Sankalp.12355" target="_blank">Sankalp Group</a>
+            </h6>
+            <p><strong>Investment Range:</strong> 50 Lakh – 1 Cr</p>
+            <p><strong>Space Required:</strong> 1500 – 2500 Sq.ft</p>
+            <p class="text-muted">Delhi, Haryana, Himachal Pradesh, Punjab, +11 More</p>
+            <a href="https://www.franchiseindia.com/brands/Sankalp.12355" target="_blank" class="btn btn-outline-success btn-block">Know More</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="col-md-3">
+        <div class="card shadow-sm h-100">
+          <a href="https://www.franchiseindia.com/brands/Prestige-Smart-Kitchen.2219" target="_blank">
+            <img src="https://franchiseindia.s3.ap-south-1.amazonaws.com/uploads/franchisor/Prestige-Smart-Kitchen_1.jpg" class="card-img-top" alt="TTK Prestige">
+          </a>
+          <div class="card-body">
+            <p class="text-muted mb-1">Kitchen</p>
+            <h6 class="font-weight-bold">
+              <a href="https://www.franchiseindia.com/brands/Prestige-Smart-Kitchen.2219" target="_blank">TTK Prestige</a>
+            </h6>
+            <p><strong>Investment Range:</strong> 20 Lakh – 30 Lakh</p>
+            <p><strong>Space Required:</strong> 400 – 1000 Sq.ft</p>
+            <p class="text-muted">Delhi, Haryana, Himachal Pradesh, Jammu & Kashmir, +15 More</p>
+            <a href="https://www.franchiseindia.com/brands/Prestige-Smart-Kitchen.2219" target="_blank" class="btn btn-outline-success btn-block">Know More</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
     <!-- End Top Franchise Opportunities Section -->
 
     <!-- ======= High Growth Potential Startups Section ======= -->
@@ -764,7 +694,7 @@
             <div class="industry-section mb-5">
                 <h3 class="h5 font-weight-bold mb-3">View Opportunities By Location</h3>
                 <ul class="list-unstyled d-flex flex-wrap gap-2">
-                    @foreach($locations as $location)
+                    @foreach($homePageLocation as $location)
                         <li>
                             <a href="{{ url('/businesslisting/?business_type=all&location='.$location->id) }}"
                                 class="industry-btn">{{ $location->state }}</a>

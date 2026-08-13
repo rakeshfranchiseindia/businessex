@@ -27,12 +27,12 @@
             <ul>
               @foreach($subIndustries->take(4) as $sub)
                 <li>
-                  <a href="{{ url('businesslisting/'.$sub['industrySlug'].'/'.$sub['subIndustrySlug']) }}">
+                  <a href="{{ url('businesslisting?business_type=all&industry='.$sub['subIndustryid']) }}">
                     {{ $sub['subindustry'] }}
                   </a>
                 </li>
               @endforeach
-              <li><a href="{{ url('businesslisting/'.$subIndustries->first()['industrySlug']) }}">View All »</a></li>
+              <li><a href="{{ url('businesslisting/' . $sub['parentCatId']) }}">View All »</a></li>
             </ul>
           </div>
         @endforeach
