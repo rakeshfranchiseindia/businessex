@@ -76,14 +76,14 @@
             </h6>
           </div>
           <div id="collapseSales" class="collapse" data-parent="#filterAccordion">
-            <div class="card-body py-2 pl-4">
-              <label class="font-weight-bold text-secondary">ANNUAL SALES</label>
-              <div id="salesSlider"></div>
-              <div class="d-flex justify-content-between mt-2">
-                <span id="salesMin">0</span>
-                <span id="salesMax">100.00 cr</span>
-              </div>
-            </div>
+          <div class="container mt-4">
+  <label class="font-weight-bold text-secondary">ANNUAL SALES</label>
+  <div id="salesRange"></div>
+  <div class="d-flex justify-content-between mt-2">
+    <span id="minValue">0</span>
+    <span id="maxValue">100.00 cr</span>
+  </div>
+</div>
           </div>
         </div>
 

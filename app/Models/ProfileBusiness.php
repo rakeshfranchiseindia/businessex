@@ -23,6 +23,8 @@ class ProfileBusiness extends \Illuminate\Database\Eloquent\Model
         'entity_type',
         'business_type',
         'industry_sector',
+        'business_industry',
+        'business_location',
         'business_website',
         'facilities_desc',
         'annual_sales',

@@ -10,7 +10,7 @@
                         <a href="{{ url('/') }}">Home</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        Businesses for Sale
+                        Businesses
                     </li>
                 </ol>
             </div>

@@ -729,21 +729,36 @@
                 <h2 class="font-weight-bold">All Popular Business Opportunities</h2>
             </div>
 
-            <!-- View Opportunities By Industry -->
-            <div class="industry-section mb-5">
-                <h3 class="h5 font-weight-bold mb-3">View Opportunities By Industry</h3>
-                <ul class="list-unstyled d-flex flex-wrap gap-2">
-                    @php
-                        $groupedIndustries = collect($industrySeller)->groupBy('industry');
-                    @endphp
-                    @foreach($groupedIndustries as $industryName => $subIndustries)
-                        <li>
-                            <a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}"
-                                class="industry-btn">{{ $industryName }}</a>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
+               <!-- View Opportunities By Industry -->
+               <div class="industry-section mb-5">
+                  <h3 class="h5 font-weight-bold mb-3">View Opportunities By Industry</h3>
+                  <ul class="list-unstyled d-flex flex-wrap gap-2">
+                     @php
+                           $groupedIndustries = collect($industrySeller)->groupBy('industry');
+                     @endphp
+
+                     @foreach($groupedIndustries as $industryName => $subIndustries)
+                           @php
+                              // Safely extract industryid and industrySlug from the first item in the group
+                              $firstItem   = $subIndustries->first();
+                              $industryId  = $firstItem['industryid'] ?? '';
+                              $industrySlug = $firstItem['industrySlug'] ?? '';
+                           @endphp
+
+                           @if($industryId && $industrySlug)
+                              <li>
+                                 <a href="{{ url('/businesslisting?business_type=all&industry='.$industryId.'&slug='.$industrySlug) }}"
+                                    class="industry-btn">
+                                       {{ $industryName }}
+                                 </a>
+                              </li>
+                           @endif
+                     @endforeach
+                  </ul>
+               </div>
+
+
+
 
             <!-- View Opportunities By Location -->
             <div class="industry-section mb-5">
@@ -751,7 +766,7 @@
                 <ul class="list-unstyled d-flex flex-wrap gap-2">
                     @foreach($locations as $location)
                         <li>
-                            <a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}"
+                            <a href="{{ url('/businesslisting/?business_type=all&location='.$location->id) }}"
                                 class="industry-btn">{{ $location->state }}</a>
                         </li>
                     @endforeach
@@ -759,23 +774,23 @@
             </div>
 
             <!-- View Opportunities By Investment -->
-            <div class="industry-section mb-5">
-                <h3 class="h5 font-weight-bold mb-3">View Opportunities By Investment</h3>
-                <ul class="list-unstyled d-flex flex-wrap gap-2">
-                    <li><a href="{{ url('/businesslisting/energy-environment-businesses-for-sale/12/s0/st0') }}" class="industry-btn">₹50K - ₹2Lakh</a></li>
-                    <li><a href="{{ url('/businesslisting/business-services-businesses-for-sale/5/s0/st0') }}" class="industry-btn">₹2Lakh - ₹5Lakh</a></li>
-                    <li><a href="{{ url('/businesslisting/retail-businesses-for-sale/14/s0/st0') }}" class="industry-btn">₹5Lakh - ₹10Lakh</a></li>
-                    <li><a href="{{ url('/businesslisting/finance-businesses-for-sale/11/s0/st0') }}" class="industry-btn">₹10Lakh - ₹20Lakh</a></li>
-                    <li><a href="{{ url('/businesslisting/food-beverage-businesses-for-sale/6/s0/st0') }}" class="industry-btn">₹20Lakh - ₹30Lakh</a></li>
-                    <li><a href="{{ url('/businesslisting/travel-tourism-businesses-for-sale/9/s0/st0') }}" class="industry-btn">₹30Lakh - ₹50Lakh</a></li>
-                    <li><a href="{{ url('/businesslisting/construction-maintenance-businesses-for-sale/10/s0/st0') }}" class="industry-btn">₹50Lakh - ₹1Cr</a></li>
-                    <li><a href="{{ url('/businesslisting/automobile-businesses-for-sale/1/s0/st0') }}" class="industry-btn">₹1Cr - ₹2Cr</a></li>
-                    <li><a href="{{ url('/businesslisting/fmcg-businesses-for-sale/15/s0/st0') }}" class="industry-btn">₹2Cr - ₹5Cr</a></li>
-                    <li><a href="{{ url('/businesslisting/fmcg-businesses-for-sale/15/s0/st0') }}" class="industry-btn">₹5Cr - ₹10Cr</a></li>
-                    <li><a href="{{ url('/businesslisting/fmcg-businesses-for-sale/15/s0/st0') }}" class="industry-btn">₹10Cr - ₹20Cr</a></li>
-                </ul>
-            </div>
-        </div>
+         <div class="industry-section mb-5">
+            <h3 class="h5 font-weight-bold mb-3">View Opportunities By Investment</h3>
+            <ul class="list-unstyled d-flex flex-wrap gap-2">
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=50000&max=200000') }}" class="industry-btn">₹50K - ₹2Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=200000&max=500000') }}" class="industry-btn">₹2Lakh - ₹5Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=500000&max=1000000') }}" class="industry-btn">₹5Lakh - ₹10Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=1000000&max=2000000') }}" class="industry-btn">₹10Lakh - ₹20Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=2000000&max=3000000') }}" class="industry-btn">₹20Lakh - ₹30Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=3000000&max=5000000') }}" class="industry-btn">₹30Lakh - ₹50Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=5000000&max=10000000') }}" class="industry-btn">₹50Lakh - ₹1Cr</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=10000000&max=20000000') }}" class="industry-btn">₹1Cr - ₹2Cr</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=20000000&max=50000000') }}" class="industry-btn">₹2Cr - ₹5Cr</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=50000000&max=100000000') }}" class="industry-btn">₹5Cr - ₹10Cr</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&min=100000000&max=200000000') }}" class="industry-btn">₹10Cr - ₹20Cr</a></li>
+            </ul>
+         </div>
+
     </section>
     <!-- End All Popular Business Opportunities Section -->
 
