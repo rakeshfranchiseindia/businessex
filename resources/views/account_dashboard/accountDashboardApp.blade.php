@@ -3,6 +3,7 @@
 
 <head>
    <meta charset="utf-8">
+   <meta name="csrf-token" content="{{ csrf_token() }}">
    <meta content="width=device-width, initial-scale=1.0" name="viewport">
    <title>@yield('title', 'Business for Sale & Investors in India - Business-Ex')</title>
    <!-- Favicons -->
@@ -198,6 +199,7 @@
    <script src="{{ asset('assets/js/services.js') }}"></script>
 
    
+@stack('scripts')
 
 
 </body>

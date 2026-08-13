@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\ProfileInvestor;
 use App\Models\LocPrefInvestor;
 use App\Models\IndPrefInvestor;
+use App\Models\IndustryCategory;
 use Illuminate\Support\Str;
 use App\Models\UserAccount;
 use Illuminate\Support\Facades\Mail;
@@ -33,9 +34,7 @@ class ProfileController extends Controller
                 'confirmed'
             ]
         ]);
-        $user = User::where('email', 'shivani@gmail.com')->first();
-        // $user = Auth::user();echo '<pre>'; print_r($user); die;
-        // Check Old Password
+        $user = Auth::user();
         if (!Hash::check($request->old_password, $user->password)) {
             return back()->withErrors([
                 'old_password' => 'Old password is incorrect'
@@ -97,7 +96,7 @@ class ProfileController extends Controller
         $user->reset_token = null;
         $user->reset_token_created_at = null;
         $user->save();
-        return redirect('/forgot-password')->with('success', 'Password reset successfully. Please login.');
+        return redirect('/')->with('success', 'Password reset successfully. Please login.');
     }
     public function getUserProfileDetails(Request $request)
     {
@@ -138,10 +137,36 @@ class ProfileController extends Controller
     public function edit($user_rand_id)
     {
         $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
-        // return view('profile.confidential_info', compact('user'));
-        return view('account_dashboard.investorConfidentials', compact('user'));
-
+        $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
+        if (!$investor) {
+            $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
+        }
+        $invPreference = $investor;
+        $indPref = collect();
+        $locationPref = collect();
+        if ($invPreference) {
+            $indPref = IndPrefInvestor::join('industry_categories', 'ind_pref_investors.sub_category_id', '=', 'industry_categories.cat_id')
+                ->where('ind_pref_investors.investor_profile_id', $invPreference->investor_id)->select('industry_categories.cat_id as id', 'industry_categories.category_name as name', 'industry_categories.parent_id as pid')
+                ->get();
+            $locationPref = LocPrefInvestor::query()->select('inv_loc_id', 'location_name')->where('investor_profile_id', $invPreference->investor_id)
+                ->orderBy('inv_loc_id', 'desc')->get();
+        }
+        return view('account_dashboard.investorConfidentials', compact('user', 'investor', 'invPreference', 'indPref', 'locationPref'));
     }
+    public function getConfidentialInfo($user_rand_id)
+    {
+        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'name' => $user->name ?? '',
+                'mobile' => $user->mobile ?? '',
+                'email' => $user->email ?? '',
+                'location' => $user->location ?? '',
+            ]
+        ]);
+    }
+
     public function updateConfidential_info(Request $request, $user_rand_id)
     {
         // basic validation
@@ -158,67 +183,73 @@ class ProfileController extends Controller
             'email' => $request->email,
             'location' => $request->location,
         ]);
-        return redirect()->back()->with('success', 'Information updated successfully!');
+        return redirect()
+            ->route('confidential.edit', [
+                'user_rand_id' => $user_rand_id
+            ])
+            ->with('success', 'Information updated successfully!');
     }
 
-    public function getInvestorAdvertisementDetails($investorUniqueId = null)
+    public function getAdvertisementDetails($user_rand_id)
     {
-        $invAdvRecord = ProfileInvestor::select(
-            'inv_profile_str',
-            'inv_headline',
-            'inv_intro'
-        )
-            ->where('inv_profile_str', $investorUniqueId)
-            ->first();
-
-        $user = UserAccount::where('user_id', Auth::id())->firstOrFail();
-        return view('account_dashboard.investorAdvertisement', compact('invAdvRecord', 'user'));
-    }
-    public function updateInvestorProfileDetails(Request $request, $uniqueid = null)
-    {
-        $request->validate([
-            'inv_headline' => 'required|string|max:255',
-            'inv_intro' => 'nullable|string',
+        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $profile = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
+        if (!$profile) {
+            $profile = ProfileInvestor::where('user_id', $user->user_id)->first();
+        }
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'inv_headline' => $profile->inv_headline ?? '',
+                'inv_intro' => $profile->inv_intro ?? '',
+            ]
         ]);
-        $user = UserAccount::where('user_id', Auth::id())->firstOrFail();
-        $profile = ProfileInvestor::where('user_id', Auth::id())
-            ->where('inv_profile_str', $uniqueid ?? $user->user_rand_id)
-            ->first();
-        if ($profile) {
-            // Update
-            $profile->update([
-                'inv_headline' => $request->inv_headline,
-                'inv_intro' => $request->inv_intro,
-                'inv_profile_status' => 1,
-            ]);
-            $message = 'Investor Profile Updated Successfully';
-        } else {
-            ProfileInvestor::create([
-                'user_id' => Auth::id(),
-                'inv_profile_str' => $uniqueid ?? $user->user_rand_id,
-                'inv_headline' => $request->inv_headline,
-                'inv_intro' => $request->inv_intro,
-                'inv_profile_status' => 1,
-            ]);
-            $message = 'Investor Profile Created Successfully';
-        }
-        return redirect()->back()->with('success', $message);
     }
-    public function getInvestorPreferenceDetails($user_rand_id)
+
+    public function updateInvestorProfileDetails(Request $request, $user_rand_id)
     {
-        $invPreference = ProfileInvestor::query()->select('investor_id', 'inv_profile_str')->where('inv_profile_str', $user_rand_id)->first();
-        if (!$invPreference) {
-            return redirect()->back()->with('success', 'No Data Found');
+        $request->validate(['inv_headline' => 'required|string|max:255', 'inv_intro' => 'nullable|string',]);
+        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $profile = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
+        if (!$profile) {
+            $profile = ProfileInvestor::where('user_id', $user->user_id)->first();
         }
-        $indPref = IndPrefInvestor::join(
-            'industry_categories','ind_pref_investors.sub_category_id','=','industry_categories.cat_id')->where('ind_pref_investors.investor_profile_id',
-            $invPreference->investor_id)->select('industry_categories.cat_id as id','industry_categories.category_name as name','industry_categories.parent_id as pid')->get();
-            
-            $locationPref = LocPrefInvestor::query()->select('location_name')->where('investor_profile_id', $invPreference->investor_id)
-            ->orderBy('inv_loc_id', 'desc')
-            ->get();
-        return view('account_dashboard.investorMultiPref', compact('invPreference','indPref','locationPref'));
+        if (!$profile) {
+            $profile = new ProfileInvestor();
+            $profile->user_id = $user->user_id;
+            $profile->inv_profile_str = $user_rand_id;
+        }
+        $profile->inv_headline = $request->inv_headline;
+        $profile->inv_intro = $request->inv_intro;
+        $profile->inv_profile_status = 1;
+        $profile->save();
+        return response()->json([
+            'status' => true,
+            'message' => 'Advertisement details saved successfully.',
+            'data' => ['inv_headline' => $profile->inv_headline, 'inv_intro' => $profile->inv_intro,]
+        ]);
     }
+
+    //   public function getInvestorPreferenceDetails($user_rand_id)
+//     {
+//         $user = UserAccount::where('user_rand_id',$user_rand_id)->firstOrFail();
+//         $invPreference = ProfileInvestor::where('inv_profile_str',$user_rand_id)->first();
+//         if (!$invPreference) {
+//             $invPreference = ProfileInvestor::where('user_id',$user->user_id)->first();
+//         }
+//         if (!$invPreference) {
+//             return response()->json([
+//                 'status' => true,
+//                 'data' => ['industries' => [],'locations' => [],]]);
+//         }
+//         $indPref = IndPrefInvestor::join('industry_categories','ind_pref_investors.sub_category_id','=','industry_categories.cat_id')
+//         ->where('ind_pref_investors.investor_profile_id',$invPreference->investor_id)->select('industry_categories.cat_id as id','industry_categories.category_name as name','industry_categories.parent_id as pid')
+//         ->get();
+//         $locationPref = LocPrefInvestor::query()->select('inv_loc_id','location_name')->where('investor_profile_id',$invPreference->investor_id)
+//         ->orderBy('inv_loc_id','desc')->get();
+//         return response()->json(['status' => true,'data' => ['industries' =>$indPref,'locations' => $locationPref,]
+//         ]);
+//     }
     public function getVisitor(Request $request)
     {
         $userId = Auth::id();
@@ -241,9 +272,34 @@ class ProfileController extends Controller
         }
         return view('account_dashboard.profile_info', compact('investor'));
     }
-    public function investorUpdate(Request $request)
+    public function getInvestorProfileDetails($user_rand_id)
     {
-        $uniqueid = Auth::user()->user_rand_id;
+        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
+        if (!$investor) {
+            $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
+        }
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'company_name' => $investor->company_name ?? '',
+                'company_designation' => $investor->company_designation ?? '',
+                'invest_pref' => (int) ($investor->invest_pref ?? 0),
+                'full_acquisition' => (int) ($investor->full_acquisition ?? 0),
+                'invest_size_min' => $investor->invest_size_min ?? '',
+                'invest_size_max' => $investor->invest_size_max ?? '',
+                'invest_stake' => $investor->invest_stake ?? '',
+                'purchase_capacity_min' => $investor->purchase_capacity_min ?? '',
+                'purchase_capacity_max' => $investor->purchase_capacity_max ?? '',
+                'inv_abt_urself' => $investor->inv_abt_urself ?? '',
+                'linkedin_profile' => $investor->linkedin_profile ?? '',
+                'inv_profile_pic_path' => $investor->inv_profile_pic_path ?? '',
+            ]
+        ]);
+    }
+
+    public function investorUpdate(Request $request, $user_rand_id)
+    {
         $request->validate([
             'company_name' => 'required|string|max:255',
             'company_designation' => 'required|string|max:255',
@@ -256,104 +312,77 @@ class ProfileController extends Controller
             'linkedin_profile' => 'nullable|url|max:500',
             'inv_profile_pic_path' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:5120',
         ]);
-        $investmentSelected = $request->has('invest_pref');
-        $acquisitionSelected = $request->has('full_acquisition');
-
+        $investmentSelected = $request->boolean('invest_pref');
+        $acquisitionSelected = $request->boolean('full_acquisition');
         if (!$investmentSelected && !$acquisitionSelected) {
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'invest_pref' => 'Please Select atleast one'
-                ]);
+            return response()->json([
+                'status' => false,
+                'message' => 'Please select at least one investment preference.',
+                'errors' => [
+                    'invest_pref' => [
+                        'Please select at least one preference.'
+                    ]
+                ]
+            ], 422);
         }
-        $investor = ProfileInvestor::where(
-            'inv_profile_str',
-            $uniqueid
-        )->first();
+        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
+        if (!$investor) {
+            $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
+        }
+        if (!$investor) {
+            $investor = new ProfileInvestor();
+            $investor->user_id = $user->user_id;
+        }
 
-        $investSizeMin = $investmentSelected
-            ? ($request->input('invest_size_min') ?: 0)
-            : 0;
+        $investor->inv_profile_str = $user_rand_id;
+        $investor->user_id = $user->user_id;
+        $investor->company_name = $request->company_name;
+        $investor->company_designation = $request->company_designation;
+        $investor->invest_pref = $investmentSelected ? 1 : 0;
+        $investor->full_acquisition = $acquisitionSelected ? 1 : 0;
+        $investor->invest_size_min = $investmentSelected ? ($request->input('invest_size_min') ?: 0) : 0;
+        $investor->invest_size_max = $investmentSelected ? ($request->input('invest_size_max') ?: 0) : 0;
+        $investor->invest_stake = $investmentSelected ? ($request->input('invest_stake') ?: 0) : 0;
+        $investor->purchase_capacity_min = $acquisitionSelected ? ($request->input('purchase_capacity_min') ?: 0) : 0;
+        $investor->purchase_capacity_max = $acquisitionSelected ? ($request->input('purchase_capacity_max') ?: 0) : 0;
+        $investor->inv_abt_urself = $request->inv_abt_urself;
+        $investor->linkedin_profile = $request->linkedin_profile;
+        $investor->inv_profile_status = 1;
 
-        $investSizeMax = $investmentSelected
-            ? ($request->input('invest_size_max') ?: 0)
-            : 0;
-
-        $investStake = $investmentSelected
-            ? ($request->input('invest_stake') ?: 0)
-            : 0;
-
-        $purchaseCapacityMin = $acquisitionSelected
-            ? ($request->input('purchase_capacity_min') ?: 0)
-            : 0;
-
-        $purchaseCapacityMax = $acquisitionSelected
-            ? ($request->input('purchase_capacity_max') ?: 0)
-            : 0;
-        $data = [
-            'inv_profile_str' => $uniqueid,
-            'company_name' => $request->input('company_name'),
-            'company_designation' => $request->input('company_designation'),
-            'invest_pref' => $investmentSelected ? 1 : 0,
-            'full_acquisition' => $acquisitionSelected ? 1 : 0,
-            'invest_size_min' => $investSizeMin,
-            'invest_size_max' => $investSizeMax,
-            'invest_stake' => $investStake,
-            'purchase_capacity_min' => $purchaseCapacityMin,
-            'purchase_capacity_max' => $purchaseCapacityMax,
-            'inv_abt_urself' => $request->input('inv_abt_urself'),
-            'linkedin_profile' => $request->input('linkedin_profile'),
-        ];
         if ($request->hasFile('inv_profile_pic_path')) {
-
             $imagePic = $request->file('inv_profile_pic_path');
-
-            $imgExt = $imagePic->getClientOriginalExtension();
-
-            $investorProfile = config(
-                'constants.InvestorProfileImagePath'
-            );
-            $imgProfilePath = sprintf(
-                $investorProfile,
-                date('Ym'),
-                random_int(100, 99999) . '_' . time(),
-                $imgExt
-            );
-            $imageName = $this->imageUploadPost(
-                $imgProfilePath,
-                $imagePic
-            );
+            $imgExt = strtolower($imagePic->getClientOriginalExtension());
+            $investorProfile = config('constants.InvestorProfileImagePath');
+            $imgProfilePath = sprintf($investorProfile, date('Ym'), random_int(100, 99999) . '_' . time(), $imgExt);
+            $oldImage = $investor->inv_profile_pic_path;
+            $imageName = $this->imageUploadPost($imgProfilePath, $imagePic);
             if (!$imageName) {
-                return back()
-                    ->withInput()
-                    ->withErrors([
-                        'inv_profile_pic_path' => 'Profile image upload failed.'
-                    ]);
+                return response()->json(['status' => false, 'message' => 'Profile image upload failed.'], 500);
             }
-
-            if ($investor && !empty($investor->inv_profile_pic_path)) {
-                $this->deleteUploadedImage(
-                    $investor->inv_profile_pic_path
-                );
+            if (!empty($oldImage)) {
+                $oldFile = public_path($oldImage);
+                if (file_exists($oldFile)) {
+                    @unlink($oldFile);
+                }
             }
-
-            $data['inv_profile_pic_path'] = $imageName;
+            $investor->inv_profile_pic_path = $imageName;
         }
-
-        ProfileInvestor::updateOrCreate(
-            [
-                'inv_profile_str' => $uniqueid
-            ],
-            $data
-        );
-
-        return redirect()
-            ->back()
-            ->with(
-                'success',
-                'Individual Investor Details Updated Successfully'
-            );
+        $investor->save();
+        return response()->json([
+            'status' => true,
+            'message' => 'Investor profile updated successfully.',
+            'data' => [
+                'company_name' => $investor->company_name,
+                'company_designation' => $investor->company_designation,
+                'inv_profile_pic_path' => $investor->inv_profile_pic_path,
+                'invest_pref' => (int) $investor->invest_pref,
+                'full_acquisition' => (int) $investor->full_acquisition,
+            ]
+        ]);
     }
+
+
 
     private function imageUploadPost($imagePath, $imagePic)
     {
@@ -376,6 +405,239 @@ class ProfileController extends Controller
 
         Storage::disk($disk)->delete($imagePath);
     }
+    public function getInvestorPreferenceDetails($user_rand_id)
+    {
+        // Find user
+        $user = UserAccount::where('user_rand_id', $user_rand_id)->first();
+
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'User not found',
+                'data' => [
+                    'industries' => [],
+                    'locations' => [],
+                ]
+            ], 404);
+        }
+
+        // Find investor profile using unique ID
+        $invPreference = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
+
+        // If not found, find using user_id
+        if (!$invPreference) {
+            $invPreference = ProfileInvestor::where('user_id', $user->user_id)->first();
+        }
+
+        // Investor profile not found
+        if (!$invPreference) {
+            return response()->json([
+                'status' => true,
+                'data' => [
+                    'industries' => [],
+                    'locations' => [],
+                ]
+            ]);
+        }
+
+        // Get investor's industry preferences
+        $indPref = IndPrefInvestor::join(
+            'industry_categories',
+            'ind_pref_investors.sub_category_id',
+            '=',
+            'industry_categories.cat_id'
+        )
+            ->where(
+                'ind_pref_investors.investor_profile_id',
+                $invPreference->investor_id
+            )
+            ->select(
+                'industry_categories.cat_id as id',
+                'industry_categories.category_name as name',
+                'industry_categories.parent_id as pid'
+            )
+            ->get();
+
+        // Get investor's location preferences
+        $locationPref = LocPrefInvestor::query()
+            ->select(
+                'inv_loc_id',
+                'location_name'
+            )
+            ->where(
+                'investor_profile_id',
+                $invPreference->investor_id
+            )
+            ->orderBy('inv_loc_id', 'desc')
+            ->get();
+
+        // Return response
+        return response()->json([
+            'status' => true,
+            'data' => [
+                'industries' => $indPref,
+                'locations' => $locationPref,
+            ]
+        ]);
+    }
+  public function updateInvestorPreferenceDetails(Request $request, $user_rand_id)
+{
+    $investorCount = ProfileInvestor::query()
+        ->select('inv_profile_str', 'investor_id', 'user_id')
+        ->where('inv_profile_str', '=', $user_rand_id)
+        ->first();
+
+    if (!$investorCount) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Investor profile not found.'
+        ], 404);
+    }
+    $sectorUpdated = false;
+    $unmatchedSectors = [];
+    if ($request->has('sectors')) {
+        $sectorsInput = $request->input('sectors');
+        if (is_array($sectorsInput)) {
+            $sectors = $sectorsInput;
+        } else {
+            $sectors = explode(',', $sectorsInput);
+        }
+        $sectors = array_map('trim', $sectors);
+        $sectors = array_filter($sectors, function ($sector) {
+            return !empty($sector);
+        });
+        $validCategoryIds = [];
+        foreach ($sectors as $sectorName) {
+            $category = IndustryCategory::query()->whereRaw('LOWER(TRIM(category_name)) = ?',
+            [strtolower($sectorName)])->first();
+            if (!$category) {
+                $unmatchedSectors[] = $sectorName;
+                continue;
+            }
+            $validCategoryIds[] = $category->cat_id;
+            $existingSector = IndPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
+            ->where('user_id', $investorCount->user_id)->where('sub_category_id', $category->cat_id)->exists();
+            if (!$existingSector) {
+                $industry = new IndPrefInvestor();
+                $industry->investor_profile_id = $investorCount->investor_id;
+                $industry->user_id = $investorCount->user_id;
+                $industry->parent_category_id = $category->parent_id;
+                $industry->sub_category_id = $category->cat_id;
+                $industry->profile_status = 1;
+                $industry->save();
+                $sectorUpdated = true;
+            }
+        }
+        if (!empty($validCategoryIds)) {
+            $deletedSectors = IndPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
+            ->where('user_id', $investorCount->user_id)->whereNotIn('sub_category_id', $validCategoryIds)->delete();
+            if ($deletedSectors > 0) {
+                $sectorUpdated = true;
+            }
+        } else {
+            $deletedSectors = IndPrefInvestor::query()
+                ->where('investor_profile_id', $investorCount->investor_id)
+                ->where('user_id', $investorCount->user_id)
+                ->delete();
+
+            if ($deletedSectors > 0) {
+                $sectorUpdated = true;
+            }
+        }
+    }
+    $locationUpdated = false;
+    if ($request->has('location_preference')) {
+        $locationInput = $request->input('location_preference');
+        if (is_array($locationInput)) {
+            $locations = $locationInput;
+        } else {
+            $locations = explode(',', $locationInput);
+        }
+        $locations = array_map('trim', $locations);
+        $locations = array_filter($locations, function ($location) {
+            return !empty($location);
+        });
+        $existingLocationNames = [];
+        foreach ($locations as $locationName) {
+            $existingLocation = LocPrefInvestor::query()
+                ->where('investor_profile_id', $investorCount->investor_id)
+                ->where('user_id', $investorCount->user_id)
+                ->whereRaw(
+                    'LOWER(TRIM(location_name)) = ?',
+                    [strtolower($locationName)]
+                )
+                ->exists();
+            if (!$existingLocation) {
+                $location = new LocPrefInvestor();
+                $location->investor_profile_id = $investorCount->investor_id;
+                $location->user_id = $investorCount->user_id;
+                $location->place_id = $locationName;
+                $location->location_name = $locationName;
+                $location->loc_state = '';
+                $location->loc_country = '';
+                $location->loc_latitude = '';
+                $location->loc_longitude = '';
+                $location->profile_status = 1;
+                $location->save();
+                $locationUpdated = true;
+            }
+
+            $existingLocationNames[] = strtolower(trim($locationName));
+        }
+        $allLocations = LocPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
+            ->where('user_id', $investorCount->user_id)
+            ->get();
+        foreach ($allLocations as $savedLocation) {
+            if (!in_array(
+                strtolower(trim($savedLocation->location_name)),
+                $existingLocationNames
+            )) {
+                $savedLocation->delete();
+                $locationUpdated = true;
+            }
+        }
+    }
+
+    if (!empty($unmatchedSectors)) {
+
+        return response()->json([
+            'status' => false,
+            'sector_updated' => $sectorUpdated,
+            'location_updated' => $locationUpdated,
+            'unmatched_sectors' => array_values($unmatchedSectors),
+            'message' =>
+                'Some sector preferences could not be updated because their categories were not found.'
+        ], 200);
+    }
+
+    return response()->json([
+        'status' => true,
+        'sector_updated' => $sectorUpdated,
+        'location_updated' => $locationUpdated,
+        'message' => 'Preference data updated successfully.'
+    ], 200);
+}
+
+
+public function searchInvestorSectors(Request $request)
+{
+    $search = trim($request->input('search', ''));
+    if ($search === '') {
+        return response()->json([
+            'status' => true,
+            'data' => []
+        ]);
+    }
+    $categories = IndustryCategory::query()->select('cat_id','category_name','parent_id')
+    ->where('category_name','LIKE','%' . $search . '%')->orderBy('category_name','asc')->limit(20)->get()
+    ->map(function ($category) {
+        return ['id' => $category->cat_id,'name' => $category->category_name,'pid' => $category->parent_id];
+        });
+    return response()->json([
+        'status' => true,
+        'data' => $categories
+    ]);
+}
 
 
 }
