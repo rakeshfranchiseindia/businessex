@@ -16,18 +16,6 @@
             </div>
 
             <div class="col-md-12 pt-b15">
-                <div class="bex-search-section">
-                    <span>
-                        <i class="fa fa-bolt" aria-hidden="true"></i> Trending Searches:
-                    </span>
-                    <span>
-                        <ul class="bex-trending-search-tab">
-                            @foreach(['Hospitality','Hotels','Management','Education','Pre-School','Restaurants','Food Parlor'] as $search)
-                                <li><a href="#">{{ $search }}</a></li>
-                            @endforeach
-                        </ul>
-                    </span>
-                </div>
             </div>
         </div>
 
@@ -37,7 +25,7 @@
             <div class="col-12 col-sm-9 col-md-9 mdy">
                 <div class="row">
                     <div class="col-12 col-sm-9 col-md-9 setheading">
-                        <h1 class="headblk">Investors In India</h1>
+                        <h1 class="headblk">Business Investment opportunities in India</h1>
                     </div>
                     <div class="col-12 col-sm-3 col-md-3 float-right setmob">
                         <div class="form-group">

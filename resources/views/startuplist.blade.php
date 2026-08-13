@@ -10,55 +10,69 @@
                         <a href="{{ url('/') }}">Home</a>
                     </li>
                     <li class="breadcrumb-item active" aria-current="page">
-                        Start-UPs Looking for Investments
+                        Start-ups
                     </li>
                 </ol>
             </div>
 
-            <div class="col-md-12 pt-b15">
-                <div class="bex-search-section">
-                    <span>
-                        <i class="fa fa-bolt" aria-hidden="true"></i> Trending Searches:
-                    </span>
-                    <span>
-                        <ul class="bex-trending-search-tab">
-                            @foreach(['Hospitality','Hotels','Management','Education','Pre-School','Restaurants','Food Parlor'] as $search)
-                                <li><a href="#">{{ $search }}</a></li>
-                            @endforeach
-                        </ul>
-                    </span>
-                </div>
-            </div>
+           
         </div>
 
         <div class="row catfull">
-            <div class="filter" id="showftr">Apply Filter</div>
             @include('includes.catleftstartup')
 
-            <div class="col-12 col-sm-9 col-md-9 mdy">
+            <div class="col-12 col-sm-9 col-md-9 mdy setheading">
                 <div class="row">
-                    <div class="col-12 col-sm-6 col-md-9 setheading">
-                        <h1 class="headblk">Start-UPs Looking for Investments</h1>
+                    <div class="col-12 col-sm-12 col-md-12">
+                        <h1 class="headblk">Startups in India</h1>
+                        <p>BusinessEx offers 678 Start-ups in 13 various industries .These promising Startups are looking to Raise Funds for their Growth or Expansion. To seek Investment, Loan, Mentors, Incubators or Accelerators for your Startup, we recommend you to create a Startup Profile on BusinessEx, we recommend to create a Startup profile in BusinessEx.</p>
                     </div>
-                    <div class="col-12 col-sm-6 col-md-3 float-right setmob">
-                        <div class="form-group">
-                            <select class="form-control modysel myselectclass" id="Industry">
-                                <option>Recently Listed</option>
-                                @foreach(['Location1','Location2','Location3','Location4'] as $location)
-                                    <option>{{ $location }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+                    
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <p>
-                            BusinessEx offers 547 Start-ups in 13 various industries. Start-ups are looking to sell their business from all over India in 13 various industries. The Start-ups listed are planning to sell. The Start-ups are available in 13 various industries which includes Web & mobile development, Beauty Salons, Education Supplies etc. For listing your Start-up, we recommend creating a Startup profile in BusinessEx.
-                        </p>
+                @php
+                    $selectedLocationIds = collect(request()->input('location', []))->map(fn ($value) => (int) $value)->all();
+                    $selectedIndustryIds = collect(request()->input('industry', []))->map(fn ($value) => (int) $value)->all();
+
+                    $selectedLocationNames = collect($locations ?? [])->filter(function ($item) use ($selectedLocationIds) {
+                        $id = (int) ($item->id ?? $item['id'] ?? 0);
+                        return in_array($id, $selectedLocationIds, true);
+                    })->map(function ($item) {
+                        return trim((string) ($item->city ?? $item['city'] ?? ''));
+                    })->filter()->values()->all();
+
+                    $selectedIndustryNames = collect($industrySeller ?? [])->filter(function ($item) use ($selectedIndustryIds) {
+                        $id = (int) ($item['subIndustryid'] ?? 0);
+                        return in_array($id, $selectedIndustryIds, true);
+                    })->map(function ($item) {
+                        return trim((string) ($item['subindustry'] ?? ''));
+                    })->filter()->values()->all();
+
+                    $selectedFilters = array_merge(
+                        $selectedLocationNames,
+                        $selectedIndustryNames
+                    );
+                @endphp
+
+                @if(!empty($selectedFilters) || ($businessType ?? 'all') !== 'all')
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="d-flex flex-wrap align-items-center gap-2 p-3 border rounded bg-light">
+                                <strong class="mr-2">Selected filters:</strong>
+
+                                @if(($businessType ?? 'all') !== 'all')
+                                    <span class="badge badge-primary mr-2">{{ ucfirst($businessType) }}</span>
+                                @endif
+
+                                @foreach($selectedFilters as $selectedFilter)
+                                    <span class="badge badge-secondary mr-2">{{ $selectedFilter }}</span>
+                                @endforeach
+
+                                <a href="{{ route('startup.listing') }}" class="btn btn-sm btn-outline-secondary ml-auto">Reset</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="row setvto">
                     @if(isset($startups) && $startups->count() > 0)
@@ -116,8 +130,13 @@
                         <div class="alert alert-info">No startups found at the moment.</div>
                     @endif
                 </div>
+
+                
             </div>
         </div>
+        @include("includes.groupcompany")
+        @include("includes.newsletter")
     </div>
+    @include("includes.categorylinkfooter")
 </main>
 @endsection

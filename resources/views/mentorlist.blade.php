@@ -16,18 +16,6 @@
             </div>
 
             <div class="col-md-12 pt-b15">
-                <div class="bex-search-section">
-                    <span>
-                        <i class="fa fa-bolt" aria-hidden="true"></i> Trending Searches:
-                    </span>
-                    <span>
-                        <ul class="bex-trending-search-tab">
-                            @foreach(['Hospitality','Hotels','Management','Education','Pre-School','Restaurants','Food Parlor'] as $search)
-                                <li><a href="#">{{ $search }}</a></li>
-                            @endforeach
-                        </ul>
-                    </span>
-                </div>
             </div>
         </div>
 
