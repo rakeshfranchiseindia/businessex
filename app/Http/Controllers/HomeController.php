@@ -26,6 +26,8 @@ use App\Models\IndPrefMentorExpertise;
 use App\Models\IndPrefMentor;
 use App\Models\BxAuthor;
 use App\Models\BxArticle;
+use App\Models\BxCity;
+
 use App\Models\Testimonial;
 use Carbon\Carbon;
 
@@ -51,6 +53,9 @@ class HomeController extends Controller
         $businessSalesOpportunities = $this->getBusinessSalesOpportunities();
         
         $featuredInvestors = $this->getFeaturedInvestors();
+        $homePageLocation = BxCity::selectRaw('MIN(id) as id, state')
+                            ->groupBy('state')
+                            ->get();
         //dd($featuredInvestors);
         $highGrowthStartups = ProfileStartup::with(['management', 'fundraising','industrySector','images'])
             ->where('startup_profile_status', config('constants.ProfileStatus.Active'))
@@ -74,7 +79,9 @@ class HomeController extends Controller
             'worldClassMentors' => $worldClassMentors,
             'highGrowthStartups' => $highGrowthStartups,
             'featuredInvestors' => $featuredInvestors,
-            'businessSalesOpportunities' => $businessSalesOpportunities
+            'salesOpportunitiesData' => $businessSalesOpportunities['salesOpportunitiesData'],
+            'totalSalesOpportunities' => $businessSalesOpportunities['totalSalesOpportunities'],
+            'homePageLocation'=>$homePageLocation
         ]);
 
     }
@@ -212,75 +219,51 @@ class HomeController extends Controller
 
 
     // Business Sales Opportunities data for home page
-            public function getBusinessSalesOpportunities()
-            {
-                if (config('constants.isCachingOn')) {
-                    $businessOpportunities = Cache::get('business_sales_opportunities');
-                    if (!empty($businessOpportunities)) {
-                        return [
-                            'salesOpportunitiesData'   => $businessOpportunities,
-                            'totalSalesOpportunities'  => ProfileBusiness::where('business_profile_status', config('constants.ProfileStatus.Active'))->count()
-                        ];
-                    }
-                }
-
-                $totalSalesOpportunities = ProfileBusiness::where('business_profile_status', config('constants.ProfileStatus.Active'))
-                    ->count();
-
-                $salesOpportunities = ProfileBusiness::select(
-                    'business_id','user_id','business_profile_str','seller_name','ofc_state','ofc_city',
-                    'advmt_headline','business_type','seller_company',
-                    'seller_designation','seller_prof_pic','ofc_country',
-                    'membership_paid','membership_plan','last_login_at'
-                )
-                ->where('business_profile_status', config('constants.ProfileStatus.Active'))
-                ->whereIn('business_profile_str', [
-                    '5l1xvp','jcahys','zuiizc','kmebfr','h0un4g','r7unm0',
-                    'nwyawl','4idnbw','sucyej','zpjzfi','n29zph','6zhvhj'
-                ])
-                ->orderByDesc('last_login_at')
-                ->orderByDesc('activated_at')
-                ->limit(12)
-                ->get();
-
-                $featuredSalesOpportunities = $salesOpportunities->map(function ($opportunity) {
-                    [$minInvestment, $maxInvestment] = CommonController::getInvestmentRange($opportunity);
-                    $slugUrl = CommonController::getSlugUrl($opportunity, $minInvestment, $maxInvestment);
-
+          private function getBusinessSalesOpportunities()
+        {
+            if (config('constants.isCachingOn')) {
+                $businessOpportunities = Cache::get('business_sales_opportunities');
+                if (!empty($businessOpportunities)) {
                     return [
-                        'sellerName'        => $opportunity->seller_name,
-                        'businessType'      => config('constants.businessType.' . $opportunity->business_type),
-                        'headline'          => $opportunity->advmt_headline,
-                        'country'           => $opportunity->ofc_country,
-                        'companyName'       => $opportunity->seller_company,
-                        'designation'       => $opportunity->seller_designation,
-                        'investmentPref'    => CommonController::getInvestmentPreference($opportunity),
-                        'minInvestment'     => $minInvestment,
-                        'maxInvestment'     => $maxInvestment,
-                        'businessStr'       => strtolower($opportunity->business_profile_str),
-                        'city'              => $opportunity->ofc_city,
-                        'state'             => config('constants.statesIndia.' . $opportunity->ofc_state),
-                        'sellerProfPic'     => ($opportunity->membership_paid == 1 && $opportunity->seller_prof_pic)
-                            ? config('constants.ImageCDN') . '/' . $opportunity->seller_prof_pic
-                            : asset('assets/img/mentor.png'),
-                        'membership_paid'   => $opportunity->membership_paid,
-                        'membership_plan'   => $opportunity->membership_plan,
-                        'lastLogin'         => $opportunity->last_login_at,
-                        'planType'          => config('constants.planType.' . $opportunity->membership_plan),
-                        'mobVerifyStatus'   => MobileVerification::isMobileNoVerified($opportunity->user_id),
-                        'opportunityUrl'    => Str::slug(trim(strtolower(CommonController::cleanSpecialChar($slugUrl))), "-"),
+                        'salesOpportunitiesData'   => $businessOpportunities,
+                        'totalSalesOpportunities'  => ProfileBusiness::where(
+                            'business_profile_status',
+                            config('constants.ProfileStatus.Active')
+                        )->count(),
                     ];
-                });
-
-                if (config('constants.isCachingOn')) {
-                    Cache::put('business_sales_opportunities', $featuredSalesOpportunities, now()->addMinutes(30));
                 }
-
-                return [
-                    'salesOpportunitiesData'   => $featuredSalesOpportunities,
-                    'totalSalesOpportunities'  => $totalSalesOpportunities
-                ];
             }
+
+            $totalSalesOpportunities = ProfileBusiness::where(
+                'business_profile_status',
+                config('constants.ProfileStatus.Active')
+            )->count();
+
+            $salesOpportunities = ProfileBusiness::select(
+                'business_id','user_id','business_profile_str','seller_name','ofc_state','ofc_city',
+                'advmt_headline','business_type','seller_company','industry_sector',
+                'seller_designation','seller_prof_pic','ofc_country','buyer_sell_price',
+                'membership_paid','membership_plan','last_login_at'
+            )
+            ->where('business_profile_status', config('constants.ProfileStatus.Active'))
+            ->whereIn('business_profile_str', [
+                '5l1xvp','jcahys','zuiizc','kmebfr','h0un4g','r7unm0',
+                'nwyawl','4idnbw','sucyej','zpjzfi','n29zph','6zhvhj'
+            ])
+            ->orderByDesc('last_login_at')
+            ->orderByDesc('activated_at')
+            ->limit(12)
+            ->get();
+
+            if (config('constants.isCachingOn')) {
+                Cache::put('business_sales_opportunities', $salesOpportunities, now()->addMinutes(30));
+            }
+
+            return [
+                'salesOpportunitiesData'   => $salesOpportunities,
+                'totalSalesOpportunities'  => $totalSalesOpportunities,
+            ];
+        }
 
 
 

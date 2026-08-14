@@ -59,18 +59,17 @@ class BusinessController extends Controller
         $query->where('buyer_sell_price', '<=', (float)$selectedRange_max);
     }
 
+    
     // Annual Sale range filter
-    if (!empty($annualSaleMin) && !empty($annualSaleMax)) {
+    if (!is_null($annualSaleMin) && !is_null($annualSaleMax)) {
     $query->whereBetween('annual_sales', [(float)$selectedRange_min, (float)$selectedRange_max]);
     } elseif (!empty($annualSaleMin)) {
         $query->where('annual_sales', '>=', (float)$selectedRange_min);
-    } elseif (!empty($selectedRange_max)) {
-        $query->where('$annualSaleMax', '<=', (float)$selectedRange_max);
+    } elseif (!empty($annualSaleMax)) {
+        $query->where('annual_sales', '<=', (float)$selectedRange_max);
     }
     
-    $annualSaleMin  = $request->input('annual_sale_min');
-    $annualSaleMax  = $request->input('annual_sale_max');
-    
+     
 
 
     //dd($query->toSql(), $query->getBindings());

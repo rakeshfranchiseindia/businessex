@@ -31,37 +31,36 @@
                         <div class="form-group">
                             <select class="form-control modysel myselectclass" id="Industry">
                                 <option>Recently Listed</option>
-                                @foreach(['Location1','Location2','Location3','Location4'] as $location)
-                                    <option>{{ $location }}</option>
-                                @endforeach
+                                    <option>Recently Listed</option>
+                                
                             </select>
                         </div>
                     </div>
                 </div>
 
                 <div class="row setvto">
-                    @if(isset($mentors) && $mentors->count() > 0)
+                    @if(isset($mentorListData) && count($mentorListData) > 0)
                         <ul class="listop">
-                            @foreach($mentors as $mentor)
+                            @foreach($mentorListData as $mentor)
                                 <li>
                                     <div class="ribbonblk">
-                                        <div class="ribbonblkinner">{{ $mentor->badge }}</div>
+                                        <div class="ribbonblkinner">{{ $mentor['mentorPlan'] }}</div>
                                     </div>
 
                                     <div class="fullb settmar">
                                         <div class="fbleft">
                                             <div class="cname">
-                                                <div class="cnameinner">{{ $mentor->name }}</div>
+                                                <div class="cnameinner">{{ $mentor['mentorName'] }}</div>
                                             </div>
                                         </div>
                                         <div class="fbright">
                                             <div class="compper">
-                                                <img src="{{ $mentor->image }}" alt="Mentor Image">
+                                                <img src="{{ $mentor['profilePic'] }}" alt="Mentor Image">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="fullb contxt">{{ $mentor->occupation }}</div>
+                                    <div class="fullb contxt">{{ $mentor['mentorOccupation'] }}</div>
 
                                     <div class="sdd">
                                         <div class="sddinner"><img src="{{ asset('assets/img/phone.svg') }}"> <span>Phone</span></div>
@@ -71,22 +70,22 @@
 
                                     <div class="fullb summtxt">
                                         <span>Summary</span>
-                                        {{ $mentor->summary }}
+                                        {{ $mentor['mentorSummary'] }}
                                     </div>
 
-                                    <div class="fullb citytxt">{{ $mentor->location }}</div>
+                                    <div class="fullb citytxt">{{ $mentor['mentorCity'] }}</div>
 
                                     <div class="tagv">
-                                        @foreach($mentor->tags as $tag)
+                                       {{-- @foreach($mentor->tags as $tag)
                                             <div class="tagvinner">{{ $tag }}</div>
-                                        @endforeach
+                                        @endforeach--}}
                                     </div>
 
                                     <div class="backv">
-                                        <div class="inblk">Experience <span>{{ $mentor->experience }}</span></div>
-                                        <div class="inblk">Expertise <span>{{ $mentor->expertise }}</span></div>
-                                        <div class="inblk">Occupation <span>{{ $mentor->occupation }}</span></div>
-                                        <div class="inblk">Sectors <span>{{ $mentor->sectors }}</span></div>
+                                        <div class="inblk">Experience <span>{{ $mentor['mentorExp'] }}</span></div>
+                                        <div class="inblk">Expertise <span>{{ $mentor['subExpStr'] }}</span></div>
+                                        <div class="inblk">Occupation <span>{{ $mentor['mentorOccupation'] }}</span></div>
+                                        <div class="inblk">Sectors <span>{{ $mentor['mentorSector'] }}</span></div>
                                     </div>
 
                                     <div class="inbtn"><a href="#">Send Proposal</a></div>
@@ -94,13 +93,17 @@
                             @endforeach
                         </ul>
 
-                        {{ $mentors->links('pagination::bootstrap-4') }}
+                        
                     @else
                         <div class="alert alert-info">No mentors found at the moment.</div>
                     @endif
                 </div>
+                {{ $mentorListData->links('pagination::bootstrap-4') }}
             </div>
+            @include("includes.groupcompany")
+            @include("includes.newsletter")
         </div>
     </div>
+    @include("includes.categorylinkfooter")
 </main>
 @endsection
