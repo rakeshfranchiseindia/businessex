@@ -5,10 +5,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Carbon\Carbon;
 use App\Models\ProfileInvestor;
 use App\Models\LocPrefInvestor;
 use App\Models\IndPrefInvestor;
+use App\Models\ProfileLender;
+use App\Models\ProfileBusiness;
+use App\Models\ProfileMentor;
+use App\Models\IndPrefMentor;
+use App\Models\ProfileStartup;
 use App\Models\IndustryCategory;
+use App\Models\ConversationReply;
+use App\Models\RequestContact;
 use Illuminate\Support\Str;
 use App\Models\UserAccount;
 use Illuminate\Support\Facades\Mail;
@@ -17,6 +25,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
+
+require_once app_path('Helpers/common_helper.php');
 class ProfileController extends Controller
 {
 
@@ -480,164 +490,348 @@ class ProfileController extends Controller
             ]
         ]);
     }
-  public function updateInvestorPreferenceDetails(Request $request, $user_rand_id)
-{
-    $investorCount = ProfileInvestor::query()
-        ->select('inv_profile_str', 'investor_id', 'user_id')
-        ->where('inv_profile_str', '=', $user_rand_id)
-        ->first();
+    public function updateInvestorPreferenceDetails(Request $request, $user_rand_id)
+    {
+        $investorCount = ProfileInvestor::query()
+            ->select('inv_profile_str', 'investor_id', 'user_id')
+            ->where('inv_profile_str', '=', $user_rand_id)
+            ->first();
 
-    if (!$investorCount) {
-        return response()->json([
-            'status' => false,
-            'message' => 'Investor profile not found.'
-        ], 404);
-    }
-    $sectorUpdated = false;
-    $unmatchedSectors = [];
-    if ($request->has('sectors')) {
-        $sectorsInput = $request->input('sectors');
-        if (is_array($sectorsInput)) {
-            $sectors = $sectorsInput;
-        } else {
-            $sectors = explode(',', $sectorsInput);
+        if (!$investorCount) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Investor profile not found.'
+            ], 404);
         }
-        $sectors = array_map('trim', $sectors);
-        $sectors = array_filter($sectors, function ($sector) {
-            return !empty($sector);
-        });
-        $validCategoryIds = [];
-        foreach ($sectors as $sectorName) {
-            $category = IndustryCategory::query()->whereRaw('LOWER(TRIM(category_name)) = ?',
-            [strtolower($sectorName)])->first();
-            if (!$category) {
-                $unmatchedSectors[] = $sectorName;
-                continue;
+        $sectorUpdated = false;
+        $unmatchedSectors = [];
+        if ($request->has('sectors')) {
+            $sectorsInput = $request->input('sectors');
+            if (is_array($sectorsInput)) {
+                $sectors = $sectorsInput;
+            } else {
+                $sectors = explode(',', $sectorsInput);
             }
-            $validCategoryIds[] = $category->cat_id;
-            $existingSector = IndPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
-            ->where('user_id', $investorCount->user_id)->where('sub_category_id', $category->cat_id)->exists();
-            if (!$existingSector) {
-                $industry = new IndPrefInvestor();
-                $industry->investor_profile_id = $investorCount->investor_id;
-                $industry->user_id = $investorCount->user_id;
-                $industry->parent_category_id = $category->parent_id;
-                $industry->sub_category_id = $category->cat_id;
-                $industry->profile_status = 1;
-                $industry->save();
-                $sectorUpdated = true;
+            $sectors = array_map('trim', $sectors);
+            $sectors = array_filter($sectors, function ($sector) {
+                return !empty($sector);
+            });
+            $validCategoryIds = [];
+            foreach ($sectors as $sectorName) {
+                $category = IndustryCategory::query()->whereRaw(
+                    'LOWER(TRIM(category_name)) = ?',
+                    [strtolower($sectorName)]
+                )->first();
+                if (!$category) {
+                    $unmatchedSectors[] = $sectorName;
+                    continue;
+                }
+                $validCategoryIds[] = $category->cat_id;
+                $existingSector = IndPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
+                    ->where('user_id', $investorCount->user_id)->where('sub_category_id', $category->cat_id)->exists();
+                if (!$existingSector) {
+                    $industry = new IndPrefInvestor();
+                    $industry->investor_profile_id = $investorCount->investor_id;
+                    $industry->user_id = $investorCount->user_id;
+                    $industry->parent_category_id = $category->parent_id;
+                    $industry->sub_category_id = $category->cat_id;
+                    $industry->profile_status = 1;
+                    $industry->save();
+                    $sectorUpdated = true;
+                }
+            }
+            if (!empty($validCategoryIds)) {
+                $deletedSectors = IndPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
+                    ->where('user_id', $investorCount->user_id)->whereNotIn('sub_category_id', $validCategoryIds)->delete();
+                if ($deletedSectors > 0) {
+                    $sectorUpdated = true;
+                }
+            } else {
+                $deletedSectors = IndPrefInvestor::query()
+                    ->where('investor_profile_id', $investorCount->investor_id)
+                    ->where('user_id', $investorCount->user_id)
+                    ->delete();
+
+                if ($deletedSectors > 0) {
+                    $sectorUpdated = true;
+                }
             }
         }
-        if (!empty($validCategoryIds)) {
-            $deletedSectors = IndPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
-            ->where('user_id', $investorCount->user_id)->whereNotIn('sub_category_id', $validCategoryIds)->delete();
-            if ($deletedSectors > 0) {
-                $sectorUpdated = true;
+        $locationUpdated = false;
+        if ($request->has('location_preference')) {
+            $locationInput = $request->input('location_preference');
+            if (is_array($locationInput)) {
+                $locations = $locationInput;
+            } else {
+                $locations = explode(',', $locationInput);
             }
-        } else {
-            $deletedSectors = IndPrefInvestor::query()
-                ->where('investor_profile_id', $investorCount->investor_id)
+            $locations = array_map('trim', $locations);
+            $locations = array_filter($locations, function ($location) {
+                return !empty($location);
+            });
+            $existingLocationNames = [];
+            foreach ($locations as $locationName) {
+                $existingLocation = LocPrefInvestor::query()
+                    ->where('investor_profile_id', $investorCount->investor_id)
+                    ->where('user_id', $investorCount->user_id)
+                    ->whereRaw(
+                        'LOWER(TRIM(location_name)) = ?',
+                        [strtolower($locationName)]
+                    )
+                    ->exists();
+                if (!$existingLocation) {
+                    $location = new LocPrefInvestor();
+                    $location->investor_profile_id = $investorCount->investor_id;
+                    $location->user_id = $investorCount->user_id;
+                    $location->place_id = $locationName;
+                    $location->location_name = $locationName;
+                    $location->loc_state = '';
+                    $location->loc_country = '';
+                    $location->loc_latitude = '';
+                    $location->loc_longitude = '';
+                    $location->profile_status = 1;
+                    $location->save();
+                    $locationUpdated = true;
+                }
+
+                $existingLocationNames[] = strtolower(trim($locationName));
+            }
+            $allLocations = LocPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
                 ->where('user_id', $investorCount->user_id)
-                ->delete();
-
-            if ($deletedSectors > 0) {
-                $sectorUpdated = true;
+                ->get();
+            foreach ($allLocations as $savedLocation) {
+                if (
+                    !in_array(
+                        strtolower(trim($savedLocation->location_name)),
+                        $existingLocationNames
+                    )
+                ) {
+                    $savedLocation->delete();
+                    $locationUpdated = true;
+                }
             }
         }
-    }
-    $locationUpdated = false;
-    if ($request->has('location_preference')) {
-        $locationInput = $request->input('location_preference');
-        if (is_array($locationInput)) {
-            $locations = $locationInput;
-        } else {
-            $locations = explode(',', $locationInput);
-        }
-        $locations = array_map('trim', $locations);
-        $locations = array_filter($locations, function ($location) {
-            return !empty($location);
-        });
-        $existingLocationNames = [];
-        foreach ($locations as $locationName) {
-            $existingLocation = LocPrefInvestor::query()
-                ->where('investor_profile_id', $investorCount->investor_id)
-                ->where('user_id', $investorCount->user_id)
-                ->whereRaw(
-                    'LOWER(TRIM(location_name)) = ?',
-                    [strtolower($locationName)]
-                )
-                ->exists();
-            if (!$existingLocation) {
-                $location = new LocPrefInvestor();
-                $location->investor_profile_id = $investorCount->investor_id;
-                $location->user_id = $investorCount->user_id;
-                $location->place_id = $locationName;
-                $location->location_name = $locationName;
-                $location->loc_state = '';
-                $location->loc_country = '';
-                $location->loc_latitude = '';
-                $location->loc_longitude = '';
-                $location->profile_status = 1;
-                $location->save();
-                $locationUpdated = true;
-            }
 
-            $existingLocationNames[] = strtolower(trim($locationName));
-        }
-        $allLocations = LocPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
-            ->where('user_id', $investorCount->user_id)
-            ->get();
-        foreach ($allLocations as $savedLocation) {
-            if (!in_array(
-                strtolower(trim($savedLocation->location_name)),
-                $existingLocationNames
-            )) {
-                $savedLocation->delete();
-                $locationUpdated = true;
-            }
-        }
-    }
+        if (!empty($unmatchedSectors)) {
 
-    if (!empty($unmatchedSectors)) {
+            return response()->json([
+                'status' => false,
+                'sector_updated' => $sectorUpdated,
+                'location_updated' => $locationUpdated,
+                'unmatched_sectors' => array_values($unmatchedSectors),
+                'message' =>
+                    'Some sector preferences could not be updated because their categories were not found.'
+            ], 200);
+        }
 
         return response()->json([
-            'status' => false,
+            'status' => true,
             'sector_updated' => $sectorUpdated,
             'location_updated' => $locationUpdated,
-            'unmatched_sectors' => array_values($unmatchedSectors),
-            'message' =>
-                'Some sector preferences could not be updated because their categories were not found.'
+            'message' => 'Preference data updated successfully.'
         ], 200);
     }
 
-    return response()->json([
-        'status' => true,
-        'sector_updated' => $sectorUpdated,
-        'location_updated' => $locationUpdated,
-        'message' => 'Preference data updated successfully.'
-    ], 200);
-}
 
-
-public function searchInvestorSectors(Request $request)
-{
-    $search = trim($request->input('search', ''));
-    if ($search === '') {
+    public function searchInvestorSectors(Request $request)
+    {
+        $search = trim($request->input('search', ''));
+        if ($search === '') {
+            return response()->json([
+                'status' => true,
+                'data' => []
+            ]);
+        }
+        $categories = IndustryCategory::query()->select('cat_id', 'category_name', 'parent_id')
+            ->where('category_name', 'LIKE', '%' . $search . '%')->orderBy('category_name', 'asc')->limit(20)->get()
+            ->map(function ($category) {
+                return ['id' => $category->cat_id, 'name' => $category->category_name, 'pid' => $category->parent_id];
+            });
         return response()->json([
             'status' => true,
-            'data' => []
+            'data' => $categories
         ]);
     }
-    $categories = IndustryCategory::query()->select('cat_id','category_name','parent_id')
-    ->where('category_name','LIKE','%' . $search . '%')->orderBy('category_name','asc')->limit(20)->get()
-    ->map(function ($category) {
-        return ['id' => $category->cat_id,'name' => $category->category_name,'pid' => $category->parent_id];
-        });
-    return response()->json([
-        'status' => true,
-        'data' => $categories
-    ]);
-}
+    public function showBxInbox()
+    {
+
+        return view('account_dashboard.bx_inbox');
+    }
+
+    public function getBxInboxNotification(Request $request)
+    {
+        $user_id = auth()->user()->user_id;
+        $query = ConversationReply::where('to_id', $user_id);
+
+        $max = (clone $query)->selectRaw('MAX(id) AS id')
+            ->groupBy(['from_id'])
+            ->get()
+            ->pluck('id')
+            ->toArray();
+
+        $results = (clone $query)->select(['id', 'from_id', 'reply as msg', 'to_id', 'timestamp', 'readstatus', 'request_id'])
+            ->whereIn('id', $max)
+            ->orderBy('id', 'desc')
+            ->limit(5)
+            ->get();
+
+        $result = [];
+        foreach ($results as $row) {
+            $user = UserAccount::select(['profile_pic', 'name', 'location'])
+                ->where('user_id', $row->from_id)->first();
+
+            $requestContact = RequestContact::where('request_id', $row->request_id)->first();
+            $profileType = ($requestContact && $requestContact->sender === $row->from_id)
+                ? $requestContact->sender_profile_type
+                : ($requestContact->receiver_profile_type ?? '');
+
+            // Call helper function for profile details
+            list($profileName, $profilelink, $category, $contactStatus, $listingLink) =
+                self::getProfileNameAndLink($profileType, $row->from_id);
+
+            $result[] = [
+                'id' => $row->id,
+                'msg' => $row->msg,
+                'from_id' => $row->from_id,
+                'to_id' => $row->to_id,
+                'timestamp' => $row->timestamp,
+                'location' => $user->location ?? '',
+                'name' => $user->name ?? '',
+                'profilepic' => $user->profile_pic ?? '',
+                'profileType' => $profileType,
+                'profileName' => $profileName,
+                'profilelink' => $profilelink,
+                'category' => $category,
+                'contactStatus' => $contactStatus,
+                'listingLink' => $listingLink,
+                'request_id' => $row->request_id,
+                'readstatus' => $row->readstatus,
+            ];
+        }
+
+        return response()->json([
+            "messages" => $result,
+            "unReadNotificationcount" => $query->where('readstatus', 1)->count()
+        ]);
+    }
+
+    public function updateBxinboxNotification(Request $request)
+    {
+        $user_id = auth()->user()->user_id;
+        $contactedContacts = $request->input('contactedContacts', []);
+        $requestId = array_unique($contactedContacts);
+
+        $conversationUpdateQuery = ConversationReply::where('readstatus', 1)
+            ->where('to_id', $user_id);
+
+        if (!empty($requestId)) {
+            $conversationUpdateQuery->whereIn('request_id', $requestId);
+        }
+
+        $updated = $conversationUpdateQuery->update(['readstatus' => 2]);
+
+        return response()->json(['message' => $updated ? 200 : 400]);
+    }
+    public static function getProfileNameAndLink($profileType, $userId, $regType = '')
+    {
+        $profileName = '';
+        $profilelink = '';
+        $category = '';
+        $contactStatus = '';
+        $listingLink = '';
+
+        if ($profileType == config('constants.profileTypes.Investor')) {
+            $investor = ProfileInvestor::where('user_id', $userId)->first();
+            if ($investor) {
+                $category = config("industryCategoriesConfig." . $investor->industry_sector . ".category_name");
+                $profileName = "Investor";
+                list($minInvestment, $maxInvestment) = getInvestmentRange($investor);
+                $slugUrl = getSlugUrl($investor, $minInvestment, $maxInvestment);
+                $profilelink = '/investor/' . Str::slug(
+                    trim(strtolower(cleanSpecialChar($slugUrl))),
+                    "-"
+                ) . '/' . strtolower($investor->inv_profile_str);
+                $contactStatus = $investor->contact_status;
+                $listingLink = '/investorlisting';
+            }
+        }
+
+        if ($profileType == config('constants.profileTypes.Mentor')) {
+            $mentor = ProfileMentor::where('user_id', $userId)->first();
+            if ($mentor) {
+                $categoryResult = IndPrefMentor::select('sub_category_id')->where('user_id', $userId)->first();
+                $category = $categoryResult ? config("industryCategoriesConfig." . $categoryResult->sub_category_id . ".category_name") : '';
+                $profileName = "Mentor";
+                $profilelink = '/mentor/' . Str::slug(
+                    trim(strtolower(cleanSpecialChar($mentor->mentor_adv_headline))),
+                    "-"
+                ) . '/' . strtolower($mentor->mentor_profile_str);
+                $contactStatus = $mentor->contact_status;
+                $listingLink = '/mentorlisting';
+            }
+        }
+
+        if ($profileType == config('constants.profileTypes.Startup')) {
+            $startup = ProfileStartup::where('user_id', $userId)->first();
+            if ($startup) {
+                $category = config("industryCategoriesConfig." . $startup->industry_sector . ".category_name");
+                $profileName = "Startup";
+                $profilelink = '/startup/' . Str::slug(
+                    trim(strtolower(cleanSpecialChar($startup->advmt_headline))),
+                    "-"
+                ) . '/' . strtolower($startup->startup_profile_str);
+                $contactStatus = $startup->contact_status;
+                $listingLink = '/startupslisting';
+            }
+        }
+
+        if ($profileType == config('constants.profileTypes.Business')) {
+            $business = ProfileBusiness::where('user_id', $userId)->first();
+            if ($business) {
+                $category = config("industryCategoriesConfig." . $business->industry_sector . ".category_name");
+                $profileName = "Business";
+                $profilelink = '/business/' . Str::slug(
+                    trim(strtolower(cleanSpecialChar($business->advmt_headline))),
+                    "-"
+                ) . '/' . strtolower($business->business_profile_str);
+                $contactStatus = $business->contact_status;
+                $listingLink = '/businesslisting';
+            }
+        }
+
+        if ($profileType == config('constants.profileTypes.Lender')) {
+            $lender = ProfileLender::where('user_id', $userId)->first();
+            if ($lender) {
+                $profileName = "Lender";
+                $contactStatus = $lender->contact_status;
+            }
+        }
+
+        return [$profileName, $profilelink, $category, $contactStatus, $listingLink];
+    }
+    public function setProfileType($type)
+    {
+        session(['profile_type' => $type]);
+        return redirect('/dashboard');
+    }
+
+    public function dashboard()
+    {
+        $type = session('profile_type', 'investor'); // default investor
+
+        switch ($type) {
+            case 'mentor':
+                return view('dashboard.mentor');
+            case 'lender':
+                return view('dashboard.lender');
+            case 'investor':
+            default:
+                return view('dashboard.investor');
+        }
+    }
+
+
+
 
 
 }

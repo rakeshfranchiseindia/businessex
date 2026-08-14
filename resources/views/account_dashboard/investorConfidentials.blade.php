@@ -341,56 +341,30 @@
     }
 </style>
 
-
- <!-- ================= MAIN CONTENT ================= -->
         <div class="col-lg-8 col-md-8 dashboard-main-content">
-
-   
-
             <div class="main-content">
-
                 <h5 class="page-title">
                     MANAGE CONFIDENTIAL INFORMATION
                 </h5>
-
-
                 <div id="ajaxAlert"></div>
-
-
-                {{-- ======================================================
-                     TABS
-                ======================================================= --}}
 
                 <ul class="nav custom-tabs"
                     id="confidentialTabs">
-
                     <li class="nav-item">
-
                         <a href="#"
                            class="nav-link active"
                            data-tab="conf-tab1">
-
                             <i class="fas fa-user-secret me-1"></i>
-
                             Confidential Information
-
                         </a>
-
                     </li>
-
-
                     <li class="nav-item">
-
                         <a href="#"
                            class="nav-link"
                            data-tab="conf-tab2">
-
                             <i class="fas fa-bullhorn me-1"></i>
-
                             Advertisement Details
-
                         </a>
-
                     </li>
 
 

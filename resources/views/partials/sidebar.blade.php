@@ -8,10 +8,6 @@ $user = UserAccount::findOrFail($user_id);
 ?>
 
 <style>
-  /* ==============================
-       DASHBOARD SIDEBAR
-    ============================== */
-
   .dashboard-sidebar {
     background: #ffffff;
     border-radius: 18px;
@@ -22,7 +18,6 @@ $user = UserAccount::findOrFail($user_id);
     top: 20px;
   }
 
-  /* Profile Header */
   .user-profile-card {
     position: relative;
     padding: 30px 20px 25px;
@@ -562,28 +557,37 @@ $user = UserAccount::findOrFail($user_id);
                 </a>
               </li>
 
-          <div class="menu-divider"></div>
+              <div class="menu-divider"></div>
 
 
-          <!-- Change Password -->
-          <li>
-            <a href="{{ route('change.password') }}">
-              <i class="fas fa-lock"></i>
-              <span>Change Password</span>
-            </a>
-          </li>
+              <!-- Change Password -->
+              <li>
+                <a href="{{ route('change.password') }}">
+                  <i class="fas fa-lock"></i>
+                  <span>Change Password</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('myinteraction.index') }}">
+                  <i class="fas fa-lock"></i>
+                  <span>BX Inbox</span>
+                </a>
+              </li>
 
-        </ul>
+
+            </ul>
 
       </div>
 
 
     </aside>
 
-
-
-
     <script>
+      function changeProfileType(select) {
+    let type = select.value;
+    window.location.href = "/set-profile-type/" + type;
+}
+
       function toggleSubmenu(element) {
 
         const parent = element.closest('.has-submenu');
@@ -596,4 +600,6 @@ $user = UserAccount::findOrFail($user_id);
         parent.classList.toggle('open');
         submenu.classList.toggle('show');
       }
+
+      
     </script>

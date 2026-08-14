@@ -71,6 +71,15 @@ Route::view('/sitemap', 'statics.sitemap');
 //Shivani Chauhan
 Route::middleware(['auth', 'verified'])->group(function () {
 
+
+
+
+    Route::get('/dashboard/myinteraction', [ProfileController::class, 'showBxInbox'])->name('myinteraction.index');
+    Route::post('/dashboard/myinteraction/fetch', [ProfileController::class, 'getBxInboxNotification'])->name('myinteraction.fetch');
+    Route::post('/dashboard/myinteraction/update', [ProfileController::class, 'updateBxinboxNotification'])->name('myinteraction.update');
+
+    Route::get('/dashboard/{type}', [ProfileController::class, 'showModule'])->name('dashboard.module');
+
     Route::get('dashboard/change-password', [ProfileController::class, 'changePassword'])->name('change.password');
     Route::post('dashboard/change-password', [ProfileController::class, 'updatePassword'])->name('update.password');
    
