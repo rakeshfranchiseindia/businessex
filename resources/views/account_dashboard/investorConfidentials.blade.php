@@ -3,8 +3,8 @@
 @section('title', 'My Account')
 
 @section('content')
+@include('account_dashboard.dashboardSidebar')
 
-@include('partials.sidebar')
 
 <style>
     .main-content {
@@ -426,7 +426,7 @@
                                 type="text"
                                 name="name"
                                 class="form-control"
-                                value="{{ $user->name ?? '' }}"
+                                value="{{ $investor->inv_name ?? '' }}"
                                 required
                             >
 
@@ -444,7 +444,7 @@
                                 type="tel"
                                 name="mobile"
                                 class="form-control"
-                                value="{{ $user->mobile ?? '' }}"
+                                value="{{ $investor->inv_mobile ?? '' }}"
                                 required
                             >
 
@@ -462,7 +462,7 @@
                                 type="email"
                                 name="email"
                                 class="form-control"
-                                value="{{ $user->email ?? '' }}"
+                                value="{{ $investor->inv_email ?? '' }}"
                                 required
                             >
 
@@ -472,16 +472,48 @@
                         <div class="form-group">
 
                             <label>
-                                Location
+                                City
                                 <span class="text-danger">*</span>
                             </label>
 
                             <input
                                 type="text"
-                                name="location"
+                                name="inv_city"
                                 class="form-control"
-                                value="{{ $user->location ?? '' }}"
+                                value="{{ $investor->inv_city ?? '' }}"
                                 required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                State
+                            </label>
+
+                            <input
+                                type="text"
+                                name="inv_state"
+                                class="form-control"
+                                value="{{ $investor->inv_state ?? '' }}"
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Country
+                            </label>
+
+                            <input
+                                type="text"
+                                name="inv_country"
+                                class="form-control"
+                                value="{{ $investor->inv_country ?? '' }}"
                             >
 
                         </div>
@@ -1664,8 +1696,16 @@ document.addEventListener('DOMContentLoaded', function () {
             info.email || '';
 
 
-        form.elements.location.value =
-            info.location || '';
+        form.elements.inv_city.value =
+            info.inv_city || '';
+
+
+        form.elements.inv_state.value =
+            info.inv_state || '';
+
+
+        form.elements.inv_country.value =
+            info.inv_country || '';
     }
 
 

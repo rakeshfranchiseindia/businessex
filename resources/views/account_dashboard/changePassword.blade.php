@@ -5,7 +5,8 @@
 @section('content')
 <div class="container-fluid py-4">
     <div class="row">
-        @include('partials.sidebar')
+              @include('account_dashboard.dashboardSidebar')
+
 
         <div class="col-md-9">
             <div class="card shadow-sm">

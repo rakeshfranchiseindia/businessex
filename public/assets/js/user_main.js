@@ -24,15 +24,20 @@ function initSidebarToggle() {
 }
 
 // Submenu Toggle
+// Skips links that already have an inline onclick="toggleSubmenu(this)" handler
+// (used by account_dashboard/dashboardSidebar.blade.php and partials/sidebar.blade.php) —
+// binding a second click listener there caused every click to toggle the submenu
+// open and immediately closed again (two toggles cancel out), so those menus
+// looked like they did nothing when clicked.
 function initSubmenuToggle() {
-  const submenuToggles = document.querySelectorAll('.has-submenu > a');
-  
+  const submenuToggles = document.querySelectorAll('.has-submenu > a:not([onclick])');
+
   submenuToggles.forEach(function(toggle) {
     toggle.addEventListener('click', function(e) {
       e.preventDefault();
       const parent = this.parentElement;
       const submenu = parent.querySelector('.submenu');
-      
+
       if (submenu) {
         submenu.classList.toggle('show');
         this.querySelector('i').classList.toggle('fa-chevron-down');
@@ -364,8 +369,7 @@ function switchTab(tabId) {
 // Profile Type Change Handler
 function changeProfileType(select) {
   const value = select.value;
-  console.log('Profile type changed to:', value);
-  showNotification(`Profile type changed to ${value}`, 'info');
+  window.location.href = '/set-profile-type/' + value;
 }
 
 // Load More Functionality
@@ -401,31 +405,13 @@ function searchContacts(query) {
   });
 }
 
-// Submenu Toggle for Separate Pages
-function toggleSubmenu(element) {
-  const parent = element.parentElement;
-  const submenu = parent.querySelector('.submenu');
-  const icon = element.querySelector('i');
-  
-  if (submenu) {
-    // Close other open submenus
-    document.querySelectorAll('.submenu.show').forEach(function(s) {
-      if (s !== submenu) {
-        s.classList.remove('show');
-        s.previousElementSibling.querySelector('i').classList.remove('fa-chevron-up');
-        s.previousElementSibling.querySelector('i').classList.add('fa-chevron-down');
-      }
-    });
-    
-    submenu.classList.toggle('show');
-    if (icon) {
-      icon.classList.toggle('fa-chevron-down');
-      icon.classList.toggle('fa-chevron-up');
-    }
-  }
-  
-  return false;
-}
+// NOTE: toggleSubmenu is intentionally NOT defined here anymore.
+// account_dashboard/dashboardSidebar.blade.php and partials/sidebar.blade.php
+// each define their own toggleSubmenu() matched to their exact markup/CSS
+// (.has-submenu / .submenu.show). A second global definition in this file
+// (loaded after those inline scripts) was silently overriding them, which is
+// why clicking a sidebar section sometimes did nothing. Do not re-add a
+// same-named function here.
 
 // Utility Functions
 function formatCurrency(amount) {

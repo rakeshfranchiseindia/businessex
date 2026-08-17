@@ -7,7 +7,7 @@
   <div class="row">
     <!-- Sidebar -->
      
-@include('partials.sidebar')
+@include('account_dashboard.dashboardSidebar')
 
     <!-- Main Content -->
     <main class="col-lg-9">

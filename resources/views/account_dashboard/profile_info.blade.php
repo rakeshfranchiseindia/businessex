@@ -6,7 +6,7 @@
 
 <div class="container-fluid py-4">
     <div class="row">
-        @include('partials.sidebar')
+@include('account_dashboard.dashboardSidebar')
         <main class="col-lg-9">
             <div class="main-content">
                 <form method="POST"

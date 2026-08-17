@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -24,6 +24,7 @@ use App\Mail\VerifyEmailMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 
 
 require_once app_path('Helpers/common_helper.php');
@@ -111,7 +112,7 @@ class ProfileController extends Controller
     public function getUserProfileDetails(Request $request)
     {
         $user_id = Auth::id();
-        $user = UserAccount::select('name', 'email', 'location', 'company_name', 'designation', 'mobile')
+        $user = UserAccount::select('name', 'email', 'location', 'company_name', 'designation', 'mobile', 'profile_pic')
             ->where('user_id', $user_id)
             ->first();
         $profile = ProfileInvestor::select('company_summary', 'inv_headline', 'inv_intro', 'invest_size_min', 'invest_size_max', 'linkedin_profile')
@@ -166,13 +167,19 @@ class ProfileController extends Controller
     public function getConfidentialInfo($user_rand_id)
     {
         $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
+        if (!$investor) {
+            $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
+        }
         return response()->json([
             'status' => true,
             'data' => [
-                'name' => $user->name ?? '',
-                'mobile' => $user->mobile ?? '',
-                'email' => $user->email ?? '',
-                'location' => $user->location ?? '',
+                'name' => $investor->inv_name ?? '',
+                'mobile' => $investor->inv_mobile ?? '',
+                'email' => $investor->inv_email ?? '',
+                'inv_city' => $investor->inv_city ?? '',
+                'inv_state' => $investor->inv_state ?? '',
+                'inv_country' => $investor->inv_country ?? '',
             ]
         ]);
     }
@@ -184,20 +191,31 @@ class ProfileController extends Controller
             'name' => 'required|string|max:255',
             'mobile' => 'required|string|max:15',
             'email' => 'required|email|max:255',
-            'location' => 'required|string|max:255',
+            'inv_city' => 'required|string|max:255',
         ]);
         $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
-        $user->update([
-            'name' => $request->name,
-            'mobile' => $request->mobile,
-            'email' => $request->email,
-            'location' => $request->location,
+        $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
+        if (!$investor) {
+            $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
+        }
+        if (!$investor) {
+            $investor = new ProfileInvestor();
+            $investor->user_id = $user->user_id;
+            $investor->inv_profile_str = $user_rand_id;
+        }
+        $investor->inv_name = $request->name;
+        $investor->inv_mobile = $request->mobile;
+        $investor->inv_email = $request->email;
+        $investor->inv_city = $request->inv_city;
+        $investor->inv_state = $request->inv_state;
+        $investor->inv_country = $request->inv_country;
+        $investor->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Information updated successfully!',
+            'data' => $investor->only(['inv_name', 'inv_mobile', 'inv_email', 'inv_city', 'inv_state', 'inv_country']),
         ]);
-        return redirect()
-            ->route('confidential.edit', [
-                'user_rand_id' => $user_rand_id
-            ])
-            ->with('success', 'Information updated successfully!');
     }
 
     public function getAdvertisementDetails($user_rand_id)
@@ -661,7 +679,19 @@ class ProfileController extends Controller
     public function getBxInboxNotification(Request $request)
     {
         $user_id = auth()->user()->user_id;
-        $query = ConversationReply::where('to_id', $user_id);
+
+        // Only show messages that were sent to the currently-selected profile type
+        // (e.g. switching to "Mentor" in the sidebar shows only messages the user
+        // received as a mentor, not as an investor/lender). A request_id belongs to
+        // this profile type if that's the type the current user was contacted as.
+        $myProfileTypeCode = config('constants.profileTypes.' . ucfirst(session('profile_type', 'investor')));
+        $matchingRequestIds = RequestContact::where(function ($q) use ($user_id, $myProfileTypeCode) {
+            $q->where('receiver', $user_id)->where('receiver_profile_type', $myProfileTypeCode);
+        })->orWhere(function ($q) use ($user_id, $myProfileTypeCode) {
+            $q->where('sender', $user_id)->where('sender_profile_type', $myProfileTypeCode);
+        })->pluck('request_id');
+
+        $query = ConversationReply::where('to_id', $user_id)->whereIn('request_id', $matchingRequestIds);
 
         $max = (clone $query)->selectRaw('MAX(id) AS id')
             ->groupBy(['from_id'])
@@ -731,6 +761,140 @@ class ProfileController extends Controller
         $updated = $conversationUpdateQuery->update(['readstatus' => 2]);
 
         return response()->json(['message' => $updated ? 200 : 400]);
+    }
+
+    /**
+     * Contact requests received by the current user, under the currently-selected
+     * profile type (e.g. only requests received as a Mentor, if Mentor is selected).
+     */
+    public function proposalsReceived()
+    {
+        $user_id = auth()->user()->user_id;
+        $myProfileTypeCode = config('constants.profileTypes.' . ucfirst(session('profile_type', 'investor')));
+
+        $requests = RequestContact::where('receiver', $user_id)
+            ->where('receiver_profile_type', $myProfileTypeCode)
+            ->orderBy('timestamp', 'desc')
+            ->get();
+
+        $proposals = $this->buildProposalList($requests, 'sender', 'sender_profile_type');
+
+        return view('account_dashboard.proposals', [
+            'title' => 'Proposals Received',
+            'proposals' => $proposals,
+        ]);
+    }
+
+    /**
+     * Contact requests sent by the current user, under the currently-selected profile type.
+     */
+    /**
+     * Ported from the old ContactHistoryController::getContactHistory() "Investor"
+     * branch (Investor/Lender/Mentor all normalize to that branch, since the
+     * dashboard only lets a user switch between those three profile types).
+     * Shows the Businesses/Startups the current profile type has sent a contact
+     * request to, as listing-style cards.
+     */
+    public function proposalsSent()
+    {
+        $userId = auth()->user()->user_id;
+        $profileType = session('profile_type', 'investor');
+        $senderProfileTypeCode = config('constants.profileTypes.' . ucfirst($profileType));
+
+        $contactHistory = RequestContact::select('profile_str', 'receiver', 'receiver_profile_type', 'status', 'viewed_status')
+            ->where('sender', $userId)
+            ->where('sender_profile_type', $senderProfileTypeCode)
+            ->where('status', config('constants.ProfileStatus.Active'))
+            ->orderBy('request_id', 'desc')
+            ->get();
+
+        $proposals = [];
+        foreach ($contactHistory as $row) {
+            if ($row->receiver_profile_type == config('constants.profileTypes.Business')) {
+                $seller = ProfileBusiness::where('business_profile_str', $row->profile_str)
+                    ->where('business_profile_status', 1)
+                    ->orderBy('business_id', 'desc')
+                    ->first();
+                if (!$seller) {
+                    continue;
+                }
+                $proposals[] = [
+                    'type' => 'Business',
+                    'userId' => $seller->user_id,
+                    'title' => $seller->advmt_headline,
+                    'thumbimage' => (!empty($seller->seller_prof_thumb_pic) && file_exists(public_path($seller->seller_prof_thumb_pic))) ? asset($seller->seller_prof_thumb_pic) : null,
+                    'catImageUrl' => randomSubCategoryImage($seller->industry_sector, 360, 202),
+                    'price' => getAskingPrice($seller),
+                    'priceLabel' => priceLabelBusiness($seller),
+                    'industry' => config('industryCategoriesConfig.' . $seller->industry_sector . '.parent_cat'),
+                    'location' => getSellerLocation($seller),
+                    'profileurl' => '/business/' . Str::slug(trim(strtolower(cleanSpecialChar($seller->advmt_headline))), '-') . '/' . strtolower($seller->business_profile_str),
+                    'viewedStatus' => $row->viewed_status,
+                ];
+            }
+
+            if ($row->receiver_profile_type == config('constants.profileTypes.Startup')) {
+                $startup = ProfileStartup::where('startup_profile_str', $row->profile_str)
+                    ->where('startup_profile_status', 1)
+                    ->orderBy('startup_id', 'desc')
+                    ->first();
+                if (!$startup) {
+                    continue;
+                }
+                $proposals[] = [
+                    'type' => 'Startup',
+                    'userId' => $startup->user_id,
+                    'title' => $startup->advmt_headline,
+                    'thumbimage' => (!empty($startup->startup_prof_thumb_pic) && file_exists(public_path($startup->startup_prof_thumb_pic))) ? asset($startup->startup_prof_thumb_pic) : null,
+                    'catImageUrl' => randomSubCategoryImage($startup->industry_sector, 360, 202),
+                    'price' => getAskingPrice($startup),
+                    'priceLabel' => priceLabelStartup($startup),
+                    'industry' => config('industryCategoriesConfig.' . $startup->industry_sector . '.parent_cat'),
+                    'location' => getSellerLocation($startup),
+                    'profileurl' => '/startup/' . Str::slug(trim(strtolower(cleanSpecialChar($startup->advmt_headline))), '-') . '/' . strtolower($startup->startup_profile_str),
+                    'viewedStatus' => $row->viewed_status,
+                ];
+            }
+        }
+
+        return view('account_dashboard.proposals_sent', [
+            'title' => 'Proposal Sent for ' . ucfirst($profileType) . ' Profile',
+            'proposals' => $proposals,
+        ]);
+    }
+
+    /**
+     * Shared helper: turn a set of RequestContact rows into a display-ready list,
+     * enriched with the other party's name/profile-picture/profile-link.
+     */
+    private function buildProposalList($requests, $otherPartyColumn, $otherPartyTypeColumn)
+    {
+        $proposals = [];
+        foreach ($requests as $row) {
+            $otherUserId = $row->{$otherPartyColumn};
+            $otherProfileType = $row->{$otherPartyTypeColumn};
+
+            $otherUser = UserAccount::select(['name', 'email', 'profile_pic', 'location'])
+                ->where('user_id', $otherUserId)->first();
+
+            list($profileName, $profilelink, $category, $contactStatus, $listingLink) =
+                self::getProfileNameAndLink($otherProfileType, $otherUserId);
+
+            $proposals[] = [
+                'request_id' => $row->request_id,
+                'name' => $otherUser->name ?? '',
+                'email' => $otherUser->email ?? '',
+                'profilepic' => $otherUser->profile_pic ?? '',
+                'location' => $otherUser->location ?? '',
+                'msg' => $row->msg,
+                'timestamp' => $row->timestamp,
+                'status' => $row->status,
+                'profileName' => $profileName,
+                'profilelink' => $profilelink,
+                'category' => $category,
+            ];
+        }
+        return $proposals;
     }
     public static function getProfileNameAndLink($profileType, $userId, $regType = '')
     {
@@ -812,7 +976,19 @@ class ProfileController extends Controller
     public function setProfileType($type)
     {
         session(['profile_type' => $type]);
-        return redirect('/dashboard');
+        $userRandId = Auth::user()->user_rand_id ?? null;
+
+        switch ($type) {
+            case 'mentor':
+                return redirect()->route('mentor.confidential.edit', ['user_rand_id' => $userRandId]);
+            case 'lender':
+                return redirect()->route('lender.confidential.edit', ['user_rand_id' => $userRandId]);
+            case 'startup':
+                return redirect()->route('startup.confidential.edit', ['user_rand_id' => $userRandId]);
+            case 'investor':
+            default:
+                return redirect()->route('confidential.edit', ['user_rand_id' => $userRandId]);
+        }
     }
 
     public function dashboard()

@@ -6,7 +6,8 @@
 
 <div class="row">
 
-    @include('partials.sidebar')
+        @include('account_dashboard.dashboardSidebar')
+
 
     <div class="col-md-9">
 

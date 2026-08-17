@@ -3,17 +3,35 @@
 
 @section('content')
 
+<style>
+  .investor-image-fallback {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #fff;
+    font-size: 72px;
+    font-weight: 700;
+  }
+</style>
+
 <div class="container-fluid py-4">
   <div class="row">
-  @include('partials.sidebar')
+@include('account_dashboard.dashboardSidebar')
     <main class="col-lg-9">
       <div class="main-content">
         <h5 class="page-title">INVESTOR PROFILE</h5>
-        
+
         <div class="investor-profile-section">
           <div class="investor-images">
-            <img src="https://via.placeholder.com/200" alt="Investor" class="investor-image-large">
-            <img src="https://via.placeholder.com/200" alt="Investor" class="investor-image-large">
+            @if(!empty($user->profile_pic) && file_exists(public_path($user->profile_pic)))
+              <img src="{{ asset($user->profile_pic) }}" alt="Investor" class="investor-image-large">
+            @else
+              <div class="investor-image-fallback">{{ strtoupper(substr($user->name ?? 'I', 0, 1)) }}</div>
+            @endif
           </div>
           
           <div class="investor-details">

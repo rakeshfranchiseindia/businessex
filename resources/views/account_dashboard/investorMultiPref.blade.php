@@ -4,7 +4,7 @@
 
 <div class="container-fluid py-4">
     <div class="row">
-        @include('partials.sidebar')
+      @include('account_dashboard.dashboardSidebar')
         <div id="conf-tab4" class="tab-content">
             <form class="needs-validation" novalidate>
                 {{-- Sector Preference --}}

@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 
+require_once app_path('Helpers/common_helper.php');
+
 class AuthController extends Controller
 {
     // Show registration form

@@ -26,6 +26,20 @@
    <link href="{{ asset('assets/css/article-style.css') }}" rel="stylesheet">
    <link href="{{ asset('assets/css/article-detail.css') }}" rel="stylesheet">
    <link href="{{ asset('assets/css/services.styles.css') }}" rel="stylesheet">
+   <style>
+      /* The navbar (partials.navbar) renders with Bootstrap's .fixed-top, taking it
+         out of normal document flow. Public/marketing pages get away with it because
+         they open with a tall hero section; dashboard pages open straight into a
+         white content card, so without this offset the navbar sits on top of it. */
+      #main {
+         padding-top: 100px;
+      }
+      @media (max-width: 767px) {
+         #main {
+            padding-top: 80px;
+         }
+      }
+   </style>
 </head>
 
 <body>
