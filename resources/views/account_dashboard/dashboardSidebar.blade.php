@@ -2,22 +2,44 @@
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserAccount;
 
+require_once app_path('Helpers/common_helper.php');
+
 $user_id = Auth::id();
 $user = UserAccount::findOrFail($user_id);
+
+// Only offer the profile types this user actually has a profile for
+// (user_profiles is the authoritative registry — see common_helper.php).
+$availableProfileTypes = getAvailableProfileTypes($user_id);
+
 $profileType = session('profile_type', 'investor');
+if (empty($availableProfileTypes[$profileType])) {
+    // Session has a type this user doesn't actually have — fall back to
+    // whichever available type comes first (investor, then mentor, etc.).
+    $firstAvailable = array_search(true, $availableProfileTypes, true);
+    $profileType = $firstAvailable ?: 'investor';
+    session(['profile_type' => $profileType]);
+}
 
 $confidentialRoutes = [
     'mentor' => 'mentor.confidential.edit',
     'lender' => 'lender.confidential.edit',
+    'startup' => 'startup.confidential.edit',
     'investor' => 'confidential.edit',
 ];
 $myProfileRoutes = [
     'mentor' => 'mentor.get.user.details',
     'lender' => 'lender.get.user.details',
+    'startup' => 'startup.get.user.details',
     'investor' => 'get.user.details',
 ];
 $confidentialRouteName = $confidentialRoutes[$profileType] ?? $confidentialRoutes['investor'];
 $myProfileRouteName = $myProfileRoutes[$profileType] ?? $myProfileRoutes['investor'];
+
+// Until the currently-selected profile type has been activated, the sidebar
+// only shows Dashboard / Manage / Change Password (matches the old site: an
+// un-activated profile shows "ACTIVATE ACCOUNT" instead of "MY PLAN" and
+// hides Profile Views / My Profile / My Interactions).
+$isProfileActivated = isProfileTypeActivated($user_id, $profileType);
 ?>
 
 <style>
@@ -25,10 +47,22 @@ $myProfileRouteName = $myProfileRoutes[$profileType] ?? $myProfileRoutes['invest
     background: #ffffff;
     border-radius: 18px;
     box-shadow: 0 8px 30px rgba(30, 41, 59, 0.08);
-    overflow: hidden;
     border: 1px solid #eef1f6;
     position: sticky;
-    top: 20px;
+    /* offset below the fixed navbar (see accountDashboardApp's #main padding-top) */
+    top: 110px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* thin, unobtrusive scrollbar for the sidebar's own scroll area */
+  .dashboard-sidebar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .dashboard-sidebar::-webkit-scrollbar-thumb {
+    background: #dbe2ee;
+    border-radius: 3px;
   }
 
   .user-profile-card {
@@ -63,6 +97,17 @@ $myProfileRouteName = $myProfileRoutes[$profileType] ?? $myProfileRoutes['invest
     border-radius: 50%;
     border: 4px solid #ffffff;
     box-shadow: 0 5px 18px rgba(37, 99, 235, 0.18);
+  }
+
+  .profile-image-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: #ffffff;
+    font-size: 38px;
+    font-weight: 700;
+    font-family: inherit;
   }
 
   .profile-edit-icon {
@@ -366,6 +411,8 @@ $myProfileRouteName = $myProfileRoutes[$profileType] ?? $myProfileRoutes['invest
     .dashboard-sidebar {
       position: relative;
       top: 0;
+      max-height: none;
+      overflow-y: visible;
       margin-bottom: 25px;
     }
 
@@ -389,7 +436,11 @@ $myProfileRouteName = $myProfileRoutes[$profileType] ?? $myProfileRoutes['invest
 
           <div class="profile-image-container">
 
-            <img src="https://via.placeholder.com/100" alt="Profile" class="profile-image">
+            @if(!empty($user->profile_pic) && file_exists(public_path($user->profile_pic)))
+              <img src="{{ asset($user->profile_pic) }}" alt="Profile" class="profile-image">
+            @else
+              <div class="profile-image profile-image-fallback">{{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}</div>
+            @endif
 
             <a href="{{ route('user.edit.page') }}" class="profile-edit-icon" title="Edit Profile">
               <i class="fas fa-pencil-alt"></i>
@@ -447,27 +498,35 @@ $myProfileRouteName = $myProfileRoutes[$profileType] ?? $myProfileRoutes['invest
           </label>
 
           <select onchange="changeProfileType(this)">
-            <option value="investor" selected>
-              Investor
-            </option>
-
-            <option value="mentor">
-              Mentor
-            </option>
-
-            <option value="lender">
-              Lender
-            </option>
+            @if($availableProfileTypes['investor'])
+              <option value="investor" {{ $profileType === 'investor' ? 'selected' : '' }}>Investor</option>
+            @endif
+            @if($availableProfileTypes['mentor'])
+              <option value="mentor" {{ $profileType === 'mentor' ? 'selected' : '' }}>Mentor</option>
+            @endif
+            @if($availableProfileTypes['lender'])
+              <option value="lender" {{ $profileType === 'lender' ? 'selected' : '' }}>Lender</option>
+            @endif
+            @if($availableProfileTypes['startup'])
+              <option value="startup" {{ $profileType === 'startup' ? 'selected' : '' }}>Startup</option>
+            @endif
           </select>
 
         </div>
 
 
-        <!-- My Plan -->
-        <button class="btn-my-plan">
-          <i class="fas fa-crown mr-2"></i>
-          MY PLAN
-        </button>
+        <!-- My Plan / Activate Account -->
+        @if($isProfileActivated)
+          <button class="btn-my-plan">
+            <i class="fas fa-crown mr-2"></i>
+            MY PLAN
+          </button>
+        @else
+          <button class="btn-my-plan">
+            <i class="fas fa-bolt mr-2"></i>
+            ACTIVATE ACCOUNT
+          </button>
+        @endif
 
 
         <!-- ================= MENU ================= -->
@@ -482,67 +541,86 @@ $myProfileRouteName = $myProfileRoutes[$profileType] ?? $myProfileRoutes['invest
           </li>
 
 
-          <!-- Profile Views -->
-          <li>
-            <a href="{{ route('profileview') }}">
-              <i class="far fa-eye"></i>
-              <span>Profile Views</span>
+          @if($isProfileActivated)
+            <!-- Profile Views -->
+            <li>
+              <a href="{{ route('profileview') }}">
+                <i class="far fa-eye"></i>
+                <span>Profile Views</span>
 
-              <span class="badge">
-                0
-              </span>
-            </a>
-          </li>
+                <span class="badge">
+                  0
+                </span>
+              </a>
+            </li>
 
 
-          <!-- My Profile -->
-          <li>
-            <a href="{{ route('get.user.details') }}">
-              <i class="far fa-user"></i>
-              <span>My Profile</span>
-            </a>
-          </li>
+            <!-- My Profile -->
+            <li>
+              <a href="{{ route($myProfileRouteName) }}">
+                <i class="far fa-user"></i>
+                <span>My Profile</span>
+              </a>
+            </li>
+          @endif
 
 
           <div class="menu-divider"></div>
 
 
-          <!-- My Interactions -->
-          <li class="has-submenu">
-
-            <a href="javascript:void(0)" onclick="toggleSubmenu(this)">
-
-              <i class="far fa-comments"></i>
-
-              <span>My Interactions</span>
-
-              <i class="fas fa-chevron-down menu-chevron"></i>
-
+          <!-- Change Password -->
+          <li>
+            <a href="{{ route('change.password') }}">
+              <i class="fas fa-lock"></i>
+              <span>Change Password</span>
             </a>
-
-            <ul class="submenu">
-
-              <li>
-                <a href="contactHistory.html">
-                  Contact History
-                </a>
-              </li>
-
-              <li>
-                <a href="instaResponse.html">
-                  Insta Response
-                </a>
-              </li>
-
-              <li>
-                <a href="bxproposal.html">
-                  BX Proposal
-                </a>
-              </li>
-
-            </ul>
-
           </li>
+
+
+          @if($isProfileActivated)
+            <!-- My Interactions -->
+            <li class="has-submenu">
+
+              <a href="javascript:void(0)" onclick="toggleSubmenu(this)">
+
+                <i class="far fa-comments"></i>
+
+                <span>My Interactions</span>
+
+                <i class="fas fa-chevron-down menu-chevron"></i>
+
+              </a>
+
+              <ul class="submenu">
+
+                <li>
+                  <a href="{{ route('myinteraction.index') }}">
+                    BX Inbox
+                  </a>
+                </li>
+
+                <li>
+                  <a href="{{ route('myinteraction.proposals-sent') }}">
+                    Proposals Sent
+                  </a>
+                </li>
+
+                <li>
+                  <a href="{{ route('myinteraction.instant-responses') }}">
+                    Instant Responses
+                  </a>
+                </li>
+
+                <li>
+                  <a href="{{ route('myinteraction.proposals-received') }}">
+                    Proposals Received
+                  </a>
+                </li>
+
+              </ul>
+
+            </li>
+          @endif
 
 
           <!-- Manage -->
@@ -563,27 +641,10 @@ $myProfileRouteName = $myProfileRoutes[$profileType] ?? $myProfileRoutes['invest
 
               <!-- Confidential -->
               <li>
-                <a href="{{ route('confidential.edit', [
+                <a href="{{ route($confidentialRouteName, [
   'user_rand_id' => auth()->user()->user_rand_id
 ]) }}">
                   Confidential Info
-                </a>
-              </li>
-
-              <div class="menu-divider"></div>
-
-
-              <!-- Change Password -->
-              <li>
-                <a href="{{ route('change.password') }}">
-                  <i class="fas fa-lock"></i>
-                  <span>Change Password</span>
-                </a>
-              </li>
-              <li>
-                <a href="{{ route('myinteraction.index') }}">
-                  <i class="fas fa-lock"></i>
-                  <span>BX Inbox</span>
                 </a>
               </li>
 

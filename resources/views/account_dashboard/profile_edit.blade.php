@@ -2,7 +2,7 @@
 @section('content')
 <div class="container mt-5">
     <div class="row justify-content-center">
-         @include('partials.sidebar')
+@include('account_dashboard.dashboardSidebar')
         <div class="col-md-8">
 
             <div class="card shadow-sm border-0">

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('reply')->nullable(false);
             $table->integer('from_id')->nullable(false);
             $table->integer('to_id')->nullable(false);
-            $table->string('timestamp', 500)->nullable(false);
+            $table->timestamp('timestamp')->useCurrent();
             $table->integer('request_id')->nullable(false);
             $table->enum('readstatus', ['1','2'])->nullable(false)->default('1');
             $table->timestamps();

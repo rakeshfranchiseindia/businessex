@@ -5,10 +5,10 @@ use Illuminate\Support\Facades\Auth;
 @section('title', 'My Account')
 
 @section('content')
-    <div class="container-fluid mt-5">
+    <div class="container-fluid" style="padding-top: 100px;">
         <div class="row">
             <!-- Sidebar -->
-           @include('partials.sidebar')
+           @include('account_dashboard.dashboardSidebar')
 
             <!-- Main Content -->
             <div class="col-md-6">
