@@ -25,9 +25,9 @@ return new class extends Migration
             $table->string('seller_intro', 255)->nullable();
             $table->string('seller_company', 255)->nullable();
             $table->integer('estb_year')->nullable();
-            $table->integer('emp_count')->nullable();
-            $table->integer('entity_type')->nullable();
-            $table->integer('business_type')->nullable();
+            $table->string('emp_count', 50)->nullable();
+            $table->string('entity_type', 80)->nullable();
+            $table->string('business_type', 80)->nullable();
             $table->string('industry_sector', 255)->nullable();
             $table->string('business_website', 150)->nullable();
             $table->text('facilities_desc')->nullable();

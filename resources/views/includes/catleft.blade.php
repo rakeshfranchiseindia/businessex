@@ -1,236 +1,197 @@
-<div class="col-md-3 catsh">
-    <div class="catleft">
-        <div id="closeftr" class="closebtn">
-            <i class="fa fa-times fa-2x" aria-hidden="true"></i>
+<div class="col-md-3">
+  <div class="border bg-white p-3 rounded">
+    <h5 class="font-weight-bold mb-3">Filters</h5>
+
+    <form method="GET" action="{{ route('investor.listing') }}">
+      <div id="filterAccordion">
+        @php
+        $selectedIndustries = collect(request()->input('industry', []))->map(fn ($value) => (int) $value)->all(); 
+        @endphp
+        <!-- Investor Types -->
+        <div class="card border-0">
+          <div class="card-header bg-white p-0 accordion_head">
+            <h6 class="mb-2 font-weight-bold text-secondary">
+              <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                 data-toggle="collapse" href="#collapseInvestor" aria-expanded="true">
+                INVESTOR TYPES
+                <span class="arrow">&#9662;</span>
+              </a>
+            </h6>
+          </div>
+          <div id="collapseInvestor" class="collapse show" data-parent="#filterAccordion">
+            <div class="card-body py-2 pl-3">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="occupation[]" value="1"
+                       {{ in_array(1, $selectedOccupations ?? []) ? 'checked' : '' }}
+                       onchange="this.form.submit()">
+                <label class="form-check-label">Individual Investor</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="occupation[]" value="2"
+                       {{ in_array(2, $selectedOccupations ?? []) ? 'checked' : '' }}
+                       onchange="this.form.submit()">
+                <label class="form-check-label">Investment Firm</label>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="mainleftdiv">
-            <div class="subhead">Filters</div>
-
-              @php
-          $selectedLocations = collect(request()->input('location', []))->map(fn ($value) => (int) $value)->all();
-          $selectedIndustries = collect(request()->input('industry', []))->map(fn ($value) => (int) $value)->all();
-
-          $selectedLocationNames = collect($locations ?? [])->filter(function ($item) use ($selectedLocations) {
-              $id = (int) ($item->id ?? $item['id'] ?? 0);
-              return in_array($id, $selectedLocations, true);
-          })->map(function ($item) {
-              return trim((string) ($item->city ?? $item['city'] ?? ''));
-          })->filter()->values()->all();
-
-          $selectedIndustryNames = collect($industrySeller ?? [])->filter(function ($item) use ($selectedIndustries) {
-              $id = (int) ($item['subIndustryid'] ?? 0);
-              return in_array($id, $selectedIndustries, true);
-          })->map(function ($item) {
-              return trim((string) ($item['subindustry'] ?? ''));
-          })->filter()->values()->all();
-      @endphp
-
-      @if(!empty($selectedLocationNames) || !empty($selectedIndustryNames) || ($businessType ?? 'all') !== 'all')
-          <div class="mb-3 p-2 border rounded bg-light">
-              <div class="small font-weight-bold mb-1">Selected filters</div>
-              <div class="d-flex flex-wrap">
-                  @if(($businessType ?? 'all') !== 'all')
-                      <span class="badge badge-primary mr-1 mb-1">{{ ucfirst($businessType) }}</span>
-                  @endif
-                  @foreach(array_merge($selectedLocationNames, $selectedIndustryNames) as $filterName)
-                      <span class="badge badge-secondary mr-1 mb-1">{{ $filterName }}</span>
-                  @endforeach
-              </div>
-          </div>
-      @endif
-
-            <!-- Investor Types -->
-            <div class="accordion_container">
-                <div class="accordion_head">
-                    <a href="#">Investor types</a>
-                    <span class="plusminus minus"></span>
-                </div>
-                <div class="accordion_body" style="display: block;">
-                    <ul class="sub-menu">
-                        <li><input type="radio" value="6" name="sub_genre" class="sub-gen"> All</li>
-                        <li><input type="radio" value="7" name="sub_genre" class="sub-gen"> Individual</li>
-                        <li><input type="radio" value="8" name="sub_genre" class="sub-gen"> Investment Firm</li>
-                    </ul>
-                </div>
-            </div>
-            <!-- Investment Size -->
-            <div class="accordion_container">
-                <div class="accordion_head">
-                    <a href="#">Investment Size</a>
-                    <span class="plusminus minus"></span>
-                </div>
-                <div class="accordion_body" style="display: block;">
-                    <div class="leftfrmblk">
-                        <form>
-                            <div class="form-group">
-                                <input type="range" class="form-control-range" id="investment-min"
-                                       min="2500000" max="2000000000" value="50" step="5">
-                                <div class="bex-range-here">
-                                    <span class="fl">₹ 25 Lakhs</span>
-                                    <span class="fr">₹ 200 Crores</span>
-                                </div>
-                            </div>
-                            <div class="bex-input-range-output">
-                                <div class="bex-minmax-imput">
-                                    <input type="text" class="form-control form-control-md form-control-a" value="2500000">
-                                </div>
-                                <div class="bex-minmax-imput">
-                                    <input type="text" class="form-control form-control-md form-control-a" value="200000000">
-                                </div>
-                                <div class="bex-minmax-imput">
-                                    <input type="button" class="pribtn" value="GO">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-             <!-- Location -->
+        <!-- Investment Size -->
         <div class="card border-0">
-          <div class="card-header bg-white p-0" id="headingLocation">
-            <h6 class="mb-0">
+          <div class="card-header bg-white p-0 accordion_head">
+            <h6 class="mb-2 font-weight-bold text-secondary">
               <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
-                 data-toggle="collapse" href="#collapseLocation" aria-expanded="false" aria-controls="collapseLocation">
-                Location
+                 data-toggle="collapse" href="#collapseSize" aria-expanded="false">
+                INVESTMENT SIZE
+                <span class="arrow">&#9662;</span>
+              </a>
+            </h6>
+          </div>
+          <div id="collapseSize" class="collapse" data-parent="#filterAccordion">
+            <div class="card-body py-2 pl-3">
+              <div class="form-group">
+                <input type="range" class="form-control-range" id="investment-min"
+                       min="2500000" max="2000000000" value="2500000" step="500000">
+                <div class="bex-range-here">
+                  <span class="fl">₹ 25 Lakhs</span>
+                  <span class="fr">₹ 200 Crores</span>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="card border-0">
+          <div class="card-header bg-white p-0 accordion_head">
+            <h6 class="mb-2 font-weight-bold text-secondary">
+              <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                 data-toggle="collapse" href="#collapseLocation" aria-expanded="false">
+                LOCATION
                 <span class="arrow">&#9662;</span>
               </a>
             </h6>
           </div>
           <div id="collapseLocation" class="collapse" data-parent="#filterAccordion">
-            <div class="card-body py-2 pl-4">
+            <div class="card-body py-2 pl-3">
               @php
-                  $locationGroups = collect($locations ?? [])->groupBy(function ($item) {
-                      return trim((string) ($item->state ?? $item['state'] ?? ''));
-                  })->filter(function ($cities, $state) {
-                      return trim((string) $state) !== '';
-                  })->sortKeys();
+                  $locationGroups = collect($locations ?? [])->groupBy(fn($item) => $item->state ?? $item['state'] ?? '');
               @endphp
 
-              @if($locationGroups->isNotEmpty())
-                  <div id="locationAccordion">
-                      @foreach($locationGroups as $stateName => $cities)
-                          @php
-                              $stateKey = \Illuminate\Support\Str::slug($stateName . '-' . $loop->index);
-                              $cityList = collect($cities)->map(function ($item) {
-                                  $cityName = trim((string) ($item->city ?? $item['city'] ?? ''));
-                                  $cityId = (int) ($item->id ?? $item['id'] ?? 0);
+              @foreach($locationGroups as $stateName => $cities)
+                @php
+                    $stateKey = Str::slug($stateName . '-' . $loop->index);
+                    $cityList = collect($cities)->map(fn($item) => [
+                        'id' => (int) ($item->id ?? $item['id'] ?? 0),
+                        'name' => trim((string) ($item->city ?? $item['city'] ?? ''))
+                    ])->filter(fn($city) => $city['id'] > 0 && $city['name'] !== '');
+                @endphp
 
-                                  return [
-                                      'id' => $cityId,
-                                      'name' => $cityName,
-                                  ];
-                              })->filter(function ($city) {
-                                  return $city['id'] > 0 && trim((string) $city['name']) !== '';
-                              })->unique('id')->values();
-                          @endphp
+                <div class="card border-0 mb-2">
+                  <div class="card-header bg-white p-0">
+                    <h6 class="mb-0 d-flex justify-content-between align-items-center py-2 px-2">
+                      <div class="d-flex align-items-center">
+                        <input type="checkbox" class="mr-2 parent-location-filter"
+                               data-parent-group="location-{{ $stateKey }}"
+                               {{ $cityList->every(fn($city) => in_array($city['id'], $selectedLocations ?? [])) ? 'checked' : '' }}>
+                        {{ $stateName }}
+                      </div>
+                      <!-- Arrow is the only collapse trigger -->
+                      <a class="text-dark" data-toggle="collapse" href="#collapseState-{{ $stateKey }}" aria-expanded="false">
+                        <span class="arrow">&#9662;</span>
+                      </a>
+                    </h6>
+                  </div>
 
-                          <div class="card border-0 mb-2">
-                              <div class="card-header bg-white p-0" id="headingLocation-{{ $stateKey }}">
-                                  <h6 class="mb-0">
-                                      <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
-                                         data-toggle="collapse" href="#collapseLocation-{{ $stateKey }}" aria-expanded="false" aria-controls="collapseLocation-{{ $stateKey }}">
-                                          <div>
-                                              <input type="checkbox" class="mr-2 parent-location-filter" data-parent-group="location-{{ $stateKey }}" {{ collect($cityList)->every(function ($city) use ($selectedLocations) { return in_array((int) $city['id'], $selectedLocations, true); }) ? 'checked' : '' }}> {{ $stateName }}
-                                          </div>
-                                          <span class="arrow">&#9662;</span>
-                                      </a>
-                                  </h6>
-                              </div>
-
-                              <div id="collapseLocation-{{ $stateKey }}" class="collapse" data-parent="#locationAccordion">
-                                  <div class="card-body py-2 pl-4">
-                                      <ul class="list-unstyled mb-0">
-                                          @foreach($cityList as $city)
-                                              <li class="mb-1">
-                                                  <label class="mb-0">
-                                                      <input type="checkbox" name="location[]" value="{{ $city['id'] }}" class="mr-2 child-location-filter" data-group="location-{{ $stateKey }}" {{ in_array((int) $city['id'], $selectedLocations, true) ? 'checked' : '' }} onchange="this.form.submit()"> {{ $city['name'] }}
-                                                  </label>
-                                              </li>
-                                          @endforeach
-                                      </ul>
-                                  </div>
-                              </div>
-                          </div>
+                  <div id="collapseState-{{ $stateKey }}" class="collapse" data-parent="#collapseLocation">
+                    <div class="card-body py-2 pl-4">
+                      @foreach($cityList as $city)
+                        <div class="form-check mb-1">
+                          <input class="form-check-input child-location-filter" type="checkbox"
+                                 name="location[]" value="{{ $city['id'] }}"
+                                 data-group="location-{{ $stateKey }}"
+                                 {{ in_array($city['id'], $selectedLocations ?? []) ? 'checked' : '' }}
+                                 onchange="this.form.submit()">
+                          <label class="form-check-label">{{ $city['name'] }}</label>
+                        </div>
                       @endforeach
-                  </div><!-- /locationAccordion -->
-              @endif
+                    </div>
+                  </div>
+                </div>
+              @endforeach
             </div>
           </div>
         </div>
 
         <!-- Industries -->
-        <div class="card border-0">
-          <div class="card-header bg-white p-0" id="headingIndustry">
-            <h6 class="mb-2 font-weight-bold text-secondary">
-              <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
-                 data-toggle="collapse" href="#collapseIndustry" aria-expanded="false" aria-controls="collapseIndustry">
-                Industry
-                <span class="arrow">&#9662;</span>
-              </a>
-            </h6>
-          </div>
-          <div id="collapseIndustry" class="collapse" data-parent="#filterAccordion">
-            <div id="industryAccordion" class="card-body py-2 pl-4">
-              @php
-                  $industryGroups = collect($industrySeller ?? [])
-                      ->filter(function ($item) {
-                          return trim((string) ($item['industry'] ?? '')) !== '';
-                      })
-                      ->groupBy('industry')
-                      ->sortKeys();
-              @endphp
-
-              @if($industryGroups->isNotEmpty())
-                  @foreach($industryGroups as $industryName => $industryItems)
-                      @php
-                          $industryKey = \Illuminate\Support\Str::slug($industryName . '-' . $loop->index);
-                          $subIndustries = collect($industryItems)->map(function ($item) {
-                              $subIndustryName = trim((string) ($item['subindustry'] ?? ''));
-                              $subIndustryId = (int) ($item['subIndustryid'] ?? 0);
-
-                              return [
-                                  'id' => $subIndustryId,
-                                  'name' => $subIndustryName,
-                              ];
-                          })->filter(function ($item) {
-                              return $item['id'] > 0 && trim((string) $item['name']) !== '';
-                          })->unique('id')->values();
-                      @endphp
-
-                      <div class="card border-0 mb-2">
-                          <div class="card-header bg-white p-0" id="headingIndustry-{{ $industryKey }}">
-                              <h6 class="mb-0">
-                                  <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
-                                     data-toggle="collapse" href="#collapseIndustry-{{ $industryKey }}" aria-expanded="false" aria-controls="collapseIndustry-{{ $industryKey }}">
-                                      <div>
-                                          <input type="checkbox" class="mr-2 parent-industry-filter" data-parent-group="industry-{{ $industryKey }}" {{ collect($subIndustries)->every(function ($industry) use ($selectedIndustries) { return in_array((int) $industry['id'], $selectedIndustries, true); }) ? 'checked' : '' }}> {{ $industryName }}
-                                      </div>
-                                      <span class="arrow">&#9662;</span>
-                                  </a>
-                              </h6>
-                          </div>
-
-                          <div id="collapseIndustry-{{ $industryKey }}" class="collapse" data-parent="#industryAccordion">
-                              <div class="card-body py-2 pl-4">
-                                  <ul class="list-unstyled mb-0">
-                                      @foreach($subIndustries as $subIndustry)
-                                          <li class="mb-1">
-                                              <label class="mb-0">
-                                                  <input type="checkbox" name="industry[]" value="{{ $subIndustry['id'] }}" class="mr-2 child-industry-filter" data-group="industry-{{ $industryKey }}" {{ in_array((int) $subIndustry['id'], $selectedIndustries, true) ? 'checked' : '' }} onchange="this.form.submit()"> {{ $subIndustry['name'] }}
-                                              </label>
-                                          </li>
-                                      @endforeach
-                                  </ul>
-                              </div>
-                          </div>
-                      </div>
-                  @endforeach
-              @endif
+            <div class="card border-0">
+            <div class="card-header bg-white p-0 accordion_head">
+                <h6 class="mb-2 font-weight-bold text-secondary">
+                <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
+                    data-toggle="collapse" href="#collapseIndustry" aria-expanded="false">
+                    INDUSTRIES
+                    <span class="arrow">&#9662;</span>
+                </a>
+                </h6>
             </div>
-          </div>
-        </div>
-            
-        </div>
-    </div>
+            <div id="collapseIndustry" class="collapse" data-parent="#filterAccordion">
+                <div id="industryAccordion" class="card-body py-2 pl-4">
+                @php
+                    $industryGroups = collect($industrySeller ?? [])
+                        ->filter(fn($item) => trim((string) ($item['industry'] ?? '')) !== '')
+                        ->groupBy('industry')
+                        ->sortKeys();
+                @endphp
+
+                @foreach($industryGroups as $industryName => $industryItems)
+                    @php
+                        $industryKey = Str::slug($industryName . '-' . $loop->index);
+                        $subIndustries = collect($industryItems)->map(function ($item) {
+                            return [
+                                'id' => (int) ($item['subIndustryid'] ?? 0),
+                                'name' => trim((string) ($item['subindustry'] ?? ''))
+                            ];
+                        })->filter(fn($item) => $item['id'] > 0 && $item['name'] !== '')
+                        ->unique('id')->values();
+                    @endphp
+
+                    <div class="card border-0 mb-2">
+                    <div class="card-header bg-white p-0">
+                        <h6 class="mb-0 d-flex justify-content-between align-items-center py-2 px-2">
+                        <div class="d-flex align-items-center">
+                            <input type="checkbox" class="mr-2 parent-industry-filter"
+                                data-parent-group="industry-{{ $industryKey }}"
+                                {{ $subIndustries->every(fn($sub) => in_array($sub['id'], $selectedIndustries ?? [])) ? 'checked' : '' }}>
+                            {{ $industryName }}
+                        </div>
+                        <!-- Arrow is the only collapse trigger -->
+                        <a class="text-dark" data-toggle="collapse" href="#collapseIndustry-{{ $industryKey }}" aria-expanded="false">
+                            <span class="arrow">&#9662;</span>
+                        </a>
+                        </h6>
+                    </div>
+
+                    <div id="collapseIndustry-{{ $industryKey }}" class="collapse" data-parent="#industryAccordion">
+                        <div class="card-body py-2 pl-4">
+                        @foreach($subIndustries as $subIndustry)
+                            <div class="form-check mb-1">
+                            <input type="checkbox" name="industry[]" value="{{ $subIndustry['id'] }}"
+                                    class="form-check-input child-industry-filter"
+                                    data-group="industry-{{ $industryKey }}"
+                                    {{ in_array($subIndustry['id'], $selectedIndustries ?? []) ? 'checked' : '' }}
+                                    onchange="this.form.submit()">
+                            <label class="form-check-label">{{ $subIndustry['name'] }}</label>
+                            </div>
+                        @endforeach
+                        </div>
+                    </div>
+                    </div>
+                @endforeach
+                </div>
+            </div>
+            </div>
+      </div>
+    </form>
+  </div>
 </div>

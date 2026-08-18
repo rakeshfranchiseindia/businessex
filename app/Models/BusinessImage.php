@@ -4,6 +4,9 @@ namespace App\Models;
 
 class BusinessImage extends \Illuminate\Database\Eloquent\Model
 {
+    public const TYPE_IMAGE = 'image';
+    public const TYPE_DOCUMENT = 'document';
+
     protected $table = 'business_images';
 
     protected $primaryKey = 'business_image_id';

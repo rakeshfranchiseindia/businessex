@@ -3,6 +3,24 @@
 @section('content')
 <main id="main" class="minheigh">
     <div class="container bex-main">
+        @if(session('success'))
+            <div class="alert alert-success mt-3">{{ session('success') }}</div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger mt-3">{{ session('error') }}</div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger mt-3">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <!-- Breadcrumb -->
         <div class="row">
             <div class="col-12">
@@ -27,7 +45,7 @@
         <!-- Form Section -->
         <div class="row">
             <div class="col-12 col-sm-9 col-md-9 frmmodfy">
-                <form class="frmall" method="POST" action="{{-- route('investor.store') --}}">
+                <form class="frmall" method="POST" action="{{route('register.create-investor') }}" enctype="multipart/form-data">
                     @csrf
 
                     <div class="frmback">
@@ -38,7 +56,10 @@
                             <label class="col-md-4 frmtxt mandatory">Your Name</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="name" class="form-control modysel" placeholder="Enter name" required>
+                                <input type="text" name="name" class="form-control modysel @error('name') is-invalid @enderror" placeholder="Enter name" value="{{ old('name') }}" required>
+                                @error('name')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
@@ -46,7 +67,10 @@
                             <label class="col-md-4 frmtxt mandatory">Email</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="email" name="email" class="form-control modysel" placeholder="Enter Email" required>
+                                <input type="email" name="email" class="form-control modysel @error('email') is-invalid @enderror" placeholder="Enter Email" value="{{ old('email') }}" required>
+                                @error('email')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
@@ -54,7 +78,10 @@
                             <label class="col-md-4 frmtxt mandatory">Mobile No.</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="mobile" class="form-control modysel" placeholder="Enter Mobile" required>
+                                <input type="text" name="mobile" class="form-control modysel @error('mobile') is-invalid @enderror" placeholder="Enter Mobile" value="{{ old('mobile') }}" required>
+                                @error('mobile')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
@@ -62,7 +89,10 @@
                             <label class="col-md-4 frmtxt mandatory">Location</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="location" class="form-control modysel" placeholder="Enter Location" required>
+                                <input type="text" name="location" class="form-control modysel @error('location') is-invalid @enderror" placeholder="Enter Location" value="{{ old('location') }}" required>
+                                @error('location')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
 
@@ -70,41 +100,207 @@
                         <div class="frmcheading marftop">Advertisement Details</div>
 
                         <div class="row marsettop">
-                            <label class="col-md-4 frmtxt mandatory">Advertisement Headline</label>
+                            <label class="col-md-4 frmtxt">Advertisement Headline</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="headline" class="form-control modysel" placeholder="Enter Advertisement Headline" required>
+                                <input type="text" name="headline" class="form-control modysel @error('headline') is-invalid @enderror" placeholder="Enter Advertisement Headline" value="{{ old('headline') }}">
+                                @error('headline')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
-                                <span class="tooltiptextfrm">Select an industry or a sector in which the company operates. E.g. Logistics Services.</span>
+                                <span class="tooltiptextfrm">Brief headline describing your investment focus</span>
                             </div>
                         </div>
 
                         <div class="row marsettop">
-                            <label class="col-md-4 frmtxt mandatory">Introduction</label>
+                            <label class="col-md-4 frmtxt">Introduction</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <textarea name="introduction" class="form-control modysel height70" placeholder="Introduction"></textarea>
+                                <textarea name="introduction" class="form-control modysel height70 @error('introduction') is-invalid @enderror" placeholder="Tell about yourself...">{{ old('introduction') }}</textarea>
+                                @error('introduction')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
-                                <span class="tooltiptextfrm">Select an industry or a sector in which the company operates. E.g. Logistics Services.</span>
+                                <span class="tooltiptextfrm">Brief information about yourself and investment experience</span>
                             </div>
                         </div>
 
                         <!-- Profile Details -->
-                        <div class="frmcheading">Profile Details</div>
+                        <div class="frmcheading marftop">Profile Details</div>
 
                         <div class="row marsettop">
                             <label class="col-md-4 frmtxt mandatory">Investor Type</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <select name="inv_type" class="form-control myselectclasscat" required>
+                                <select name="inv_type" class="form-control myselectclasscat @error('inv_type') is-invalid @enderror" id="invType" required>
                                     <option value="" disabled selected>Select Investor Type</option>
-                                    <option value="Individual Investor">Individual Investor</option>
-                                    <option value="Investment Firm">Investment Firm</option>
+                                    <option value="Individual Investor" {{ old('inv_type') == 'Individual Investor' ? 'selected' : '' }}>Individual Investor</option>
+                                    <option value="Investment Firm" {{ old('inv_type') == 'Investment Firm' ? 'selected' : '' }}>Investment Firm</option>
                                 </select>
+                                @error('inv_type')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row marsettop">
+                            <label class="col-md-4 frmtxt">Your LinkedIn Profile</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <input type="url" name="linkedin_profile" class="form-control modysel @error('linkedin_profile') is-invalid @enderror" placeholder="https://www.linkedin.com/in/your-profile" value="{{ old('linkedin_profile') }}">
+                                @error('linkedin_profile')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row marsettop">
+                            <label class="col-md-4 frmtxt">Location Preference</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <input type="text" name="location_preference" class="form-control modysel @error('location_preference') is-invalid @enderror" placeholder="Enter location preference" value="{{ old('location_preference') }}">
+                                @error('location_preference')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row marsettop">
+                            <label class="col-md-4 frmtxt">Sector Preference</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <input type="text" name="sector_preference" class="form-control modysel @error('sector_preference') is-invalid @enderror" placeholder="Enter sector preference" value="{{ old('sector_preference') }}">
+                                @error('sector_preference')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row marsettop">
+                            <label class="col-md-4 frmtxt">Investment Preference</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <div class="d-flex flex-column gap-2">
+                                    <label class="d-flex align-items-center gap-2 mb-0">
+                                        <input type="checkbox" name="invest_pref" value="1" id="invest_pref">
+                                        <span>Investment</span>
+                                    </label>
+                                    <label class="d-flex align-items-center gap-2 mb-0">
+                                        <input type="checkbox" name="full_acquisition" value="1" id="full_acquisition">
+                                        <span>Full Acquisition</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row marsettop investment-size-group" style="display: none;">
+                            <label class="col-md-4 frmtxt">Investment Size</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="number" name="invest_size_min" class="form-control modysel @error('invest_size_min') is-invalid @enderror" placeholder="Min Investment" value="{{ old('invest_size_min') }}">
+                                        @error('invest_size_min')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="number" name="invest_size_max" class="form-control modysel @error('invest_size_max') is-invalid @enderror" placeholder="Max Investment" value="{{ old('invest_size_max') }}">
+                                        @error('invest_size_max')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row marsettop purchase-capacity-group" style="display: none;">
+                            <label class="col-md-4 frmtxt">Purchasing Capacity</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="number" name="purchase_capacity_min" class="form-control modysel @error('purchase_capacity_min') is-invalid @enderror" placeholder="Min Capacity" value="{{ old('purchase_capacity_min') }}">
+                                        @error('purchase_capacity_min')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="number" name="purchase_capacity_max" class="form-control modysel @error('purchase_capacity_max') is-invalid @enderror" placeholder="Max Capacity" value="{{ old('purchase_capacity_max') }}">
+                                        @error('purchase_capacity_max')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row marsettop">
+                            <label class="col-md-4 frmtxt">About Yourself</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <textarea name="inv_abt_urself" class="form-control modysel height70 @error('inv_abt_urself') is-invalid @enderror" placeholder="Tell us about yourself...">{{ old('inv_abt_urself') }}</textarea>
+                                @error('inv_abt_urself')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row marsettop">
+                            <label class="col-md-4 frmtxt">Company Name</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <input type="text" name="company_name" class="form-control modysel @error('company_name') is-invalid @enderror" placeholder="Enter Company Name" value="{{ old('company_name') }}">
+                                @error('company_name')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="row marsettop">
+                            <label class="col-md-4 frmtxt">Designation</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <input type="text" name="company_designation" class="form-control modysel @error('company_designation') is-invalid @enderror" placeholder="Enter Designation" value="{{ old('company_designation') }}">
+                                @error('company_designation')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Profile Picture (for Individual Investor) -->
+                        <div class="row marsettop" id="profilePicDiv" style="display: none;">
+                            <label class="col-md-4 frmtxt">Profile Picture</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <input type="file" name="inv_profile_pic_path" class="form-control modysel @error('inv_profile_pic_path') is-invalid @enderror" accept="image/*">
+                                @error('inv_profile_pic_path')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="tooltipfrm">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptextfrm">Upload a professional profile picture (JPG, PNG)</span>
+                            </div>
+                        </div>
+
+                        <!-- Company Logo (for Investment Firm) -->
+                        <div class="row marsettop" id="companyLogoDiv" style="display: none;">
+                            <label class="col-md-4 frmtxt">Company Logo</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-md-6">
+                                <input type="file" name="company_logo_path" class="form-control modysel @error('company_logo_path') is-invalid @enderror" accept="image/*">
+                                @error('company_logo_path')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="tooltipfrm">
+                                <i class="fas fa-info-circle"></i>
+                                <span class="tooltiptextfrm">Upload your company logo (JPG, PNG)</span>
                             </div>
                         </div>
 
@@ -130,4 +326,71 @@
   @include('includes.groupcompany')
   @include('includes.newsletter')
   @include('includes.categorylinkfooter')
+
+<script>
+// Toggle visibility of profile picture and company logo based on investor type
+document.addEventListener('DOMContentLoaded', function() {
+    const invTypeSelect = document.getElementById('invType');
+    const profilePicDiv = document.getElementById('profilePicDiv');
+    const companyLogoDiv = document.getElementById('companyLogoDiv');
+    const investmentPreference = document.getElementById('invest_pref');
+    const fullAcquisitionPreference = document.getElementById('full_acquisition');
+    const investmentSizeGroup = document.querySelector('.investment-size-group');
+    const purchaseCapacityGroup = document.querySelector('.purchase-capacity-group');
+
+    function updateFileFields() {
+        const value = invTypeSelect.value;
+        if (value === 'Individual Investor') {
+            profilePicDiv.style.display = 'flex';
+            companyLogoDiv.style.display = 'none';
+        } else if (value === 'Investment Firm') {
+            profilePicDiv.style.display = 'none';
+            companyLogoDiv.style.display = 'flex';
+        } else {
+            profilePicDiv.style.display = 'none';
+            companyLogoDiv.style.display = 'none';
+        }
+    }
+
+    function updateInvestmentPreferenceFields() {
+        const isInvestmentSelected = investmentPreference && investmentPreference.checked;
+        const isFullAcquisitionSelected = fullAcquisitionPreference && fullAcquisitionPreference.checked;
+
+        if (investmentSizeGroup) {
+            investmentSizeGroup.style.display = isInvestmentSelected ? 'flex' : 'none';
+        }
+
+        if (purchaseCapacityGroup) {
+            purchaseCapacityGroup.style.display = isFullAcquisitionSelected ? 'flex' : 'none';
+        }
+    }
+
+    if (invTypeSelect) {
+        invTypeSelect.addEventListener('change', updateFileFields);
+        if (invTypeSelect.value) {
+            updateFileFields();
+        }
+    }
+
+    if (investmentPreference) {
+        investmentPreference.addEventListener('change', function() {
+            if (this.checked) {
+                fullAcquisitionPreference.checked = false;
+            }
+            updateInvestmentPreferenceFields();
+        });
+    }
+
+    if (fullAcquisitionPreference) {
+        fullAcquisitionPreference.addEventListener('change', function() {
+            if (this.checked) {
+                investmentPreference.checked = false;
+            }
+            updateInvestmentPreferenceFields();
+        });
+    }
+
+    updateInvestmentPreferenceFields();
+});
+</script>
 @endsection

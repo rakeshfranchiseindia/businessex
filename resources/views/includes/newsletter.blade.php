@@ -8,18 +8,20 @@
         </div>
         
         <div class="col-lg-6">
-          <!-- Success Message -->
-          @if(session('success'))
-              <div class="alert alert-success alert-dismissible fade show" role="alert">
-                  {{ session('success') }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-          @endif
-          @if(session('error'))
-              <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                  {{ session('error') }}
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
+          @if(!request()->routeIs(['register.create-investor-profile', 'register.create-lender-profile', 'register.create-startup-profile', 'register.create-business-profile', 'register.create-mentor-profile']))
+              <!-- Success Message -->
+              @if(session('success'))
+                  <div class="alert alert-success alert-dismissible fade show" role="alert">
+                      {{ session('success') }}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              @endif
+              @if(session('error'))
+                  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                      {{ session('error') }}
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+              @endif
           @endif
           <form id="newsletterForm" name="newsletterForm" method="POST" action="{{ route('newsLetterSubscribe') }}" class="newsletter-form row">
             @csrf

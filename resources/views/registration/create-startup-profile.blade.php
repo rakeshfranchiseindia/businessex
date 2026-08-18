@@ -3,6 +3,24 @@
 @section('content')
 <main id="main" class="minheigh">
     <div class="container bex-main">
+        @if(session('success'))
+            <div class="alert alert-success mt-3">{{ session('success') }}</div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger mt-3">{{ session('error') }}</div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger mt-3">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         {{-- ==================== BREADCRUMB ==================== --}}
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12">
@@ -28,7 +46,7 @@
             <div class="col-12 col-sm-9 col-md-9 frmmodfy">
                 <form 
                     class="frmall" 
-                    action="{{-- route('startups.store') --}}" 
+                    action="{{route('register.create-startup') }}" 
                     method="POST" 
                     enctype="multipart/form-data"
                 >
@@ -143,10 +161,9 @@
                             <div class="col-12 col-sm-6 col-md-6">
                                 <select name="business_type" id="business_type" class="form-control modysel myselectclasscat {{ $errors->has('business_type') ? 'is-invalid' : '' }}">
                                     <option disabled hidden selected value="">Select Business Type</option>
-                                    <option value="1" {{ old('business_type') == '1' ? 'selected' : '' }}>B2B</option>
-                                    <option value="2" {{ old('business_type') == '2' ? 'selected' : '' }}>B2C</option>
-                                    <option value="3" {{ old('business_type') == '3' ? 'selected' : '' }}>C2C</option>
-                                    <option value="4" {{ old('business_type') == '4' ? 'selected' : '' }}>C2B</option>
+                                    @foreach(config('constants.businessType') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('business_type') == (string) $key ? 'selected' : '' }}>{{ $value }}</option>
+                                    @endforeach
                                 </select>
                                 @error('business_type')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -161,7 +178,9 @@
                             <div class="col-12 col-sm-6 col-md-6">
                                 <select name="nature_of_entity" id="nature_of_entity" class="form-control modysel myselectclasscat {{ $errors->has('nature_of_entity') ? 'is-invalid' : '' }}">
                                     <option value="">Select Nature Of Entity</option>
-                                    {{-- Add options dynamically from controller or config --}}
+                                    @foreach(config('constants.businessEntity') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('nature_of_entity') == (string) $key ? 'selected' : '' }}>{{ $value }}</option>
+                                    @endforeach
                                 </select>
                                 @error('nature_of_entity')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -176,7 +195,11 @@
                             <div class="col-12 col-sm-6 col-md-6">
                                 <select name="industry_sector" id="industry_sector" class="form-control modysel myselectclasscat {{ $errors->has('industry_sector') ? 'is-invalid' : '' }}">
                                     <option value="">Select Industry Sector</option>
-                                    {{-- Add options dynamically --}}
+                                    @foreach($industrySeller ?? [] as $sector)
+                                        <option value="{{ $sector['subIndustryid'] ?? $sector['industry_sector'] ?? $sector['subindustry'] }}" {{ old('industry_sector') == (string) ($sector['subIndustryid'] ?? $sector['industry_sector'] ?? $sector['subindustry']) ? 'selected' : '' }}>
+                                            {{ $sector['subindustry'] ?? $sector['industry'] ?? 'Industry' }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('industry_sector')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -212,12 +235,9 @@
                             <div class="col-12 col-sm-6 col-md-6">
                                 <select name="number_of_employees" id="number_of_employees" class="form-control modysel myselectclasscat {{ $errors->has('number_of_employees') ? 'is-invalid' : '' }}">
                                     <option disabled hidden selected value="">Select Number Of Employees</option>
-                                    <option value="1" {{ old('number_of_employees') == '1' ? 'selected' : '' }}>less than 10</option>
-                                    <option value="2" {{ old('number_of_employees') == '2' ? 'selected' : '' }}>10-50</option>
-                                    <option value="3" {{ old('number_of_employees') == '3' ? 'selected' : '' }}>50-100</option>
-                                    <option value="4" {{ old('number_of_employees') == '4' ? 'selected' : '' }}>100-500</option>
-                                    <option value="5" {{ old('number_of_employees') == '5' ? 'selected' : '' }}>500-1000</option>
-                                    <option value="6" {{ old('number_of_employees') == '6' ? 'selected' : '' }}>more than 1000</option>
+                                    @foreach(config('constants.employeeCount') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('number_of_employees') == (string) $key ? 'selected' : '' }}>{{ $value }}</option>
+                                    @endforeach
                                 </select>
                                 @error('number_of_employees')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
@@ -257,6 +277,23 @@
                                 <textarea name="facilities" id="facilities" class="form-control modysel height70">{{ old('facilities', 'Facilities') }}</textarea>
                             </div>
                         </div>
+                        {{-- Company Summary --}}
+                        <div class="row marsettop">
+                            <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="company_summary">Company Summary</label> 
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-12 col-sm-6 col-md-6">
+                                <textarea 
+                                    name="company_summary" 
+                                    id="company_summary" 
+                                    class="form-control modysel height70 {{ $errors->has('company_summary') ? 'is-invalid' : '' }}" 
+                                    placeholder="Enter Company Summary"
+                                >{{ old('company_summary') }}</textarea>
+                                @error('company_summary')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
 
                         {{-- ===== FINANCIAL DETAILS ===== --}}
                         <div class="frmcheading marftop">Financial details</div>
@@ -318,10 +355,9 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="ebitda_margin">EBITDA Margin</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <select name="ebitda_margin" id="ebitda_margin" class="form-control modysel myselectclasscat">
-                                    <option value="">Select EBITDA Margin</option>
-                                    {{-- Add options dynamically --}}
-                                </select>
+                                
+                                <input type="text" name="ebitda_margin" id="ebitda_margin" class="form-control modysel" placeholder="Enter EBITDA Margin" value="{{ old('ebitda_margin') }}">
+                                
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -439,11 +475,429 @@
                             <div class="col-12 col-sm-6 col-md-6">
                                 <select name="director_designation" id="director_designation" class="form-control modysel myselectclasscat">
                                     <option value="">Select Designation</option>
-                                    {{-- Add options dynamically --}}
+                                    @foreach(config('constants.designationinf') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('director_designation') == (string) $key ? 'selected' : '' }}>{{ $value }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
+
+                         {{-- =============================== --}}
+                        {{-- MANAGEMENT TEAM INFORMATION SECTION --}}
+                        {{-- =============================== --}}
+                        <div class="frmcheading marftop">Management Team Information</div>
+
+                        <div class="management-team-wrap">
+                            <div class="management-team-row management-team-header">
+                                <div class="management-team-col">
+                                    <label>Name</label>
+                                </div>
+                                <div class="management-team-col">
+                                    <label>Designation</label>
+                                </div>
+                                <div class="management-team-col">
+                                    <label>Email ID</label>
+                                </div>
+                                <div class="management-team-action"></div>
+                            </div>
+
+                            {{-- First Team Member Row --}}
+                            <div class="management-team-row">
+                                <div class="management-team-col">
+                                    <input type="text" name="team_member_name[]" class="form-control modysel team-name-input" placeholder="Enter Name" value="{{ old('team_member_name.0') }}">
+                                </div>
+                                <div class="management-team-col">
+                                    <input type="text" name="team_member_designation[]" class="form-control modysel team-designation-input" placeholder="Enter Designation" value="{{ old('team_member_designation.0') }}">
+                                </div>
+                                <div class="management-team-col">
+                                    <input type="email" name="team_member_email[]" class="form-control modysel team-email-input" placeholder="Enter Email ID" value="{{ old('team_member_email.0') }}">
+                                </div>
+                                <div class="management-team-action">
+                                    <button type="button" class="team-action-btn add-team-member" aria-label="Add member">+</button>
+                                </div>
+                            </div>
+
+                            {{-- Container for additional team members --}}
+                            <div id="teamMembersContainer"></div>
+                        </div>
+
+                        {{-- ===== BUSINESS PLAN ===== --}}
+                        <div class="frmcheading marftop">Business Plan</div>
+
+                        {{-- Company Stage --}}
+                        <div class="row marsettop">
+                            <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="company_stage">Select your Company Stage</label>
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-12 col-sm-6 col-md-6">
+                                <select name="company_stage" id="company_stage" class="form-control modysel myselectclasscat {{ $errors->has('company_stage') ? 'is-invalid' : '' }}">
+                                    <option value="">Select your Company stage</option>
+                                    @foreach(config('constants.companyStage') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('company_stage') == (string) $key ? 'selected' : '' }}>{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                                @error('company_stage')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+
+{{-- Customer Problem & Solution --}}
+<div class="row marsettop">
+    <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="customer_problem_solution">Customer Problem & Solution</label>
+    <div class="d-none d-md-block col-md-1">:</div>
+    <div class="col-12 col-sm-6 col-md-6">
+        <textarea name="customer_problem_solution" id="customer_problem_solution" class="form-control modysel height70 {{ $errors->has('customer_problem_solution') ? 'is-invalid' : '' }}" placeholder="Describe the problem and your solution">{{ old('customer_problem_solution') }}</textarea>
+        @error('customer_problem_solution')
+            <span class="invalid-feedback" role="alert">{{ $message }}</span>
+        @enderror
+    </div>
+</div>
+
+{{-- Start-up Product / Service --}}
+<div class="row marsettop">
+    <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="startup_product">Start-up's Product / Service</label>
+    <div class="d-none d-md-block col-md-1">:</div>
+    <div class="col-12 col-sm-6 col-md-6">
+        <textarea name="startup_product" id="startup_product" class="form-control modysel height70 {{ $errors->has('startup_product') ? 'is-invalid' : '' }}" placeholder="Describe your product or service">{{ old('startup_product') }}</textarea>
+        @error('startup_product')
+            <span class="invalid-feedback" role="alert">{{ $message }}</span>
+        @enderror
+    </div>
+</div>
+
+{{-- Target Customer Segment --}}
+<div class="row marsettop">
+    <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="target_customer_segment">Target Customer Segment</label>
+    <div class="d-none d-md-block col-md-1">:</div>
+    <div class="col-12 col-sm-6 col-md-6">
+        <textarea name="target_customer_segment" id="target_customer_segment" class="form-control modysel height70 {{ $errors->has('target_customer_segment') ? 'is-invalid' : '' }}" placeholder="Describe your target customers">{{ old('target_customer_segment') }}</textarea>
+        @error('target_customer_segment')
+            <span class="invalid-feedback" role="alert">{{ $message }}</span>
+        @enderror
+    </div>
+</div>
+
+{{-- Target Market --}}
+<div class="row marsettop">
+    <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="target_market">Target Market</label>
+    <div class="d-none d-md-block col-md-1">:</div>
+    <div class="col-12 col-sm-6 col-md-6">
+        <textarea name="target_market" id="target_market" class="form-control modysel height70 {{ $errors->has('target_market') ? 'is-invalid' : '' }}" placeholder="Describe your target market">{{ old('target_market') }}</textarea>
+        @error('target_market')
+            <span class="invalid-feedback" role="alert">{{ $message }}</span>
+        @enderror
+    </div>
+</div>
+
+{{-- Competitors --}}
+<div class="row marsettop">
+    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="competitors">Competitors</label>
+    <div class="d-none d-md-block col-md-1">:</div>
+    <div class="col-12 col-sm-6 col-md-6">
+        <textarea name="competitors" id="competitors" class="form-control modysel height70" placeholder="Mention your competitors">{{ old('competitors') }}</textarea>
+    </div>
+</div>
+
+{{-- Competitive Advantage --}}
+<div class="row marsettop">
+    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="competitive_advantage">Competitive Advantage</label>
+    <div class="d-none d-md-block col-md-1">:</div>
+    <div class="col-12 col-sm-6 col-md-6">
+        <textarea name="competitive_advantage" id="competitive_advantage" class="form-control modysel height70" placeholder="Mention your competitive advantage">{{ old('competitive_advantage') }}</textarea>
+    </div>
+</div>
+
+{{-- Sales & Marketing Strategy --}}
+<div class="row marsettop">
+    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="sales_marketing_strategy">Sales & Marketing Strategy</label>
+    <div class="d-none d-md-block col-md-1">:</div>
+    <div class="col-12 col-sm-6 col-md-6">
+        <textarea name="sales_marketing_strategy" id="sales_marketing_strategy" class="form-control modysel height70" placeholder="Describe your marketing strategy">{{ old('sales_marketing_strategy') }}</textarea>
+    </div>
+</div>
+
+                {{-- Fund Raising Information --}}
+                <div class="row marsettop align-items-center">
+                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="funding_round">Fund raising information</label>
+                    <div class="d-none d-md-block col-md-1">:</div>
+                    <div class="col-12 col-sm-6 col-md-6 d-flex align-items-center gap-3">
+                        <select name="funding_round" id="funding_round" class="form-control modysel myselectclasscat" style="flex:1; min-width: 180px;">
+                            <option value="">Round of funding</option>
+                            <option value="seed">Seed</option>
+                            <option value="series_a">Series A</option>
+                            <option value="series_b">Series B</option>
+                            <option value="series_c">Series C</option>
+                            <option value="pre_seed">Pre-Seed</option>
+                            <option value="bootstrapped">Bootstrapped</option>
+                        </select>
+                        <input type="text" name="investment_amount" id="investment_amount" class="form-control modysel" style="flex:1; min-width: 180px;" placeholder="Investment amount" value="{{ old('investment_amount') }}">
+                        <button type="button" class="btn btn-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; padding: 0; border: 0; font-size: 18px; line-height: 1;" aria-label="Information">
+                            <span>i</span>
+                        </button>
                     </div>
+                </div>
+
+                {{-- =============================== --}}
+                        {{-- BUSINESS REQUIREMENTS SECTION --}}
+                        {{-- =============================== --}}
+                        <div class="frmcheading marftop">Business Requirements</div>
+
+                        <div class="business-requirements-wrap">
+                            {{-- I am looking for Checkboxes --}}
+                            <div class="row marsettop">
+                                <label class="col-12 col-sm-6 col-md-4 frmtxt" for="looking_for">
+                                    I am looking for
+                                </label>
+                                <div class="d-none d-md-block col-md-1">:</div>
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="looking-for-options">
+                                        <label class="check-item"><input type="checkbox" name="seeking_investors" value="1" id="seeking_investors" class="requirement-checkbox" data-target="investors-section"> <span>Investors for My business</span></label>
+                                        <label class="check-item"><input type="checkbox" name="seeking_loan" value="1" id="seeking_loan" class="requirement-checkbox" data-target="loan-section"> <span>Loan for my business</span></label>
+                                        <label class="check-item"><input type="checkbox" name="seeking_incubators" value="1" id="seeking_incubators" class="requirement-checkbox" data-target="incubators-section"> <span>Incubators for My business</span></label>
+                                        <label class="check-item"><input type="checkbox" name="seeking_buyers" value="1" id="seeking_buyers" class="requirement-checkbox" data-target="buyers-section"> <span>Buyers for My business</span></label>
+                                        <label class="check-item"><input type="checkbox" name="seeking_mentors" value="1" id="seeking_mentors" class="requirement-checkbox" data-target="mentors-section"> <span>Mentorship for My business</span></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR INVESTORS SECTION --}}
+                            <div id="investors-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Partial Business Sale (investors)</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="investor_investment_amount">Amount of investment you are looking for</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="investor_investment_amount" id="investor_investment_amount" class="form-control modysel" placeholder="Enter Amount" value="{{ old('investor_investment_amount') }}">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="investor_business_stake">Business stake of the investment</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <div style="display: flex; gap: 10px;">
+                                            <input type="text" name="investor_business_stake" id="investor_business_stake" class="form-control modysel" placeholder="Enter Stake" style="flex: 1;" value="{{ old('investor_business_stake') }}">
+                                            <span style="flex: 0 0 auto; display: flex; align-items: center; padding: 0 10px;">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="investor_investment_reason">Reason for investment</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="investor_investment_reason" id="investor_investment_reason" class="form-control modysel height70" placeholder="Enter Reason for investment">{{ old('investor_investment_reason') }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR LOAN SECTION --}}
+                            <div id="loan-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Business Loan</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="loan_amount">Loan amount you are looking for</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="loan_amount" id="loan_amount" class="form-control modysel" placeholder="Enter Loan Amount" value="{{ old('loan_amount') }}">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="loan_repayment_period">Repayment period</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="loan_repayment_period" id="loan_repayment_period" class="form-control modysel" placeholder="Enter Repayment Period" value="{{ old('loan_repayment_period') }}">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="loan_interest_rate">Expected interest rate</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="loan_interest_rate" id="loan_interest_rate" class="form-control modysel" placeholder="Enter Interest Rate" value="{{ old('loan_interest_rate') }}">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="loan_existing_details">Any existing loans</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="loan_existing_details" id="loan_existing_details" class="form-control modysel height70" placeholder="Describe existing loans if any">{{ old('loan_existing_details') }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="loan_reason">Reason for loan</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="loan_reason" id="loan_reason" class="form-control modysel height70" placeholder="Enter Reason for loan">{{ old('loan_reason') }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="loan_collateral_details">Collateral details</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="loan_collateral_details" id="loan_collateral_details" class="form-control modysel height70" placeholder="Describe collateral details">{{ old('loan_collateral_details') }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR BUYERS SECTION --}}
+                            <div id="buyers-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Business Sale</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="buyer_selling_price">Selling price</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="buyer_selling_price" id="buyer_selling_price" class="form-control modysel" placeholder="Enter Selling Price" value="{{ old('buyer_selling_price') }}">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="buyer_selling_reason">Reason for selling</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="buyer_selling_reason" id="buyer_selling_reason" class="form-control modysel height70" placeholder="Enter Reason for selling">{{ old('buyer_selling_reason') }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR INCUBATORS SECTION --}}
+                            <div id="incubators-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Incubation Support</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="incubator_requirements">Incubation requirements</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="incubator_requirements" id="incubator_requirements" class="form-control modysel height70" placeholder="Describe your incubation requirements">{{ old('incubator_requirements') }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="incubator_expected_investment">Expected investment from incubator</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="incubator_expected_investment" id="incubator_expected_investment" class="form-control modysel" placeholder="Enter Expected Investment" value="{{ old('incubator_expected_investment') }}">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="incubator_time_period">Time period for incubation</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="incubator_time_period" id="incubator_time_period" class="form-control modysel" placeholder="Enter Time Period" value="{{ old('incubator_time_period') }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR MENTORS SECTION --}}
+                            <div id="mentors-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Mentorship</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt" for="mentor_requirements">Mentorship requirements</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="mentor_requirements" id="mentor_requirements" class="form-control modysel height70" placeholder="Describe your mentorship requirements">{{ old('mentor_requirements') }}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- One Line Pitch --}}
+                            <div class="row marsettop">
+                                <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="one_line_pitch">
+                                    One line pitch for your business
+                                </label> 
+                                <div class="d-none d-md-block col-md-1">:</div>
+                                <div class="col-12 col-sm-6 col-md-6"> 
+                                    <textarea 
+                                        name="one_line_pitch" 
+                                        id="one_line_pitch"
+                                        class="form-control modysel height70 {{ $errors->has('one_line_pitch') ? 'is-invalid' : '' }}"
+                                    >{{ old('one_line_pitch', 'Sample Pitches: My company, Airto, is developing a web-based social seating check-in platform to help air travelers see who is on board their flight and use Facebook and Linked in to assign all flight seats with one click') }}</textarea>
+                                    @error('one_line_pitch')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Business Photos --}}
+                            <div class="row marsettop">
+                                <label class="col-12 col-sm-6 col-md-4 frmtxt" for="business_photos">
+                                    Business Photo 
+                                    <span class="frmnote">
+                                        <strong>Note:</strong> Accepted formats - png, jpeg, gif
+                                    </span>
+                                </label> 
+                                <div class="d-none d-md-block col-md-1">:</div>
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="photobox">
+                                        <input type="file" name="business_photos[]" class="form-control modysel" accept=".png,.jpeg,.jpg,.gif">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_photos[]" class="form-control modysel" accept=".png,.jpeg,.jpg,.gif">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_photos[]" class="form-control modysel" accept=".png,.jpeg,.jpg,.gif">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_photos[]" class="form-control modysel" accept=".png,.jpeg,.jpg,.gif">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Business Documents --}}
+                            <div class="row marsettop">
+                                <label class="col-12 col-sm-6 col-md-4 frmtxt" for="business_documents">
+                                    Business Documents
+                                    <span class="frmnote">
+                                        <strong>Note:</strong> Accepted formats - Word Document, Excel & PDF
+                                    </span>
+                                </label> 
+                                <div class="d-none d-md-block col-md-1">:</div>
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="photobox">
+                                        <input type="file" name="business_documents[]" class="form-control modysel" accept=".doc,.docx,.xls,.xlsx,.pdf">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_documents[]" class="form-control modysel" accept=".doc,.docx,.xls,.xlsx,.pdf">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_documents[]" class="form-control modysel" accept=".doc,.docx,.xls,.xlsx,.pdf">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_documents[]" class="form-control modysel" accept=".doc,.docx,.xls,.xlsx,.pdf">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Submit Button --}}
+                        <div class="row setborder">
+                            <button type="submit" class="frmbtn">
+                                Submit
+                            </button>
+                        </div>
+
+                        {{-- Terms Text --}}
+                        <div class="termstxt">
+                            By Clicking Submit you are Accepting 
+                            <a href="{{-- route('terms.conditions') --}}">Terms & Conditions</a>
+                        </div>
+                    </div>
+                </form>
+                </div>
+                {{-- Sidebar --}}
+            <div class="col-12 col-sm-3 col-md-3 frmdfy2">
+                @include('includes.faqsright')
+            </div>
             </div>
             
         </div>
@@ -453,4 +907,93 @@
                         @include('includes.groupcompany')
                         @include('includes.newsletter')
                         @include('includes.categorylinkfooter')
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle collapse/expand functionality for "I am looking for" checkboxes
+    const checkboxes = document.querySelectorAll('.requirement-checkbox');
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const targetId = this.dataset.target;
+            const targetSection = document.getElementById(targetId);
+            
+            if (targetSection) {
+                if (this.checked) {
+                    // Show section with animation
+                    targetSection.style.display = 'block';
+                    targetSection.style.animation = 'fadeIn 0.3s ease-in';
+                } else {
+                    // Hide section
+                    targetSection.style.display = 'none';
+                }
+            }
+        });
+    });
+
+    // Management Team Add/Remove functionality
+    const addTeamMemberBtn = document.querySelector('.add-team-member');
+    const container = document.getElementById('teamMembersContainer');
+    let memberCount = 1;
+
+    function createTeamMemberRow() {
+        const rowHTML = `
+            <div class="management-team-row">
+                <div class="management-team-col">
+                    <input type="text" name="team_member_name[]" class="form-control modysel team-name-input" placeholder="Enter Name">
+                </div>
+                <div class="management-team-col">
+                    <input type="text" name="team_member_designation[]" class="form-control modysel team-designation-input" placeholder="Enter Designation">
+                </div>
+                <div class="management-team-col">
+                    <input type="email" name="team_member_email[]" class="form-control modysel team-email-input" placeholder="Enter Email ID">
+                </div>
+                <div class="management-team-action">
+                    <button type="button" class="team-action-btn remove-team-member" aria-label="Remove member">×</button>
+                </div>
+            </div>
+        `;
+        return rowHTML;
+    }
+
+    if (addTeamMemberBtn) {
+        addTeamMemberBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            memberCount++;
+            container.insertAdjacentHTML('beforeend', createTeamMemberRow());
+            attachRemoveListener();
+        });
+    }
+
+    function attachRemoveListener() {
+        const removeButtons = document.querySelectorAll('.remove-team-member');
+        removeButtons.forEach(btn => {
+            btn.onclick = function(e) {
+                e.preventDefault();
+                this.closest('.management-team-row').remove();
+                memberCount--;
+            };
+        });
+    }
+
+    // Initial attach for any pre-existing remove buttons
+    attachRemoveListener();
+});
+
+// Add fade-in animation
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+`;
+document.head.appendChild(style);
+</script>
                     @endsection

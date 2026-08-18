@@ -5957,6 +5957,29 @@ color: #231F20; padding-bottom: 10px; margin-bottom: 20px; }
 .photobox { margin-bottom: 15px;}
 .stey{ margin-top:10px;}
 .frmnote { font-size: 12px; line-height: 16px; color: #333; display: block;}
+.looking-for-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px 18px; }
+.check-item { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #303030; }
+.check-item input[type="checkbox"] { width: 18px; height: 18px; margin: 0; cursor: pointer; }
+.check-item span { cursor: pointer; }
+.management-team-wrap,
+.business-requirements-wrap { width: 100%; margin-top: 10px; }
+.management-team-row,
+.business-requirements-row { display: flex; align-items: flex-start; width: 100%; gap: 15px; margin-bottom: 18px; }
+.management-team-header .management-team-col label,
+.business-requirements-title { font-size: 14px; font-weight: 600; color: #231F20; }
+.management-team-col { flex: 1; min-width: 0; }
+.management-team-action { width: 60px; display: flex; align-items: center; justify-content: center; }
+.team-action-btn { width: 32px; height: 32px; border: 1px solid #16A085; border-radius: 50%; background: #fff; color: #16A085; font-size: 20px; line-height: 1; cursor: pointer; }
+.management-team-extra { margin-top: 10px; }
+.business-requirements-label { width: 30%; padding-right: 10px; }
+.business-requirements-options { display: flex; flex-wrap: wrap; gap: 12px 18px; width: 70%; }
+.check-inline { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; color: #303030; margin-bottom: 10px; }
+.check-inline input[type="checkbox"] { margin-top: 0; }
+.business-requirements-field { width: 70%; }
+.business-pitch { min-height: 110px; }
+.required-star { color: #d9435f; }
+.upload-row .business-requirements-field { display: flex; flex-direction: column; }
+.conditional-section { margin-top: 15px; }
 .setborder { border-top: 1px solid #dfdfdf; text-align: center; padding:15px 0 0 0; margin:15px 0 0 0;  }
 .frmbtn {font-size:14px; color: #fff; border:1px solid #16A085; background: #16A085;
 width: 130px; text-align: center; padding:5px 10px; display: block; margin: 0 auto;}

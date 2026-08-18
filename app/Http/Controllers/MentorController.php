@@ -13,38 +13,35 @@ use Illuminate\Support\Str;
 
 class MentorController extends Controller
 {
-    public function mentorListing(Request $request)
-{
     // Extract filters from request
-    $state        = $request->input('state', []);
-    $city         = $request->input('city', []);
-    $industrymain = $request->input('industrymain', []);
-    $sortby       = $request->input('sortby');
-    $itemsPerPage = $request->input('itemsPerPage', 10);
+    public function mentorListing(Request $request)
+    {
+    $states              = (array) $request->input('state', []);
+    $cities              = (array) $request->input('city', []);
+    $selectedOccupations = (array) $request->input('occupation', []);
+    $selectedLocations   = (array) $request->input('location', []);
+    $sortby              = $request->input('sortby');
+    $itemsPerPage        = (int) $request->input('itemsPerPage', 10);
+
+    
 
     // Base query
     $mentorQuery = ProfileMentor::query()
         ->where('mentor_profile_status', config('constants.ProfileStatus.Active'));
 
     // State filter
-    if (!empty($state)) {
-        count($state) > 1
-            ? $mentorQuery->whereIn('mentor_state', $state)
-            : $mentorQuery->where('mentor_state', 'LIKE', '%' . $state[0] . '%');
+    if (!empty($states)) {
+        $mentorQuery->whereIn('mentor_state', $states);
     }
 
     // City filter
-    if (!empty($city)) {
-        count($city) > 1
-            ? $mentorQuery->whereIn('mentor_city', $city)
-            : $mentorQuery->where('mentor_city', 'LIKE', '%' . $city[0] . '%');
+    if (!empty($selectedLocations) && count($selectedLocations) > 0) {
+        $mentorQuery->whereIn('mentor_city', $selectedLocations);
     }
 
-    // Industry filter
-    if (!empty($industrymain)) {
-        count($industrymain) > 1
-            ? $mentorQuery->whereIn('mentor_occupation', $industrymain)
-            : $mentorQuery->where('mentor_occupation', 'LIKE', '%' . $industrymain[0] . '%');
+    // Occupation filter
+    if (!empty($selectedOccupations)) {
+        $mentorQuery->whereIn('mentor_occupation', $selectedOccupations);
     }
 
     // Sorting
@@ -55,6 +52,7 @@ class MentorController extends Controller
     } elseif ($sortby === 'asc') {
         $mentorQuery->orderBy('created_at', 'ASC');
     } else {
+        
         $mentorQuery->orderBy('created_at', 'DESC');
     }
 
@@ -62,7 +60,7 @@ class MentorController extends Controller
     $mentors = $mentorQuery->paginate($itemsPerPage);
 
     // Transform collection while preserving pagination
-    $mentorListData = $mentors->getCollection()->map(function ($mentor) {
+    $mentorListData = $mentors->getCollection()->map(function ($mentor) use ($selectedOccupations) {
         return [
             'mentorProfileStr'   => strtolower($mentor->mentor_profile_str),
             'mentorCity'         => $mentor->mentor_city,
@@ -86,10 +84,9 @@ class MentorController extends Controller
             'membership_paid'    => $mentor->membership_paid,
             'membership_plan'    => $mentor->membership_plan,
             'mentorPlan'         => config('constants.planType.' . $mentor->membership_plan),
-            'mentorName'         => $mentor->mentor_name,
+            'mentorName'         => $mentor->mentor_name
         ];
     });
-
     // Re-wrap into paginator
     $mentorListData = new \Illuminate\Pagination\LengthAwarePaginator(
         $mentorListData,
@@ -101,7 +98,7 @@ class MentorController extends Controller
 
     $mentorCount = $mentors->total();
 
-    return view('mentorlist', compact('mentorListData', 'mentorCount'));
+    return view('mentorlist', compact('mentorListData', 'mentorCount','selectedOccupations','selectedLocations'));
 }
 
 

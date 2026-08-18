@@ -4,6 +4,9 @@ namespace App\Models;
 
 class StartupImage extends \Illuminate\Database\Eloquent\Model
 {
+    public const TYPE_IMAGE = 1;
+    public const TYPE_DOCUMENT = 2;
+
     protected $table = 'startup_images';
 
     protected $primaryKey = 'startup_image_id';

@@ -25,7 +25,6 @@
    <link href="{{ asset('assets/css/article-style.css') }}" rel="stylesheet">
    <link href="{{ asset('assets/css/article-detail.css') }}" rel="stylesheet">
    <link href="{{ asset('assets/css/services.styles.css') }}" rel="stylesheet">
-   <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.4/nouislider.min.css" rel="stylesheet">
    @stack('styles')
 </head>
 
@@ -189,7 +188,6 @@
    <script src="{{ asset('assets/js/user_main.js') }}"></script>
    <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
    <script src="{{ asset('assets/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.4/nouislider.min.js"></script>
    <!-- Add ScrollReveal -->
    <script src="https://unpkg.com/scrollreveal"></script>
    <!-- Your custom JS -->
@@ -208,40 +206,6 @@ $(document).ready(function(){
             1000:{ items:3 }
         }
     });
-
-var slider = document.getElementById('salesRange');
-  noUiSlider.create(slider, {
-    start: [0, 100],       // default full range selected
-    connect: true,         // fill between handles
-    range: { 'min': 500000, 'max': 10000000 },
-    step: 1,
-    tooltips: [true, true], // show current values
-    format: {
-   to: function (value) {
-      if (value >= 10000000) {
-         return (value / 10000000).toFixed(2) + ' cr';   // Crores
-      } else if (value >= 100000) {
-         return (value / 100000).toFixed(2) + ' lakh';   // Lakhs
-      } else if (value >= 1000) {
-         return (value / 1000).toFixed(2) + ' thousand'; // Thousands
-      } else {
-         return value.toFixed(2);                        // Plain number
-      }
-   },
-   from: function (value) {
-      if (value.includes('cr')) {
-         return Number(value.replace(' cr', '')) * 10000000;
-      } else if (value.includes('lakh')) {
-         return Number(value.replace(' lakh', '')) * 100000;
-      } else if (value.includes('thousand')) {
-         return Number(value.replace(' thousand', '')) * 1000;
-      } else {
-         return Number(value);
-      }
-   }
-}
-
-  });
 });
 </script>
    <script src="{{ asset('assets/js/main.js') }}"></script>
@@ -276,6 +240,48 @@ var slider = document.getElementById('salesRange');
             }
         }
     });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // When parent state checkbox is toggled
+    document.querySelectorAll('.parent-location-filter').forEach(function (parentCheckbox) {
+        parentCheckbox.addEventListener('change', function () {
+            const parentGroup = this.dataset.parentGroup;
+            const childCheckboxes = document.querySelectorAll('.child-location-filter[data-group="' + parentGroup + '"]');
+
+            childCheckboxes.forEach(function (child) {
+                child.checked = parentCheckbox.checked;
+            });
+
+            this.form.submit();
+        });
+    });
+
+    // Keep parent in sync when children are toggled
+    document.querySelectorAll('.child-location-filter').forEach(function (childCheckbox) {
+        childCheckbox.addEventListener('change', function () {
+            const group = this.dataset.group;
+            const parentCheckbox = document.querySelector('.parent-location-filter[data-parent-group="' + group + '"]');
+            if (!parentCheckbox) return;
+
+            const siblings = document.querySelectorAll('.child-location-filter[data-group="' + group + '"]');
+            const anyChecked = Array.from(siblings).some(cb => cb.checked);
+
+            // Parent is checked if ANY child is checked
+            parentCheckbox.checked = anyChecked;
+
+            // Expand (show) the collapse when a child is checked
+            if (anyChecked) {
+                const collapseEl = document.querySelector('#' + group.replace('location-', 'collapseState-'));
+                if (collapseEl) {
+                    $(collapseEl).collapse('show'); // requires Bootstrap JS
+                }
+            }
+
+            parentCheckbox.form && parentCheckbox.form.submit();
+        });
+    });
+});
 </script>
 @stack('scripts')
 </body>

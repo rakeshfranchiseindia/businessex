@@ -3,6 +3,24 @@
 @section('content')
 <main id="main" class="minheigh">
     <div class="container bex-main">
+        @if(session('success'))
+            <div class="alert alert-success mt-3">{{ session('success') }}</div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger mt-3">{{ session('error') }}</div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger mt-3">
+                <ul class="mb-0">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         {{-- Breadcrumb --}}
         <div class="row">
             <div class="col-12 col-sm-12 col-md-12">
@@ -27,7 +45,7 @@
             <div class="col-12 col-sm-9 col-md-9 frmmodfy">
                 <form 
                     class="frmall" 
-                    action="{{--route('business-profiles.store') --}}" 
+                    action="{{ route('register.create-business') }}" 
                     method="POST" 
                     enctype="multipart/form-data"
                 >
@@ -55,6 +73,34 @@
                                     value="{{ old('your_name') }}"
                                 >
                                 @error('your_name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        {{-- Designation Field --}}
+                        <div class="row marsettop">
+                            <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="designation">
+                                Designation
+                            </label> 
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-12 col-sm-6 col-md-6">
+                                <select
+                                    name="designation"
+                                    id="designation"
+                                    class="form-control modysel myselectclasscat {{ $errors->has('designation') ? 'is-invalid' : '' }}"
+                                >
+                                    <option value="" disabled {{ !old('designation') ? 'selected' : '' }}>
+                                        Select Designation
+                                    </option>
+                                    @foreach(config('constants.designationinf') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('designation') == (string) $key ? 'selected' : '' }}>
+                                            {{ $value }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('designation')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -101,29 +147,6 @@
                                     value="{{ old('mobile_no') }}"
                                 >
                                 @error('mobile_no')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        {{-- Company Name Field (Confidential) --}}
-                        <div class="row marsettop">
-                            <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="company_name_confidential">
-                                Company Name
-                            </label> 
-                            <div class="d-none d-md-block col-md-1">:</div>
-                            <div class="col-12 col-sm-6 col-md-6">
-                                <input 
-                                    type="text" 
-                                    name="company_name_confidential" 
-                                    id="company_name_confidential"
-                                    class="form-control modysel {{ $errors->has('company_name_confidential') ? 'is-invalid' : '' }}" 
-                                    placeholder="Enter Company" 
-                                    value="{{ old('company_name_confidential') }}"
-                                >
-                                @error('company_name_confidential')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -265,12 +288,11 @@
                                     <option value="" disabled {{ !old('employee_count') ? 'selected' : '' }}>
                                         Select Employee Count
                                     </option>
-                                    <option value="1-10" {{ old('employee_count') == '1-10' ? 'selected' : '' }}>1-10</option>
-                                    <option value="11-50" {{ old('employee_count') == '11-50' ? 'selected' : '' }}>11-50</option>
-                                    <option value="51-100" {{ old('employee_count') == '51-100' ? 'selected' : '' }}>51-100</option>
-                                    <option value="101-500" {{ old('employee_count') == '101-500' ? 'selected' : '' }}>101-500</option>
-                                    <option value="501-1000" {{ old('employee_count') == '501-1000' ? 'selected' : '' }}>501-1000</option>
-                                    <option value="1000+" {{ old('employee_count') == '1000+' ? 'selected' : '' }}>1000+</option>
+                                    @foreach(config('constants.employeeCount') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('employee_count') == (string) $key ? 'selected' : '' }}>
+                                            {{ $value }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('employee_count')
                                     <span class="invalid-feedback" role="alert">
@@ -295,24 +317,11 @@
                                     <option value="" disabled {{ !old('entity_type') ? 'selected' : '' }}>
                                         Select Entity Type
                                     </option>
-                                    <option value="sole_proprietorship" {{ old('entity_type') == 'sole_proprietorship' ? 'selected' : '' }}>
-                                        Sole Proprietorship
-                                    </option>
-                                    <option value="partnership" {{ old('entity_type') == 'partnership' ? 'selected' : '' }}>
-                                        Partnership
-                                    </option>
-                                    <option value="llp" {{ old('entity_type') == 'llp' ? 'selected' : '' }}>
-                                        LLP (Limited Liability Partnership)
-                                    </option>
-                                    <option value="private_limited" {{ old('entity_type') == 'private_limited' ? 'selected' : '' }}>
-                                        Private Limited Company
-                                    </option>
-                                    <option value="public_limited" {{ old('entity_type') == 'public_limited' ? 'selected' : '' }}>
-                                        Public Limited Company
-                                    </option>
-                                    <option value="other" {{ old('entity_type') == 'other' ? 'selected' : '' }}>
-                                        Other
-                                    </option>
+                                    @foreach(config('constants.businessEntity') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('entity_type') == (string) $key ? 'selected' : '' }}>
+                                            {{ $value }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('entity_type')
                                     <span class="invalid-feedback" role="alert">
@@ -337,11 +346,11 @@
                                     <option value="" disabled {{ !old('business_type') ? 'selected' : '' }}>
                                         Select Business Type
                                     </option>
-                                    <option value="b2b" {{ old('business_type') == 'b2b' ? 'selected' : '' }}>B2B</option>
-                                    <option value="b2c" {{ old('business_type') == 'b2c' ? 'selected' : '' }}>B2C</option>
-                                    <option value="c2c" {{ old('business_type') == 'c2c' ? 'selected' : '' }}>C2C</option>
-                                    <option value="c2b" {{ old('business_type') == 'c2b' ? 'selected' : '' }}>C2B</option>
-                                    <option value="both_b2b_b2c" {{ old('business_type') == 'both_b2b_b2c' ? 'selected' : '' }}>Both B2B & B2C</option>
+                                    @foreach(config('constants.businessType') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('business_type') == (string) $key ? 'selected' : '' }}>
+                                            {{ $value }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('business_type')
                                     <span class="invalid-feedback" role="alert">
@@ -366,17 +375,11 @@
                                     <option value="" disabled {{ !old('industry_sector') ? 'selected' : '' }}>
                                         Select Industry Sector
                                     </option>
-                                    {{-- Populate from config or database --}}
-                                    <option value="technology" {{ old('industry_sector') == 'technology' ? 'selected' : '' }}>Technology / IT</option>
-                                    <option value="healthcare" {{ old('industry_sector') == 'healthcare' ? 'selected' : '' }}>Healthcare</option>
-                                    <option value="finance" {{ old('industry_sector') == 'finance' ? 'selected' : '' }}>Finance / Banking</option>
-                                    <option value="manufacturing" {{ old('industry_sector') == 'manufacturing' ? 'selected' : '' }}>Manufacturing</option>
-                                    <option value="retail" {{ old('industry_sector') == 'retail' ? 'selected' : '' }}>Retail / E-commerce</option>
-                                    <option value="logistics" {{ old('industry_sector') == 'logistics' ? 'selected' : '' }}>Logistics Services</option>
-                                    <option value="agriculture" {{ old('industry_sector') == 'agriculture' ? 'selected' : '' }}>Agriculture</option>
-                                    <option value="education" {{ old('industry_sector') == 'education' ? 'selected' : '' }}>Education</option>
-                                    <option value="real_estate" {{ old('industry_sector') == 'real_estate' ? 'selected' : '' }}>Real Estate</option>
-                                    <option value="other" {{ old('industry_sector') == 'other' ? 'selected' : '' }}>Other</option>
+                                    @foreach($industrySeller ?? [] as $sector)
+                                        <option value="{{ $sector['subIndustryid'] ?? $sector['industry_sector'] ?? $sector['subindustry'] }}" {{ old('industry_sector') == (string) ($sector['subIndustryid'] ?? $sector['industry_sector'] ?? $sector['subindustry']) ? 'selected' : '' }}>
+                                            {{ $sector['subindustry'] ?? $sector['industry'] ?? 'Industry' }}
+                                        </option>
+                                    @endforeach
                                 </select>
                                 @error('industry_sector')
                                     <span class="invalid-feedback" role="alert">
@@ -439,6 +442,27 @@
                                 <span class="tooltiptextfrm">
                                     Mention the existing facilities of your business. It can be office space / infrastructure / warehouse / equipment / plant and machinery / furniture and fixtures / building and property
                                 </span>
+                            </div>
+                        </div>
+
+                         {{-- Business / Company Summary --}}
+                        <div class="row marsettop">
+                            <label class="col-12 col-sm-6 col-md-4 frmtxt" for="company_summary_financial">
+                                Describe about the Business / Company Summary
+                            </label> 
+                            <div class="d-none d-md-block col-md-1">:</div>
+                            <div class="col-12 col-sm-6 col-md-6">
+                                <textarea 
+                                    name="company_summary_financial" 
+                                    id="company_summary_financial"
+                                    class="form-control modysel height70 {{ $errors->has('company_summary_financial') ? 'is-invalid' : '' }}"
+                                    placeholder="Describe about the Business / Company Summary"
+                                >{{ old('company_summary_financial') }}</textarea>
+                                @error('company_summary_financial')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
                         </div>
 
@@ -550,21 +574,15 @@
                             </label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <select 
+                                
+                                <input 
+                                    type="text" 
                                     name="ebitda_margin" 
                                     id="ebitda_margin"
-                                    class="form-control modysel myselectclasscat"
+                                    class="form-control modysel"
+                                    placeholder="Enter EBITDA Margin" 
+                                    value="{{ old('ebitda_margin') }}"
                                 >
-                                    <option value="" disabled {{ !old('ebitda_margin') ? 'selected' : '' }}>
-                                        Select EBITDA Margin
-                                    </option>
-                                    <option value="less_than_5" {{ old('ebitda_margin') == 'less_than_5' ? 'selected' : '' }}>Less than 5%</option>
-                                    <option value="5_10" {{ old('ebitda_margin') == '5_10' ? 'selected' : '' }}>5% - 10%</option>
-                                    <option value="10_15" {{ old('ebitda_margin') == '10_15' ? 'selected' : '' }}>10% - 15%</option>
-                                    <option value="15_20" {{ old('ebitda_margin') == '15_20' ? 'selected' : '' }}>15% - 20%</option>
-                                    <option value="20_25" {{ old('ebitda_margin') == '20_25' ? 'selected' : '' }}>20% - 25%</option>
-                                    <option value="more_than_25" {{ old('ebitda_margin') == 'more_than_25' ? 'selected' : '' }}>More than 25%</option>
-                                </select>
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -598,18 +616,57 @@
                             </div>
                         </div>
 
-                        {{-- Business / Company Summary --}}
-                        <div class="row marsettop">
-                            <label class="col-12 col-sm-6 col-md-4 frmtxt" for="company_summary">
-                                Describe about the Business / Company Summary
-                            </label> 
-                            <div class="d-none d-md-block col-md-1">:</div>
-                            <div class="col-12 col-sm-6 col-md-6">
-                                <textarea 
-                                    name="company_summary" 
-                                    id="company_summary"
-                                    class="form-control modysel height70"
-                                >{{ old('company_summary', 'Describe about the Business / Company Summary') }}</textarea>
+                       
+
+                        {{-- =============================== --}}
+                        {{-- MANAGEMENT TEAM INFORMATION SECTION --}}
+                        {{-- =============================== --}}
+                        <div class="frmcheading marftop">Management Team Information</div>
+
+                        <div class="management-team-wrap">
+                            <div class="management-team-row management-team-header">
+                                <div class="management-team-col">
+                                    <label>Name</label>
+                                </div>
+                                <div class="management-team-col">
+                                    <label>Designation</label>
+                                </div>
+                                <div class="management-team-col">
+                                    <label>Email ID</label>
+                                </div>
+                                <div class="management-team-action"></div>
+                            </div>
+
+                            <div class="management-team-row">
+                                <div class="management-team-col">
+                                    <input type="text" name="team_name[]" class="form-control modysel" placeholder="Enter Name">
+                                </div>
+                                <div class="management-team-col">
+                                    <input type="text" name="team_designation[]" class="form-control modysel" placeholder="Enter Designation">
+                                </div>
+                                <div class="management-team-col">
+                                    <input type="email" name="team_email[]" class="form-control modysel" placeholder="Enter Email ID">
+                                </div>
+                                <div class="management-team-action">
+                                    <button type="button" class="team-action-btn add-team-member" aria-label="Add member">+</button>
+                                </div>
+                            </div>
+
+                            <div id="teamMemberExtra" class="management-team-extra" style="display:none;">
+                                <div class="management-team-row">
+                                    <div class="management-team-col">
+                                        <input type="text" name="team_name[]" class="form-control modysel" placeholder="Enter Name">
+                                    </div>
+                                    <div class="management-team-col">
+                                        <input type="text" name="team_designation[]" class="form-control modysel" placeholder="Enter Designation">
+                                    </div>
+                                    <div class="management-team-col">
+                                        <input type="email" name="team_email[]" class="form-control modysel" placeholder="Enter Email ID">
+                                    </div>
+                                    <div class="management-team-action">
+                                        <button type="button" class="team-action-btn remove-team-member" aria-label="Remove member">×</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -669,20 +726,17 @@
                                     <option value="" disabled {{ !old('director_designation') ? 'selected' : '' }}>
                                         Select Designation
                                     </option>
-                                    <option value="ceo" {{ old('director_designation') == 'ceo' ? 'selected' : '' }}>CEO</option>
-                                    <option value="md" {{ old('director_designation') == 'md' ? 'selected' : '' }}>Managing Director</option>
-                                    <option value="director" {{ old('director_designation') == 'director' ? 'selected' : '' }}>Director</option>
-                                    <option value="owner" {{ old('director_designation') == 'owner' ? 'selected' : '' }}>Owner</option>
-                                    <option value="partner" {{ old('director_designation') == 'partner' ? 'selected' : '' }}>Partner</option>
-                                    <option value="cfo" {{ old('director_designation') == 'cfo' ? 'selected' : '' }}>CFO</option>
-                                    <option value="coo" {{ old('director_designation') == 'coo' ? 'selected' : '' }}>COO</option>
-                                    <option value="other" {{ old('director_designation') == 'other' ? 'selected' : '' }}>Other</option>
+                                    @foreach(config('constants.designationinf') as $key => $value)
+                                        <option value="{{ $key }}" {{ old('director_designation') == (string) $key ? 'selected' : '' }}>
+                                            {{ $value }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
 
                         {{-- Add Another Member Button --}}
-                        <div class="row marsettop">
+                        {{--<div class="row marsettop">
                             <label class="col-12 col-sm-6 col-md-4 frmtxt"></label> 
                             <div class="d-none d-md-block col-md-1"></div>
                             <div class="col-12 col-sm-6 col-md-6">
@@ -695,7 +749,7 @@
                                     <img src="{{ asset('assets/img/addmem.svg') }}" alt="Add Member"> Add Another Member
                                 </button>
                             </div>
-                        </div>
+                        </div>--}}
 
                         {{-- Additional Member Fields (Hidden by default) --}}
                         <div class="showmebblk" id="additionalMemberFields" style="display:none;">
@@ -842,158 +896,241 @@
                         {{-- BUSINESS REQUIREMENTS SECTION --}}
                         {{-- =============================== --}}
                         <div class="frmcheading marftop">Business Requirements</div>
-                        
-                        {{-- One Line Pitch --}}
-                        <div class="row marsettop">
-                            <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="one_line_pitch">
-                                One line pitch for your business
-                            </label> 
-                            <div class="d-none d-md-block col-md-1">:</div>
-                            <div class="col-12 col-sm-6 col-md-6"> 
-                                <textarea 
-                                    name="one_line_pitch" 
-                                    id="one_line_pitch"
-                                    class="form-control modysel height70 {{ $errors->has('one_line_pitch') ? 'is-invalid' : '' }}"
-                                >{{ old('one_line_pitch', 'Sample Pitches: My company, Airto, is developing a web-based social seating check-in platform to help air travelers see who is on board their flight and use Facebook and Linked in to assign all flight seats with one click') }}</textarea>
-                                @error('one_line_pitch')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
+
+                        <div class="business-requirements-wrap">
+                            {{-- I am looking for Checkboxes --}}
+                            <div class="row marsettop">
+                                <label class="col-12 col-sm-6 col-md-4 frmtxt" for="looking_for">
+                                    I am looking for
+                                </label>
+                                <div class="d-none d-md-block col-md-1">:</div>
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="looking-for-options">
+                                        <label class="check-item"><input type="checkbox" name="seeking_investors" value="1" id="seeking_investors" class="requirement-checkbox"> <span>Investors for My business</span></label>
+                                        <label class="check-item"><input type="checkbox" name="seeking_loan" value="1" id="seeking_loan" class="requirement-checkbox"> <span>Loan for my business</span></label>
+                                        <label class="check-item"><input type="checkbox" name="seeking_incubators" value="1" id="seeking_incubators" class="requirement-checkbox"> <span>Incubators for My business</span></label>
+                                        <label class="check-item"><input type="checkbox" name="seeking_buyers" value="1" id="seeking_buyers" class="requirement-checkbox"> <span>Buyers for My business</span></label>
+                                        <label class="check-item"><input type="checkbox" name="seeking_mentors" value="1" id="seeking_mentors" class="requirement-checkbox"> <span>Mentorship for My business</span></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR INVESTORS SECTION --}}
+                            <div id="investors-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Partial Business Sale (investors)</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Amount of investment you are looking for</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="inv_asking_price" class="form-control modysel" placeholder="Enter Amount">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Business stake of the investment</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <div style="display: flex; gap: 10px;">
+                                            <input type="text" name="inv_stake" class="form-control modysel" placeholder="Enter Stake" style="flex: 1;">
+                                            <span style="flex: 0 0 auto; display: flex; align-items: center; padding: 0 10px;">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Reason for investment</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="inv_reason" class="form-control modysel height70" placeholder="Enter Reason for investment"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR LOAN SECTION --}}
+                            <div id="loan-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Business Loan</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Loan amount you are looking for</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="loan_amount" class="form-control modysel" placeholder="Enter Loan Amount">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Repayment period</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="loan_repayment_period" class="form-control modysel" placeholder="Enter Repayment Period">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Expected interest rate</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="loan_interest_rate" class="form-control modysel" placeholder="Enter Interest Rate">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Any existing loans</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="loan_existing" class="form-control modysel height70" placeholder="Describe existing loans if any"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Reason for loan</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="loan_reason" class="form-control modysel height70" placeholder="Enter Reason for loan"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Collateral details</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="loan_collateral_details" class="form-control modysel height70" placeholder="Describe collateral details"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR BUYERS SECTION --}}
+                            <div id="buyers-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Business Sale</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Selling price</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="buyer_sell_price" class="form-control modysel" placeholder="Enter Selling Price">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Reason for selling</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="buyer_sell_reason" class="form-control modysel height70" placeholder="Enter Reason for selling"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR INCUBATORS SECTION --}}
+                            <div id="incubators-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Incubation Support</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Incubation requirements</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="accel_req_details" class="form-control modysel height70" placeholder="Describe your incubation requirements"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Expected investment from incubator</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="accel_inv_req" class="form-control modysel" placeholder="Enter Expected Investment">
+                                    </div>
+                                </div>
+
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Time period for incubation</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <input type="text" name="accel_time_period" class="form-control modysel" placeholder="Enter Time Period">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- FOR MENTORS SECTION --}}
+                            <div id="mentors-section" class="conditional-section" style="display:none; background: #f7f7f7; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                                <div class="section-heading" style="font-weight: 600; font-size: 16px; margin-bottom: 15px; border-bottom: 1px solid #dfdfdf; padding-bottom: 10px;">For Mentorship</div>
+                                
+                                <div class="row marsettop">
+                                    <label class="col-12 col-sm-6 col-md-4 frmtxt">Mentorship requirements</label>
+                                    <div class="d-none d-md-block col-md-1">:</div>
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <textarea name="mentor_req_details" class="form-control modysel height70" placeholder="Describe your mentorship requirements"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- One Line Pitch --}}
+                            <div class="row marsettop">
+                                <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="one_line_pitch">
+                                    One line pitch for your business
+                                </label> 
+                                <div class="d-none d-md-block col-md-1">:</div>
+                                <div class="col-12 col-sm-6 col-md-6"> 
+                                    <textarea 
+                                        name="one_line_pitch" 
+                                        id="one_line_pitch"
+                                        class="form-control modysel height70 {{ $errors->has('one_line_pitch') ? 'is-invalid' : '' }}"
+                                    >{{ old('one_line_pitch', 'Sample Pitches: My company, Airto, is developing a web-based social seating check-in platform to help air travelers see who is on board their flight and use Facebook and Linked in to assign all flight seats with one click') }}</textarea>
+                                    @error('one_line_pitch')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            {{-- Business Photos --}}
+                            <div class="row marsettop">
+                                <label class="col-12 col-sm-6 col-md-4 frmtxt" for="business_photos">
+                                    Business Photo 
+                                    <span class="frmnote">
+                                        <strong>Note:</strong> Accepted formats - png, jpeg, gif
                                     </span>
-                                @enderror
+                                </label> 
+                                <div class="d-none d-md-block col-md-1">:</div>
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="photobox">
+                                        <input type="file" name="business_photos[]" class="form-control modysel" accept=".png,.jpeg,.jpg,.gif">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_photos[]" class="form-control modysel" accept=".png,.jpeg,.jpg,.gif">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_photos[]" class="form-control modysel" accept=".png,.jpeg,.jpg,.gif">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_photos[]" class="form-control modysel" accept=".png,.jpeg,.jpg,.gif">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="tooltipfrm">
-                                <i class="fas fa-info-circle"></i>
-                                <span class="tooltiptextfrm">
-                                    A catchy one-liner that describes your business value proposition.
-                                </span>
-                            </div>
-                        </div>
 
-                        {{-- Business Photos --}}
-                        <div class="row marsettop">
-                            <label class="col-12 col-sm-6 col-md-4 frmtxt" for="business_photos">
-                                Business Photo 
-                                <span class="frmnote">
-                                    <strong>Note:</strong> Accepted formats - png, jpeg, gif
-                                </span>
-                            </label> 
-                            <div class="d-none d-md-block col-md-1">:</div>
-                            <div class="col-12 col-sm-6 col-md-6">
-                                <div class="photobox">
-                                    <input 
-                                        type="file" 
-                                        name="business_photos[]" 
-                                        id="business_photos"
-                                        class="form-control modysel"
-                                        accept=".png,.jpeg,.jpg,.gif"
-                                    >
+                            {{-- Business Documents --}}
+                            <div class="row marsettop">
+                                <label class="col-12 col-sm-6 col-md-4 frmtxt" for="business_documents">
+                                    Business Documents
+                                    <span class="frmnote">
+                                        <strong>Note:</strong> Accepted formats - Word Document, Excel & PDF
+                                    </span>
+                                </label> 
+                                <div class="d-none d-md-block col-md-1">:</div>
+                                <div class="col-12 col-sm-6 col-md-6">
+                                    <div class="photobox">
+                                        <input type="file" name="business_documents[]" class="form-control modysel" accept=".doc,.docx,.xls,.xlsx,.pdf">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_documents[]" class="form-control modysel" accept=".doc,.docx,.xls,.xlsx,.pdf">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_documents[]" class="form-control modysel" accept=".doc,.docx,.xls,.xlsx,.pdf">
+                                    </div>
+                                    <div class="photobox">
+                                        <input type="file" name="business_documents[]" class="form-control modysel" accept=".doc,.docx,.xls,.xlsx,.pdf">
+                                    </div>
                                 </div>
-                                <div class="photobox">
-                                    <input 
-                                        type="file" 
-                                        name="business_photos[]" 
-                                        class="form-control modysel"
-                                        accept=".png,.jpeg,.jpg,.gif"
-                                    >
-                                </div>
-                                <div class="photobox">
-                                    <input 
-                                        type="file" 
-                                        name="business_photos[]" 
-                                        class="form-control modysel"
-                                        accept=".png,.jpeg,.jpg,.gif"
-                                    >
-                                </div>
-                                
-                                <button 
-                                    type="button" 
-                                    class="showmephoto"
-                                    onclick="addPhotoField()"
-                                >
-                                    <img src="{{ asset('assets/img/pluscircle.svg') }}" alt="Add"> Add Business Photo
-                                </button>
-
-                                <div class="photobox stey" id="extraPhotoField" style="display:none;">
-                                    <input 
-                                        type="file" 
-                                        name="business_photos[]" 
-                                        class="form-control modysel"
-                                        accept=".png,.jpeg,.jpg,.gif"
-                                    >
-                                </div>
-                                <button 
-                                    type="button" 
-                                    class="showmephoto" 
-                                    id="removePhotoBtn"
-                                    style="display:none;"
-                                    onclick="removePhotoField()"
-                                >
-                                    <img src="{{ asset('assets/img/pluscircle.svg') }}" alt="Remove"> Remove Business Photo
-                                </button>
-                            </div>
-                        </div>
-
-                        {{-- Business Documents --}}
-                        <div class="row marsettop">
-                            <label class="col-12 col-sm-6 col-md-4 frmtxt" for="business_documents">
-                                Business Documents
-                                <span class="frmnote">
-                                    <strong>Note:</strong> Accepted formats - Word Document, Excel & PDF
-                                </span>
-                            </label> 
-                            <div class="d-none d-md-block col-md-1">:</div>
-                            <div class="col-12 col-sm-6 col-md-6">
-                                <div class="photobox">
-                                    <input 
-                                        type="file" 
-                                        name="business_documents[]" 
-                                        id="business_documents"
-                                        class="form-control modysel"
-                                        accept=".doc,.docx,.xls,.xlsx,.pdf"
-                                    >
-                                </div>
-                                <div class="photobox">
-                                    <input 
-                                        type="file" 
-                                        name="business_documents[]" 
-                                        class="form-control modysel"
-                                        accept=".doc,.docx,.xls,.xlsx,.pdf"
-                                    >
-                                </div>
-                                <div class="photobox">
-                                    <input 
-                                        type="file" 
-                                        name="business_documents[]" 
-                                        class="form-control modysel"
-                                        accept=".doc,.docx,.xls,.xlsx,.pdf"
-                                    >
-                                </div>
-                                
-                                <button 
-                                    type="button" 
-                                    class="showmedocuments"
-                                    onclick="addDocumentField()"
-                                >
-                                    <img src="{{ asset('assets/img/pluscircle.svg') }}" alt="Add"> Add Business Documents
-                                </button>
-
-                                <div class="photobox stey" id="extraDocumentField" style="display:none;">
-                                    <input 
-                                        type="file" 
-                                        name="business_documents[]" 
-                                        class="form-control modysel"
-                                        accept=".doc,.docx,.xls,.xlsx,.pdf"
-                                    >
-                                </div>
-                                <button 
-                                    type="button" 
-                                    class="showmedocuments" 
-                                    id="removeDocumentBtn"
-                                    style="display:none;"
-                                    onclick="removeDocumentField()"
-                                >
-                                    <img src="{{ asset('assets/img/pluscircle.svg') }}" alt="Remove"> Remove Business Document
-                                </button>
                             </div>
                         </div>
 
@@ -1025,72 +1162,63 @@
 
 @push('scripts')
 <script>
-// Toggle Additional Member Fields
-function toggleAdditionalMember() {
-    const additionalFields = document.getElementById('additionalMemberFields');
-    const addBtn = document.getElementById('addMemberBtn');
-    
-    if (additionalFields.style.display === 'none') {
-        additionalFields.style.display = 'block';
-        addBtn.style.display = 'none';
-    } else {
-        additionalFields.style.display = 'none';
-        addBtn.style.display = 'inline-block';
-        // Clear additional member fields
-        const inputs = additionalFields.querySelectorAll('input, select');
-        inputs.forEach(input => input.value = '');
+window.addEventListener('DOMContentLoaded', function () {
+    // Handle Team Member Management
+    const addTeamBtn = document.querySelector('.add-team-member');
+    const extraMemberBlock = document.getElementById('teamMemberExtra');
+
+    if (addTeamBtn && extraMemberBlock) {
+        addTeamBtn.addEventListener('click', function () {
+            extraMemberBlock.style.display = 'block';
+            addTeamBtn.closest('.management-team-action').style.display = 'none';
+        });
     }
-}
 
-// Add Extra Photo Field
-function addPhotoField() {
-    document.getElementById('extraPhotoField').style.display = 'block';
-    document.getElementById('removePhotoBtn').style.display = 'inline-block';
-    event.target.style.display = 'none';
-}
-
-// Remove Extra Photo Field
-function removePhotoField() {
-    document.getElementById('extraPhotoField').style.display = 'none';
-    document.getElementById('removePhotoBtn').style.display = 'none';
-    
-    // Find and show the add button again
-    const addButtons = document.querySelectorAll('.showmephoto');
-    addButtons.forEach(btn => {
-        if (btn.textContent.includes('Add Business Photo')) {
-            btn.style.display = 'inline-block';
+    document.addEventListener('click', function (event) {
+        if (event.target && event.target.classList.contains('remove-team-member')) {
+            const row = event.target.closest('.management-team-row');
+            if (row) {
+                row.querySelectorAll('input').forEach(function (input) {
+                    input.value = '';
+                });
+            }
+            extraMemberBlock.style.display = 'none';
+            const mainAction = document.querySelector('.add-team-member').closest('.management-team-action');
+            if (mainAction) {
+                mainAction.style.display = 'flex';
+            }
         }
     });
-    
-    // Clear the file input
-    const fileInput = document.querySelector('#extraPhotoField input[type="file"]');
-    if (fileInput) fileInput.value = '';
-}
 
-// Add Extra Document Field
-function addDocumentField() {
-    document.getElementById('extraDocumentField').style.display = 'block';
-    document.getElementById('removeDocumentBtn').style.display = 'inline-block';
-    event.target.style.display = 'none';
-}
+    // Handle Business Requirements Conditional Sections
+    const checkboxes = document.querySelectorAll('.requirement-checkbox');
+    const sections = {
+        'seeking_investors': 'investors-section',
+        'seeking_loan': 'loan-section',
+        'seeking_buyers': 'buyers-section',
+        'seeking_incubators': 'incubators-section',
+        'seeking_mentors': 'mentors-section'
+    };
 
-// Remove Extra Document Field
-function removeDocumentField() {
-    document.getElementById('extraDocumentField').style.display = 'none';
-    document.getElementById('removeDocumentBtn').style.display = 'none';
-    
-    // Find and show the add button again
-    const addButtons = document.querySelectorAll('.showmedocuments');
-    addButtons.forEach(btn => {
-        if (btn.textContent.includes('Add Business Documents')) {
-            btn.style.display = 'inline-block';
-        }
+    function updateSections() {
+        checkboxes.forEach(checkbox => {
+            const sectionId = sections[checkbox.id];
+            if (sectionId) {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    section.style.display = checkbox.checked ? 'block' : 'none';
+                }
+            }
+        });
+    }
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSections);
     });
-    
-    // Clear the file input
-    const fileInput = document.querySelector('#extraDocumentField input[type="file"]');
-    if (fileInput) fileInput.value = '';
-}
+
+    // Initialize on page load
+    updateSections();
+});
 </script>
 @endpush
 @endsection

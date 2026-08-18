@@ -17,6 +17,8 @@ use App\Http\Controllers\PriceController;
 use App\Http\Controllers\ServiceListingController;
 use App\Http\Controllers\BxInsightController;
 use App\Http\Controllers\SubscribeController;
+use App\Http\Controllers\LenderProfileController;
+
 
 
 // Route::get('/', function () {
@@ -33,9 +35,15 @@ Route::get('/startuplisting', [StartupController::class, 'startupListing'])->nam
 
 
 Route::get('/registration/create-mentor-profile', [MentorProfileController::class, 'createMentorProfile'])->name('register.create-mentor-profile');
+Route::post('/registration/create-mentor-profile', [MentorProfileController::class, 'createMentor'])->name('register.create-mentor');
 Route::get('/registration/create-business-profile', [BusinessProfileController::class, 'createBusinessProfile'])->name('register.create-business-profile');
+Route::post('/registration/create-business-profile', [BusinessProfileController::class, 'storeBusinessProfile'])->name('register.create-business');
 Route::get('/registration/create-investor-profile', [InvestorProfileController::class, 'createInvestorProfile'])->name('register.create-investor-profile');
+Route::post('/registration/create-investor-profile', [InvestorProfileController::class, 'createInvestor'])->name('register.create-investor');
 Route::get('/registration/create-startup-profile', [StartupProfileController::class, 'createStartupProfile'])->name('register.create-startup-profile');
+Route::post('/registration/create-startup-profile', [StartupProfileController::class, 'createStartup'])->name('register.create-startup');
+Route::get('/registration/create-lender-profile', [LenderProfileController::class, 'createLenderProfile'])->name('register.create-lender-profile');
+Route::post('/registration/create-lender-profile', [LenderProfileController::class, 'createLender'])->name('register.create-lender');
 
 Route::get('/pricing', [PriceController::class, 'priceListing'])->name('pricing.listing');
 

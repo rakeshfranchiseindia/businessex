@@ -30,38 +30,39 @@
                     <div class="col-12 col-sm-3 col-md-3 float-right setmob">
                         <div class="form-group">
                             <select class="form-control modysel myselectclass" id="Industry">
-                                <option>Recently Listed</option>
-                                @foreach(['Location1','Location2','Location3','Location4'] as $location)
-                                    <option>{{ $location }}</option>
-                                @endforeach
+                                <option value="">Sort By</option>
+                                <option value="asc">Listed first asc</option>
+                                <option value="desc">Listed first desc</option>
+                                
                             </select>
                         </div>
                     </div>
                 </div>
+                <p>Looking for a perfect investor for your business? BusinessEx provides a 296 of investors with investment preferences in 13 various industries having Daman and Diu,Delhi,Andhra Pradesh as their preferred location(s) for investment. We recommended to create a Investor profile in BusinessEx.</p>
 
                 <div class="row setvto">
-                    @if(isset($investors) && $investors->count() > 0)
+                    @if(isset($investorList) && count($investorList) > 0)
                         <ul class="listop">
-                            @foreach($investors as $investor)
+                            @foreach($investorList as $investor)
                                 <li>
                                     <div class="ribbonblk">
-                                        <div class="ribbonblkinner">{{ $investor->badge }}</div>
+                                        <div class="ribbonblkinner">{{ $investor['investorPlan'] }}</div>
                                     </div>
 
                                     <div class="fullb settmar">
                                         <div class="fbleft">
                                             <div class="cname">
-                                                <div class="cnameinner">{{ $investor->name }}</div>
+                                                <div class="cnameinner">{{ $investor['investorName'] }}</div>
                                             </div>
                                         </div>
                                         <div class="fbright">
                                             <div class="compper">
-                                                <img src="{{ $investor->image }}" alt="Investor Image">
+                                                <img src="{{ $investor['investorProfPic'] }}" alt="Investor Image">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="fullb contxt">{{ $investor->description }}</div>
+                                    <div class="fullb contxt">{{ $investor['investorTitle'] }}</div>
 
                                     <div class="sdd">
                                         <div class="sddinner"><img src="{{ asset('assets/img/phone.svg') }}"> <span>Phone</span></div>
@@ -71,15 +72,15 @@
 
                                     <div class="fullb summtxt">
                                         <span>Summary</span>
-                                        {{ $investor->summary }}
+                                        {{ $investor['investorSummary'] }}
                                     </div>
 
-                                    <div class="fullb citytxt">{{ $investor->location }}</div>
+                                    <div class="fullb citytxt">{{ $investor['locations'] }}</div>
 
                                     <div class="tagv">
-                                        @foreach($investor->tags as $tag)
+                                        {{--@foreach($investor->tags as $tag)
                                             <div class="tagvinner">{{ $tag }}</div>
-                                        @endforeach
+                                        @endforeach --}}
                                     </div>
 
                                     <div class="backv">

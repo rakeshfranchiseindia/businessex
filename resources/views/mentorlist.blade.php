@@ -29,11 +29,13 @@
                     </div>
                     <div class="col-12 col-sm-3 col-md-3 mfer float-right setmob">
                         <div class="form-group">
-                            <select class="form-control modysel myselectclass" id="Industry">
-                                <option>Recently Listed</option>
-                                    <option>Recently Listed</option>
-                                
+                            <form method="GET" action="{{ route('mentor.listing') }}">
+                            <select name="sortby" class="form-control modysel myselectclass" id="Industry"  onchange="this.form.submit()">
+                                <option value="">Sort By</option>
+                                <option value="desc">Listed desc first</option>
+                                <option value="asc">Listed asc first</option>
                             </select>
+                        </form>
                         </div>
                     </div>
                 </div>
