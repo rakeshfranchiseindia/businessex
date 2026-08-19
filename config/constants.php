@@ -359,6 +359,7 @@ return array(
         2 => 'Business Plan',
         3 => 'BEx Guruwaar',
         4 => 'Due Diligence',
+        5 => 'Certified Business Broker',
     ],
     'originalPlanAmount' => [
         1 => '4999',

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@section('content')
 <!-- ========== HERO SECTION ========== -->
   <section class="hero-section hero-due-diligence">
     <div class="container">
@@ -6,29 +7,34 @@
         <div class="col-lg-5 mb-5 mb-lg-0">
           <div class="hero-form-card">
             <h3>Get Due Diligence Done Today!</h3>
-            <form class="hero-form">
+            @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+            @if(session('error'))<div class="alert alert-danger">{{ session('error') }}</div>@endif
+            <form class="hero-form" method="POST" action="{{ route('service.payment.initiate') }}">
+              @csrf
+              <input type="hidden" name="service_type" value="4">
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Your Name" required>
+                <input type="text" name="name" class="form-control" placeholder="Your Name" value="{{ old('name') }}" required>
               </div>
               <div class="form-group">
-                <input type="email" class="form-control" placeholder="Your Email" required>
+                <input type="email" name="email" class="form-control" placeholder="Your Email" value="{{ old('email') }}" required>
               </div>
               <div class="form-group">
-                <input type="tel" class="form-control" placeholder="Your Mobile" required>
+                <input type="tel" name="mobile" class="form-control" placeholder="Your Mobile" value="{{ old('mobile') }}" required>
               </div>
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Your Company">
+                <input type="text" name="company" class="form-control" placeholder="Your Company" value="{{ old('company') }}" required>
               </div>
               <div class="form-group">
-                <select class="form-control" id="paymentMode">
+                <select class="form-control" name="payment_mode" id="paymentMode" required>
                   <option value="">Select Payment Mode</option>
-                  <option value="online">Online Payment</option>
-                  <option value="bank">Bank Transfer</option>
-                  <option value="cheque">Cheque Payment</option>
+                  <option value="OPTCRDC">Credit Card</option>
+                  <option value="OPTDBCRD">Debit Card</option>
+                  <option value="OPTNBK">Net Banking</option>
                 </select>
               </div>
               <button type="submit" class="btn-submit-primary">SUBMIT</button>
             </form>
+            @if($errors->any())<div class="alert alert-danger mt-3">{{ $errors->first() }}</div>@endif
           </div>
         </div>
         
@@ -161,4 +167,15 @@
   @include('includes.newsletter')
   @include('includes.categorylinkfooter')
 
-@section('content')
+<style>
+  .hero-due-diligence { min-height: 650px; background-size: cover; background-position: center; }
+  .hero-due-diligence .hero-form-card { max-width: 510px; margin-left: auto; padding: 22px 24px; }
+  .hero-due-diligence .hero-form-card h3 { font-size: 24px; line-height: 30px; margin-bottom: 16px; }
+  .hero-due-diligence .hero-form .form-group { margin-bottom: 12px; }
+  .hero-due-diligence .hero-form-card .form-control { height: 48px; padding: 10px 13px; font-size: 15px; }
+  .hero-due-diligence .btn-submit-primary { padding: 10px 32px; font-size: 16px; }
+  .hero-due-diligence .alert { margin-bottom: 12px; padding: 8px 12px; }
+  @media (max-width: 991px) { .hero-due-diligence { min-height: auto; padding: 55px 0; } .hero-due-diligence .hero-form-card { margin: 24px auto 0; } }
+  @media (max-width: 575px) { .hero-due-diligence { padding: 35px 0; } .hero-due-diligence .hero-form-card { padding: 18px; } .hero-due-diligence .hero-form-card h3 { font-size: 22px; line-height: 27px; } }
+</style>
+@endsection

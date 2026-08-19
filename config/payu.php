@@ -13,8 +13,8 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    //'merchantKey' => 'gtKFFx',  //Staging
-    'merchantKey' => 'zXwKxK',
+    'environment' => env('PAYU_ENVIRONMENT', 'test'),
+    'merchantKey' => env('PAYU_MERCHANT_KEY', 'gtKFFx'),
 
     /*
     |--------------------------------------------------------------------------
@@ -22,8 +22,7 @@ return [
     |--------------------------------------------------------------------------
     */
     
-    //'salt' => 'eCwWELxi',   staging
-    'salt' => '0LBCTaus',
+    'salt' => env('PAYU_SALT', '4R38IvwiV57FwVpsgOvTXBdLE4tHUXFW'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,7 +54,7 @@ return [
     |--------------------------------------------------------------------------
     */
     //'baseUrl' => 'https://test.payu.in',
-    'baseUrl' => 'https://secure.payu.in/_payment',
+    'baseUrl' => env('PAYU_BASE_URL', 'https://test.payu.in/_payment'),
 
     /*
     |--------------------------------------------------------------------------

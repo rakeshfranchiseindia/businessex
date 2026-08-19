@@ -3,9 +3,36 @@
     <!-- ========== HERO SECTION ========== -->
   <section class="hero-section hero-broker">
     <div class="container">
-      <div class="broker-hero-content">
-        <h1>Certified Business Broker (CBB)</h1>
-        <p>A Professional Certification Program On Business Brokerage</p>
+      <div class="row align-items-center w-100">
+        <div class="col-lg-7 broker-hero-content mb-5 mb-lg-0">
+          <h1>Certified Business Broker (CBB)</h1>
+          <p>A Professional Certification Program On Business Brokerage</p>
+        </div>
+        <div class="col-lg-5">
+          <div class="hero-form-card">
+            <h3>Become a Certified Business Broker</h3>
+            @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+            @if(session('error'))<div class="alert alert-danger">{{ session('error') }}</div>@endif
+            <form class="hero-form" method="POST" action="{{ route('service.payment.initiate') }}">
+              @csrf
+              <input type="hidden" name="service_type" value="5">
+              <div class="form-group"><input type="text" name="name" class="form-control" placeholder="Your Name" value="{{ old('name') }}" required></div>
+              <div class="form-group"><input type="email" name="email" class="form-control" placeholder="Your Email" value="{{ old('email') }}" required></div>
+              <div class="form-group"><input type="tel" name="mobile" class="form-control" placeholder="Your Mobile" value="{{ old('mobile') }}" required></div>
+              <div class="form-group"><input type="text" name="company" class="form-control" placeholder="Your Company" value="{{ old('company') }}" required></div>
+              <div class="form-group">
+                <select class="form-control" name="payment_mode" required>
+                  <option value="">Select Payment Mode</option>
+                  <option value="OPTCRDC">Credit Card</option>
+                  <option value="OPTDBCRD">Debit Card</option>
+                  <option value="OPTNBK">Net Banking</option>
+                </select>
+              </div>
+              <button type="submit" class="btn-submit-primary">SUBMIT</button>
+            </form>
+            @if($errors->any())<div class="alert alert-danger mt-3">{{ $errors->first() }}</div>@endif
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -263,4 +290,16 @@
   @include('includes.groupcompany')
   @include('includes.newsletter')
   @include('includes.categorylinkfooter')
+
+<style>
+  .hero-broker { min-height: 650px; background-size: cover; background-position: center; }
+  .hero-broker .hero-form-card { max-width: 510px; margin-left: auto; padding: 22px 24px; }
+  .hero-broker .hero-form-card h3 { font-size: 24px; line-height: 30px; margin-bottom: 16px; }
+  .hero-broker .hero-form .form-group { margin-bottom: 12px; }
+  .hero-broker .hero-form-card .form-control { height: 48px; padding: 10px 13px; font-size: 15px; }
+  .hero-broker .btn-submit-primary { padding: 10px 32px; font-size: 16px; }
+  .hero-broker .alert { margin-bottom: 12px; padding: 8px 12px; }
+  @media (max-width: 991px) { .hero-broker { min-height: auto; padding: 55px 0; } .hero-broker .hero-form-card { margin: 24px auto 0; } }
+  @media (max-width: 575px) { .hero-broker { padding: 35px 0; } .hero-broker .hero-form-card { padding: 18px; } .hero-broker .hero-form-card h3 { font-size: 22px; line-height: 27px; } }
+</style>
 @endsection

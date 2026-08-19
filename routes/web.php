@@ -22,6 +22,7 @@ use App\Http\Controllers\ServiceListingController;
 use App\Http\Controllers\BxInsightController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\LenderProfileController;
+use App\Http\Controllers\BxServicePaymentController;
 
 
 
@@ -56,6 +57,16 @@ Route::get('/articles/{id}', [BxInsightController::class, 'show'])->name('bxinsi
 Route::post('/articles/{id}/comments', [BxInsightController::class, 'storeComment'])->name('bxinsight.comments.store');
 
 Route::get('/service/business-valuation', [ServiceListingController::class, 'businessValuation'])->name('service.business-valuation');
+Route::post('/service/payment/initiate', [BxServicePaymentController::class, 'initiateServicePayment'])->name('service.payment.initiate');
+Route::post('/service/payment/payu/success', [BxServicePaymentController::class, 'verifyServicePayment'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])
+    ->name('service.payment.payu.success');
+Route::post('/service/payment/payu/cancel', [BxServicePaymentController::class, 'cancelledServicePayment'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])
+    ->name('service.payment.payu.cancel');
+Route::post('/service/payment/payu/failure', [BxServicePaymentController::class, 'failedServicePayment'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])
+    ->name('service.payment.payu.failure');
 Route::get('/service/business-plan', [ServiceListingController::class, 'businessPlan'])->name('service.business-plan');
 Route::get('/service/due-diligence', [ServiceListingController::class, 'dueDiligence'])->name('service.due-diligence');
 Route::get('/service/certified-business-broker', [ServiceListingController::class, 'certifiedBusinessBroker'])->name('service.certified-business-broker');
