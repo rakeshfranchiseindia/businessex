@@ -54,7 +54,7 @@
                                 <option value="{{ $category->category_slug }}" {{ request('category') === $category->category_slug ? 'selected' : '' }}>{{ $category->category_name }}</option>
                             @endforeach
                         </select>
-                        <button class="btn btn-primary" type="submit">Search</button>
+                        <button class="btn article-search-button" type="submit">Search</button>
                     </div>
                 </form>
 
@@ -112,6 +112,21 @@
         </div>
     </div>
 </main>
+
+<style>
+    .article-search-button {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        color: #fff;
+    }
+
+    .article-search-button:hover,
+    .article-search-button:focus {
+        background: var(--primary-dark, #d95d00);
+        border-color: var(--primary-dark, #d95d00);
+        color: #fff;
+    }
+</style>
 
   @include('includes.groupcompany')
   @include('includes.newsletter')

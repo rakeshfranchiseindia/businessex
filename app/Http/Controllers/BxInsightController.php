@@ -14,12 +14,12 @@ class BxInsightController extends Controller
     {
     // Featured article
     $featuredArticle = BxArticle::published()
-        ->with(['category', 'author'])
+        ->with('author')
         ->latest('created_at')
         ->first();
 
     // Build articles query
-    $query = BxArticle::published()->with(['category', 'author']);
+    $query = BxArticle::published()->with('author');
 
     // Sorting
     $sort = $request->get('sort', 'recent');
@@ -30,10 +30,9 @@ class BxInsightController extends Controller
     };
 
     // Filter by category
-    if ($request->has('category')) {
-        $query->whereHas('category', function ($q) use ($request) {
-            $q->where('category_slug', $request->category);
-        });
+    if ($request->filled('category')) {
+        $category = str_replace('-', ' ', $request->string('category')->toString());
+        $query->where('article_tags', 'like', '%' . $category . '%');
     }
 
     // Search
@@ -51,7 +50,7 @@ class BxInsightController extends Controller
 
     // Sidebar latest
     $latestArticles = BxArticle::published()
-        ->with(['category', 'author'])
+        ->with('author')
         ->latest('created_at')
         ->take(5)
         ->get();
@@ -70,7 +69,6 @@ class BxInsightController extends Controller
 public function show(int $id): View
 {
     $article = BxArticle::with([
-        'category',
         'author',
         'comments' => fn ($query) => $query->where('comment_status', 1)->latest(),
     ])
@@ -82,28 +80,22 @@ public function show(int $id): View
     $article->refresh();
 
     $relatedArticles = BxArticle::published()
-        ->with(['category', 'author'])
+        ->with('author')
         ->where('article_id', '!=', $article->article_id)
-        ->when($article->category_id, function ($q) use ($article) {
-            $q->where('category_id', $article->category_id);
-        })
         ->inRandomOrder()
         ->take(4)
         ->get();
 
     $latestArticles = BxArticle::published()
-        ->with(['category', 'author'])
+        ->with('author')
         ->where('article_id', '!=', $article->article_id)
         ->latest('created_at')
         ->take(5)
         ->get();
 
     $recommendedArticles = BxArticle::published()
-        ->with(['category', 'author'])
+        ->with('author')
         ->where('article_id', '!=', $article->article_id)
-        ->when($article->category_id, function ($query) use ($article) {
-            $query->where('category_id', $article->category_id);
-        })
         ->latest('article_views')
         ->take(5)
         ->get();
@@ -148,8 +140,8 @@ public function category(string $slug): View
         ->firstOrFail();
 
     $articles = BxArticle::published()
-        ->where('category_id', $category->cat_id)
-        ->with(['category', 'author'])
+        ->where('article_tags', 'like', '%' . str_replace('-', ' ', $slug) . '%')
+        ->with('author')
         ->latest('created_at')
         ->paginate(12);
 
@@ -157,16 +149,18 @@ public function category(string $slug): View
 
     $latestArticles = BxArticle::published()
         ->whereNotIn('article_id', $articles->pluck('article_id'))
+        ->with('author')
         ->latest('created_at')
         ->take(5)
         ->get();
 
-    return view('articles.category', compact(
-        'category',
-        'articles',
-        'featuredArticle',
-        'latestArticles'
-    ));
+    return view('bxinsight.index', [
+        'categories' => IndustryCategory::active()->ordered()->get(),
+        'category' => $category,
+        'articles' => $articles,
+        'featuredArticle' => $featuredArticle,
+        'latestArticles' => $latestArticles,
+    ]);
 }
 
 }
