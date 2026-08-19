@@ -53,6 +53,7 @@ Route::get('/pricing', [PriceController::class, 'priceListing'])->name('pricing.
 
 Route::get('/articles', [BxInsightController::class, 'index'])->name('bxinsight.index');
 Route::get('/articles/{id}', [BxInsightController::class, 'show'])->name('bxinsight.show');
+Route::post('/articles/{id}/comments', [BxInsightController::class, 'storeComment'])->name('bxinsight.comments.store');
 
 Route::get('/service/business-valuation', [ServiceListingController::class, 'businessValuation'])->name('service.business-valuation');
 Route::get('/service/business-plan', [ServiceListingController::class, 'businessPlan'])->name('service.business-plan');
