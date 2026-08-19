@@ -19,7 +19,7 @@
         </div>
 
         <div class="row catfull">
-            @include('includes.catleftstartup')
+            @include('includes.catleftstartup', ['businessType' => $businessTypeData ?? 'all'])
 
             <div class="col-12 col-sm-9 col-md-9 mdy setheading">
                 <div class="row">
@@ -78,60 +78,76 @@
                     @if(isset($startups) && $startups->count() > 0)
                         <ul class="listop otherlist">
                             @foreach($startups as $startup)
-                                <li>
+                                <li class="startup-card">
                                     <div class="ribbonblk">
-                                        <div class="ribbonblkinner">{{ $startup->badge }}</div>
+                                        <div class="ribbonblkinner">{{ $startup['badge'] }}</div>
                                     </div>
 
                                     <div class="fullban">
-                                        <a href="#"><img src="{{ $startup->image }}" alt="Startup Image"></a>
+                                        <a href="{{ $startup['profile_url'] }}"><img src="{{ $startup['image'] }}" alt="{{ $startup['title'] }}"></a>
                                     </div>
 
-                                    <div class="fullb cattxt">
-                                        <span>{{ $startup->category }}</span>
-                                        {{ $startup->title }}
+                                    <div class="fullb cattxt startup-card-title">
+                                        <span>{{ $startup['category'] }}</span>
+                                        <h3>{{ $startup['title'] }}</h3>
                                     </div>
 
-                                    <div class="fullb contxt">
-                                        {{ $startup->description }}
+                                    <div class="startup-investment-row">
+                                        <span>Seeking Investment</span>
+                                        <strong>{{ $startup['investment'] }}</strong>
                                     </div>
 
-                                    <div class="sdd">
-                                        <div class="sddinner"><img src="{{ asset('assets/img/phone.svg') }}"> <span>Phone</span></div>
-                                        <div class="sddinner"><img src="{{ asset('assets/img/email.svg') }}"> <span>Email</span></div>
+                                    <div class="startup-details">
+                                        <div class="inblk">
+                                            Annual sale
+                                            <span>{{ $startup['annual_sales'] ?? 0 }}</span>
+                                        </div>
+                                        <div class="inblk">
+                                            Establishment Year 
+                                            <span>{{ $startup['est_year'] }}</span>
+                                        </div>
+                                        <div class="inblk">
+                                            Employee Count 
+                                            <span>{{ $startup['employee_count'] }}</span>
+                                        </div>
+                                        <div class="inblk">
+                                            Entity Type 
+                                            <span>{{ $startup['entity_type'] }}</span>
+                                        </div>
+                                        <div class="inblk">
+                                            Business Type 
+                                            <span>{{ $startup['business_type'] }}</span>
+                                        </div>
                                     </div>
 
-                                    <div class="fullb citytxt">
-                                        {{ $startup->location }}
+                                    <div class="startup-location">
+                                        <i class="fa fa-map-marker"></i> {{ $startup['location'] }}
                                     </div>
 
-                                    <div class="tagv">
-                                        @foreach($startup->tags as $tag)
-                                            <div class="tagvinner">{{ $tag }}</div>
-                                        @endforeach
+                                    <div class="inbtn startup-contact-button">
+                                        <a href="mailto:{{ $startup['contact_email'] }}">Contact Startup</a>
                                     </div>
-
-                                    <div class="backv">
-                                        <div class="inblk">Seeking Investment <span><i class="fas fa-rupee-sign"></i> {{ $startup->investment }}</span></div>
-                                        <div class="inblk">Requirement <span>{{ $startup->requirement }}</span></div>
-                                        <div class="inblk">Establishment year <span>{{ $startup->est_year }}</span></div>
-                                        <div class="inblk">Employee count <span>{{ $startup->employee_count }}</span></div>
-                                        <div class="inblk">Entity type <span>{{ $startup->entity_type }}</span></div>
-                                        <div class="inblk">Business type <span>{{ $startup->business_type }}</span></div>
-                                    </div>
-
-                                    <div class="inbtn"><a href="#">Contact Business</a></div>
                                 </li>
                             @endforeach
                         </ul>
-
-                        {{ $startups->links('pagination::bootstrap-4') }}
+                        
                     @else
-                        <div class="alert alert-info">No startups found at the moment.</div>
+                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                            <i class="fa fa-info-circle mr-2"></i>
+                            <strong>No startups found</strong> matching your filters. Try adjusting your search criteria.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     @endif
+                    
                 </div>
-
-                
+                <!-- Pagination -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        {{ $startups->render('pagination::bootstrap-4') }}
+                    </div>
+                </div>
             </div>
         </div>
         @include("includes.groupcompany")
@@ -139,4 +155,89 @@
     </div>
     @include("includes.categorylinkfooter")
 </main>
+
+<style>
+    .startup-card {
+        padding: 10px 13px 0 !important;
+        height: auto !important;
+        min-height: 0;
+    }
+
+    .startup-card .fullban {
+        width: 100%;
+        height: 198px;
+        overflow: hidden;
+    }
+
+    .startup-card .fullban img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .startup-card-title {
+        padding: 12px 0 8px;
+        text-align: center;
+    }
+
+    .startup-card-title span {
+        text-align: left;
+        margin-bottom: 16px;
+    }
+
+    .startup-card-title h3 {
+        font-size: 22px;
+        line-height: 25px;
+        margin: 0;
+    }
+
+    .startup-investment-row {
+        align-items: center;
+        background: #16a085;
+        color: #fff;
+        display: flex;
+        font-size: 18px;
+        justify-content: space-between;
+        line-height: 22px;
+        margin: 0 0 4px;
+        padding: 6px;
+    }
+
+    .startup-investment-row strong {
+        color: #fff;
+        font-size: 16px;
+    }
+
+    .startup-details {
+        background: #fff;
+        padding: 0 0 4px;
+    }
+
+    .startup-card .startup-details .inblk {
+        font-size: 16px;
+        line-height: 22px;
+        padding: 4px 0;
+    }
+
+    .startup-card .startup-details .inblk span {
+        font-size: 16px;
+    }
+
+    .startup-location {
+        background: #fbfbfb;
+        color: #231f20;
+        font-size: 16px;
+        line-height: 22px;
+        padding: 6px 0 8px;
+    }
+
+    .startup-contact-button {
+        margin-top: 14px;
+    }
+
+    .startup-contact-button a {
+        font-size: 16px;
+        padding: 11px 10px;
+    }
+</style>
 @endsection

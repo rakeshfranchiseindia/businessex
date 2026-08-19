@@ -11,7 +11,7 @@
             <h6 class="mb-2 font-weight-bold text-secondary">
               <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
                  data-toggle="collapse" href="#collapseMentor" aria-expanded="true">
-                Mentor Types
+                <label class="font-weight-bold text-secondary">MENTOR TYPES</label>
                 <span class="arrow">&#9662;</span>
               </a>
             </h6>
@@ -41,7 +41,7 @@
             <h6 class="mb-2 font-weight-bold text-secondary">
               <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
                  data-toggle="collapse" href="#collapseLocation" aria-expanded="true">
-                Location
+                <label class="font-weight-bold text-secondary">LOCATION</label>
                 <span class="arrow">&#9662;</span>
               </a>
             </h6>
@@ -96,7 +96,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </form>
   </div>

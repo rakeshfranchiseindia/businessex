@@ -83,9 +83,10 @@
                                     $imageUrl = $businessImage && $businessImage->image_path ? $businessImage->image_path : asset('assets/img/default-business.jpg');
                                     $headline = $business->advmt_headline ?: $business->seller_company ?: 'Business Listing';
                                     $location = trim(($business->ofc_city ?? '') . (empty($business->ofc_city) || empty($business->ofc_state) ? '' : ', ') . ($business->ofc_state ?? ''));
-                                    $annualSales = $business->annual_sales ? '₹ ' . number_format((float) $business->annual_sales, 2) : 'N/A';
+                                    $annualSales = $business->annual_sales ? number_format((float) $business->annual_sales / 10000000, 2) . ' cr' : 'N/A';
+                                    $askingAmount = $business->buyer_sell_price ? number_format((float) $business->buyer_sell_price / 10000000, 2) . ' Crores' : 'N/A';
                                 @endphp
-                                <li>
+                                <li class="business-list-card">
                                     <div class="ribbonblk">
                                         <div class="ribbonblkinner">
                                             {{ $business->business_type ? config('constants.businessType.' . $business->business_type) : 'Business' }}
@@ -96,34 +97,27 @@
                                         <a href="#"><img src="{{ $imageUrl }}" alt="Business Image"></a>
                                     </div>
 
-                                    <div class="fullb cattxt">
+                                    <div class="fullb cattxt business-card-title">
                                         <span>{{ $business->seller_company ?: 'Business' }}</span>
-                                        {{ $headline }}
+                                        <h3>{{ $headline }}</h3>
                                     </div>
 
-                                    <div class="fullb contxt">
-                                        {{ $business->seller_intro ?: $business->company_summary ?: 'Business profile details available.' }}
+                                    <div class="business-investment-row">
+                                        <span>Seeking Investment</span>
+                                        <strong>{{ $askingAmount }}</strong>
                                     </div>
 
-                                    <div class="sdd">
-                                        <div class="sddinner"><img src="{{ asset('assets/img/phone.svg') }}"> <span>{{ $business->seller_mobile ?: 'Phone' }}</span></div>
-                                        <div class="sddinner"><img src="{{ asset('assets/img/email.svg') }}"> <span>{{ $business->seller_email ?: 'Email' }}</span></div>
-                                    </div>
-
-                                    <div class="fullb citytxt">
-                                        {{ $location ?: 'Location not specified' }}
-                                    </div>
-
-                                    <div class="backv">
-                                        <div class="inblk">Asking price <span><i class="fas fa-rupee-sign"></i> {{ $business->buyer_sell_price ? number_format((float) $business->buyer_sell_price, 2) : 'N/A' }}</span></div>
-                                        <div class="inblk">Annual sale <span><i class="fas fa-rupee-sign"></i> {{ $annualSales }}</span></div>
+                                    <div class="business-card-details">
+                                        <div class="inblk">Annual sale <span>{{ $annualSales }}</span></div>
                                         <div class="inblk">Establishment year <span>{{ $business->estb_year ?: 'N/A' }}</span></div>
                                         <div class="inblk">Employee count <span>{{ $business->emp_count ?: 'N/A' }}</span></div>
                                         <div class="inblk">Entity type <span>{{ $business->entity_type ?: 'N/A' }}</span></div>
-                                        <div class="inblk">Business type <span>{{ $business->business_type ?: 'N/A' }}</span></div>
+                                        <div class="inblk">Business type <span>{{ $business->business_type ? config('constants.businessType.' . $business->business_type) : 'N/A' }}</span></div>
                                     </div>
 
-                                    <div class="inbtn"><a href="#">Contact Business</a></div>
+                                    <div class="business-card-location"><i class="fa fa-map-marker"></i> {{ $location ?: 'Location not specified' }}</div>
+
+                                    <div class="inbtn business-card-contact"><a href="mailto:{{ $business->seller_email }}">Contact Business</a></div>
                                 </li>
                             @endforeach
                         </ul>
@@ -143,4 +137,89 @@
     </div>
     @include("includes.categorylinkfooter")
 </main>
+
+<style>
+    .business-list-card {
+        height: auto !important;
+        min-height: 0;
+        padding: 10px 13px 0 !important;
+    }
+
+    .business-list-card .fullban {
+        height: 198px;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .business-list-card .fullban img {
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .business-card-title {
+        padding: 12px 0 8px;
+        text-align: center;
+    }
+
+    .business-card-title span {
+        display: block;
+        margin-bottom: 5px;
+        text-align: left;
+    }
+
+    .business-card-title h3 {
+        font-size: 22px;
+        line-height: 25px;
+        margin: 0;
+    }
+
+    .business-investment-row {
+        align-items: center;
+        background: #16a085;
+        color: #fff;
+        display: flex;
+        font-size: 18px;
+        justify-content: space-between;
+        line-height: 22px;
+        margin: 0 0 4px;
+        padding: 6px;
+    }
+
+    .business-investment-row strong {
+        color: #fff;
+        font-size: 16px;
+    }
+
+    .business-card-details {
+        padding: 0 0 4px;
+    }
+
+    .business-list-card .business-card-details .inblk {
+        font-size: 16px;
+        line-height: 22px;
+        padding: 4px 0;
+    }
+
+    .business-list-card .business-card-details .inblk span {
+        font-size: 16px;
+    }
+
+    .business-card-location {
+        background: #fbfbfb;
+        color: #231f20;
+        font-size: 16px;
+        line-height: 22px;
+        padding: 6px 0 8px;
+    }
+
+    .business-card-contact {
+        margin-top: 14px;
+    }
+
+    .business-card-contact a {
+        font-size: 16px;
+        padding: 11px 10px;
+    }
+</style>
 @endsection

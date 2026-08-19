@@ -29,10 +29,10 @@
                     </div>
                     <div class="col-12 col-sm-3 col-md-3 float-right setmob">
                         <div class="form-group">
-                            <select class="form-control modysel myselectclass" id="Industry">
+                            <select class="form-control modysel myselectclass" id="sortby" onchange="const params = new URLSearchParams(window.location.search); params.set('sortby', this.value); params.delete('currentPage'); window.location = '{{ route('investor.listing') }}?' + params.toString();">
                                 <option value="">Sort By</option>
-                                <option value="asc">Listed first asc</option>
-                                <option value="desc">Listed first desc</option>
+                                <option value="asc" {{ request('sortby') === 'asc' ? 'selected' : '' }}>Listed first asc</option>
+                                <option value="desc" {{ request('sortby') === 'desc' ? 'selected' : '' }}>Listed first desc</option>
                                 
                             </select>
                         </div>
@@ -44,6 +44,7 @@
                     @if(isset($investorList) && count($investorList) > 0)
                         <ul class="listop">
                             @foreach($investorList as $investor)
+                            <?php //print_r($investor); exit?>
                                 <li>
                                     <div class="ribbonblk">
                                         <div class="ribbonblkinner">{{ $investor['investorPlan'] }}</div>
@@ -84,10 +85,10 @@
                                     </div>
 
                                     <div class="backv">
-                                        <div class="inblk">Investment Preference <span>{{ $investor->investment_preference }}</span></div>
-                                        <div class="inblk">Investment Size <span>{{ $investor->investment_size }}</span></div>
-                                        <div class="inblk">Industry Preference <span>{{ $investor->industry_preference }}</span></div>
-                                        <div class="inblk">Location Preference <span>{{ $investor->location_preference }}</span></div>
+                                        <div class="inblk">Investment Preference <span>{{ $investor['investmentPref'] }}</span></div>
+                                        <div class="inblk">Investment Size <span>{{ $investor['minInvestment'] }} - {{ $investor['maxInvestment'] }}</span></div>
+                                        <div class="inblk">Industry Preference <span>{{ $investor['sectorPref'] }}</span></div>
+                                        <div class="inblk">Location Preference <span>{{ $investor['locations'] }}</span></div>
                                     </div>
 
                                     <div class="inbtn"><a href="#">Send Proposal</a></div>
@@ -95,7 +96,7 @@
                             @endforeach
                         </ul>
 
-                        {{ $investors->links('pagination::bootstrap-4') }}
+                        {{ $investors->appends(request()->except('currentPage'))->links('pagination::bootstrap-4') }}
                     @else
                         <div class="alert alert-info">No investors found at the moment.</div>
                     @endif
