@@ -104,6 +104,9 @@ class BusinessProfileController extends Controller
             $employeeCount = $request->input('employee_count');
             $entityType = $request->input('entity_type');
             $businessType = $request->input('business_type');
+            $numericOrZero = static function ($value) {
+                return $value === null || $value === '' ? 0 : $value;
+            };
 
             $seller = new ProfileBusiness([
                 'business_profile_str' => $sellerProfileStr,
@@ -122,11 +125,11 @@ class BusinessProfileController extends Controller
                 'industry_sector' => $request->input('industry_sector'),
                 'business_website' => $request->input('business_website'),
                 'facilities_desc' => $request->input('facilities'),
-                'annual_sales' => $request->input('annual_sales'),
-                'ebitda' => $request->input('ebitda'),
+                'annual_sales' => $numericOrZero($request->input('annual_sales')),
+                'ebitda' => $numericOrZero($request->input('ebitda')),
                 'gross_profit' => $request->input('gross_income'),
                 'inventory_value' => $request->input('inventory_value'),
-                'ebitda_margin' => $request->input('ebitda_margin'),
+                'ebitda_margin' => $numericOrZero($request->input('ebitda_margin')),
                 'rentals' => $request->input('rentals'),
                 'company_summary' => $request->input('company_summary_financial'),
                 'director_name' => $request->input('director_name'),
@@ -138,12 +141,12 @@ class BusinessProfileController extends Controller
                 'ofc_country' => trim((string) $request->input('country', $request->input('ofc_country')), '"') ?: 'India',
                 'ofc_pincode' => $request->input('pin_code'),
                 'business_pitch' => $request->input('one_line_pitch'),
-                'seeking_investors' => $request->input('seeking_investors'),
-                'seeking_buyers' => $request->input('seeking_buyers'),
-                'seeking_loan' => $request->input('seeking_loan'),
-                'seeking_mentors' => $request->input('seeking_mentors'),
-                'seeking_accelerators' => $request->input('seeking_accelerators'),
-                'inv_asking_price' => $request->input('inv_asking_price'),
+                'seeking_investors' => $request->boolean('seeking_investors') ? 1 : 0,
+                'seeking_buyers' => $request->boolean('seeking_buyers') ? 1 : 0,
+                'seeking_loan' => $request->boolean('seeking_loan') ? 1 : 0,
+                'seeking_mentors' => $request->boolean('seeking_mentors') ? 1 : 0,
+                'seeking_accelerators' => $request->boolean('seeking_accelerators') ? 1 : 0,
+                'inv_asking_price' => $numericOrZero($request->input('inv_asking_price')),
                 'inv_stake' => $request->input('inv_stake'),
                 'inv_reason' => $request->input('inv_reason'),
                 'buyer_sell_price' => $request->input('buyer_sell_price'),

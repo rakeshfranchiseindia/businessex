@@ -31,8 +31,6 @@ class ProfileInvestor extends \Illuminate\Database\Eloquent\Model
         'purchase_capacity_max',
         'inv_abt_urself',
         'linkedin_profile',
-        'location_preference',
-        'sector_preference',
         'company_name',
         'company_designation',
         'company_placeid',

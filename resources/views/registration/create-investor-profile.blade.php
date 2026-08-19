@@ -162,7 +162,15 @@
                             <label class="col-md-4 frmtxt">Location Preference</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="location_preference" class="form-control modysel @error('location_preference') is-invalid @enderror" placeholder="Enter location preference" value="{{ old('location_preference') }}">
+                                <select name="location_preference[]" class="form-control modysel @error('location_preference') is-invalid @enderror" multiple>
+                                    @foreach(collect($locations ?? [])->groupBy(fn ($location) => $location->state ?? $location['state'] ?? '')->sortKeys() as $stateName => $cities)
+                                        <optgroup label="{{ $stateName }}">
+                                            @foreach($cities as $city)
+                                                <option value="{{ $city->id ?? $city['id'] }}" {{ in_array((string) ($city->id ?? $city['id']), array_map('strval', (array) old('location_preference', [])), true) ? 'selected' : '' }}>{{ $city->city ?? $city['city'] }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
                                 @error('location_preference')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -173,7 +181,15 @@
                             <label class="col-md-4 frmtxt">Sector Preference</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="sector_preference" class="form-control modysel @error('sector_preference') is-invalid @enderror" placeholder="Enter sector preference" value="{{ old('sector_preference') }}">
+                                <select name="sector_preference[]" class="form-control modysel @error('sector_preference') is-invalid @enderror" multiple>
+                                    @foreach(collect($industrySeller ?? [])->groupBy('industry')->sortKeys() as $industryName => $industryItems)
+                                        <optgroup label="{{ $industryName }}">
+                                            @foreach($industryItems as $industry)
+                                                <option value="{{ $industry['subIndustryid'] }}_{{ $industry['parentCatId'] }}" {{ in_array((string) $industry['subIndustryid'] . '_' . $industry['parentCatId'], array_map('strval', (array) old('sector_preference', [])), true) ? 'selected' : '' }}>{{ $industry['subindustry'] }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
                                 @error('sector_preference')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror

@@ -6,6 +6,7 @@ use App\Models\IndPrefInvestor;
 use App\Models\LocPrefInvestor;
 use App\Models\UserAccount;
 use App\Models\UserProfile;
+use App\Models\BxCity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -44,8 +45,10 @@ class InvestorProfileController extends Controller
             'introduction'          => 'nullable|string',
             'inv_type'              => 'required|in:Individual Investor,Investment Firm',
             'linkedin_profile'      => 'nullable|url|max:255',
-            'location_preference'   => 'nullable|string|max:255',
-            'sector_preference'     => 'nullable|string|max:255',
+            'location_preference'   => 'nullable|array',
+            'location_preference.*' => 'integer|exists:bx_cities,id',
+            'sector_preference'     => 'nullable|array',
+            'sector_preference.*'   => ['string', 'regex:/^\d+_\d+$/'],
             'invest_pref'           => 'nullable|in:1',
             'full_acquisition'      => 'nullable|in:1',
             'invest_size_min'       => 'nullable|numeric|min:0',
@@ -93,8 +96,8 @@ class InvestorProfileController extends Controller
         DB::beginTransaction();
 
         try {
-            // ✅ Determine investor type (1 = Individual, 2 = Firm)
-            $invTypeCode = ($request->input('inv_type') === 'Investment Firm') ? 2 : 1;
+            // ✅ Determine investor type (2 = Individual, 1 = Firm)
+            $invTypeCode = ($request->input('inv_type') === 'Investment Firm') ? 1 : 2;
 
             // ✅ Save Investor Profile
             $investor = new ProfileInvestor();
@@ -116,8 +119,6 @@ class InvestorProfileController extends Controller
                 'purchase_capacity_max' => $acquisitionSelected ? ($request->input('purchase_capacity_max') ?? 0) : 0,
                 'inv_abt_urself'       => $request->input('inv_abt_urself'),
                 'linkedin_profile'      => $request->input('linkedin_profile'),
-                'location_preference'   => $request->input('location_preference'),
-                'sector_preference'     => $request->input('sector_preference'),
                 'company_name'          => $request->input('company_name'),
                 'company_designation'   => $request->input('company_designation'),
                 'inv_profile_pic_path'  => $imageName,
@@ -129,33 +130,39 @@ class InvestorProfileController extends Controller
             $lastInsertId = $investor->investor_id;
 
             // ✅ Industry Preferences
-            if ($request->filled('industry_pref')) {
-                foreach (explode(',', $request->input('industry_pref')) as $pref) {
+            $sectorPreferences = $request->input('sector_preference', $request->input('industry_pref', []));
+            if (!empty($sectorPreferences)) {
+                foreach ((array) $sectorPreferences as $pref) {
                     $pref = trim($pref);
                     if (!empty($pref)) {
                         $parts = explode('_', $pref);
                         IndPrefInvestor::create([
                             'investor_profile_id' => $lastInsertId,
                             'user_id'             => $userId,
-                            'parent_category_id'  => $parts[2] ?? null,
+                            'parent_category_id'  => $parts[1] ?? null,
                             'sub_category_id'     => $parts[0] ?? null,
+                            'profile_status'      => config('constants.ProfileStatus.Awaiting'),
                         ]);
                     }
                 }
             }
 
             // ✅ Location Preferences
-            if ($request->filled('location_pref')) {
-                $locations = explode(',', trim($request->input('location_pref')));
-                foreach ($locations as $loc) {
-                    $loc = trim($loc);
-                    if (!empty($loc)) {
-                        LocPrefInvestor::create([
-                            'investor_profile_id' => $lastInsertId,
-                            'user_id'             => $userId,
-                            'location_name'       => strpos($loc, 'India') !== false ? $loc : $loc . ', India',
-                        ]);
-                    }
+            $locationPreference = $request->input('location_preference', $request->input('location_pref', []));
+            foreach ((array) $locationPreference as $cityId) {
+                $city = BxCity::find($cityId);
+                if ($city) {
+                    LocPrefInvestor::create([
+                        'investor_profile_id' => $lastInsertId,
+                        'user_id'             => $userId,
+                        'place_id'            => (string) $city->id,
+                        'location_name'       => $city->city . ', ' . $city->state,
+                        'loc_state'           => $city->state,
+                        'loc_country'         => 'India',
+                        'loc_latitude'        => '',
+                        'loc_longitude'       => '',
+                        'profile_status'     => config('constants.ProfileStatus.Awaiting'),
+                    ]);
                 }
             }
 
