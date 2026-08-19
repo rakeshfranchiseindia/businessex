@@ -21,11 +21,11 @@
     <!-- Intro Section -->
     <div class="row">
         <div class="col-12 col-md-7">
-            <strong>Business Exchange is a flagship business initiative of Franchise India, headquartered at Faridabad, Haryana.</strong>
+            <strong>Business Exchange is a flagship business initiative of Franchise India, head quartered at Faridabad, Haryana.</strong>
             <br><br>
-            BusinessEx is thoughtfully conceived and created to address selling and exchanging of businesses across industry verticals...
+            BusinessEx is thoughtfully conceived and created to address selling and exchanging of businesses across industry verticals. It’s a one-of-kind platform that interconnects the like-minded, gives exposure to Businesses, Start-ups, Investors, Lenders, Mentors and Incubators to find suitable business associates. Over the last 15 years we have mastered the art of creating a springboard that is capable of addressing the scopes of selling and exchanging of businesses.
             <br><br>
-            Businessex.com is emerging as the fastest growing marketplace for business consultation services...
+            Businessex.com is emerging as the fastest growing marketplace for business consultation services. It bestows the buyers & sellers an interactive and a symbiotic platform to communicate with each other. With ‘Efficiency’ as its motto, Businessex.com gives cutting-edge efficiency in terms of time, efficacy, transaction and tailored solutions to its broad spectrum of buyers and sellers of existing businesses, across industries and geographies.
         </div>
 
         <div class="col-12 col-md-5">
@@ -56,68 +56,8 @@
     </div>
 
     <div class="clr"></div>
-
-    <!-- How It Works -->
-    <div class="row">
-        <div class="col-12">
-            <h4 class="mhvt">How It Works?</h4>
-            <ul class="ncn">
-                <li>
-                    <img src="{{ asset('assets/img/img_1.jpg') }}" alt="Register">
-                    <div class="shotxt">
-                        <span>Register</span>
-                        Create a profile to become a member of BusinessEx.com...
-                    </div>
-                </li>
-                <li>
-                    <img src="{{ asset('assets/img/img_2.jpg') }}" alt="Create Profile">
-                    <div class="shotxt">
-                        <span>Create Profile</span>
-                        Create a profile to become a member of BusinessEx.com...
-                    </div>
-                </li>
-                <li>
-                    <img src="{{ asset('assets/img/img_3.jpg') }}" alt="Review">
-                    <div class="shotxt">
-                        <span>Review</span>
-                        Sit back while our team reviews your submission...
-                    </div>
-                </li>
-                <li>
-                    <img src="{{ asset('assets/img/img_4.jpg') }}" alt="Publish">
-                    <div class="shotxt">
-                        <span>Publish</span>
-                        Visit the marketplace and send/receive top structured deals...
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Consumer Problem & Solution -->
-    <div class="row">
-        <div class="col-12">
-            <div class="divncnbtm">
-                <div class="divncnbtminner">
-                    <h4 class="mhvt mdfy">Consumer Problem</h4>
-                    <ul class="listnav">
-                        <li>You will be asked to submit your details</li>
-                        <li>You will be asked to submit your details</li>
-                        <li>You will be asked to submit your details</li>
-                        <li>You will be asked to submit your details</li>
-                    </ul>
-                </div>
-                <div class="divncnbtminner">
-                    <h4 class="mhvt mdfy">Business-ex Solution</h4>
-                    <ul class="listnav">
-                        <li>You will be asked to submit your details</li>
-                        <li>You will be asked to submit your details</li>
-                        <li>You will be asked to submit your details</li>
-                        <li>You will be asked to submit your details</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    @include('includes.groupcompany')
+    @include('includes.newsletter')
+    @include('includes.categorylinkfooter')
 </div>
 @endsection
