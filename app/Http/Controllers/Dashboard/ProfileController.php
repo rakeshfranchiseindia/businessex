@@ -17,10 +17,11 @@ use App\Models\ProfileStartup;
 use App\Models\IndustryCategory;
 use App\Models\ConversationReply;
 use App\Models\RequestContact;
+use App\Models\BxCity;
 use Illuminate\Support\Str;
 use App\Models\UserAccount;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\VerifyEmailMail;
+use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -79,17 +80,17 @@ class ProfileController extends Controller
         $resetLink = route('reset.password', [
             'token' => $token
         ]);
-        Mail::to($user->email)->send(new VerifyEmailMail($resetLink));
+        Mail::to($user->email)->send(new ResetPasswordMail($resetLink));
         return back()->with(
             'success',
-            'Mail Send successfully.'
+            'A password reset link has been sent to your email.'
         );
     }
     public function showResetPasswordForm($token)
     {
         $user = UserAccount::where('reset_token', $token)->first();
-        if (!$user) {
-            return redirect('/forgot-password')->with('error', 'Invalid or expired reset link.');
+        if (!$user || $this->isResetTokenExpired($user)) {
+            return redirect('/forgot-password')->with('error', 'This reset link is invalid or has expired. Please request a new one.');
         }
         return view('profile.reset-password', compact('token'));
     }
@@ -100,14 +101,25 @@ class ProfileController extends Controller
             'password' => 'required|min:8|confirmed',
         ]);
         $user = UserAccount::where('reset_token', $request->token)->first();
-        if (!$user) {
-            return redirect('/forgot-password')->with('error', 'Invalid reset link.');
+        if (!$user || $this->isResetTokenExpired($user)) {
+            return redirect('/forgot-password')->with('error', 'This reset link is invalid or has expired. Please request a new one.');
         }
         $user->password = Hash::make($request->password);
         $user->reset_token = null;
         $user->reset_token_created_at = null;
         $user->save();
         return redirect('/')->with('success', 'Password reset successfully. Please login.');
+    }
+
+    /**
+     * Reset links are valid for 60 minutes from when they were issued.
+     */
+    private function isResetTokenExpired($user)
+    {
+        if (empty($user->reset_token_created_at)) {
+            return true;
+        }
+        return Carbon::parse($user->reset_token_created_at)->addMinutes(60)->isPast();
     }
     public function getUserProfileDetails(Request $request)
     {
@@ -162,7 +174,11 @@ class ProfileController extends Controller
             $locationPref = LocPrefInvestor::query()->select('inv_loc_id', 'location_name')->where('investor_profile_id', $invPreference->investor_id)
                 ->orderBy('inv_loc_id', 'desc')->get();
         }
-        return view('account_dashboard.investorConfidentials', compact('user', 'investor', 'invPreference', 'indPref', 'locationPref'));
+        // Same source as the investor registration form's Location Preference dropdown.
+        $locations = BxCity::orderBy('state')->orderBy('city')->get();
+        // State filter only lists states that actually have cities in bx_cities.
+        $availableStates = getAvailableStatesFromCities();
+        return view('account_dashboard.investorConfidentials', compact('user', 'investor', 'invPreference', 'indPref', 'locationPref', 'locations', 'availableStates'));
     }
     public function getConfidentialInfo($user_rand_id)
     {
@@ -490,7 +506,8 @@ class ProfileController extends Controller
         $locationPref = LocPrefInvestor::query()
             ->select(
                 'inv_loc_id',
-                'location_name'
+                'location_name',
+                'place_id'
             )
             ->where(
                 'investor_profile_id',
@@ -575,58 +592,53 @@ class ProfileController extends Controller
                 }
             }
         }
+        // Location Preference: same source/shape as the investor registration
+        // form — the select posts bx_cities.id values, resolved here the same
+        // way InvestorProfileController::store() does (place_id/location_name/
+        // loc_state/loc_country from BxCity), just synced instead of only inserted.
         $locationUpdated = false;
         if ($request->has('location_preference')) {
-            $locationInput = $request->input('location_preference');
-            if (is_array($locationInput)) {
-                $locations = $locationInput;
-            } else {
-                $locations = explode(',', $locationInput);
-            }
-            $locations = array_map('trim', $locations);
-            $locations = array_filter($locations, function ($location) {
-                return !empty($location);
-            });
-            $existingLocationNames = [];
-            foreach ($locations as $locationName) {
+            $cityIds = array_filter(array_map('intval', (array) $request->input('location_preference')));
+
+            $existingPlaceIds = [];
+            foreach ($cityIds as $cityId) {
+                $city = BxCity::find($cityId);
+                if (!$city) {
+                    continue;
+                }
+
+                $existingPlaceIds[] = (string) $city->id;
+
                 $existingLocation = LocPrefInvestor::query()
                     ->where('investor_profile_id', $investorCount->investor_id)
                     ->where('user_id', $investorCount->user_id)
-                    ->whereRaw(
-                        'LOWER(TRIM(location_name)) = ?',
-                        [strtolower($locationName)]
-                    )
+                    ->where('place_id', (string) $city->id)
                     ->exists();
-                if (!$existingLocation) {
-                    $location = new LocPrefInvestor();
-                    $location->investor_profile_id = $investorCount->investor_id;
-                    $location->user_id = $investorCount->user_id;
-                    $location->place_id = $locationName;
-                    $location->location_name = $locationName;
-                    $location->loc_state = '';
-                    $location->loc_country = '';
-                    $location->loc_latitude = '';
-                    $location->loc_longitude = '';
-                    $location->profile_status = 1;
-                    $location->save();
-                    $locationUpdated = true;
-                }
 
-                $existingLocationNames[] = strtolower(trim($locationName));
-            }
-            $allLocations = LocPrefInvestor::query()->where('investor_profile_id', $investorCount->investor_id)
-                ->where('user_id', $investorCount->user_id)
-                ->get();
-            foreach ($allLocations as $savedLocation) {
-                if (
-                    !in_array(
-                        strtolower(trim($savedLocation->location_name)),
-                        $existingLocationNames
-                    )
-                ) {
-                    $savedLocation->delete();
+                if (!$existingLocation) {
+                    LocPrefInvestor::create([
+                        'investor_profile_id' => $investorCount->investor_id,
+                        'user_id' => $investorCount->user_id,
+                        'place_id' => (string) $city->id,
+                        'location_name' => $city->city . ', ' . $city->state,
+                        'loc_state' => $city->state,
+                        'loc_country' => 'India',
+                        'loc_latitude' => '',
+                        'loc_longitude' => '',
+                        'profile_status' => 1,
+                    ]);
                     $locationUpdated = true;
                 }
+            }
+
+            $deletedLocations = LocPrefInvestor::query()
+                ->where('investor_profile_id', $investorCount->investor_id)
+                ->where('user_id', $investorCount->user_id)
+                ->whereNotIn('place_id', $existingPlaceIds)
+                ->delete();
+
+            if ($deletedLocations > 0) {
+                $locationUpdated = true;
             }
         }
 
@@ -973,10 +985,35 @@ class ProfileController extends Controller
 
         return [$profileName, $profilelink, $category, $contactStatus, $listingLink];
     }
-    public function setProfileType($type)
+    public function setProfileType($type, \Illuminate\Http\Request $request)
     {
         session(['profile_type' => $type]);
         $userRandId = Auth::user()->user_rand_id ?? null;
+
+        // AJAX callers (e.g. the dashboard-home "Top 5 Recommendations" switcher)
+        // just want the session updated without navigating away — everyone else
+        // (plain links) keeps the existing full-page redirect behaviour below.
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json(['status' => 'ok', 'profile_type' => $type]);
+        }
+
+        // If the dropdown was changed while on one of the "My Interactions" tabs
+        // (BX Inbox / Proposals Sent / Proposals Received / Instant Responses),
+        // stay on that same tab instead of bouncing to Manage — those tabs aren't
+        // tied to a specific profile type, so there's nothing to redirect to.
+        $referer = $request->headers->get('referer');
+        if ($referer) {
+            $refererPath = rtrim(parse_url($referer, PHP_URL_PATH) ?? '', '/');
+            $interactionPaths = [
+                '/dashboard/myinteraction',
+                '/dashboard/proposals-sent',
+                '/dashboard/proposals-received',
+                '/dashboard/instant-responses',
+            ];
+            if (in_array($refererPath, $interactionPaths, true)) {
+                return redirect($referer);
+            }
+        }
 
         switch ($type) {
             case 'mentor':
@@ -985,6 +1022,8 @@ class ProfileController extends Controller
                 return redirect()->route('lender.confidential.edit', ['user_rand_id' => $userRandId]);
             case 'startup':
                 return redirect()->route('startup.confidential.edit', ['user_rand_id' => $userRandId]);
+            case 'business':
+                return redirect()->route('business.confidential.edit', ['user_rand_id' => $userRandId]);
             case 'investor':
             default:
                 return redirect()->route('confidential.edit', ['user_rand_id' => $userRandId]);

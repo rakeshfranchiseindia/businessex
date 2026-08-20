@@ -22,7 +22,8 @@ class InvestorProfileController extends Controller
      */
     public function createInvestorProfile()
     {
-        return view('registration.create-investor-profile');
+        $locations = BxCity::orderBy('state')->orderBy('city')->get();
+        return view('registration.create-investor-profile', compact('locations'));
     }
 
     /**

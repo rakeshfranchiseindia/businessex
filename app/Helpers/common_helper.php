@@ -45,17 +45,18 @@ if (!function_exists('convertAmountToShort')) {
             return $rpVal;
         }
 
+        // These must be elseif, not separate ifs: once a branch reassigns
+        // $rpVal to a formatted string ("15 Lakhs"), a later `if` here would
+        // re-test/re-divide that STRING as if it were still the raw number —
+        // that's what was throwing "A non-numeric value encountered" (fatal
+        // in this app, since warnings are elevated to exceptions).
         if ($rpVal > 1000 && $rpVal < 100000) {
             $mod = round($rpVal / 1000, $decimalPoints);
             $rpVal = $mod . " Thousand";
-        }
-
-        if ($rpVal >= 100000 && $rpVal < 10000000) {
+        } elseif ($rpVal >= 100000 && $rpVal < 10000000) {
             $mod = round($rpVal / 100000, $decimalPoints);
             $rpVal = $mod . " Lakhs";
-        }
-
-        if ($rpVal >= 10000000) {
+        } elseif ($rpVal >= 10000000) {
             $decimalPoints = ($decimalPoints == 0) ? 2 : $decimalPoints;
             $mod = round($rpVal / 10000000, $decimalPoints);
             $rpVal = $mod . " Crores";
@@ -432,7 +433,7 @@ if (!function_exists('getAvailableProfileTypes')) {
      */
     function getAvailableProfileTypes($userId)
     {
-        $types = ['investor', 'mentor', 'lender', 'startup'];
+        $types = ['investor', 'mentor', 'lender', 'startup', 'business'];
         $available = [];
 
         foreach ($types as $type) {
@@ -465,6 +466,10 @@ if (!function_exists('isProfileTypeActivated')) {
         $isSpecificProfileActive = false;
 
         switch ($profileType) {
+            case 'business':
+                $profile = \App\Models\ProfileBusiness::where('user_id', $userId)->first();
+                $isSpecificProfileActive = !empty($profile) && (int) $profile->business_profile_status === 1;
+                break;
             case 'mentor':
                 $profile = \App\Models\ProfileMentor::where('user_id', $userId)->first();
                 $isSpecificProfileActive = !empty($profile) && (int) $profile->mentor_profile_status === 1;
@@ -485,5 +490,54 @@ if (!function_exists('isProfileTypeActivated')) {
         }
 
         return $isUserProfileActive && $isSpecificProfileActive;
+    }
+}
+
+
+if (!function_exists('getAvailableStatesFromCities')) {
+    /**
+     * Only the states that actually have at least one city in bx_cities —
+     * used to populate a State dropdown whose City dropdown is driven by
+     * bx_cities, so every state offered actually has cities behind it
+     * (bx_cities is sparse: only a handful of states are populated, while
+     * config('constants.statesIndia') lists every Indian state).
+     */
+    function getAvailableStatesFromCities()
+    {
+        $stateNames = \App\Models\BxCity::query()
+            ->select('state')
+            ->whereNotNull('state')
+            ->distinct()
+            ->pluck('state');
+
+        $codeByName = array_flip(config('constants.statesIndia'));
+
+        return $stateNames
+            ->mapWithKeys(function ($name) use ($codeByName) {
+                $code = $codeByName[$name] ?? $name;
+                return [$code => $name];
+            })
+            ->sort();
+    }
+}
+
+
+if (!function_exists('getTopRecommendationAddOnProfiles')) {
+    /**
+     * Profile ids (for the given profile type) who have an active "Top
+     * Recommendations" paid add-on (profile_memberships.membership_type = 502).
+     * Ported from CommonController::getTopRecommendationAddOnProfiles().
+     */
+    function getTopRecommendationAddOnProfiles($profileType)
+    {
+        return \App\Models\ProfileMembership::query()
+            ->select('profile_id')
+            ->where('profile_type', $profileType)
+            ->where('membership_type', 502)
+            ->where('is_active', '=', config('constants.ProfileStatus.Active'))
+            ->orderBy('membership_id', 'desc')
+            ->get()
+            ->pluck('profile_id')
+            ->toArray();
     }
 }

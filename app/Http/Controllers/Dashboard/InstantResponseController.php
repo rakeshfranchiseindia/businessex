@@ -12,13 +12,7 @@ use App\Models\ProfileMembership;
 
 require_once app_path('Helpers/common_helper.php');
 
-/**
- * Ported from the old (standalone) InstaResponseController. The dashboard's
- * profile switcher only supports Investor / Lender / Mentor, so only those
- * three "Contact*" tables are wired up here (Business/Startup/Incubation/Broker
- * existed in the old multi-profile-type version but have no place in this
- * dashboard's profile switcher).
- */
+
 class InstantResponseController extends Controller
 {
     public function index()

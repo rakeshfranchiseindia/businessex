@@ -71,10 +71,11 @@
                 @auth
                             <!-- Logged in: show profile image -->
                             <a href="javascript:void(0)" onclick="openSidebar()">
-                                <img src="{{ Auth::user()->profile_image
-                    ? asset(Auth::user()->profile_image)
-                    : asset('assets/img/mentor.png') }}" alt="User Profile" class="userpro rounded-circle"
-                                    width="40">
+                                @if(!empty($user->profile_pic) && file_exists(public_path($user->profile_pic)))
+                                    <img src="{{ asset($user->profile_pic) }}" alt="User Profile" class="userpro rounded-circle" width="40">
+                                @else
+                                    <span class="userpro-fallback">{{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}</span>
+                                @endif
                             </a>
                 @endauth
 
@@ -91,16 +92,17 @@
     </div>
 </nav>
 
+@auth
 <!-- User Profile Sidebar -->
-<div id="userSidebar" class="sidebar bg-white shadow-lg p-3" style="width:300px; position:fixed; top:0; right:-300px; height:100%; 
+<div id="userSidebar" class="sidebar bg-white shadow-lg p-3" style="width:300px; position:fixed; top:0; right:-300px; height:100%;
             overflow-y:auto; transition:right 0.3s; z-index:1050;">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <a href="{{ route('myaccount') }}" class="btn btn-success btn-sm">
+        <a href="{{ route('myaccount') }}" class="btn-user-sidebar">
             Dashboard
         </a>
-        <form method="POST" action="{{ route('logout') }}">
+        <form method="POST" action="{{ route('logout') }}" class="m-0">
             @csrf
-            <button type="submit" class="btn btn-success btn-sm">Logout</button>
+            <button type="submit" class="btn-user-sidebar">Logout</button>
         </form>
         <button class="btn btn-link text-dark" onclick="closeSidebar()">
             <i class="fa fa-times fa-lg"></i>
@@ -108,12 +110,16 @@
     </div>
 
     <div class="text-center">
-        <img src="{{ asset('images/default-mentor.jpg') }}" class="rounded mb-2" width="120" alt="Profile">
-        <p class="mb-0"><i class="fa fa-map-marker"></i>{{ $user->location ?? 'Not Set' }}</p>
-        <h6 class="font-weight-bold">{{ $user->name ?? 'N/A' }}</h6>
+        @if(!empty($user->profile_pic) && file_exists(public_path($user->profile_pic)))
+            <img src="{{ asset($user->profile_pic) }}" class="user-sidebar-photo mb-2" alt="Profile">
+        @else
+            <div class="user-sidebar-photo-fallback mb-2">{{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}</div>
+        @endif
+        <p class="mb-0 text-muted"><i class="fa fa-map-marker"></i> {{ $user->location ?? 'Not Set' }}</p>
+        <h6 class="font-weight-bold mt-1">{{ $user->name ?? 'N/A' }}</h6>
     </div>
 
-    <div class="mt-3 p-3 bg-light rounded">
+    <div class="mt-3 p-3 user-sidebar-info rounded">
         <p class="mb-1"><i class="fa fa-envelope"></i> <strong>Email</strong></p>
         <p class="text-muted mb-2">{{ $user->email ?? 'N/A' }}</p>
 
@@ -121,12 +127,73 @@
         <p class="text-muted mb-2">{{ $user->mobile ?? 'N/A' }}</p>
 
         <div class="mt-2">
-            <a href="#" class="text-success mr-2"><i class="fa fa-facebook"></i></a>
-            <a href="#" class="text-success mr-2"><i class="fa fa-google-plus"></i></a>
-            <a href="#" class="text-success"><i class="fa fa-linkedin"></i></a>
+            <a href="#" class="user-sidebar-social mr-2"><i class="fa fa-facebook"></i></a>
+            <a href="#" class="user-sidebar-social mr-2"><i class="fa fa-google-plus"></i></a>
+            <a href="#" class="user-sidebar-social"><i class="fa fa-linkedin"></i></a>
         </div>
     </div>
 </div>
+@endauth
+
+<style>
+    .userpro-fallback {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        font-weight: 700;
+        font-size: 16px;
+        vertical-align: middle;
+    }
+    .btn-user-sidebar {
+        background: #1f4e79;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 7px 16px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    .btn-user-sidebar:hover {
+        background: #163a5c;
+        color: #fff;
+    }
+    .user-sidebar-photo {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #eef1f6;
+    }
+    .user-sidebar-photo-fallback {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2563eb, #7c3aed);
+        color: #fff;
+        font-size: 44px;
+        font-weight: 700;
+    }
+    .user-sidebar-info {
+        background: #f7f9fb;
+        border: 1px solid #eef1f6;
+    }
+    .user-sidebar-social {
+        color: #1f4e79;
+    }
+    .user-sidebar-social:hover {
+        color: #163a5c;
+    }
+</style>
 
 <!-- Overlay -->
 <div id="sidebarOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
