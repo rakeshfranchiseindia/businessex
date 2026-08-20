@@ -54,10 +54,37 @@
                 </div>
             </div>
 
+            
+
             <!-- Contact Form Section -->
-            <div class="col-12 col-md-6 contbg">
+            <div class="col-12 col-md-6 contbg" style="background-color:#f7f7f7; border-radius:18px;">
                 <h2 class="stati2chead marsetb">Send Us Your Questions and Feedback</h2>
-                <form method="POST" action="" class="form-horizontal">
+                <!-- Success & Error Messages -->
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
+                @if($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+                <form method="POST" action="{{route("contact.submit")}}" class="form-horizontal">
                     @csrf
 
                     <div class="form-group row">
@@ -99,7 +126,7 @@
 
                     <div class="form-group row">
                         <div class="col-md-7 offset-md-4">
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success" style="background-color: #16A085">Submit</button>
                         </div>
                     </div>
 

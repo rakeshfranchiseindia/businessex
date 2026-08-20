@@ -798,7 +798,6 @@
         </form>
 
     </div>
-
     @include('includes.groupcompany')
     @include('includes.newsletter')
     @include('includes.categorylinkfooter')

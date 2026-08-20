@@ -12,6 +12,8 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\InvestorController;
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\StartupController;
+use App\Http\Controllers\ContactUsController;
+
 
 use App\Http\Controllers\BusinessProfileController;
 use App\Http\Controllers\InvestorProfileController;
@@ -31,7 +33,7 @@ use App\Http\Controllers\BxServicePaymentController;
 // })->name('home');
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubscribe'])->name('newsLetterSubscribe');
+Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubscribe'])->name('newsLetterSubscribe')->withoutMiddleware('auth');
 
 Route::get('/businesslisting', [BusinessController::class, 'businessListing'])->name('business.listing');
 Route::get('/investorlisting', [InvestorController::class, 'investorListing'])->name('investor.listing');
@@ -91,6 +93,7 @@ Route::view('/disclaimer', 'statics.disclaimer');
 Route::view('/privacy-policy', 'statics.privacy');
 Route::view('/terms', 'statics.terms');
 Route::view('/contact-us', 'statics.contact');
+Route::post('/contact-us', [ContactUsController::class, 'submitContactForm'])->name('contact.submit');
 Route::view('/sitemap', 'statics.sitemap');
 //Shivani Chauhan
 Route::middleware(['auth', 'verified'])->group(function () {

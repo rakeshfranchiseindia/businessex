@@ -103,6 +103,9 @@
                 </div>
             </div>
         </div>
+        @include("includes.groupcompany")
+        @include("includes.newsletter")
     </div>
+    @include("includes.categorylinkfooter")
 </main>
 @endsection
