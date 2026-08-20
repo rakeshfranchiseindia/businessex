@@ -168,4 +168,11 @@ class MentorController extends Controller
 
         return [$title, $keyword, $description, $metaDescription];
     }
+
+
+    public function mentorDetail(){
+
+      return view('bx-mentor-details');
+
+    }
 }
