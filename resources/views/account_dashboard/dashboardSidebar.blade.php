@@ -24,12 +24,14 @@ $confidentialRoutes = [
     'mentor' => 'mentor.confidential.edit',
     'lender' => 'lender.confidential.edit',
     'startup' => 'startup.confidential.edit',
+    'business' => 'business.confidential.edit',
     'investor' => 'confidential.edit',
 ];
 $myProfileRoutes = [
     'mentor' => 'mentor.get.user.details',
     'lender' => 'lender.get.user.details',
     'startup' => 'startup.get.user.details',
+    'business' => 'business.get.user.details',
     'investor' => 'get.user.details',
 ];
 $confidentialRouteName = $confidentialRoutes[$profileType] ?? $confidentialRoutes['investor'];
@@ -510,6 +512,9 @@ $isProfileActivated = isProfileTypeActivated($user_id, $profileType);
             @if($availableProfileTypes['startup'])
               <option value="startup" {{ $profileType === 'startup' ? 'selected' : '' }}>Startup</option>
             @endif
+            @if($availableProfileTypes['business'])
+              <option value="business" {{ $profileType === 'business' ? 'selected' : '' }}>Business</option>
+            @endif
           </select>
 
         </div>
@@ -623,33 +628,13 @@ $isProfileActivated = isProfileTypeActivated($user_id, $profileType);
           @endif
 
 
-          <!-- Manage -->
-          <li class="has-submenu open">
-
-            <a href="javascript:void(0)" onclick="toggleSubmenu(this)" class="active">
-
+          <!-- Manage (just Confidential Info under the hood, so it's one flat link instead of an expandable submenu) -->
+          <li>
+            <a href="{{ route($confidentialRouteName, ['user_rand_id' => auth()->user()->user_rand_id]) }}">
               <i class="fas fa-sliders-h"></i>
-
               <span>Manage</span>
-
-              <i class="fas fa-chevron-down menu-chevron"></i>
-
             </a>
-
-
-            <ul class="submenu show">
-
-              <!-- Confidential -->
-              <li>
-                <a href="{{ route($confidentialRouteName, [
-  'user_rand_id' => auth()->user()->user_rand_id
-]) }}">
-                  Confidential Info
-                </a>
-              </li>
-
-
-            </ul>
+          </li>
 
       </div>
 

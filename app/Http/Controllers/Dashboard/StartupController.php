@@ -13,6 +13,7 @@ use App\Models\StartupImage;
 use App\Models\IndPrefMentorStartup;
 use App\Models\IndPrefIncubatorStartup;
 use App\Models\IndustryCategory;
+use App\Models\BxCity;
 
 require_once app_path('Helpers/common_helper.php');
 
@@ -56,9 +57,33 @@ class StartupController extends Controller
 
         $categories = IndustryCategory::select('cat_id', 'category_name', 'parent_id')->orderBy('category_name')->get();
 
+        // State dropdown only lists states that actually have cities in
+        // bx_cities (it's sparse — not every Indian state is populated),
+        // and City is pre-loaded for whichever state is currently saved.
+        $availableStates = getAvailableStatesFromCities();
+        $currentCities = collect();
+        if ($startup && !empty($startup->ofc_state)) {
+            $stateName = config('constants.statesIndia.' . $startup->ofc_state, $startup->ofc_state);
+            $currentCities = BxCity::where('state', $stateName)->orderBy('city')->pluck('city');
+        }
+
         return view('account_dashboard.startupConfidentials', compact(
-            'user', 'startup', 'teamMembers', 'fundRaising', 'mentorSectors', 'incubatorSectors', 'images', 'documents', 'categories'
+            'user', 'startup', 'teamMembers', 'fundRaising', 'mentorSectors', 'incubatorSectors', 'images', 'documents', 'categories', 'currentCities', 'availableStates'
         ));
+    }
+
+    /**
+     * City dropdown options for the given state (State -> City dependent
+     * dropdown on the Headquarters tab). $stateCode is a statesIndia key
+     * (e.g. "MH"); bx_cities stores the full state name, so it's resolved
+     * before querying.
+     */
+    public function getCitiesByState($stateCode)
+    {
+        $stateName = config('constants.statesIndia.' . $stateCode, $stateCode);
+        $cities = BxCity::where('state', $stateName)->orderBy('city')->pluck('city');
+
+        return response()->json(['status' => true, 'cities' => $cities]);
     }
 
     public function getConfidentialInfo($user_rand_id)

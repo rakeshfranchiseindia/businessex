@@ -369,6 +369,16 @@ function switchTab(tabId) {
 // Profile Type Change Handler
 function changeProfileType(select) {
   const value = select.value;
+
+  // Pages that want the profile-type switch to happen without a full page
+  // reload (currently only the dashboard home / "Top 5 Recommendations"
+  // widget) can register window.__handleProfileTypeChange. Every other
+  // page falls through to the original full-navigation behaviour, unchanged.
+  if (typeof window.__handleProfileTypeChange === 'function') {
+    window.__handleProfileTypeChange(value);
+    return;
+  }
+
   window.location.href = '/set-profile-type/' + value;
 }
 

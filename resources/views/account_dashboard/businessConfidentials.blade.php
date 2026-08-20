@@ -56,193 +56,134 @@
 
 <div class="col-lg-8 col-md-8 dashboard-main-content">
     <div class="main-content">
-        <h5 class="page-title">MANAGE STARTUP INFORMATION</h5>
+        <h5 class="page-title">MANAGE BUSINESS INFORMATION</h5>
         <div id="ajaxAlert"></div>
 
         <ul class="nav custom-tabs" id="confidentialTabs">
-            <li class="nav-item"><a href="#" class="nav-link active" data-tab="tab1">Confidential Information</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab2">Advertisement Details</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab3">Business Information</a></li>
+            <li class="nav-item"><a href="#" class="nav-link active" data-tab="tab1">Confidential Info</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab2">Advert Details</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab3">Business Info</a></li>
             <li class="nav-item"><a href="#" class="nav-link" data-tab="tab4">Financial Details</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab5">Headquarters</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab6">Team Details</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab7">Business Plan</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab8">Requirement</a></li>
-            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab9">Attachments</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab5">Team Details</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab6">Headquarters</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab7">Requirements</a></li>
+            <li class="nav-item"><a href="#" class="nav-link" data-tab="tab8">Attachments</a></li>
         </ul>
 
-        {{-- TAB 1: CONFIDENTIAL INFORMATION --}}
+        {{-- TAB 1: CONFIDENTIAL INFO --}}
         <div id="tab1" class="tab-content active">
-            <form action="{{ route('startup.confidential.ajax.update', $user->user_rand_id) }}" method="POST" id="confidentialForm">
+            <form action="{{ route('business.confidential.ajax.update', $user->user_rand_id) }}" method="POST" id="confidentialForm">
                 @csrf
                 <div class="form-group"><label>Your Name <span class="text-danger">*</span></label>
-                    <input type="text" name="name" class="form-control" value="{{ $startup->startup_name ?? '' }}" required></div>
+                    <input type="text" name="name" class="form-control" value="{{ $business->seller_name ?? '' }}" required></div>
+                <div class="form-group"><label>Designation <span class="text-danger">*</span></label>
+                    <input type="text" name="designation" class="form-control" value="{{ $business->seller_designation ?? '' }}" required></div>
                 <div class="form-group"><label>Mobile Number <span class="text-danger">*</span></label>
-                    <input type="tel" name="mobile" class="form-control" value="{{ $startup->startup_mobile ?? '' }}" required></div>
+                    <input type="tel" name="mobile" class="form-control" value="{{ $business->seller_mobile ?? '' }}" required></div>
                 <div class="form-group"><label>Email ID <span class="text-danger">*</span></label>
-                    <input type="email" name="email" class="form-control" value="{{ $startup->startup_email ?? '' }}" required></div>
+                    <input type="email" name="email" class="form-control" value="{{ $business->seller_email ?? '' }}" required></div>
                 <button type="submit" class="btn-submit">SUBMIT</button>
             </form>
         </div>
 
-        {{-- TAB 2: ADVERTISEMENT DETAILS --}}
+        {{-- TAB 2: ADVERT DETAILS --}}
         <div id="tab2" class="tab-content">
-            <form action="{{ route('startup.advertisement.ajax.update', $user->user_rand_id) }}" method="POST" id="advertisementForm">
+            <form action="{{ route('business.advertisement.ajax.update', $user->user_rand_id) }}" method="POST" id="advertisementForm">
                 @csrf
                 <div class="form-group"><label>Advertisement Headline <span class="text-danger">*</span></label>
-                    <input type="text" id="advmt_headline" name="advmt_headline" class="form-control" value="{{ $startup->advmt_headline ?? '' }}" required></div>
+                    <input type="text" id="advmt_headline" name="advmt_headline" class="form-control" value="{{ $business->advmt_headline ?? '' }}" required></div>
                 <div class="form-group"><label>Introduction</label>
-                    <textarea id="startup_intro" name="startup_intro" class="form-control" rows="4">{{ $startup->startup_intro ?? '' }}</textarea></div>
+                    <textarea id="seller_intro" name="seller_intro" class="form-control" rows="4">{{ $business->seller_intro ?? '' }}</textarea></div>
                 <button type="submit" class="btn-submit">SUBMIT</button>
             </form>
         </div>
 
-        {{-- TAB 3: BUSINESS INFORMATION --}}
+        {{-- TAB 3: BUSINESS INFO --}}
         <div id="tab3" class="tab-content">
-            <form action="{{ route('startup.business.ajax.update', $user->user_rand_id) }}" method="POST" id="businessInfoForm">
+            <form action="{{ route('business.info.ajax.update', $user->user_rand_id) }}" method="POST" id="businessInfoForm">
                 @csrf
-                <div class="form-group"><label>Name of Entity <span class="text-danger">*</span></label>
-                    <input type="text" id="name_of_entity" name="name_of_entity" class="form-control" value="{{ $startup->name_of_entity ?? '' }}" required></div>
-                <div class="form-group"><label>Business Type <span class="text-danger">*</span></label>
-                    <select id="business_type" name="business_type" class="form-control" required>
-                        <option value="">Select</option>
-                        @foreach(config('constants.businessType', []) as $key => $label)
-                            <option value="{{ $key }}" {{ ($startup->business_type ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
-                        @endforeach
-                    </select></div>
-                <div class="form-group"><label>Nature of Entity <span class="text-danger">*</span></label>
-                    <select id="nature_of_entity" name="nature_of_entity" class="form-control" required>
-                        <option value="">Select</option>
-                        @foreach(config('constants.entityType', []) as $key => $label)
-                            <option value="{{ $key }}" {{ ($startup->nature_of_entity ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
-                        @endforeach
-                    </select></div>
-                <div class="form-group"><label>Industry Sector <span class="text-danger">*</span></label>
-                    <select id="industry_sector" name="industry_sector" class="form-control" required>
-                        <option value="">Select</option>
-                        @foreach($categories as $cat)
-                            <option value="{{ $cat->cat_id }}" {{ ($startup->industry_sector ?? '') == $cat->cat_id ? 'selected' : '' }}>{{ $cat->category_name }}</option>
-                        @endforeach
-                    </select></div>
-                <div class="form-group"><label>Establishment Date <span class="text-danger">*</span></label>
-                    <select id="estb_date" name="estb_date" class="form-control" required>
+                <div class="form-group"><label>Company Name <span class="text-danger">*</span></label>
+                    <input type="text" id="seller_company" name="seller_company" class="form-control" value="{{ $business->seller_company ?? '' }}" required></div>
+                <div class="form-group"><label>Establishment Year <span class="text-danger">*</span></label>
+                    <select id="estb_year" name="estb_year" class="form-control" required>
                         <option value="">Select Year</option>
                         @for($y = date('Y'); $y >= 1950; $y--)
-                            <option value="{{ $y }}" {{ ($startup->estb_date ?? '') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                            <option value="{{ $y }}" {{ ($business->estb_year ?? '') == $y ? 'selected' : '' }}>{{ $y }}</option>
                         @endfor
                     </select></div>
                 <div class="form-group"><label>Employee Count <span class="text-danger">*</span></label>
                     <select id="emp_count" name="emp_count" class="form-control" required>
                         <option value="">Select</option>
                         @foreach(config('constants.employeeCount', []) as $key => $label)
-                            <option value="{{ $key }}" {{ ($startup->emp_count ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                            <option value="{{ $key }}" {{ ($business->emp_count ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select></div>
+                <div class="form-group"><label>Entity Type <span class="text-danger">*</span></label>
+                    <select id="entity_type" name="entity_type" class="form-control" required>
+                        <option value="">Select</option>
+                        @foreach(config('constants.entityType', []) as $key => $label)
+                            <option value="{{ $key }}" {{ ($business->entity_type ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select></div>
+                <div class="form-group"><label>Business Type <span class="text-danger">*</span></label>
+                    <select id="business_type" name="business_type" class="form-control" required>
+                        <option value="">Select</option>
+                        @foreach(config('constants.businessType', []) as $key => $label)
+                            <option value="{{ $key }}" {{ ($business->business_type ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                        @endforeach
+                    </select></div>
+                <div class="form-group"><label>Industry Sector <span class="text-danger">*</span></label>
+                    <select id="industry_sector" name="industry_sector" class="form-control" required>
+                        <option value="">Select</option>
+                        @foreach($categories as $cat)
+                            <option value="{{ $cat->cat_id }}" {{ ($business->industry_sector ?? '') == $cat->cat_id ? 'selected' : '' }}>{{ $cat->category_name }}</option>
                         @endforeach
                     </select></div>
                 <div class="form-group"><label>Business Website</label>
-                    <input type="url" id="business_website" name="business_website" class="form-control" placeholder="Enter Website Url" value="{{ $startup->business_website ?? '' }}"></div>
+                    <input type="url" id="business_website" name="business_website" class="form-control" placeholder="Enter Website Url" value="{{ $business->business_website ?? '' }}"></div>
                 <div class="form-group"><label>Facilities</label>
-                    <textarea id="facilities_desc" name="facilities_desc" class="form-control" rows="3" placeholder="Enter your Business Facilities Ex: Shop, Machine Info">{{ $startup->facilities_desc ?? '' }}</textarea></div>
-                <div class="form-section"><h4>Social Media Links</h4></div>
-                <div class="form-group"><label>Facebook Link</label>
-                    <input type="url" id="facebook_profile" name="facebook_profile" class="form-control" placeholder="Enter Facebook Url" value="{{ $startup->facebook_profile ?? '' }}"></div>
-                <div class="form-group"><label>Twitter Link</label>
-                    <input type="url" id="twitter_profile" name="twitter_profile" class="form-control" placeholder="Enter Twitter Url" value="{{ $startup->twitter_profile ?? '' }}"></div>
-                <div class="form-group"><label>Linkedin Link</label>
-                    <input type="url" id="linkedin_profile" name="linkedin_profile" class="form-control" placeholder="Enter Linkedin Url" value="{{ $startup->linkedin_profile ?? '' }}"></div>
+                    <textarea id="facilities_desc" name="facilities_desc" class="form-control" rows="3" placeholder="Enter your Business Facilities Ex: Shop, Machine Info">{{ $business->facilities_desc ?? '' }}</textarea></div>
+                <div class="form-group"><label>Describe about the Business / Company Summary</label>
+                    <textarea id="company_summary" name="company_summary" class="form-control" rows="3">{{ $business->company_summary ?? '' }}</textarea></div>
                 <button type="submit" class="btn-submit">SUBMIT</button>
             </form>
         </div>
 
         {{-- TAB 4: FINANCIAL DETAILS --}}
         <div id="tab4" class="tab-content">
-            <form action="{{ route('startup.financial.ajax.update', $user->user_rand_id) }}" method="POST" id="financialForm">
+            <form action="{{ route('business.financial.ajax.update', $user->user_rand_id) }}" method="POST" id="financialForm">
                 @csrf
                 <div class="row">
                     <div class="col-md-4 form-group"><label>Annual Sales <span class="text-danger">*</span></label>
-                        <input type="number" id="annual_sales" name="annual_sales" class="form-control" value="{{ $startup->annual_sales ?? '' }}"></div>
+                        <input type="number" id="annual_sales" name="annual_sales" class="form-control" value="{{ $business->annual_sales ?? '' }}"></div>
                     <div class="col-md-4 form-group"><label>Inventory Value <span class="text-danger">*</span></label>
-                        <input type="number" id="inventory_value" name="inventory_value" class="form-control" value="{{ $startup->inventory_value ?? '' }}"></div>
+                        <input type="number" id="inventory_value" name="inventory_value" class="form-control" value="{{ $business->inventory_value ?? '' }}"></div>
                     <div class="col-md-4 form-group"><label>Gross Income <span class="text-danger">*</span></label>
-                        <input type="number" id="gross_profit" name="gross_profit" class="form-control" value="{{ $startup->gross_profit ?? '' }}"></div>
+                        <input type="number" id="gross_profit" name="gross_profit" class="form-control" value="{{ $business->gross_profit ?? '' }}"></div>
                     <div class="col-md-4 form-group"><label>EBITDA <span class="text-danger">*</span></label>
-                        <input type="number" id="ebitda" name="ebitda" class="form-control" value="{{ $startup->ebitda ?? '' }}"></div>
+                        <input type="number" id="ebitda" name="ebitda" class="form-control" value="{{ $business->ebitda ?? '' }}"></div>
                     <div class="col-md-4 form-group"><label>EBITDA Margin <span class="text-danger">*</span></label>
-                        <input type="number" id="ebitda_margin" name="ebitda_margin" class="form-control" value="{{ $startup->ebitda_margin ?? '' }}"></div>
+                        <input type="number" id="ebitda_margin" name="ebitda_margin" class="form-control" value="{{ $business->ebitda_margin ?? '' }}"></div>
                     <div class="col-md-4 form-group"><label>Rentals <span class="text-danger">*</span></label>
-                        <input type="number" id="rentals" name="rentals" class="form-control" value="{{ $startup->rentals ?? '' }}"></div>
-                </div>
-
-                <div class="form-group">
-                    <label>Fund Raising Information</label>
-                    <div id="fundRaisingRows">
-                        @forelse($fundRaising as $fund)
-                            <div class="repeatable-row">
-                                <input type="text" name="fund_stages[]" class="form-control" placeholder="Fund Stage (e.g. Seed Funding)" value="{{ $fund->fund_stage }}">
-                                <input type="number" name="fund_amounts[]" class="form-control" placeholder="Amount" value="{{ $fund->fund_amount }}">
-                                <span class="remove-row" title="Remove">&times;</span>
-                            </div>
-                        @empty
-                            <div class="repeatable-row">
-                                <input type="text" name="fund_stages[]" class="form-control" placeholder="Fund Stage (e.g. Seed Funding)">
-                                <input type="number" name="fund_amounts[]" class="form-control" placeholder="Amount">
-                                <span class="remove-row" title="Remove">&times;</span>
-                            </div>
-                        @endforelse
-                    </div>
-                    <button type="button" class="file-upload-btn" id="addFundRow">+ Add Fund Stage</button>
+                        <input type="number" id="rentals" name="rentals" class="form-control" value="{{ $business->rentals ?? '' }}"></div>
                 </div>
                 <button type="submit" class="btn-submit">SUBMIT</button>
             </form>
         </div>
 
-        {{-- TAB 5: HEADQUARTERS --}}
+        {{-- TAB 5: TEAM DETAILS --}}
         <div id="tab5" class="tab-content">
-            <form action="{{ route('startup.headquarters.ajax.update', $user->user_rand_id) }}" method="POST" id="headquartersForm">
-                @csrf
-                <div class="form-group"><label>Address <span class="text-danger">*</span></label>
-                    <textarea id="ofc_address" name="ofc_address" class="form-control" rows="3" placeholder="Enter Office Address" required>{{ $startup->ofc_address ?? '' }}</textarea></div>
-                <div class="row">
-                    <div class="col-md-4 form-group"><label>Country</label>
-                        <select id="ofc_country" name="ofc_country" class="form-control">
-                            <option value="India" selected>India</option>
-                        </select></div>
-                    <div class="col-md-4 form-group"><label>State</label>
-                        <select id="ofc_state" name="ofc_state" class="form-control">
-                            <option value="">Select State</option>
-                            @foreach($availableStates as $stateCode => $stateName)
-                                <option value="{{ $stateCode }}" {{ ($startup->ofc_state ?? '') == $stateCode ? 'selected' : '' }}>{{ $stateName }}</option>
-                            @endforeach
-                        </select></div>
-                    <div class="col-md-4 form-group"><label>City <span class="text-danger">*</span></label>
-                        <select id="ofc_city" name="ofc_city" class="form-control" required>
-                            <option value="">Select City</option>
-                            @foreach($currentCities as $cityName)
-                                <option value="{{ $cityName }}" {{ ($startup->ofc_city ?? '') == $cityName ? 'selected' : '' }}>{{ $cityName }}</option>
-                            @endforeach
-                            @if(!empty($startup->ofc_city ?? '') && !$currentCities->contains($startup->ofc_city))
-                                <option value="{{ $startup->ofc_city }}" selected>{{ $startup->ofc_city }}</option>
-                            @endif
-                        </select></div>
-                </div>
-                <div class="form-group"><label>PIN Code <span class="text-danger">*</span></label>
-                    <input type="text" id="ofc_pincode" name="ofc_pincode" class="form-control" placeholder="Enter Pin Code" value="{{ $startup->ofc_pincode ?? '' }}" required></div>
-                <button type="submit" class="btn-submit">SUBMIT</button>
-            </form>
-        </div>
-
-        {{-- TAB 6: TEAM DETAILS --}}
-        <div id="tab6" class="tab-content">
-            <form action="{{ route('startup.team.ajax.update', $user->user_rand_id) }}" method="POST" id="teamForm">
+            <form action="{{ route('business.team.ajax.update', $user->user_rand_id) }}" method="POST" id="teamForm">
                 @csrf
                 <div class="form-group"><label>Name <span class="text-danger">*</span></label>
-                    <input type="text" id="director_name" name="director_name" class="form-control" placeholder="Enter Your Name" value="{{ $startup->director_name ?? '' }}" required></div>
+                    <input type="text" id="director_name" name="director_name" class="form-control" placeholder="Enter Your Name" value="{{ $business->director_name ?? '' }}" required></div>
                 <div class="form-group"><label>Email ID <span class="text-danger">*</span></label>
-                    <input type="email" id="director_email" name="director_email" class="form-control" placeholder="Enter Your Email" value="{{ $startup->director_email ?? '' }}" required></div>
+                    <input type="email" id="director_email" name="director_email" class="form-control" placeholder="Enter Your Email" value="{{ $business->director_email ?? '' }}" required></div>
                 <div class="form-group"><label>Designation <span class="text-danger">*</span></label>
                     <select id="director_designation" name="director_designation" class="form-control" required>
                         <option value="">Select</option>
                         @foreach(config('constants.designationinf', []) as $key => $label)
-                            <option value="{{ $key }}" {{ ($startup->director_designation ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                            <option value="{{ $key }}" {{ ($business->director_designation ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
                         @endforeach
                     </select></div>
 
@@ -270,95 +211,126 @@
             </form>
         </div>
 
-        {{-- TAB 7: BUSINESS PLAN --}}
-        <div id="tab7" class="tab-content">
-            <form action="{{ route('startup.plan.ajax.update', $user->user_rand_id) }}" method="POST" id="planForm">
+        {{-- TAB 6: HEADQUARTERS --}}
+        <div id="tab6" class="tab-content">
+            <form action="{{ route('business.headquarters.ajax.update', $user->user_rand_id) }}" method="POST" id="headquartersForm">
                 @csrf
-                <div class="form-group"><label>Select your Company stage <span class="text-danger">*</span></label>
-                    <select id="company_stage" name="company_stage" class="form-control" required>
-                        <option value="">Select</option>
-                        @foreach(config('constants.companyStage', []) as $key => $label)
-                            <option value="{{ $key }}" {{ ($startup->company_stage ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
-                        @endforeach
-                    </select></div>
-                <div class="form-group"><label>Describe the customer problem your start-up will solve <span class="text-danger">*</span></label>
-                    <textarea id="customer_problem" name="customer_problem" class="form-control" rows="3" required>{{ $startup->customer_problem ?? '' }}</textarea></div>
-                <div class="form-group"><label>Describe the product or service that you will sell <span class="text-danger">*</span></label>
-                    <textarea id="product_service" name="product_service" class="form-control" rows="3" required>{{ $startup->product_service ?? '' }}</textarea></div>
-                <div class="form-group"><label>Describe your target customer segment <span class="text-danger">*</span></label>
-                    <textarea id="customer_segment" name="customer_segment" class="form-control" rows="3" required>{{ $startup->customer_segment ?? '' }}</textarea></div>
-                <div class="form-group"><label>Describe your target market <span class="text-danger">*</span></label>
-                    <textarea id="target_market" name="target_market" class="form-control" rows="3" required>{{ $startup->target_market ?? '' }}</textarea></div>
-                <div class="form-group"><label>Competitors</label>
-                    <textarea id="competitors" name="competitors" class="form-control" rows="2">{{ $startup->competitors ?? '' }}</textarea></div>
-                <div class="form-group"><label>Competitive Advantage</label>
-                    <textarea id="competitive_advantage" name="competitive_advantage" class="form-control" rows="2">{{ $startup->competitive_advantage ?? '' }}</textarea></div>
-                <div class="form-group"><label>Sales & Marketing Strategy</label>
-                    <textarea id="sales_marketing" name="sales_marketing" class="form-control" rows="2">{{ $startup->sales_marketing ?? '' }}</textarea></div>
-                <div class="form-group"><label>Company Summary</label>
-                    <textarea id="company_summary" name="company_summary" class="form-control" rows="2">{{ $startup->company_summary ?? '' }}</textarea></div>
-                <div class="form-group"><label>One line pitch for your business</label>
-                    <textarea id="business_pitch" name="business_pitch" class="form-control" rows="2">{{ $startup->business_pitch ?? '' }}</textarea></div>
+                <div class="form-group"><label>Address <span class="text-danger">*</span></label>
+                    <textarea id="ofc_address" name="ofc_address" class="form-control" rows="3" placeholder="Enter Office Address" required>{{ $business->ofc_address ?? '' }}</textarea></div>
+                <div class="row">
+                    <div class="col-md-4 form-group"><label>Country</label>
+                        <select id="ofc_country" name="ofc_country" class="form-control">
+                            <option value="India" selected>India</option>
+                        </select></div>
+                    <div class="col-md-4 form-group"><label>State</label>
+                        <select id="ofc_state" name="ofc_state" class="form-control">
+                            <option value="">Select State</option>
+                            @foreach($availableStates as $stateCode => $stateName)
+                                <option value="{{ $stateCode }}" {{ ($business->ofc_state ?? '') == $stateCode ? 'selected' : '' }}>{{ $stateName }}</option>
+                            @endforeach
+                        </select></div>
+                    <div class="col-md-4 form-group"><label>City <span class="text-danger">*</span></label>
+                        <select id="ofc_city" name="ofc_city" class="form-control" required>
+                            <option value="">Select City</option>
+                            @foreach($currentCities as $cityName)
+                                <option value="{{ $cityName }}" {{ ($business->ofc_city ?? '') == $cityName ? 'selected' : '' }}>{{ $cityName }}</option>
+                            @endforeach
+                            @if(!empty($business->ofc_city ?? '') && !$currentCities->contains($business->ofc_city))
+                                <option value="{{ $business->ofc_city }}" selected>{{ $business->ofc_city }}</option>
+                            @endif
+                        </select></div>
+                </div>
+                <div class="form-group"><label>PIN Code <span class="text-danger">*</span></label>
+                    <input type="text" id="ofc_pincode" name="ofc_pincode" class="form-control" placeholder="Enter Pin Code" value="{{ $business->ofc_pincode ?? '' }}" required></div>
                 <button type="submit" class="btn-submit">SUBMIT</button>
             </form>
         </div>
 
-        {{-- TAB 8: REQUIREMENT --}}
-        <div id="tab8" class="tab-content">
-            <form action="{{ route('startup.requirement.ajax.update', $user->user_rand_id) }}" method="POST" id="requirementForm">
+        {{-- TAB 7: REQUIREMENTS --}}
+        <div id="tab7" class="tab-content">
+            <form action="{{ route('business.requirement.ajax.update', $user->user_rand_id) }}" method="POST" id="requirementForm">
                 @csrf
                 <div class="form-group">
                     <label>I am looking for</label>
                     <div class="preference-checkboxes">
-                        <label class="checkbox-group"><input type="checkbox" name="seeking_investors" id="seeking_investors" value="1" {{ ($startup->seeking_investors ?? 0) == 1 ? 'checked' : '' }}> <span>Investors for my business</span></label>
-                        <label class="checkbox-group"><input type="checkbox" name="seeking_mentorship" id="seeking_mentorship" value="1" {{ ($startup->seeking_mentorship ?? 0) == 1 ? 'checked' : '' }}> <span>Mentorship for my business</span></label>
-                        <label class="checkbox-group"><input type="checkbox" name="seeking_acquirers" id="seeking_acquirers" value="1" {{ ($startup->seeking_acquirers ?? 0) == 1 ? 'checked' : '' }}> <span>Acquirers for my startup</span></label>
-                        <label class="checkbox-group"><input type="checkbox" name="seeking_loan" id="seeking_loan" value="1" {{ ($startup->seeking_loan ?? 0) == 1 ? 'checked' : '' }}> <span>Loan for my business</span></label>
-                        <label class="checkbox-group"><input type="checkbox" name="seeking_incubators" id="seeking_incubators" value="1" {{ ($startup->seeking_incubators ?? 0) == 1 ? 'checked' : '' }}> <span>Incubators / Accelerators for my startup</span></label>
+                        <label class="checkbox-group"><input type="checkbox" name="seeking_investors" id="seeking_investors" value="1" {{ ($business->seeking_investors ?? 0) == 1 ? 'checked' : '' }}> <span>Investors for my business</span></label>
+                        <label class="checkbox-group"><input type="checkbox" name="seeking_loan" id="seeking_loan" value="1" {{ ($business->seeking_loan ?? 0) == 1 ? 'checked' : '' }}> <span>Loan for my business</span></label>
+                        <label class="checkbox-group"><input type="checkbox" name="seeking_accelerators" id="seeking_accelerators" value="1" {{ ($business->seeking_accelerators ?? 0) == 1 ? 'checked' : '' }}> <span>Accelerators for my Business</span></label>
+                        <label class="checkbox-group"><input type="checkbox" name="seeking_buyers" id="seeking_buyers" value="1" {{ ($business->seeking_buyers ?? 0) == 1 ? 'checked' : '' }}> <span>Buyers for my business</span></label>
+                        <label class="checkbox-group"><input type="checkbox" name="seeking_mentors" id="seeking_mentors" value="1" {{ ($business->seeking_mentors ?? 0) == 1 ? 'checked' : '' }}> <span>Mentorship for my business</span></label>
                     </div>
                 </div>
 
-                <div id="investorSection" class="form-section-wrap" style="{{ ($startup->seeking_investors ?? 0) == 1 ? '' : 'display:none;' }}">
-                    <div class="form-section"><h4>For Investor Search</h4></div>
+                <div class="form-group"><label>One line pitch for your business</label>
+                    <textarea id="business_pitch" name="business_pitch" class="form-control" rows="2">{{ $business->business_pitch ?? '' }}</textarea></div>
+
+                <div id="investorSection" class="form-section-wrap" style="{{ ($business->seeking_investors ?? 0) == 1 ? '' : 'display:none;' }}">
+                    <div class="form-section"><h4>For Partial Business Sale (Investors)</h4></div>
                     <div class="form-group"><label>Amount of investment you are looking for</label>
-                        <input type="number" id="inv_asking_price" name="inv_asking_price" class="form-control" value="{{ $startup->inv_asking_price ?? '' }}"></div>
+                        <input type="number" id="inv_asking_price" name="inv_asking_price" class="form-control" value="{{ $business->inv_asking_price ?? '' }}"></div>
                     <div class="form-group"><label>Business stake of the investment</label>
-                        <input type="text" id="inv_stake" name="inv_stake" class="form-control" placeholder="Enter Stake" value="{{ $startup->inv_stake ?? '' }}"></div>
+                        <select id="inv_stake" name="inv_stake" class="form-control">
+                            <option value="">Select</option>
+                            @foreach(config('constants.invstake', []) as $key => $label)
+                                <option value="{{ $key }}" {{ ($business->inv_stake ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select></div>
                     <div class="form-group"><label>Reason for investment</label>
-                        <input type="text" id="inv_reason" name="inv_reason" class="form-control" placeholder="Enter Your Reason for Investment" value="{{ $startup->inv_reason ?? '' }}"></div>
+                        <input type="text" id="inv_reason" name="inv_reason" class="form-control" placeholder="Enter Your Reason for Investment" value="{{ $business->inv_reason ?? '' }}"></div>
                 </div>
 
-                <div id="loanSection" class="form-section-wrap" style="{{ ($startup->seeking_loan ?? 0) == 1 ? '' : 'display:none;' }}">
+                <div id="loanSection" class="form-section-wrap" style="{{ ($business->seeking_loan ?? 0) == 1 ? '' : 'display:none;' }}">
                     <div class="form-section"><h4>For Loans Seeking</h4></div>
                     <div class="form-group"><label>Collateral details</label>
-                        <input type="text" id="loan_collateral_details" name="loan_collateral_details" class="form-control" placeholder="Enter details" value="{{ $startup->loan_collateral_details ?? '' }}"></div>
+                        <input type="text" id="loan_collateral_details" name="loan_collateral_details" class="form-control" placeholder="Enter details" value="{{ $business->loan_collateral_details ?? '' }}"></div>
                     <div class="form-group"><label>Loan amount seeking</label>
-                        <input type="number" id="loan_amount" name="loan_amount" class="form-control" value="{{ $startup->loan_amount ?? '' }}"></div>
+                        <input type="number" id="loan_amount" name="loan_amount" class="form-control" value="{{ $business->loan_amount ?? '' }}"></div>
                     <div class="form-group"><label>Possible repayment period</label>
                         <select id="loan_repayment_period" name="loan_repayment_period" class="form-control">
                             <option value="">Select</option>
                             @foreach(config('constants.loanRepaymentPeriod', []) as $key => $label)
-                                <option value="{{ $key }}" {{ ($startup->loan_repayment_period ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
+                                <option value="{{ $key }}" {{ ($business->loan_repayment_period ?? '') == $key ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select></div>
                     <div class="form-group"><label>Expected Interest Rate</label>
-                        <input type="text" id="loan_interest_rate" name="loan_interest_rate" class="form-control" placeholder="e.g. 10%" value="{{ $startup->loan_interest_rate ?? '' }}"></div>
+                        <input type="text" id="loan_interest_rate" name="loan_interest_rate" class="form-control" placeholder="Enter %" value="{{ $business->loan_interest_rate ?? '' }}"></div>
                     <div class="form-group"><label>Reason for loan</label>
-                        <input type="text" id="loan_reason" name="loan_reason" class="form-control" placeholder="Enter Reason" value="{{ $startup->loan_reason ?? '' }}"></div>
+                        <input type="text" id="loan_reason" name="loan_reason" class="form-control" placeholder="Enter Reason" value="{{ $business->loan_reason ?? '' }}"></div>
                 </div>
 
-                <div id="acquirersSection" class="form-section-wrap" style="{{ ($startup->seeking_acquirers ?? 0) == 1 ? '' : 'display:none;' }}">
-                    <div class="form-section"><h4>For Acquirers</h4></div>
+                <div id="accelSection" class="form-section-wrap" style="{{ ($business->seeking_accelerators ?? 0) == 1 ? '' : 'display:none;' }}">
+                    <div class="form-section"><h4>For Incubators / Accelerator</h4></div>
+                    <div class="form-group"><label>Accelerator requirement details</label>
+                        <input type="text" id="accel_req_details" name="accel_req_details" class="form-control" placeholder="Enter your Req" value="{{ $business->accel_req_details ?? '' }}"></div>
+                    <div class="form-group"><label>Investment Requirement</label>
+                        <input type="number" id="accel_inv_req" name="accel_inv_req" class="form-control" value="{{ $business->accel_inv_req ?? '' }}"></div>
+                    <div class="form-group"><label>Field of support needed</label>
+                        <div class="sector-search-wrapper">
+                            <div class="tags-container" id="incubatorTagsContainer">
+                                @foreach($incubatorSectors as $item)
+                                    <span class="tag-item" data-tag="{{ $item->name }}"><span>{{ $item->name }}</span><span class="remove-tag">&times;</span></span>
+                                @endforeach
+                                <input type="text" class="tags-input" id="incubatorTagsInput" placeholder="Search sector..." autocomplete="off">
+                                <input type="hidden" name="incubator_sectors" id="incubator_sectors" value="{{ $incubatorSectors->pluck('name')->implode(',') }}">
+                            </div>
+                            <div id="incubatorSectorDropdown" class="sector-dropdown"></div>
+                        </div></div>
+                    <div class="form-group"><label>Time period of support needed</label>
+                        <input type="text" id="accel_time_period" name="accel_time_period" class="form-control" value="{{ $business->accel_time_period ?? '' }}"></div>
+                </div>
+
+                <div id="buyersSection" class="form-section-wrap" style="{{ ($business->seeking_buyers ?? 0) == 1 ? '' : 'display:none;' }}">
+                    <div class="form-section"><h4>For Full Business Sale</h4></div>
                     <div class="form-group"><label>Selling (Asking) Price</label>
-                        <input type="number" id="buyer_sell_price" name="buyer_sell_price" class="form-control" value="{{ $startup->buyer_sell_price ?? '' }}"></div>
+                        <input type="number" id="buyer_sell_price" name="buyer_sell_price" class="form-control" value="{{ $business->buyer_sell_price ?? '' }}"></div>
                     <div class="form-group"><label>Reason for Selling</label>
-                        <input type="text" id="buyer_sell_reason" name="buyer_sell_reason" class="form-control" placeholder="Enter Your Reason for selling" value="{{ $startup->buyer_sell_reason ?? '' }}"></div>
+                        <input type="text" id="buyer_sell_reason" name="buyer_sell_reason" class="form-control" placeholder="Enter Your Reason for selling" value="{{ $business->buyer_sell_reason ?? '' }}"></div>
                 </div>
 
-                <div id="mentorSection" class="form-section-wrap" style="{{ ($startup->seeking_mentorship ?? 0) == 1 ? '' : 'display:none;' }}">
+                <div id="mentorSection" class="form-section-wrap" style="{{ ($business->seeking_mentors ?? 0) == 1 ? '' : 'display:none;' }}">
                     <div class="form-section"><h4>For Mentor Search</h4></div>
                     <div class="form-group"><label>Mentorship Requirement Details</label>
-                        <textarea id="mentor_req_details" name="mentor_req_details" class="form-control" rows="2">{{ $startup->mentor_req_details ?? '' }}</textarea></div>
+                        <textarea id="mentor_req_details" name="mentor_req_details" class="form-control" rows="2">{{ $business->mentor_req_details ?? '' }}</textarea></div>
                     <div class="form-group"><label>Field of Mentorship</label>
                         <div class="sector-search-wrapper">
                             <div class="tags-container" id="mentorTagsContainer">
@@ -372,41 +344,20 @@
                         </div></div>
                 </div>
 
-                <div id="incubatorSection" class="form-section-wrap" style="{{ ($startup->seeking_incubators ?? 0) == 1 ? '' : 'display:none;' }}">
-                    <div class="form-section"><h4>For Incubators / Accelerator</h4></div>
-                    <div class="form-group"><label>Accelerator requirement details</label>
-                        <input type="text" id="accel_req_details" name="accel_req_details" class="form-control" placeholder="Enter your Req" value="{{ $startup->accel_req_details ?? '' }}"></div>
-                    <div class="form-group"><label>Investment Requirement</label>
-                        <input type="number" id="accel_inv_req" name="accel_inv_req" class="form-control" value="{{ $startup->accel_inv_req ?? '' }}"></div>
-                    <div class="form-group"><label>Field of support needed</label>
-                        <div class="sector-search-wrapper">
-                            <div class="tags-container" id="incubatorTagsContainer">
-                                @foreach($incubatorSectors as $item)
-                                    <span class="tag-item" data-tag="{{ $item->name }}"><span>{{ $item->name }}</span><span class="remove-tag">&times;</span></span>
-                                @endforeach
-                                <input type="text" class="tags-input" id="incubatorTagsInput" placeholder="Search sector..." autocomplete="off">
-                                <input type="hidden" name="incubator_sectors" id="incubator_sectors" value="{{ $incubatorSectors->pluck('name')->implode(',') }}">
-                            </div>
-                            <div id="incubatorSectorDropdown" class="sector-dropdown"></div>
-                        </div></div>
-                    <div class="form-group"><label>Time period of support needed</label>
-                        <input type="text" id="accel_time_period" name="accel_time_period" class="form-control" value="{{ $startup->accel_time_period ?? '' }}"></div>
-                </div>
-
                 <button type="submit" class="btn-submit">SUBMIT</button>
             </form>
         </div>
 
-        {{-- TAB 9: ATTACHMENTS --}}
-        <div id="tab9" class="tab-content">
+        {{-- TAB 8: ATTACHMENTS --}}
+        <div id="tab8" class="tab-content">
             <div class="form-group">
                 <label>Business Photo:</label>
                 <div class="attachment-list" id="imageList">
                     @foreach($images as $img)
-                        <div class="attachment-item" data-id="{{ $img->startup_image_id }}">
-                            <img src="{{ asset($img->startup_img_path) }}" alt="photo">
-                            <div class="attachment-name">{{ $img->startup_img_name }}</div>
-                            <span class="remove-attachment" data-id="{{ $img->startup_image_id }}">&times;</span>
+                        <div class="attachment-item" data-id="{{ $img->business_image_id }}">
+                            <img src="{{ asset($img->business_img_path) }}" alt="photo">
+                            <div class="attachment-name">{{ $img->business_img_name }}</div>
+                            <span class="remove-attachment" data-id="{{ $img->business_image_id }}">&times;</span>
                         </div>
                     @endforeach
                 </div>
@@ -420,9 +371,9 @@
                 <label>Business Documents:</label>
                 <div class="attachment-list" id="documentList">
                     @foreach($documents as $doc)
-                        <div class="attachment-item" data-id="{{ $doc->startup_image_id }}">
-                            <div class="attachment-name">{{ $doc->startup_img_name }}</div>
-                            <span class="remove-attachment" data-id="{{ $doc->startup_image_id }}">&times;</span>
+                        <div class="attachment-item" data-id="{{ $doc->business_image_id }}">
+                            <div class="attachment-name">{{ $doc->business_img_name }}</div>
+                            <span class="remove-attachment" data-id="{{ $doc->business_image_id }}">&times;</span>
                         </div>
                     @endforeach
                 </div>
@@ -526,25 +477,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     activateTab('tab1');
 
-    // ============ Fund Raising repeatable rows ============
-    document.getElementById('addFundRow')?.addEventListener('click', function () {
-        const container = document.getElementById('fundRaisingRows');
-        const row = document.createElement('div');
-        row.className = 'repeatable-row';
-        row.innerHTML = '<input type="text" name="fund_stages[]" class="form-control" placeholder="Fund Stage (e.g. Seed Funding)">' +
-            '<input type="number" name="fund_amounts[]" class="form-control" placeholder="Amount">' +
-            '<span class="remove-row" title="Remove">&times;</span>';
-        container.appendChild(row);
-        row.querySelector('.remove-row').addEventListener('click', function () {
-            if (document.querySelectorAll('#fundRaisingRows .repeatable-row').length > 1) row.remove();
-        });
-    });
-    document.querySelectorAll('#fundRaisingRows .remove-row').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            if (document.querySelectorAll('#fundRaisingRows .repeatable-row').length > 1) btn.closest('.repeatable-row').remove();
-        });
-    });
-
     // ============ Team repeatable rows ============
     document.getElementById('addTeamRow')?.addEventListener('click', function () {
         const container = document.getElementById('teamRows');
@@ -576,9 +508,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     bindToggle('seeking_investors', 'investorSection');
     bindToggle('seeking_loan', 'loanSection');
-    bindToggle('seeking_acquirers', 'acquirersSection');
-    bindToggle('seeking_mentorship', 'mentorSection');
-    bindToggle('seeking_incubators', 'incubatorSection');
+    bindToggle('seeking_accelerators', 'accelSection');
+    bindToggle('seeking_buyers', 'buyersSection');
+    bindToggle('seeking_mentors', 'mentorSection');
 
     // ============ Tag inputs (Mentor / Incubator sectors) ============
     function addTag(containerId, inputId, hiddenId, text) {
@@ -696,7 +628,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         setButtonLoading(this, true);
         try {
-            const response = await fetch(@json(route('startup.attachments.ajax.update', $user->user_rand_id)), {
+            const response = await fetch(@json(route('business.attachments.ajax.update', $user->user_rand_id)), {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                 body: formData
@@ -718,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     async function loadAttachments() {
-        const data = await getData(@json(route('startup.attachments.ajax.get', $user->user_rand_id)));
+        const data = await getData(@json(route('business.attachments.ajax.get', $user->user_rand_id)));
         if (!data) return;
         const imageList = document.getElementById('imageList');
         const documentList = document.getElementById('documentList');
@@ -737,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.remove-attachment').forEach(function (btn) {
             btn.addEventListener('click', async function () {
                 const id = this.dataset.id;
-                const url = @json(route('startup.attachments.ajax.delete', 999999)).replace('999999', id);
+                const url = @json(route('business.attachments.ajax.delete', 999999)).replace('999999', id);
                 try {
                     await fetch(url, {
                         method: 'POST',
@@ -762,7 +694,7 @@ document.addEventListener('DOMContentLoaded', function () {
             await submitForm(this, this.action, button);
         });
     }
-    ['confidentialForm', 'advertisementForm', 'businessInfoForm', 'financialForm', 'headquartersForm', 'teamForm', 'planForm', 'requirementForm'].forEach(bindFormSubmit);
+    ['confidentialForm', 'advertisementForm', 'businessInfoForm', 'financialForm', 'teamForm', 'headquartersForm', 'requirementForm'].forEach(bindFormSubmit);
 
     // ============ Headquarters: State -> City dependent dropdown ============
     const stateSelect = document.getElementById('ofc_state');
@@ -775,7 +707,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 citySelect.innerHTML = '<option value="">Select City</option>';
                 return;
             }
-            fetch('{{ url("/dashboard/startupConfidentials/cities-by-state") }}/' + stateCode, {
+            fetch('{{ url("/dashboard/businessConfidentials/cities-by-state") }}/' + stateCode, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
                 .then(function (res) { return res.json(); })

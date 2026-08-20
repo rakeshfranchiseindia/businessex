@@ -1023,13 +1023,15 @@
                                 Location Preference
                             </label>
 
-                            <input
-                                type="text"
-                                name="location_preference"
-                                id="location_preference"
-                                class="form-control"
-                                placeholder="Example: Delhi, Mumbai"
-                            >
+                            <select name="location_preference[]" id="location_preference" class="form-control modysel" multiple>
+                                @foreach(collect($locations ?? [])->groupBy(fn ($location) => $location->state ?? '')->sortKeys() as $stateName => $cities)
+                                    <optgroup label="{{ $stateName ?: 'Other' }}">
+                                        @foreach($cities as $city)
+                                            <option value="{{ $city->id }}">{{ $city->city }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
 
                         </div>
 
@@ -1082,6 +1084,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelector(
             'meta[name="csrf-token"]'
         )?.getAttribute('content');
+
 
 
     /*
@@ -2033,26 +2036,33 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /*
         |--------------------------------------------------------------------------
-        | LOCATION
+        | LOCATION (same select + optgroup markup as the investor
+        | registration form — value is the bx_cities.id, matched here
+        | against each saved preference's place_id)
         |--------------------------------------------------------------------------
         */
 
-        const locationInput =
+        const locationSelect =
             document.getElementById(
                 'location_preference'
             );
 
+        if (locationSelect) {
 
-        if (locationInput) {
+            const savedPlaceIds =
+                locations.map(
+                    function (item) {
+                        return String(item.place_id || '');
+                    }
+                );
 
-            locationInput.value =
-                locations
-                    .map(
-                        function (item) {
-                            return item.location_name;
-                        }
-                    )
-                    .join(', ');
+            Array.from(locationSelect.options).forEach(
+                function (option) {
+                    option.selected = savedPlaceIds.includes(
+                        String(option.value)
+                    );
+                }
+            );
         }
     }
 
@@ -2500,6 +2510,11 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     );
+
+
+    // Location Preference uses the same select + optgroup as the investor
+    // registration form (see loadPreferences() above for how saved
+    // preferences get pre-selected).
 
 
     /*
