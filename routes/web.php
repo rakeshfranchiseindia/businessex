@@ -15,6 +15,8 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\InvestorController;
 use App\Http\Controllers\MentorController;
 use App\Http\Controllers\StartupController;
+use App\Http\Controllers\ContactUsController;
+
 
 use App\Http\Controllers\BusinessProfileController;
 use App\Http\Controllers\InvestorProfileController;
@@ -25,6 +27,7 @@ use App\Http\Controllers\ServiceListingController;
 use App\Http\Controllers\BxInsightController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\LenderProfileController;
+use App\Http\Controllers\BxServicePaymentController;
 
 
 
@@ -33,7 +36,7 @@ use App\Http\Controllers\LenderProfileController;
 // })->name('home');
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubscribe'])->name('newsLetterSubscribe');
+Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubscribe'])->name('newsLetterSubscribe')->withoutMiddleware('auth');
 
 Route::get('/businesslisting', [BusinessController::class, 'businessListing'])->name('business.listing');
 Route::get('/investorlisting', [InvestorController::class, 'investorListing'])->name('investor.listing');
@@ -56,8 +59,19 @@ Route::get('/pricing', [PriceController::class, 'priceListing'])->name('pricing.
 
 Route::get('/articles', [BxInsightController::class, 'index'])->name('bxinsight.index');
 Route::get('/articles/{id}', [BxInsightController::class, 'show'])->name('bxinsight.show');
+Route::post('/articles/{id}/comments', [BxInsightController::class, 'storeComment'])->name('bxinsight.comments.store');
 
 Route::get('/service/business-valuation', [ServiceListingController::class, 'businessValuation'])->name('service.business-valuation');
+Route::post('/service/payment/initiate', [BxServicePaymentController::class, 'initiateServicePayment'])->name('service.payment.initiate');
+Route::post('/service/payment/payu/success', [BxServicePaymentController::class, 'verifyServicePayment'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])
+    ->name('service.payment.payu.success');
+Route::post('/service/payment/payu/cancel', [BxServicePaymentController::class, 'cancelledServicePayment'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])
+    ->name('service.payment.payu.cancel');
+Route::post('/service/payment/payu/failure', [BxServicePaymentController::class, 'failedServicePayment'])
+    ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])
+    ->name('service.payment.payu.failure');
 Route::get('/service/business-plan', [ServiceListingController::class, 'businessPlan'])->name('service.business-plan');
 Route::get('/service/due-diligence', [ServiceListingController::class, 'dueDiligence'])->name('service.due-diligence');
 Route::get('/service/certified-business-broker', [ServiceListingController::class, 'certifiedBusinessBroker'])->name('service.certified-business-broker');
@@ -82,6 +96,7 @@ Route::view('/disclaimer', 'statics.disclaimer');
 Route::view('/privacy-policy', 'statics.privacy');
 Route::view('/terms', 'statics.terms');
 Route::view('/contact-us', 'statics.contact');
+Route::post('/contact-us', [ContactUsController::class, 'submitContactForm'])->name('contact.submit');
 Route::view('/sitemap', 'statics.sitemap');
 //Shivani Chauhan
 Route::middleware(['auth', 'verified'])->group(function () {

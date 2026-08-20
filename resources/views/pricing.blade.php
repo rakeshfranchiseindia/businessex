@@ -632,7 +632,7 @@
 
 
             {{-- ==================== COMPARISON ==================== --}}
-            <div class="feblkcontainer">
+            <div class="feblkcontainer pricing-comparison">
 
                 <div class="feblk_head">
 
@@ -798,7 +798,6 @@
         </form>
 
     </div>
-
     @include('includes.groupcompany')
     @include('includes.newsletter')
     @include('includes.categorylinkfooter')
@@ -820,6 +819,44 @@
     padding: 10px 0;
     align-items: stretch;
     overflow-x: auto;
+}
+
+.pricing-comparison {
+    clear: both;
+    display: block;
+    margin: 20px 0 0;
+    width: 100%;
+}
+
+.pricing-comparison .feblk_head,
+.pricing-comparison .feblk_body {
+    width: 100%;
+}
+
+.pricing-comparison .priceplan {
+    align-items: stretch;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.pricing-comparison .priceplan > li {
+    display: block;
+    float: none;
+    flex: 0 0 17%;
+    margin-left: 0;
+    min-width: 0;
+}
+
+.pricing-comparison .priceplan > li:first-child {
+    flex-basis: 32%;
+}
+
+.pricing-comparison .priceplan::after {
+    clear: both;
+    content: '';
+    display: table;
 }
 
 .priclistinner {
@@ -859,8 +896,7 @@
 }
 
 .priceplan > li {
-    display: flex;
-    align-items: center;
+    display: block;
     border-bottom: 1px solid #eee;
 }
 
@@ -981,7 +1017,13 @@
     }
 
     .priceplan > li {
-        min-width: 900px;
+        flex-basis: 180px;
+        min-width: 180px;
+    }
+
+    .pricing-comparison .priceplan > li:first-child {
+        flex-basis: 260px;
+        min-width: 260px;
     }
 }
 

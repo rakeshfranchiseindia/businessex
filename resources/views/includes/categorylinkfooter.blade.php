@@ -51,7 +51,7 @@
             <ul>
               @foreach($subIndustries->take(4) as $sub)
                 <li>
-                  <a href="{{ url('startuplisting/'.$sub['industrySlug'].'/'.$sub['subIndustrySlug']) }}">
+                  <a href="{{ url('startuplisting?business_type=all&industry='.$sub['subIndustryid']) }}">
                     {{ $sub['subindustry'] }}
                   </a>
                 </li>
@@ -75,7 +75,7 @@
             <ul>
               @foreach($subIndustries->take(4) as $sub)
                 <li>
-                  <a href="{{ url('investorlisting/'.$sub['industrySlug'].'/'.$sub['subIndustrySlug']) }}">
+                  <a href="{{ url('investorlisting?business_type=all&industry='.$sub['subIndustryid']) }}">
                     {{ $sub['subindustry'] }}
                   </a>
                 </li>
