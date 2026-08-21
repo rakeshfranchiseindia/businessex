@@ -103,7 +103,7 @@ class StartupController extends Controller
                 ->first();
             
             $imagePath = $profileImage 
-                ? asset('storage/' . $profileImage->startup_img_path)
+                ? asset($profileImage->startup_img_path)
                 : asset('assets/img/placeholder-startup.png');
 
             // Get location name
