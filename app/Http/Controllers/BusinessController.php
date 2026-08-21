@@ -82,4 +82,9 @@ class BusinessController extends Controller
     return view('businesslist', compact('businesses', 'businessType'));
 }
 
+        public function businessDetail()
+        {
+            return view('bx-business-details');
+        }
+
 }

@@ -233,4 +233,9 @@ class StartupController extends Controller
         
         return '₹' . number_format($value, 0);
     }
+
+    public function startupDetail()
+    {
+        return view('bx-startup-details');
+    }
 }

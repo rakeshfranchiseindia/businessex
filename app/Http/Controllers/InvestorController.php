@@ -189,6 +189,8 @@ class InvestorController extends Controller
         ]);
     }
 
-    
+    public function investorDetail(){
+        return view('bx-investor-details');
+    }
 
 }

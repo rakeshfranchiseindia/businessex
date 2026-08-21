@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-12">
             <ul class="brunnar">
-                <li><a href="#">Home</a></li>
+                <li><a href="/">Home</a></li>
                 <li>/</li>
                 <li>Contact</li>
             </ul>
@@ -53,8 +53,6 @@
                     </div>
                 </div>
             </div>
-
-            
 
             <!-- Contact Form Section -->
             <div class="col-12 col-md-6 contbg" style="background-color:#f7f7f7; border-radius:18px;">

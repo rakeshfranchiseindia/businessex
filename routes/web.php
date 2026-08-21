@@ -39,9 +39,13 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubscribe'])->name('newsLetterSubscribe')->withoutMiddleware('auth');
 
 Route::get('/businesslisting', [BusinessController::class, 'businessListing'])->name('business.listing');
+Route::get('/businesslisting/{business_profile}', [BusinessController::class, 'businessDetail'])->name('business.detail');
 Route::get('/investorlisting', [InvestorController::class, 'investorListing'])->name('investor.listing');
+Route::get('/investorlisting/{investor_profile}', [InvestorController::class, 'investorDetail'])->name('investor.detail');
 Route::get('/mentorlisting', [MentorController::class, 'mentorListing'])->name('mentor.listing');
+Route::get('/mentorlisting/{mentor_profile}', [MentorController::class, 'mentorDetail'])->name('mentor.detail');
 Route::get('/startuplisting', [StartupController::class, 'startupListing'])->name('startup.listing');
+Route::get('/startuplisting/{startup_profile}', [StartupController::class, 'startupDetail'])->name('startup.detail');
 
 
 Route::get('/registration/create-mentor-profile', [MentorProfileController::class, 'createMentorProfile'])->name('register.create-mentor-profile');
