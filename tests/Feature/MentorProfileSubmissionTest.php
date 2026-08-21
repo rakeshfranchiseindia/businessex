@@ -19,6 +19,7 @@ class MentorProfileSubmissionTest extends TestCase
             'password' => Hash::make('secret123'),
             'mobile' => '9999999999',
             'location' => 'Delhi',
+            'company_name' => 'Test Company',
             'reg_profile' => 'Mentor',
         ]);
 

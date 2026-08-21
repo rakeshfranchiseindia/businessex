@@ -12,6 +12,7 @@ use App\Models\BxCity;
 
 use App\Http\Controllers\CommonController; 
 use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Support\Facades\Schema;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -29,13 +30,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $testimonials = Testimonial::all();
-        $locations    = BxCity::all();
+        $testimonials = Schema::hasTable('testimonials') ? Testimonial::all() : collect();
+        $locations    = Schema::hasTable('bx_cities') ? BxCity::all() : collect();
         
-        $homepageArticles = BxArticle::with('author')->published()
-            ->latest('created_at')
-            ->take(4)
-            ->get();
+        $homepageArticles = Schema::hasTable('bx_articles')
+            ? BxArticle::with('author')->published()->latest('created_at')->take(4)->get()
+            : collect();
         
         [$businessList, $parentChild] = $this->getIndustrySeller();
         View::share([
@@ -55,10 +55,12 @@ class AppServiceProvider extends ServiceProvider
     public function getIndustrySeller()
     {
         $businessList = [];
-        $industrySeller = IndustryCategory::query()
-            ->select('cat_id as industry_sector')
-            ->where('parent_id','!=',0)
-            ->get();
+        $industrySeller = Schema::hasTable('industry_categories')
+            ? IndustryCategory::query()
+                ->select('cat_id as industry_sector')
+                ->where('parent_id', '!=', 0)
+                ->get()
+            : collect();
 
             //dd($industrySeller->toArray());
 
