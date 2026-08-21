@@ -494,6 +494,79 @@ if (!function_exists('isProfileTypeActivated')) {
 }
 
 
+if (!function_exists('getProfileSocialLinks')) {
+    /**
+     * Facebook / LinkedIn / Twitter links for the given user's currently
+     * active profile type, pulled from that profile-specific table (the
+     * social columns aren't named consistently across types — see below).
+     * Falls back to user_account.facebook_id / linkedin_id when the active
+     * profile has nothing of its own (business/lender don't have their own
+     * social columns at all, so they always fall back to these).
+     *
+     * Returns ['facebook' => url|null, 'linkedin' => url|null, 'twitter' => url|null].
+     */
+    function getProfileSocialLinks($userId, $profileType)
+    {
+        $links = ['facebook' => null, 'linkedin' => null, 'twitter' => null];
+
+        switch ($profileType) {
+            case 'startup':
+                $profile = \App\Models\ProfileStartup::where('user_id', $userId)->first();
+                if ($profile) {
+                    $links['facebook'] = $profile->facebook_profile ?: null;
+                    $links['linkedin'] = $profile->linkedin_profile ?: null;
+                    $links['twitter'] = $profile->twitter_profile ?: null;
+                }
+                break;
+            case 'mentor':
+                $profile = \App\Models\ProfileMentor::where('user_id', $userId)->first();
+                if ($profile) {
+                    $links['linkedin'] = $profile->mentor_linkedin ?: null;
+                }
+                break;
+            case 'lender':
+                // profile_lenders has no social columns of its own.
+                break;
+            case 'business':
+                // profile_business has no social columns of its own.
+                break;
+            case 'investor':
+            default:
+                $profile = \App\Models\ProfileInvestor::where('user_id', $userId)->first();
+                if ($profile) {
+                    $links['linkedin'] = $profile->linkedin_profile ?: null;
+                }
+                break;
+        }
+
+        // Fallback to the account-level fields (used by business/lender,
+        // which have no social columns of their own, and as a catch-all for
+        // any other type whose profile-specific field is empty).
+        if (empty($links['facebook']) || empty($links['linkedin'])) {
+            $account = \App\Models\UserAccount::find($userId);
+            if ($account) {
+                if (empty($links['facebook'])) {
+                    $links['facebook'] = $account->facebook_id ?: null;
+                }
+                if (empty($links['linkedin'])) {
+                    $links['linkedin'] = $account->linkedin_id ?: null;
+                }
+            }
+        }
+
+        // Normalize to an absolute URL so an anchor tag doesn't treat a
+        // scheme-less value ("linkedin.com/in/foo") as a relative link.
+        foreach ($links as $key => $url) {
+            if ($url && !preg_match('#^https?://#i', $url)) {
+                $links[$key] = 'https://' . ltrim($url, '/');
+            }
+        }
+
+        return $links;
+    }
+}
+
+
 if (!function_exists('getAvailableStatesFromCities')) {
     /**
      * Only the states that actually have at least one city in bx_cities —
