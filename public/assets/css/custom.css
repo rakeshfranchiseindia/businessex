@@ -13,6 +13,124 @@
     --bx-shadow: 0 8px 24px rgba(31, 78, 121, 0.08);
 }
 
+/* Match the typography used by the live BusinessEx site. */
+body,
+button,
+input,
+select,
+textarea {
+    font-family: 'Roboto', sans-serif;
+}
+body {
+    font-size: 16px;
+}
+h1 { font-size: 36px; }
+h2 { font-size: 28px; }
+h3 { font-size: 24px; }
+h4 { font-size: 20px; }
+h5 { font-size: 18px; }
+h6 { font-size: 16px; }
+p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Profile listings, filters, and detail pages use the live site's type scale. */
+.catfull .headblk,
+.bex-main > .row > .col-12 > .headblk {
+    font-size: 30px !important;
+    line-height: 1.2 !important;
+    font-weight: 600;
+}
+.catfull .setheading > .row p {
+    font-size: 17px;
+    line-height: 1.6;
+}
+.listop .cattxt,
+.listop .cattxt h3,
+.startup-card-title h3 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px !important;
+    line-height: 21px !important;
+    font-weight: 600;
+}
+.listop .cattxt span {
+    font-size: 13px !important;
+    line-height: 17px !important;
+    font-weight: 400;
+}
+.listop .inblk,
+.listop .inblk span,
+.startup-investment-row,
+.startup-investment-row strong,
+.startup-location,
+.inbtn a {
+    font-size: 13px !important;
+    line-height: 18px !important;
+}
+.startup-filter-sidebar,
+.business-filter-sidebar {
+    font-family: 'Roboto', sans-serif;
+}
+.startup-filter-sidebar .subhead,
+.business-filter-sidebar .subhead {
+    font-size: 20px;
+    line-height: 24px;
+}
+.startup-filter-sidebar .startup-filter-heading label,
+.business-filter-sidebar .business-filter-heading label,
+.startup-filter-sidebar .card-body p,
+.business-filter-sidebar .card-body p,
+.startup-filter-sidebar .form-check-label,
+.business-filter-sidebar .form-check-label {
+    font-size: 13px;
+    line-height: 18px;
+}
+.startup-filter-sidebar .startup-filter-heading label,
+.business-filter-sidebar .business-filter-heading label {
+    font-weight: 700;
+}
+.brunnar li,
+.bexdlist li,
+.statictxt {
+    font-family: 'Roboto', sans-serif;
+}
+.bex-main > .row > .col-12 > .statictxt {
+    font-size: 15px;
+    line-height: 18px;
+}
+.bexdlist li {
+    font-size: 13px;
+    line-height: 17px;
+}
+.fulldetailpage .tab-content {
+    font-size: 15px;
+    line-height: 20px;
+}
+.fulldetailpage .boxsecthead,
+.fulldetailpage .subchead {
+    font-size: 17px;
+    line-height: 21px;
+    font-weight: 600;
+}
+.fulldetailpage .showtxtc,
+.fulldetailpage .indetail,
+.fulldetailpage .indetailmodfy,
+.fulldetailpage .sminhead {
+    font-size: 13px;
+    line-height: 17px;
+}
+.fulldetailpage .bexdetailsh {
+    font-size: 14px;
+    line-height: 17px;
+}
+.fulldetailpage .bexdetailsh span,
+.fulldetailpage .showtxtc span,
+.fulldetailpage .indetail span {
+    font-size: 14px;
+    line-height: 18px;
+}
+
 /* Header and navigation */
 .navbar.navbar-default {
     min-height: 72px;
