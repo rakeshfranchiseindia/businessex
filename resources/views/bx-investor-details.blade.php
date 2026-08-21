@@ -1,5 +1,22 @@
 @extends('layouts.app')
 
+@php
+    $investorTitle = $investor->inv_headline ?: 'Investor Profile';
+    $investorLocation = trim(collect([$investor->inv_city, config('constants.statesIndia.' . $investor->inv_state), $investor->inv_country])->filter()->implode(', '));
+    $companyLocation = trim(collect([$investor->company_city, config('constants.statesIndia.' . $investor->company_state), $investor->company_country])->filter()->implode(', '));
+    $investorImage = $investor->inv_profile_pic_path
+        ? rtrim(config('constants.ImageCDN'), '/') . '/' . ltrim($investor->inv_profile_pic_path, '/')
+        : asset('assets/img/profile-dflt.jpg');
+    $companyLogo = $investor->company_logo_path
+        ? rtrim(config('constants.ImageCDN'), '/') . '/' . ltrim($investor->company_logo_path, '/')
+        : asset('assets/img/profile-dflt.jpg');
+    $industryPreferences = $investor->industryPreferences
+        ->map(fn ($preference) => config('industryCategoriesConfig.' . $preference->sub_category_id . '.category_name'))
+        ->filter();
+@endphp
+
+@section('title', $investorTitle)
+
 @section('content')
 <main id="main">
     <div class="container bex-main">
@@ -10,9 +27,9 @@
                     <li>/</li>
                     <li><a href="#">Investor</a></li>
                     <li>/</li>
-                    <li><a href="#">I am open to buy and invest in a business</a></li>
+                    <li><a href="#">{{ $investorTitle }}</a></li>
                     <li>/</li>
-                    <li></li>
+                    <li>{{ $investor->inv_name ?: 'Investor' }}</li>
                 </ul>
             </div>
         </div>
@@ -20,7 +37,7 @@
         <div class="row">
             <div class="col-12">
                 <h1 class="headblk">
-                    An upcoming company in the Food & Beverage sector, one of the fast growing industry segment.
+                    {{ $investorTitle }}
                 </h1>
             </div>
         </div>
@@ -35,15 +52,15 @@
                             <div class="boxsecthead">Personal Information</div>
                             <div class="fullblks">
                                 <div class="f1blk">
-                                    <div class="showtxtc">Name <span>Rohit Purohit</span></div>
-                                    <div class="showtxtc">Mobile <span><img src="{{ asset('assets/img/lock.svg') }}"> Available after Interaction</span></div>
-                                    <div class="showtxtc">Email id <span><img src="{{ asset('assets/img/lock.svg') }}"> Available after Interaction</span></div>
-                                    <div class="showtxtc">LinkedIn <span><img src="{{ asset('assets/img/lock.svg') }}"> Available after Interaction</span></div>
-                                    <div class="showtxtc">Location <span>Gujarat, India</span></div>
+                                    <div class="showtxtc">Name <span>{{ $investor->inv_name ?: 'N/A' }}</span></div>
+                                    <div class="showtxtc">Mobile <span class="fa fa-lock"> Available after Interaction</span></div>
+                                    <div class="showtxtc">Email id <span class="fa fa-lock">Available after Interaction</span></div>
+                                    <div class="showtxtc">LinkedIn <span class="fa fa-lock">Available after Interaction</span></div>
+                                    <div class="showtxtc">Location <span>{{ $investorLocation ?: 'N/A' }}</span></div>
                                 </div>
                                 <div class="f2blk">
                                     <div class="comppro">
-                                        <img src="https://businessextest.s3.ap-south-1.amazonaws.com/investor/profile/202005/73081_1590489389.jpg">
+                                        <img src="{{ $investorImage }}" alt="{{ $investor->inv_name ?: 'Investor' }}">
                                     </div>
                                 </div>
                             </div>
@@ -51,18 +68,18 @@
 
                         {{-- Company Information --}}
                         <div class="boxsect">
-                            <div class="boxsecthead">Personal Information</div>
+                            <div class="boxsecthead">Company Information</div>
                             <div class="fullblks">
                                 <div class="f1blk">
-                                    <div class="showtxtc">Name <span>Rohit Purohit</span></div>
-                                    <div class="showtxtc">Mobile <span><img src="{{ asset('assets/img/lock.svg') }}"> Available after Interaction</span></div>
-                                    <div class="showtxtc">Email id <span><img src="{{ asset('assets/img/lock.svg') }}"> Available after Interaction</span></div>
-                                    <div class="showtxtc">LinkedIn <span><img src="{{ asset('assets/img/lock.svg') }}"> Available after Interaction</span></div>
-                                    <div class="showtxtc">Location <span>Gujarat, India</span></div>
+                                    <div class="showtxtc">Name <span>{{ $investor->company_name ?: 'N/A' }}</span></div>
+                                    <div class="showtxtc">Mobile <span class="fa fa-lock">Available after Interaction</span></div>
+                                    <div class="showtxtc">Email id <span class="fa fa-lock">Available after Interaction</span></div>
+                                    <div class="showtxtc">LinkedIn <span class="fa fa-lock">Available after Interaction</span></div>
+                                    <div class="showtxtc">Location <span>{{ $companyLocation ?: 'N/A' }}</span></div>
                                 </div>
                                 <div class="f2blk">
                                     <div class="complog">
-                                        <img src="https://franchiseindia.s3.ap-south-1.amazonaws.com/tbo/11231182540492.jpg">
+                                        <img src="{{ $companyLogo }}" alt="{{ $investor->company_name ?: 'Company' }}">
                                     </div>
                                 </div>
                             </div>
@@ -76,18 +93,18 @@
 
                                 <div class="halkblknew">
                                     <div class="sminhead">Individual</div>
-                                    <div class="indetail">Investor Company <span>Franchise India</span></div>
-                                    <div class="indetail">Investor Designation <span>Sr. UI Developer</span></div>
-                                    <div class="indetail setfull">Professional Summary <span>Domestic and International domain... </span></div>
+                                    <div class="indetail">Investor Company <span>{{ $investor->company_name ?: 'N/A' }}</span></div>
+                                    <div class="indetail">Investor Designation <span>{{ $investor->company_designation ?: 'N/A' }}</span></div>
+                                    <div class="indetail setfull">Professional Summary <span>{{ $investor->inv_abt_urself ?: $investor->inv_intro ?: 'N/A' }}</span></div>
                                 </div>
 
                                 <div class="halkblknew">
                                     <div class="sminhead">Investment Firm</div>
-                                    <div class="indetail">Firm Type <span>Corporate/VC/PE</span></div>
-                                    <div class="indetail">Company Name <span>Franchise India</span></div>
-                                    <div class="indetail">Company HQ Location <span>Faridabad</span></div>
-                                    <div class="indetail">Company Website <span>https://www.franchiseindia.com/</span></div>
-                                    <div class="indetail setfull">Company Summary <span>Franchiseindia.com is world’s #1 franchise website...</span></div>
+                                    <div class="indetail">Firm Type <span>{{ config('constants.investorFirmType.' . $investor->firm_type, 'N/A') }}</span></div>
+                                    <div class="indetail">Company Name <span>{{ $investor->company_name ?: 'N/A' }}</span></div>
+                                    <div class="indetail">Company HQ Location <span>{{ $companyLocation ?: 'N/A' }}</span></div>
+                                    <div class="indetail">Company Website <span>{{ $investor->company_website ?: 'N/A' }}</span></div>
+                                    <div class="indetail setfull">Company Summary <span>{{ $investor->company_summary ?: 'N/A' }}</span></div>
                                 </div>
                             </div>
                         </div>
@@ -100,12 +117,12 @@
                                     <h3 class="subchead">1. Investment Preference (Investment/Acquisition)</h3>
                                     <div class="halkblk">
                                         <div class="sminhead">A. For Investment:</div>
-                                        <div class="indetail">Investment Size <span>1 Crore - 15 Crore</span></div>
-                                        <div class="indetail">Investment Stake Preference <span>60%</span></div>
+                                        <div class="indetail">Investment Size <span>{{ number_format((float) $investor->invest_size_min, 2) }} - {{ number_format((float) $investor->invest_size_max, 2) }}</span></div>
+                                        <div class="indetail">Investment Stake Preference <span>{{ $investor->invest_stake !== null ? $investor->invest_stake . '%' : 'N/A' }}</span></div>
                                     </div>
                                     <div class="halkblk">
                                         <div class="sminhead">B. For Acquisition:</div>
-                                        <div class="indetail">Purchasing Capacity <span>70%</span></div>
+                                        <div class="indetail">Purchasing Capacity <span>{{ $investor->purchase_capacity_max ? number_format((float) $investor->purchase_capacity_max, 2) : 'N/A' }}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -114,13 +131,11 @@
                                 <div class="perset">
                                     <h3 class="subchead">2. Location Preference</h3>
                                     <ul class="prefetxt mdfy">
-                                        <li><i class="fa fa-check"></i> New Delhi, Delhi</li>
-                                        <li><i class="fa fa-check"></i> Gurgaon, Haryana</li>
-                                        <li><i class="fa fa-check"></i> Himachal Pradesh</li>
-                                        <li><i class="fa fa-check"></i> Jammu and Kashmir</li>
-                                        <li><i class="fa fa-check"></i> Punjab</li>
-                                        <li><i class="fa fa-check"></i> Uttaranchal</li>
-                                        <li><i class="fa fa-check"></i> Noida, Uttar Pradesh</li>
+                                        @forelse($investor->locationPreferences as $preference)
+                                            <li><i class="fa fa-check"></i> {{ $preference->location_name }}</li>
+                                        @empty
+                                            <li>No location preferences specified</li>
+                                        @endforelse
                                     </ul>
                                 </div>
                             </div>
@@ -129,10 +144,11 @@
                                 <div class="perset">
                                     <h3 class="subchead">3. Sector Preference</h3>
                                     <ul class="prefetxt">
-                                        <li><i class="fa fa-angle-double-right"></i> Medical supplies & equipment</li>
-                                        <li><i class="fa fa-angle-double-right"></i> Ecommerce websites</li>
-                                        <li><i class="fa fa-angle-double-right"></i> Food stores</li>
-                                        <li><i class="fa fa-angle-double-right"></i> Software services Schools</li>
+                                        @forelse($industryPreferences as $industry)
+                                            <li><i class="fa fa-angle-double-right"></i> {{ $industry }}</li>
+                                        @empty
+                                            <li>No sector preferences specified</li>
+                                        @endforelse
                                     </ul>
                                 </div>
                             </div>

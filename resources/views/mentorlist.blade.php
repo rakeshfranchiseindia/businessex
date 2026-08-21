@@ -90,7 +90,13 @@
                                         <div class="inblk">Sectors <span>{{ $mentor['mentorSector'] }}</span></div>
                                     </div>
 
-                                    <div class="inbtn"><a href="#">Send Proposal</a></div>
+                                    <div class="inbtn">
+                                        @auth
+                                            <a href="{{ route('mentor.detail', $mentor['mentorId']) }}">Send Proposal</a>
+                                        @else
+                                            <a href="#login" data-toggle="modal" data-target="#login">Send Proposal</a>
+                                        @endauth
+                                    </div>
                                 </li>
                             @endforeach
                         </ul>

@@ -91,7 +91,13 @@
                                         <div class="inblk">Location Preference <span>{{ $investor['locations'] }}</span></div>
                                     </div>
 
-                                    <div class="inbtn"><a href="#">Send Proposal</a></div>
+                                    <div class="inbtn">
+                                        @auth
+                                            <a href="{{ route('investor.detail', $investor['investorId']) }}">Send Proposal</a>
+                                        @else
+                                            <a href="#login" data-toggle="modal" data-target="#login">Send Proposal</a>
+                                        @endauth
+                                    </div>
                                 </li>
                             @endforeach
                         </ul>

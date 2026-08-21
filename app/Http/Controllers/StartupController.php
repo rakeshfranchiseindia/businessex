@@ -234,8 +234,13 @@ class StartupController extends Controller
         return '₹' . number_format($value, 0);
     }
 
-    public function startupDetail()
+    public function startupDetail($startup_profile)
     {
-        return view('bx-startup-details');
+        $startup = ProfileStartup::with(['images', 'management', 'fundRaising', 'industrySector'])
+            ->where('startup_profile_status', config('constants.ProfileStatus.Active'))
+            ->where('startup_id', $startup_profile)
+            ->firstOrFail();
+
+        return view('bx-startup-details', compact('startup'));
     }
 }

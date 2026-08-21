@@ -82,9 +82,14 @@ class BusinessController extends Controller
     return view('businesslist', compact('businesses', 'businessType'));
 }
 
-        public function businessDetail()
+        public function businessDetail($business_profile)
         {
-            return view('bx-business-details');
+            $business = ProfileBusiness::with(['images', 'management'])
+                ->where('business_profile_status', config('constants.ProfileStatus.Active'))
+                ->where('business_id', $business_profile)
+                ->firstOrFail();
+
+            return view('bx-business-details', compact('business'));
         }
 
 }

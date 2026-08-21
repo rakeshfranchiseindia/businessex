@@ -136,6 +136,7 @@ class InvestorController extends Controller
             $slugUrl = $investor->inv_headline ?: sprintf(config('constants.InvestorTitlePattern'), $invTitleLoc, $minInvestment, $maxInvestment);
 
             $investorsList[] = [
+                'investorId'         => $investor->investor_id,
                 'investorName'       => $investor->inv_name,
                 'investorTitle'      => sprintf(config('constants.InvestorTitlePattern'), $invTitleLoc, $minInvestment, $maxInvestment),
                 'locations'          => $locPrefStr,
@@ -189,8 +190,14 @@ class InvestorController extends Controller
         ]);
     }
 
-    public function investorDetail(){
-        return view('bx-investor-details');
+    public function investorDetail($investor_profile)
+    {
+        $investor = ProfileInvestor::with(['industryPreferences', 'locationPreferences'])
+            ->where('inv_profile_status', config('constants.ProfileStatus.Active'))
+            ->where('investor_id', $investor_profile)
+            ->firstOrFail();
+
+        return view('bx-investor-details', compact('investor'));
     }
 
 }
