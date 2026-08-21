@@ -42,6 +42,10 @@ $myProfileRouteName = $myProfileRoutes[$profileType] ?? $myProfileRoutes['invest
 // un-activated profile shows "ACTIVATE ACCOUNT" instead of "MY PLAN" and
 // hides Profile Views / My Profile / My Interactions).
 $isProfileActivated = isProfileTypeActivated($user_id, $profileType);
+
+// Facebook / LinkedIn / Twitter — dynamic per the active profile type,
+// only rendered as a clickable link when the user actually has one set.
+$socialLinks = getProfileSocialLinks($user_id, $profileType);
 ?>
 
 <style>
@@ -197,6 +201,20 @@ $isProfileActivated = isProfileTypeActivated($user_id, $profileType);
     background: #2563eb;
     color: #fff;
     transform: translateY(-2px);
+  }
+
+  /* Not set for this profile — shown but not clickable */
+  .social-links .social-link-disabled {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #c3cad6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: not-allowed;
   }
 
   /* Profile Type */
@@ -475,17 +493,35 @@ $isProfileActivated = isProfileTypeActivated($user_id, $profileType);
 
           <div class="social-links mt-3">
 
-            <a href="#" title="Facebook">
-              <i class="fab fa-facebook-f"></i>
-            </a>
+            @if($socialLinks['facebook'])
+              <a href="{{ $socialLinks['facebook'] }}" target="_blank" rel="noopener noreferrer" title="Facebook">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+            @else
+              <span class="social-link-disabled" title="Not added">
+                <i class="fab fa-facebook-f"></i>
+              </span>
+            @endif
 
-            <a href="#" title="LinkedIn">
-              <i class="fab fa-linkedin-in"></i>
-            </a>
+            @if($socialLinks['linkedin'])
+              <a href="{{ $socialLinks['linkedin'] }}" target="_blank" rel="noopener noreferrer" title="LinkedIn">
+                <i class="fab fa-linkedin-in"></i>
+              </a>
+            @else
+              <span class="social-link-disabled" title="Not added">
+                <i class="fab fa-linkedin-in"></i>
+              </span>
+            @endif
 
-            <a href="#" title="Twitter / X">
-              <i class="fa-brands fa-x-twitter"></i>
-            </a>
+            @if($socialLinks['twitter'])
+              <a href="{{ $socialLinks['twitter'] }}" target="_blank" rel="noopener noreferrer" title="Twitter / X">
+                <i class="fa-brands fa-x-twitter"></i>
+              </a>
+            @else
+              <span class="social-link-disabled" title="Not added">
+                <i class="fa-brands fa-x-twitter"></i>
+              </span>
+            @endif
 
           </div>
 
