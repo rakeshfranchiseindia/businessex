@@ -357,6 +357,12 @@
                 return;
             }
 
+            if (form.dataset.newsletterBound === 'true') {
+                return;
+            }
+
+            form.dataset.newsletterBound = 'true';
+
 
             form.addEventListener('submit', function (e) {
 
@@ -413,6 +419,12 @@
         Object.keys(data.errors).forEach(function (key) {
             const input = form.querySelector('[name="' + key + '"]');
             if (!input) return;
+
+                input.parentElement
+                    .querySelectorAll('.newsletter-error')
+                    .forEach(function (element) {
+                        element.remove();
+                    });
 
             const errorElement = document.createElement('small');
             errorElement.className = 'text-danger d-block newsletter-error';

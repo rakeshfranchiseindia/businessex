@@ -141,34 +141,6 @@
     }
   });
 
-  /*--/ Testimonials owl /--*/
-  $('#bex-bussiness-carousel').owlCarousel({
-    margin: 0,
-    autoplay: true,
-    nav: true,
-    animateOut: 'fadeOut',
-    animateIn: 'fadeInUp',
-    navText: ['<div class="bex-arrow-section"><i class="ion-ios-arrow-back" aria-hidden="true"></i>', '<i class="ion-ios-arrow-forward" aria-hidden="true"></i></div>'],
-    autoplayTimeout: 8000,
-    autoplayHoverPause: true,
-    responsive: {
-      0: {
-        items: 1,
-      },
-      600: {
-        items: 1
-      },
-  
-      1024: {
-        items: 3
-      },
-  
-      1366: {
-        items: 3
-      }
-    }
-  });
-
   $('#bex-featured-business-for-sale-carousel').owlCarousel({
     margin: 0,
     autoplay: true,
@@ -294,11 +266,11 @@
       },
   
       1024: {
-        items: 3
+        items: 4
       },
   
       1366: {
-        items: 3
+        items: 4
       }
     }
   });

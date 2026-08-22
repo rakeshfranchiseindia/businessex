@@ -2395,7 +2395,9 @@ footer {
 	text-align: center;
 }
 
-.bex-section-business-ex {}
+.bex-section-business-ex {
+	margin-top: -10px !important;
+}
 
 
 /*--------------------------------------------------------------
@@ -2461,7 +2463,7 @@ footer {
 
 .imgblk { width: 190px; margin: 0 auto;}
 
-.title-box { margin-top: 50px;}
+.title-box { margin-top: -15px;}
 .title-box h2 { font-size: 32px; line-height: 32px; color: #231F20; }
 .title-box h5 { color: #231F20; opacity: 0.75; font-size:18px; line-height: 20px; font-weight: 400;}
 

@@ -142,7 +142,7 @@ p {
     width: auto;
 }
 .navbar-default .navbar-nav .nav-link {
-    color: var(--bx-ink);
+    color: var(--bx-ink)!important;
     font-weight: 500;
     transition: color .2s ease;
 }
@@ -305,13 +305,115 @@ body.sidebar-open { overflow: hidden; }
 
 /* Footer */
 footer {
-    background: var(--bx-navy);
+    background: #f7f7f7;
     color: #fff;
     padding: 22px 0;
 }
-footer a { color: #fff; }
-footer a:hover { color: #fce1ca; }
+footer a { color: #141313; }
+footer a:hover { color: #f58220; }
 .bex-footer-bottom-links { align-items: center; display: flex; flex-wrap: wrap; gap: 8px 18px; justify-content: flex-end; margin: 0; padding: 0; }
+
+/* Newsletter and social strip */
+.newsletter-section {
+    background: #ff7f19;
+    color: #fff;
+    margin: 0;
+    min-height: 300px;
+    overflow: hidden;
+    padding: 24px 60px 20px;
+    position: relative;
+}
+.newsletter-section::before {
+    color: rgba(195, 74, 9, .18);
+    content: 'EX';
+    font-size: 520px;
+    font-weight: 700;
+    left: -20px;
+    line-height: .8;
+    pointer-events: none;
+    position: absolute;
+    top: 40px;
+    white-space: nowrap;
+}
+.newsletter-inner { position: relative; z-index: 1; }
+.newsletter-content { padding-top: 0; }
+.newsletter-content h3 {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0 0 9px;
+}
+.newsletter-content p {
+    color: #fff;
+    font-size: 16px;
+    line-height: 1.3;
+    margin: 0;
+}
+.newsletter-form-column { padding-left: 28px; }
+.newsletter-form { margin: 0 -13px; }
+.newsletter-form > div { padding: 0 13px; }
+.newsletter-form .form-control {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, .95);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14px;
+    height: 40px;
+    padding: 6px 13px;
+}
+.newsletter-form .form-control::placeholder { color: #fff; opacity: 1; }
+.newsletter-form .form-control:focus {
+    background: rgba(255, 255, 255, .08);
+    border-color: #fff;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, .25);
+    color: #fff;
+}
+.newsletter-form .text-danger { color: #fff !important; }
+.btn-subscribe {
+    background: #fff;
+    border: 0;
+    border-radius: 36px;
+    color: #f56f1b;
+    font-size: 15px;
+    font-weight: 400;
+    margin-top: 8px;
+    min-height: 50px;
+    padding: 8px 24px;
+}
+.btn-subscribe:hover,
+.btn-subscribe:focus { background: #fff; color: #d9580e; }
+.newsletter-social-bar {
+    background: #231f20;
+    color: #fff;
+    min-height: 54px;
+    padding: 8px 60px;
+}
+.newsletter-follow {
+    align-items: center;
+    display: flex;
+    font-size: 16px;
+    gap: 10px;
+}
+.newsletter-follow strong { color: #ff7f19; font-weight: 400; }
+.newsletter-follow .social-links-footer { display: flex; gap: 10px; }
+.newsletter-follow .social-links-footer a {
+    align-items: center;
+    border-radius: 5px;
+    display: inline-flex;
+    font-size: 17px;
+    height: 30px;
+    justify-content: center;
+    margin: 0;
+    opacity: 1;
+    width: 30px;
+}
+.newsletter-follow .social-links-footer a:nth-child(1) { background: #4267b2; }
+.newsletter-follow .social-links-footer a:nth-child(2) { background: #55acee; }
+.newsletter-follow .social-links-footer a:nth-child(3) { background: linear-gradient(135deg, #feda75, #d62976, #4f5bd5); }
+.newsletter-follow .social-links-footer a:nth-child(4) { background: #0878aa; }
+.newsletter-follow .social-links-footer a:nth-child(5) { background: #ed1c2e; }
+.newsletter-stay-tuned { font-size: 16px; text-align: right; }
 
 /* Small-screen layout safeguards */
 @media (max-width: 991.98px) {
@@ -325,4 +427,13 @@ footer a:hover { color: #fce1ca; }
     .modal-dialog { margin: .5rem; }
     footer { text-align: center; }
     .bex-footer-bottom-links { justify-content: center; }
+    .newsletter-section { min-height: 0; padding: 24px 20px; }
+    .newsletter-content h3 { font-size: 28px; }
+    .newsletter-content p { font-size: 16px; }
+    .newsletter-form-column { padding-left: 15px; }
+    .newsletter-form { margin: 0 -5px; }
+    .newsletter-form > div { padding: 0 5px; }
+    .newsletter-social-bar { padding: 10px 20px; }
+    .newsletter-follow { align-items: flex-start; flex-direction: column; gap: 12px; }
+    .newsletter-stay-tuned { margin-top: 18px; text-align: left; }
 }
