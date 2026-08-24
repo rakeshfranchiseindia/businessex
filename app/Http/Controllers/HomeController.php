@@ -177,6 +177,7 @@ class HomeController extends Controller
                 $slugUrl = CommonController::getSlugUrl($investor, $minInvestment, $maxInvestment);
 
                 return [
+                    'investor_id'       => $investor->investor_id,
                     'investorName'     => $investor->inv_name,
                     'investorType'     => config('constants.investorType.' . $investor->inv_type),
                     'invheadline'      => $investor->inv_headline,

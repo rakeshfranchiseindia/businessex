@@ -79,7 +79,7 @@
                                                 <img src="./assets/img/person.png" alt="Name">
                                             </span>
                                         </div>
-                                        <input name="name" type="text" class="form-control" placeholder="Enter Your Name" required>
+                                        <input name="name" type="text" class="form-control" placeholder="Enter Your Name" pattern="^[A-Za-z\s]+$" title="Only letters and spaces are allowed" required>
                                     </div>
                                     @error('name')
                                         <div class="text-danger">{{ $message }}</div>
@@ -233,14 +233,24 @@
     <!-- ======= Business For Sale Opportunities Section ======= -->
     <section class="py-5 bg-light business-sale-section">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-4">
                 <div>
                     <h2 class="font-weight-bold mb-0 homepage-section-heading">Business For Sale Opportunities</h2>
                     <h5 class="text-muted mb-0 homepage-section-subheading">
                         BusinessEx offers 1863 businesses in 16 industries as on Jul 27, 2026
                     </h5>
                 </div>
-                <a href="{{ url('/businesslisting') }}" class="text-success font-weight-bold">View All</a>
+                <div class="business-sale-section-actions text-right">
+                    <a href="{{ url('/businesslisting') }}" class="text-success font-weight-bold d-block">View All</a>
+                    <div class="business-sale-carousel-controls">
+                        <a class="business-sale-carousel-control" href="#businessSaleCarousel" role="button" data-slide="prev" aria-label="Previous business opportunities">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </a>
+                        <a class="business-sale-carousel-control" href="#businessSaleCarousel" role="button" data-slide="next" aria-label="Next business opportunities">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Carousel -->
@@ -263,6 +273,7 @@
                         </span>
                     @endif
                 </div>
+                <?php //print_r($opportunity); die;?>
                 <div class="card-body">
                     <p class="text-muted mb-1">{{ $opportunity['industry_sector'] ?? 'N/A' }}</p>
                     <h6 class="font-weight-bold">{{ $opportunity['advmt_headline'] ?? 'No headline available' }}</h6>
@@ -272,9 +283,15 @@
                         <i class="fa fa-envelope"></i> Email
                         <i class="fa fa-map-marker"></i> {{ $opportunity['ofc_city'] ?? ''  }}
                     </p>
-                    <a href="{{ url('/opportunity/'."sdfdf") }}" target="_blank" class="btn btn-outline-success btn-block">
-                        Contact Business
-                    </a>
+                    @auth
+                        <a href="{{ route('business.detail', ['business_profile' => $opportunity['business_id']]) }}" target="_blank" class="btn btn-outline-success btn-block">
+                            Contact Business
+                        </a>
+                    @else
+                        <a href="#login" data-toggle="modal" data-target="#login" class="btn btn-outline-success btn-block">
+                            Contact Business
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -291,15 +308,6 @@
         </div>
     </div>
 
-    <!-- Controls -->
-    <a class="carousel-control-prev" href="#businessSaleCarousel" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#businessSaleCarousel" role="button" data-slide="next">
-        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
 </div>
 
         </div>
@@ -374,7 +382,10 @@
                         <div class="title-box">
                             <h2 class="bex-title-a homepage-section-heading">Featured Investors</h2>
                             <h5 class="homepage-section-subheading">Business-Ex Offers 511 Start-Ups In 13 Various Industries</h5>
-                            <a href="/investorlisting" class="bex-view-all-section">View All</a>
+                        </div>
+                        <div class="featured-investors-section-actions text-right">
+                            <a href="/investorlisting" class="bex-view-all-section d-block">View All</a>
+                            <div id="featured-investors-carousel-nav" class="featured-investors-carousel-nav"></div>
                         </div>
                     </div>
                 </div>
@@ -423,7 +434,11 @@
                                                     </ul>
                                                 </div>
                                                 <div class="bex-primary-btn">
-                                                    <a href="#">Send Proposal</a>
+                                                    @auth
+                                                        <a href="{{ route('investor.detail', ['investor_profile' => $investor['investor_id']]) }}">Send Proposal</a>
+                                                    @else
+                                                        <a href="#login" data-toggle="modal" data-target="#login">Send Proposal</a>
+                                                    @endauth
                                                 </div>
                                             </div>
                                         </div>
@@ -531,14 +546,24 @@
     <!-- ======= High Growth Potential Startups Section ======= -->
     <section class="py-5 bg-light startup-growth-section">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-4">
                 <div>
                     <h2 class="font-weight-bold mb-0 homepage-section-heading">High Growth Potential Startups</h2>
                     <h5 class="text-muted mb-0 homepage-section-subheading">
                         BusinessEx offers 678 startups in 16 industries as on Jul 27, 2026
                     </h5>
                 </div>
-                <a href="{{ url('/startupslisting') }}" class="text-success font-weight-bold">View All</a>
+                <div class="business-sale-section-actions text-right">
+                    <a href="{{ url('/startupslisting') }}" class="text-success font-weight-bold d-block">View All</a>
+                    <div class="business-sale-carousel-controls">
+                        <a class="business-sale-carousel-control" href="#startupCarousel" role="button" data-slide="prev" aria-label="Previous startups">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </a>
+                        <a class="business-sale-carousel-control" href="#startupCarousel" role="button" data-slide="next" aria-label="Next startups">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Carousel -->
@@ -562,8 +587,13 @@
                                                 <i class="fa fa-envelope"></i> Email
                                                 <i class="fa fa-map-marker"></i> Mumbai
                                             </p>
-                                            <a href="{{ url('/startup/looking-for-an-investor-for-commercial-real-estate-rental-solutions/jm3ak7') }}"
-                                                class="btn btn-outline-success btn-block">Enquire Now</a>
+                                            @auth
+                                                <a href="{{ route('startup.detail', ['startup_profile' => $startup->startup_id]) }}"
+                                                    class="btn btn-outline-success btn-block">Enquire Now</a>
+                                            @else
+                                                <a href="#login" data-toggle="modal" data-target="#login"
+                                                    class="btn btn-outline-success btn-block">Enquire Now</a>
+                                            @endauth
                                         </div>
                                     </div>
                                 </div>
@@ -571,15 +601,6 @@
                         </div>
                     </div>
 
-                    <!-- Controls -->
-                    <a class="carousel-control-prev" href="#startupCarousel" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#startupCarousel" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
                 </div>
             </div>
         </div>
@@ -589,14 +610,24 @@
     <!-- ======= World Class Mentors Section ======= -->
     <section class="py-5 bg-light">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-4">
                 <div>
                     <h2 class="font-weight-bold mb-0 homepage-section-heading">World Class Mentors</h2>
                     <h5 class="text-muted mb-0 homepage-section-subheading">
                         BusinessEx offers 194 mentors as on Jul 27, 2026
                     </h5>
                 </div>
-                <a href="{{ url('/mentorlisting') }}" class="text-success font-weight-bold">View All</a>
+                <div class="business-sale-section-actions text-right">
+                    <a href="{{ url('/mentorlisting') }}" class="text-success font-weight-bold d-block">View All</a>
+                    <div class="business-sale-carousel-controls">
+                        <a class="business-sale-carousel-control" href="#mentorCarousel" role="button" data-slide="prev" aria-label="Previous mentors">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </a>
+                        <a class="business-sale-carousel-control" href="#mentorCarousel" role="button" data-slide="next" aria-label="Next mentors">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Carousel -->
@@ -621,8 +652,13 @@
                                                 <i class="fa fa-map-marker"></i> Location
                                             </p>
                                             <p class="small">{{ $mentor->mentor_profile_summary }}</p>
-                                            <a href="{{ url('/mentor/moving-your-business-from-good-to-awesome/kyu1as') }}"
-                                                class="btn btn-outline-success btn-block">Send Proposal</a>
+                                            @auth
+                                                <a href="{{ route('mentor.detail', ['mentor_profile' => $mentor->mentor_id]) }}"
+                                                    class="btn btn-outline-success btn-block">Send Proposal</a>
+                                            @else
+                                                <a href="#login" data-toggle="modal" data-target="#login"
+                                                    class="btn btn-outline-success btn-block">Send Proposal</a>
+                                            @endauth
                                         </div>
                                     </div>
                                 </div>
@@ -638,15 +674,6 @@
                     </div>
                 </div>
 
-                <!-- Controls -->
-                <a class="carousel-control-prev" href="#mentorCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#mentorCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
         </div>
     </section>
@@ -1219,6 +1246,79 @@
         padding: 6px 10px;
     }
 
+    .business-sale-section-actions {
+        min-width: 90px;
+    }
+
+    .business-sale-carousel-controls {
+        display: flex;
+        justify-content: flex-end;
+        gap: 24px;
+        margin-top: 10px;
+    }
+
+    .business-sale-carousel-control {
+        color: #555;
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    .business-sale-carousel-control:hover,
+    .business-sale-carousel-control:focus {
+        color: #198754;
+        text-decoration: none;
+    }
+
+    .business-sale-carousel-control.disabled,
+    .business-sale-carousel-control[aria-disabled="true"] {
+        color: #b5b5b5;
+        cursor: not-allowed;
+        opacity: 0.55;
+        pointer-events: none;
+    }
+
+    .featured-investors-section-actions {
+        min-width: 90px;
+    }
+
+    .featured-investors-carousel-nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: 24px;
+        margin-top: 10px;
+        color: #555;
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    .featured-investors-carousel-nav .owl-prev,
+    .featured-investors-carousel-nav .owl-next {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        color: #555;
+        font-size: 24px;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .featured-investors-carousel-nav .owl-prev:hover,
+    .featured-investors-carousel-nav .owl-next:hover,
+    .featured-investors-carousel-nav .owl-prev:focus,
+    .featured-investors-carousel-nav .owl-next:focus {
+        color: #198754;
+    }
+
+    .featured-investors-carousel-nav .owl-prev.disabled,
+    .featured-investors-carousel-nav .owl-next.disabled,
+    .owl-nav .owl-prev.disabled,
+    .owl-nav .owl-next.disabled {
+        color: #b5b5b5;
+        cursor: not-allowed;
+        opacity: 0.55;
+        pointer-events: none;
+    }
+
     .startup-growth-section .homepage-section-heading {
         font-size: 24px !important;
         font-weight: 400 !important;
@@ -1293,6 +1393,63 @@
     window.isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
 
     document.addEventListener('DOMContentLoaded', function () {
+        function setControlState(control, disabled) {
+            control.classList.toggle('disabled', disabled);
+            control.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+        }
+
+        function updateBootstrapCarouselControls(carousel) {
+            const items = Array.from(carousel.querySelectorAll('.carousel-item'));
+            const activeIndex = items.findIndex(item => item.classList.contains('active'));
+            const hasData = item => item.querySelector('.row')?.children.length > 0;
+            const controls = document.querySelectorAll(
+                `.business-sale-carousel-controls a[href="#${carousel.id}"]`
+            );
+            const hasPrevious = activeIndex >= 0 && items.slice(0, activeIndex).some(hasData);
+            const hasNext = activeIndex >= 0 && items.slice(activeIndex + 1).some(hasData);
+
+            Array.from(controls).filter(control => control.dataset.slide === 'prev').forEach(control => {
+                setControlState(control, !hasPrevious);
+            });
+            Array.from(controls).filter(control => control.dataset.slide === 'next').forEach(control => {
+                setControlState(control, !hasNext);
+            });
+        }
+
+        document.querySelectorAll('.carousel[id]').forEach(carousel => {
+            updateBootstrapCarouselControls(carousel);
+        });
+
+        document.querySelectorAll('.business-sale-carousel-controls a').forEach(control => {
+            control.addEventListener('click', function (event) {
+                if (control.classList.contains('disabled')) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        if (window.jQuery) {
+            $(document).on('slid.bs.carousel', '.carousel[id]', function () {
+                updateBootstrapCarouselControls(this);
+            });
+
+            $(document).on('initialized.owl.carousel changed.owl.carousel translated.owl.carousel refreshed.owl.carousel', '.owl-carousel', function (event) {
+                const page = event.page;
+                const settings = event.relatedTarget?.settings;
+                const nextControl = this.querySelector('.owl-next');
+
+                if (!nextControl || !page || settings?.loop) {
+                    return;
+                }
+
+                setControlState(nextControl, page.index + page.size >= page.count);
+                const previousControl = this.querySelector('.owl-prev');
+                if (previousControl) {
+                    setControlState(previousControl, page.index <= 0);
+                }
+            });
+        }
+
         const createProfileBtn = document.getElementById('createProfileBtn');
         const profileSelect = document.getElementById('profileSelect');
 

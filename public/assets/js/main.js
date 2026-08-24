@@ -173,7 +173,7 @@
     nav: true,
     animateOut: 'fadeOut',
     animateIn: 'fadeInUp',
-    navText: ['<div class="bex-arrow-sectionm"><i class="ion-ios-arrow-back" aria-hidden="true"></i>', '<i class="ion-ios-arrow-forward" aria-hidden="true"></i></div>'],
+    navText: ['<i class="fa fa-chevron-left" aria-hidden="true"></i>', '<i class="fa fa-chevron-right" aria-hidden="true"></i>'],
     autoplayTimeout: 4000,
     autoplayHoverPause: true,
     responsive: {
@@ -252,6 +252,7 @@
     margin: 0,
     autoplay: true,
     nav: true,
+    navContainer: '#featured-investors-carousel-nav',
     animateOut: 'fadeOut',
     animateIn: 'fadeInUp',
     navText: ['<div class="bex-arrow-sectionm"><i class="ion-ios-arrow-back" aria-hidden="true"></i>', '<i class="ion-ios-arrow-forward" aria-hidden="true"></i></div>'],
