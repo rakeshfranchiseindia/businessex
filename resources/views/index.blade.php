@@ -246,7 +246,7 @@
                 </div>
                 <div class="business-sale-section-actions text-right">
                     <a href="{{ url('/businesslisting') }}" class="text-success font-weight-bold d-block">View All</a>
-                    <div class="business-sale-carousel-controls">
+                    <div class="business-sale-carousel-controls home-carousel-controls">
                         <a class="business-sale-carousel-control" href="#businessSaleCarousel" role="button" data-slide="prev" aria-label="Previous business opportunities">
                             <i class="fa fa-chevron-left" aria-hidden="true"></i>
                         </a>
@@ -554,7 +554,7 @@
                 </div>
                 <div class="business-sale-section-actions text-right">
                     <a href="{{ url('/startupslisting') }}" class="text-success font-weight-bold d-block">View All</a>
-                    <div class="business-sale-carousel-controls">
+                    <div class="business-sale-carousel-controls home-carousel-controls">
                         <a class="business-sale-carousel-control" href="#startupCarousel" role="button" data-slide="prev" aria-label="Previous startups">
                             <i class="fa fa-chevron-left" aria-hidden="true"></i>
                         </a>
@@ -618,7 +618,7 @@
                 </div>
                 <div class="business-sale-section-actions text-right">
                     <a href="{{ url('/mentorlisting') }}" class="text-success font-weight-bold d-block">View All</a>
-                    <div class="business-sale-carousel-controls">
+                    <div class="business-sale-carousel-controls home-carousel-controls">
                         <a class="business-sale-carousel-control" href="#mentorCarousel" role="button" data-slide="prev" aria-label="Previous mentors">
                             <i class="fa fa-chevron-left" aria-hidden="true"></i>
                         </a>
@@ -1246,14 +1246,21 @@
     .business-sale-carousel-controls {
         display: flex;
         justify-content: flex-end;
-        gap: 24px;
+        gap: 8px;
         margin-top: 10px;
     }
 
     .business-sale-carousel-control {
+        align-items: center;
+        border: 1px solid #d9dee5;
+        border-radius: 4px;
+        display: inline-flex;
+        height: 34px;
+        justify-content: center;
         color: #555;
-        font-size: 24px;
+        font-size: 16px;
         line-height: 1;
+        width: 34px;
     }
 
     .business-sale-carousel-control:hover,
@@ -1264,10 +1271,7 @@
 
     .business-sale-carousel-control.disabled,
     .business-sale-carousel-control[aria-disabled="true"] {
-        color: #b5b5b5;
-        cursor: not-allowed;
-        opacity: 0.55;
-        pointer-events: none;
+        display: none;
     }
 
     .featured-investors-section-actions {
@@ -1277,7 +1281,7 @@
     .featured-investors-carousel-nav {
         display: flex;
         justify-content: flex-end;
-        gap: 24px;
+        gap: 8px;
         margin-top: 10px;
         color: #555;
         font-size: 24px;
@@ -1286,13 +1290,19 @@
 
     .featured-investors-carousel-nav .owl-prev,
     .featured-investors-carousel-nav .owl-next {
-        display: inline-block;
+        align-items: center;
+        border: 1px solid #d9dee5;
+        border-radius: 4px;
+        display: inline-flex;
+        height: 34px;
+        justify-content: center;
         margin: 0;
         padding: 0;
         color: #555;
-        font-size: 24px;
+        font-size: 16px;
         line-height: 1;
         cursor: pointer;
+        width: 34px;
     }
 
     .featured-investors-carousel-nav .owl-prev:hover,
@@ -1306,10 +1316,7 @@
     .featured-investors-carousel-nav .owl-next.disabled,
     .owl-nav .owl-prev.disabled,
     .owl-nav .owl-next.disabled {
-        color: #b5b5b5;
-        cursor: not-allowed;
-        opacity: 0.55;
-        pointer-events: none;
+        display: none;
     }
 
     .startup-growth-section .homepage-section-heading {
@@ -1389,6 +1396,7 @@
         function setControlState(control, disabled) {
             control.classList.toggle('disabled', disabled);
             control.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+            control.setAttribute('tabindex', disabled ? '-1' : '0');
         }
 
         function updateBootstrapCarouselControls(carousel) {
@@ -1429,17 +1437,24 @@
             $(document).on('initialized.owl.carousel changed.owl.carousel translated.owl.carousel refreshed.owl.carousel', '.owl-carousel', function (event) {
                 const page = event.page;
                 const settings = event.relatedTarget?.settings;
-                const nextControl = this.querySelector('.owl-next');
+                const nav = this.id === 'bex-featured-investors-carousel'
+                    ? document.querySelector('#featured-investors-carousel-nav')
+                    : this.querySelector('.owl-nav');
+                const nextControl = nav?.querySelector('.owl-next');
 
-                if (!nextControl || !page || settings?.loop) {
+                if (!nav || !page || settings?.loop) {
                     return;
                 }
 
-                setControlState(nextControl, page.index + page.size >= page.count);
-                const previousControl = this.querySelector('.owl-prev');
+                if (nextControl) {
+                    setControlState(nextControl, page.index + page.size >= page.count);
+                }
+                const previousControl = nav.querySelector('.owl-prev');
                 if (previousControl) {
                     setControlState(previousControl, page.index <= 0);
                 }
+
+                nav.style.display = page.count > page.size ? 'flex' : 'none';
             });
         }
 

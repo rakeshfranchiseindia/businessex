@@ -171,10 +171,6 @@ class HomeController extends Controller
                 'inv_abt_urself','membership_paid','membership_plan','last_login_at'
             )
             ->where('inv_profile_status', config('constants.ProfileStatus.Active'))
-            ->whereIn('inv_profile_str', [
-                '5l1xvp','jcahys','zuiizc','kmebfr','h0un4g','r7unm0',
-                'nwyawl','4idnbw','sucyej','zpjzfi','n29zph','6zhvhj'
-            ])
             ->orderByDesc('last_login_at')
             ->orderByDesc('invest_size_max')
             ->limit(12)
