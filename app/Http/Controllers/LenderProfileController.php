@@ -148,7 +148,6 @@ class LenderProfileController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error("Lender profile creation failed: " . $e->getMessage() . "\n" . $e->getTraceAsString());
-
             return redirect()->back()->withInput()->with('error', $e->getMessage());
         }
     }

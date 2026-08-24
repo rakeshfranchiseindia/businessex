@@ -55,9 +55,16 @@ class ProfileController extends Controller
         $user->update([
             'password' => Hash::make($request->password)
         ]);
-        return back()->with(
+
+        // Force a fresh login with the new password instead of letting the
+        // old session carry on — same logout sequence as AuthController::logout.
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with(
             'success',
-            'Password changed successfully'
+            'Password changed successfully. Please log in again with your new password.'
         );
     }
     public function forgotPassword()
