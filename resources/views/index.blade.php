@@ -38,19 +38,22 @@
                         <div class="bex-card-main">
                             <div class="bex-form-section-main">
                                 <h5>REGISTER FOR FREE</h5>
-                                @if(session('email_error'))
-                                    <div class="text-danger">{{ session('email_error') }}</div>
+                                @if(session('quick_profile_email_error'))
+                                    <div class="text-danger">{{ session('quick_profile_email_error') }}</div>
                                 @endif
-                                @if(session('success'))
+                                @if(session('quick_profile_success'))
                                     <div class="alert alert-success">
-                                        {{ session('success') }}
+                                        {{ session('quick_profile_success') }}
                                     </div>
+                                @endif
+                                @if($errors->quickProfileRegister->any())
+                                    <div class="alert alert-danger">Please correct the highlighted fields.</div>
                                 @endif
                             </div>
                         </div>
                         <div>
                             <div class="bex-form-section">
-                                <form id="quick-registration" name="quick-registration" method="POST" action="{{ route('quick.register') }}">
+                                <form id="quick-registration" name="quick-registration" method="POST" action="{{ route('quick.profile.register') }}">
                                     @csrf
 
                                     <!-- Profile -->
@@ -68,7 +71,7 @@
                                             <option value="4">Mentor | Looking To Guide/Coach</option>
                                         </select>
                                     </div>
-                                    @error('profile')
+                                    @error('profile', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 
@@ -81,7 +84,7 @@
                                         </div>
                                         <input name="name" type="text" class="form-control" placeholder="Enter Your Name" pattern="^[A-Za-z\s]+$" title="Only letters and spaces are allowed" required>
                                     </div>
-                                    @error('name')
+                                    @error('name', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 
@@ -94,7 +97,7 @@
                                         </div>
                                         <input name="phone_number" type="tel" class="form-control" placeholder="Enter Your Mobile No." required>
                                     </div>
-                                    @error('phone_number')
+                                    @error('phone_number', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 
@@ -107,7 +110,7 @@
                                         </div>
                                         <input name="email" type="email" class="form-control" placeholder="Enter Your Email ID" required>
                                     </div>
-                                    @error('email')
+                                    @error('email', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 
@@ -120,7 +123,7 @@
                                         </div>
                                         <input name="company" type="text" class="form-control" placeholder="Enter Company Name" required>
                                     </div>
-                                    @error('company')
+                                    @error('company', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 

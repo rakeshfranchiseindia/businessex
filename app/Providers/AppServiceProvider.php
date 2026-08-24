@@ -13,6 +13,9 @@ use App\Models\BxCity;
 use App\Http\Controllers\CommonController; 
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Schema;
+use SocialiteProviders\LinkedIn\Provider as LinkedInProvider;
+use SocialiteProviders\Manager\SocialiteWasCalled;
+use Illuminate\Support\Facades\Event;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Event::listen(function (SocialiteWasCalled $event) {
+            $event->extendSocialite('linkedin', LinkedInProvider::class);
+        });
+
         $testimonials = Schema::hasTable('testimonials') ? Testimonial::all() : collect();
         $locations    = Schema::hasTable('bx_cities') ? BxCity::all() : collect();
         

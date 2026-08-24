@@ -28,6 +28,7 @@ use App\Http\Controllers\BxInsightController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\LenderProfileController;
 use App\Http\Controllers\BxServicePaymentController;
+use App\Http\Controllers\SocialLoginController;
 
 
 
@@ -82,8 +83,11 @@ Route::get('/service/certified-business-broker', [ServiceListingController::clas
 
 
 
-Route::post('/quick-register', [AuthController::class, 'quickRegister'])->name('quick.register');
+Route::post('/quick-profile-register', [AuthController::class, 'quickProfileRegister'])->name('quick.profile.register');
+Route::post('/user-register', [AuthController::class, 'userRegister'])->name('user.register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::get('/auth/{provider}', [SocialLoginController::class, 'redirect'])->name('social.redirect');
+Route::get('/auth/{provider}/callback', [SocialLoginController::class, 'callback'])->name('social.callback');
 Route::get('/dashboard/myaccount', [AuthController::class, 'myaccount'])->middleware('auth')->name('myaccount');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 

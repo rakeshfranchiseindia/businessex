@@ -93,19 +93,22 @@
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="Login" role="tabpanel" aria-labelledby="login-tab">
+                                @if(session('social_login_error'))
+                                    <div class="alert alert-danger">{{ session('social_login_error') }}</div>
+                                @endif
                                 <div class="soc">
-                                    <div class="innsoc"><a href="#" aria-label="Login with Google"><img src="{{ asset('assets/img/google.svg') }}" alt="Google"></a></div>
-                                    <div class="innsoc"><a href="#" aria-label="Login with Facebook"><img src="{{ asset('assets/img/fb.svg') }}" alt="Facebook"></a></div>
-                                    <div class="innsoc"><a href="#" aria-label="Login with LinkedIn"><img src="{{ asset('assets/img/linkedins.svg') }}" alt="LinkedIn"></a></div>
+                                    <div class="innsoc"><a href="{{ route('social.redirect', ['provider' => 'google']) }}" aria-label="Login with Google"><img src="{{ asset('assets/img/google.svg') }}" alt="Google"></a></div>
+                                    <div class="innsoc"><a href="{{ route('social.redirect', ['provider' => 'facebook']) }}" aria-label="Login with Facebook"><img src="{{ asset('assets/img/fb.svg') }}" alt="Facebook"></a></div>
+                                    <div class="innsoc"><a href="{{ route('social.redirect', ['provider' => 'linkedin']) }}" aria-label="Login with LinkedIn"><img src="{{ asset('assets/img/linkedins.svg') }}" alt="LinkedIn"></a></div>
                                 </div>
                                 <div class="emaishow">Or use your email account</div>
                                 <form action="{{ route('login') }}" method="POST">
                                     @csrf
                                     <div class="frmblk">
-                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/email-iconnew.svg') }}" alt="Email"></span></div><input id="login_email" name="email" type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Enter Your Email ID" value="{{ old('email') }}" autocomplete="email" required></div>
-                                        @error('email')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
-                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/lock-icon.svg') }}" alt="Password"></span></div><input id="login_password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter Your Password" autocomplete="current-password" required></div>
-                                        @error('password')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/email-iconnew.svg') }}" alt="Email"></span></div><input id="login_email" name="email" type="email" class="form-control @error('login_email') is-invalid @enderror" placeholder="Enter Your Email ID" value="{{ old('email') }}" autocomplete="email" required></div>
+                                        @error('login_email')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/lock-icon.svg') }}" alt="Password"></span></div><input id="login_password" type="password" name="password" class="form-control @error('login_password') is-invalid @enderror" placeholder="Enter Your Password" autocomplete="current-password" required></div>
+                                        @error('login_password')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
                                         <div class="ffull"><div class="pleft"><label><input type="checkbox" name="remember" value="1"> Keep me Logged In</label></div><div class="pright"><a href="{{ route('forgot.password') }}">Forgot Password?</a></div></div>
                                         <input type="submit" value="Login" class="popbtn">
                                     </div>
@@ -114,17 +117,29 @@
 
                             <div class="tab-pane fade" id="Register" role="tabpanel" aria-labelledby="register-tab">
                                 <div class="soc">
-                                    <div class="innsoc"><a href="#" aria-label="Register with Google"><img src="{{ asset('assets/img/google.svg') }}" alt="Google"></a></div>
-                                    <div class="innsoc"><a href="#" aria-label="Register with Facebook"><img src="{{ asset('assets/img/fb.svg') }}" alt="Facebook"></a></div>
-                                    <div class="innsoc"><a href="#" aria-label="Register with LinkedIn"><img src="{{ asset('assets/img/linkedins.svg') }}" alt="LinkedIn"></a></div>
+                                    <div class="innsoc"><a href="{{ route('social.redirect', ['provider' => 'google']) }}" aria-label="Register with Google"><img src="{{ asset('assets/img/google.svg') }}" alt="Google"></a></div>
+                                    <div class="innsoc"><a href="{{ route('social.redirect', ['provider' => 'facebook']) }}" aria-label="Register with Facebook"><img src="{{ asset('assets/img/fb.svg') }}" alt="Facebook"></a></div>
+                                    <div class="innsoc"><a href="{{ route('social.redirect', ['provider' => 'linkedin']) }}" aria-label="Register with LinkedIn"><img src="{{ asset('assets/img/linkedins.svg') }}" alt="LinkedIn"></a></div>
                                 </div>
                                 <div class="emaishow">Or use your email account</div>
-                                <form action="{{ route('quick.register') }}" method="POST">
+                                <form action="{{ route('user.register') }}" method="POST">
                                     @csrf
+                                    @if(session('user_registration_email_error'))
+                                        <div class="text-danger mb-3">{{ session('user_registration_email_error') }}</div>
+                                    @endif
+                                    @if(session('user_registration_success'))
+                                        <div class="alert alert-success">{{ session('user_registration_success') }}</div>
+                                    @endif
+                                    @if($errors->userRegister->any())
+                                        <div class="alert alert-danger">Please correct the highlighted fields.</div>
+                                    @endif
                                     <div class="frmblk">
-                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/email-iconnew.svg') }}" alt="Email"></span></div><input id="register_email" type="email" name="email" class="form-control" placeholder="Enter Your Email ID" value="{{ old('email') }}" autocomplete="email" required></div>
-                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/lock-icon.svg') }}" alt="Password"></span></div><input id="register_password" type="password" name="password" class="form-control" placeholder="Enter Your Password" autocomplete="new-password" required></div>
-                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/lock-icon.svg') }}" alt="Confirm Password"></span></div><input id="register_password_confirmation" type="password" name="password_confirmation" class="form-control" placeholder="Enter Confirm Password" autocomplete="new-password" required></div>
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/email-iconnew.svg') }}" alt="Email"></span></div><input id="register_email" type="email" name="email" class="form-control @error('email', 'userRegister') is-invalid @enderror" placeholder="Enter Your Email ID" value="{{ old('email') }}" autocomplete="email" required></div>
+                                        @error('email', 'userRegister')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/lock-icon.svg') }}" alt="Password"></span></div><input id="register_password" type="password" name="password" class="form-control @error('password', 'userRegister') is-invalid @enderror" placeholder="Enter Your Password" autocomplete="new-password" required></div>
+                                        @error('password', 'userRegister')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/lock-icon.svg') }}" alt="Confirm Password"></span></div><input id="register_password_confirmation" type="password" name="password_confirmation" class="form-control @error('password_confirmation', 'userRegister') is-invalid @enderror" placeholder="Enter Your Password Again" autocomplete="new-password" required></div>
+                                        @error('password_confirmation', 'userRegister')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
                                         <div class="ffull"><div class="pleft"><label><input type="checkbox" name="subscribe" value="1"> Subscribe for Daily Updates</label></div></div>
                                         <input type="submit" value="Submit" class="popbtn">
                                     </div>
@@ -207,6 +222,20 @@
         document.addEventListener('DOMContentLoaded', function () {
 
             const isLoggedIn = @json(auth()->check());
+            const loginFailed = @json(session('login_failed', false));
+            const userRegistrationFailed = @json(session('user_registration_failed', false));
+
+            if (loginFailed && !isLoggedIn) {
+                $('#login').modal('show');
+                $('#login-tab').tab('show');
+                return;
+            }
+
+            if (userRegistrationFailed && !isLoggedIn) {
+                $('#login').modal('show');
+                $('#register-tab').tab('show');
+                return;
+            }
 
             const currentPath = window.location.pathname.replace(/\/$/, '');
 
