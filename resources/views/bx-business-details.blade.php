@@ -1,5 +1,11 @@
 @extends('layouts.app');
-@section('title', 'Prominent Branded Gym Chain Franchise For Sale')
+@php
+    $businessTitle = $business->advmt_headline ?: $business->seller_company ?: 'Business Listing';
+    $businessLocation = trim(($business->ofc_city ?? '') . (empty($business->ofc_city) || empty($business->ofc_state) ? '' : ', ') . ($business->ofc_state ?? ''));
+    $businessImages = $business->images->filter(fn ($image) => !empty($image->business_img_path));
+@endphp
+
+@section('title', $businessTitle)
 
 @section('content')
 
@@ -16,15 +22,15 @@
             </li>
             <li>/</li>
             <li>
-                <a href="#">Health</a>
+                <a href="#">{{ $businessLocation ?: 'Business' }}</a>
             </li>
             <li>/</li>
             <li>
-                <a href="#">Old gym for Sale</a>
+                <a href="#">{{ $business->seller_company ?: 'Business' }}</a>
             </li>
             <li>/</li>
             <li>
-                Prominent Branded Gym Chain Franchise For Sale
+                {{ $businessTitle }}
             </li>
         </ul>
     </div>
@@ -35,13 +41,11 @@
     <div class="container">
 
         <h1 class="headblk">
-            Prominent Branded Gym Chain Franchise For Sale
+            {{ $businessTitle }}
         </h1>
 
         <p class="statictxt">
-            Focuses on providing its customers with a healthy snacking option
-            along with its eco-friendly and hygienic packaging, with negligible
-            usage of plastics.
+            {{ $business->seller_intro ?: $business->company_summary ?: 'Business profile details.' }}
         </p>
 
     </div>
@@ -101,21 +105,21 @@
                 <ul class="mainsecdet">
                     <li>
                         <span>Seeking Investment</span>
-                        INR 1 Cr - 2 Cr
+                        {{ $business->inv_asking_price ? 'INR ' . number_format((float) $business->inv_asking_price, 2) : 'N/A' }}
                     </li>
 
                     <li class="linesh">|</li>
 
                     <li>
                         <span>Annual Sales/Turnover</span>
-                        N/A
+                        {{ $business->annual_sales ? number_format((float) $business->annual_sales, 2) : 'N/A' }}
                     </li>
 
                     <li class="linesh">|</li>
 
                     <li>
                         <span>Gross Income</span>
-                        N/A
+                        {{ $business->gross_profit ? number_format((float) $business->gross_profit, 2) : 'N/A' }}
                     </li>
                 </ul>
 
@@ -124,73 +128,35 @@
                      class="carousel slide"
                      data-ride="carousel">
 
-                    <ol class="carousel-indicators">
-
-                        <li data-target="#carouselExampleIndicators"
-                            data-slide-to="0"
-                            class="active">
-                        </li>
-
-                        <li data-target="#carouselExampleIndicators"
-                            data-slide-to="1">
-                        </li>
-
-                        <li data-target="#carouselExampleIndicators"
-                            data-slide-to="2">
-                        </li>
-
-                        <li data-target="#carouselExampleIndicators"
-                            data-slide-to="3">
-                        </li>
-
-                        <li data-target="#carouselExampleIndicators"
-                            data-slide-to="4">
-                        </li>
-
-                    </ol>
+                    @if($businessImages->isNotEmpty())
+                        <ol class="carousel-indicators">
+                            @foreach($businessImages as $index => $image)
+                                <li data-target="#carouselExampleIndicators"
+                                    data-slide-to="{{ $index }}"
+                                    class="{{ $index === 0 ? 'active' : '' }}">
+                                </li>
+                            @endforeach
+                        </ol>
+                    @endif
 
                     <div class="carousel-inner">
-
-                        <div class="carousel-item active">
-                            <img
-                                src="https://s3.ap-south-1.amazonaws.com/businessextest/subCatImages/66/1000_x_562/shutterstock_289585190.jpg"
-                                class="d-block w-100"
-                                alt="Gym"
-                            >
-                        </div>
-
-                        <div class="carousel-item">
-                            <img
-                                src="https://s3.ap-south-1.amazonaws.com/businessextest/subCatImages/66/1000_x_562/shutterstock_523768063.jpg"
-                                class="d-block w-100"
-                                alt="Gym"
-                            >
-                        </div>
-
-                        <div class="carousel-item">
-                            <img
-                                src="https://s3.ap-south-1.amazonaws.com/businessextest/subCatImages/66/1000_x_562/shutterstock_531055792.jpg"
-                                class="d-block w-100"
-                                alt="Gym"
-                            >
-                        </div>
-
-                        <div class="carousel-item">
-                            <img
-                                src="https://s3.ap-south-1.amazonaws.com/businessextest/subCatImages/66/1000_x_562/shutterstock_560271130.jpg"
-                                class="d-block w-100"
-                                alt="Gym"
-                            >
-                        </div>
-
-                        <div class="carousel-item">
-                            <img
-                                src="https://s3.ap-south-1.amazonaws.com/businessextest/subCatImages/66/1000_x_562/shutterstock_1113163970.jpg"
-                                class="d-block w-100"
-                                alt="Gym"
-                            >
-                        </div>
-
+                        @forelse($businessImages as $index => $image)
+                            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                <img
+                                    src="{{ filter_var($image->business_img_path, FILTER_VALIDATE_URL) ? $image->business_img_path : asset($image->business_img_path) }}"
+                                    class="d-block w-100"
+                                    alt="{{ $businessTitle }}"
+                                >
+                            </div>
+                        @empty
+                            <div class="carousel-item active">
+                                <img
+                                    src="{{ asset('assets/img/default-business.jpg') }}"
+                                    class="d-block w-100"
+                                    alt="{{ $businessTitle }}"
+                                >
+                            </div>
+                        @endforelse
                     </div>
 
                     <a class="carousel-control-prev"
@@ -448,7 +414,7 @@
                                             </span>
 
                                             <span class="ds2">
-                                                2011
+                                                {{ $business->estb_year ?: 'N/A' }}
                                             </span>
                                         </div>
 
@@ -458,7 +424,7 @@
                                             </span>
 
                                             <span class="ds2">
-                                                101-500
+                                                {{ $business->emp_count ?: 'N/A' }}
                                             </span>
                                         </div>
 
@@ -468,7 +434,7 @@
                                             </span>
 
                                             <span class="ds2">
-                                                Private Limited Company
+                                                {{ $business->entity_type ?: 'N/A' }}
                                             </span>
                                         </div>
 
@@ -478,7 +444,7 @@
                                             </span>
 
                                             <span class="ds2">
-                                                Coaching & training institutes
+                                                {{ $business->industry_sector ?: 'N/A' }}
                                             </span>
                                         </div>
 
@@ -488,7 +454,7 @@
                                             </span>
 
                                             <span class="ds2">
-                                                Business to Customer
+                                                {{ $business->business_type ? config('constants.businessType.' . $business->business_type) : 'N/A' }}
                                             </span>
                                         </div>
 
@@ -551,7 +517,7 @@
 
                                             <span class="ds2">
                                                 <i class="fas fa-rupee-sign"></i>
-                                                100000000
+                                                {{ $business->annual_sales ? number_format((float) $business->annual_sales, 2) : 'N/A' }}
                                             </span>
                                         </div>
 
@@ -562,7 +528,7 @@
 
                                             <span class="ds2">
                                                 <i class="fas fa-rupee-sign"></i>
-                                                9,000,000.00
+                                                {{ $business->ebitda ? number_format((float) $business->ebitda, 2) : 'N/A' }}
                                             </span>
                                         </div>
 
@@ -572,7 +538,7 @@
                                             </span>
 
                                             <span class="ds2">
-                                                21,122.00%
+                                                {{ $business->ebitda_margin ? number_format((float) $business->ebitda_margin, 2) . '%' : 'N/A' }}
                                             </span>
                                         </div>
 
@@ -583,7 +549,7 @@
 
                                             <span class="ds2">
                                                 <i class="fas fa-rupee-sign"></i>
-                                                300,000.00
+                                                {{ $business->inventory_value ? number_format((float) $business->inventory_value, 2) : 'N/A' }}
                                             </span>
                                         </div>
 
@@ -594,7 +560,7 @@
 
                                             <span class="ds2">
                                                 <i class="fas fa-rupee-sign"></i>
-                                                40,000.00
+                                                {{ $business->rentals ? number_format((float) $business->rentals, 2) : 'N/A' }}
                                             </span>
                                         </div>
 
@@ -605,7 +571,7 @@
 
                                             <span class="ds2">
                                                 <i class="fas fa-rupee-sign"></i>
-                                                100000000
+                                                {{ $business->gross_profit ? number_format((float) $business->gross_profit, 2) : 'N/A' }}
                                             </span>
                                         </div>
 
@@ -755,7 +721,7 @@
                         <div class="btnconatblk">
                             <a href="#contactfrm"
                                class="btnconat">
-                                Contact Startup
+                                Contact Business
                             </a>
                         </div>
 

@@ -62,6 +62,7 @@ class MentorController extends Controller
     // Transform collection while preserving pagination
     $mentorListData = $mentors->getCollection()->map(function ($mentor) use ($selectedOccupations) {
         return [
+            'mentorId'           => $mentor->mentor_id,
             'mentorProfileStr'   => strtolower($mentor->mentor_profile_str),
             'mentorCity'         => $mentor->mentor_city,
             'mentorState'        => config('constants.statesIndia.' . $mentor->mentor_state),
@@ -170,9 +171,17 @@ class MentorController extends Controller
     }
 
 
-    public function mentorDetail(){
+        public function mentorDetail($mentor_profile)
+        {
+            $mentor = ProfileMentor::with(['experience', 'industryPreferences'])
+                ->where('mentor_profile_status', config('constants.ProfileStatus.Active'))
+                ->where('mentor_id', $mentor_profile)
+                ->firstOrFail();
 
-      return view('bx-mentor-details');
+            $mentorSectors = $this->getMentorSectors($mentor->mentor_id);
+            $mentorExpertise = $this->getMentorSubjectExpertise($mentor->mentor_id);
+
+            return view('bx-mentor-details', compact('mentor', 'mentorSectors', 'mentorExpertise'));
 
     }
 }

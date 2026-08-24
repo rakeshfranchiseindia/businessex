@@ -117,7 +117,13 @@
 
                                     <div class="business-card-location"><i class="fa fa-map-marker"></i> {{ $location ?: 'Location not specified' }}</div>
 
-                                    <div class="inbtn business-card-contact"><a href="mailto:{{ $business->seller_email }}">Contact Business</a></div>
+                                    <div class="inbtn business-card-contact">
+                                        @auth
+                                            <a href="{{ route('business.detail', $business->business_id) }}">Contact Business</a>
+                                        @else
+                                            <a href="#login" data-toggle="modal" data-target="#login">Contact Business</a>
+                                        @endauth
+                                    </div>
                                 </li>
                             @endforeach
                         </ul>

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<main id="main">
+<main id="main" class="homepage-main">
     <!-- ======= Intro Section ======= -->
     <section id="hero" class="section-t8 d-flex align-items-center">
         <div class="container" data-aos="zoom-out" data-aos-delay="100">
@@ -139,20 +139,20 @@
     <!-- End Intro Section -->
 
     <!-- ======= Why Business-Ex Section ======= -->
-    <section class="section-business-ex section-t2 nav-arrow-a">
+    <section class="section-business-ex section-t2 nav-arrow-a why-business-section">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="title-wrap d-flex justify-content-between">
                         <div class="title-box">
-                            <h2 class="bex-title-a">Why Business-Ex</h2>
-                            <h5>Businessex- Exit, Exchange, Excel</h5>
+                            <h2 class="bex-title-a homepage-section-heading">Why Business-Ex</h2>
+                            <h5 class="homepage-section-subheading">Businessex- Exit, Exchange, Excel</h5>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="bex-bussiness-carousel" class="owl-carousel owl-arrow card bex-card-margin bex-main-text-aling">
-                <div class="carousel-item-a">
+            <div class="why-business-grid bex-card-margin bex-main-text-aling">
+                <div class="why-business-grid-item">
                     <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                             <img src="{{ asset('assets/img/business-ex.jpg') }}" alt="Business Ex">
@@ -164,7 +164,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item-a">
+                <div class="why-business-grid-item">
                     <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                             <img src="{{ asset('assets/img/help-companies-scale-upnew.svg') }}" alt="Business Ex">
@@ -177,7 +177,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item-a">
+                <div class="why-business-grid-item">
                     <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                             <img src="{{ asset('assets/img/a-connected-networknew.svg') }}" alt="Business Ex">
@@ -189,7 +189,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item-a">
+                <div class="why-business-grid-item">
                     <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                             <img src="{{ asset('assets/img/fully-customizable-platformnew.svg') }}" alt="Business Ex">
@@ -201,7 +201,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item-a">
+                <div class="why-business-grid-item">
                     <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                             <img src="{{ asset('assets/img/authentic-communitynew.svg') }}" alt="Business Ex">
@@ -213,7 +213,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="carousel-item-a">
+                <div class="why-business-grid-item">
                     <div class="business-ex-box">
                         <div class="bex-bussiness-section">
                             <img src="./assets/img/portfolio-managementnew.svg" alt="">
@@ -231,12 +231,12 @@
     <!-- End business-ex Section -->
 
     <!-- ======= Business For Sale Opportunities Section ======= -->
-    <section class="py-5 bg-light">
+    <section class="py-5 bg-light business-sale-section">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 class="font-weight-bold mb-0">Business For Sale Opportunities</h2>
-                    <h5 class="text-muted mb-0">
+                    <h2 class="font-weight-bold mb-0 homepage-section-heading">Business For Sale Opportunities</h2>
+                    <h5 class="text-muted mb-0 homepage-section-subheading">
                         BusinessEx offers 1863 businesses in 16 industries as on Jul 27, 2026
                     </h5>
                 </div>
@@ -307,13 +307,13 @@
     <!-- End Business For Sale Opportunities Section -->
 
     <!-- ======= Upcoming & Past Events Section ======= -->
-    <section class="section-business-ex section-t2 nav-arrow-a">
+    <section class="section-business-ex section-t2 nav-arrow-a upcoming-events-section">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="title-wrap d-flex justify-content-between">
                         <div class="title-box">
-                            <h2 class="bex-title-a">Upcoming & Past Events</h2>
+                            <h2 class="bex-title-a homepage-section-heading">Upcoming & Past Events</h2>
                         </div>
                     </div>
                 </div>
@@ -372,8 +372,8 @@
                 <div class="col-md-12">
                     <div class="title-wrap d-flex justify-content-between">
                         <div class="title-box">
-                            <h2 class="bex-title-a">Featured Investors</h2>
-                            <h5>Business-Ex Offers 511 Start-Ups In 13 Various Industries</h5>
+                            <h2 class="bex-title-a homepage-section-heading">Featured Investors</h2>
+                            <h5 class="homepage-section-subheading">Business-Ex Offers 511 Start-Ups In 13 Various Industries</h5>
                             <a href="/investorlisting" class="bex-view-all-section">View All</a>
                         </div>
                     </div>
@@ -442,7 +442,7 @@
     <section class="py-5 bg-light">
   <div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h2 class="font-weight-bold mb-0">Top Franchise Opportunities</h2>
+    <h2 class="font-weight-bold mb-0 homepage-section-heading">Top Franchise Opportunities</h2>
       <a href="https://www.franchiseindia.com/" target="_blank" class="text-success font-weight-bold">View All</a>
     </div>
 
@@ -529,12 +529,12 @@
     <!-- End Top Franchise Opportunities Section -->
 
     <!-- ======= High Growth Potential Startups Section ======= -->
-    <section class="py-5 bg-light">
+    <section class="py-5 bg-light startup-growth-section">
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 class="font-weight-bold mb-0">High Growth Potential Startups</h2>
-                    <h5 class="text-muted mb-0">
+                    <h2 class="font-weight-bold mb-0 homepage-section-heading">High Growth Potential Startups</h2>
+                    <h5 class="text-muted mb-0 homepage-section-subheading">
                         BusinessEx offers 678 startups in 16 industries as on Jul 27, 2026
                     </h5>
                 </div>
@@ -591,8 +591,8 @@
         <div class="container">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 class="font-weight-bold mb-0">World Class Mentors</h2>
-                    <h5 class="text-muted mb-0">
+                    <h2 class="font-weight-bold mb-0 homepage-section-heading">World Class Mentors</h2>
+                    <h5 class="text-muted mb-0 homepage-section-subheading">
                         BusinessEx offers 194 mentors as on Jul 27, 2026
                     </h5>
                 </div>
@@ -656,12 +656,12 @@
     <section class="py-5 bg-light">
         <div class="container">
             <div class="title-box mb-4">
-                <h2 class="font-weight-bold">All Popular Business Opportunities</h2>
+                <h2 class="font-weight-bold homepage-section-heading">All Popular Business Opportunities</h2>
             </div>
 
                <!-- View Opportunities By Industry -->
-               <div class="industry-section mb-5">
-                  <h3 class="h5 font-weight-bold mb-3">View Opportunities By Industry</h3>
+               <div class="industry-section industry-section-compact mb-5">
+                  <h3 class="h5 font-weight-bold mb-3 homepage-section-heading">View Opportunities By Industry</h3>
                   <ul class="list-unstyled d-flex flex-wrap gap-2">
                      @php
                            $groupedIndustries = collect($industrySeller)->groupBy('industry');
@@ -691,8 +691,8 @@
 
 
             <!-- View Opportunities By Location -->
-            <div class="industry-section mb-5">
-                <h3 class="h5 font-weight-bold mb-3">View Opportunities By Location</h3>
+            <div class="industry-section industry-section-compact mb-5">
+                <h3 class="h5 font-weight-bold mb-3 homepage-section-heading">View Opportunities By Location</h3>
                 <ul class="list-unstyled d-flex flex-wrap gap-2">
                     @foreach($homePageLocation as $location)
                         <li>
@@ -704,8 +704,8 @@
             </div>
 
             <!-- View Opportunities By Investment -->
-         <div class="industry-section mb-5">
-            <h3 class="h5 font-weight-bold mb-3">View Opportunities By Investment</h3>
+         <div class="industry-section industry-section-compact">
+            <h3 class="h5 font-weight-bold mb-3 homepage-section-heading">View Opportunities By Investment</h3>
             <ul class="list-unstyled d-flex flex-wrap gap-2">
                <li><a href="{{ url('/businesslisting?business_type=sale&min=50000&max=200000') }}" class="industry-btn">₹50K - ₹2Lakh</a></li>
                <li><a href="{{ url('/businesslisting?business_type=sale&min=200000&max=500000') }}" class="industry-btn">₹2Lakh - ₹5Lakh</a></li>
@@ -731,7 +731,7 @@
                 <div class="col-md-12">
                     <div class="title-wrap d-flex justify-content-between">
                         <div class="title-box">
-                            <h2 class="bex-title-a">Bx Insights</h2>
+                            <h2 class="bex-title-a homepage-section-heading">Bx Insights</h2>
                             <a href="/articles" class="bex-view-all-section2">View All</a>
                         </div>
                     </div>
@@ -833,7 +833,7 @@
                 <div class="col-md-12">
                     <div class="title-wrap d-flex justify-content-between">
                         <div class="title-box">
-                            <h2 class="bex-title-a">Bx Services</h2>
+                            <h2 class="bex-title-a homepage-section-heading">Bx Services</h2>
                         </div>
                     </div>
                 </div>
@@ -935,8 +935,8 @@
                 <div class="col-md-12 text-center">
                     <div class="title-wrap justify-content-between">
                         <div class="title-box">
-                            <h1 class="bex-title-a">Membership Plans</h1>
-                            <h5>Choose The Right One For You</h5>
+                            <h1 class="bex-title-a homepage-section-heading">Membership Plans</h1>
+                            <h5 class="homepage-section-subheading">Choose The Right One For You</h5>
                         </div>
                     </div>
                 </div>
@@ -1036,8 +1036,8 @@
                 <div class="col-md-12 text-center">
                     <div class="title-wrap justify-content-between">
                         <div class="title-box">
-                            <h1 class="bex-title-a">Did You Find Anything Interested ?</h1>
-                            <h5>Why Wait, Create Your Profile Now.</h5>
+                            <h1 class="bex-title-a homepage-section-heading">Did You Find Anything Interested ?</h1>
+                            <h5 class="homepage-section-subheading">Why Wait, Create Your Profile Now.</h5>
                         </div>
                     </div>
                 </div>
@@ -1072,7 +1072,7 @@
     <section class="section-business-ex section-t2 section-b2 nav-arrow-a">
         <div class="container-fluid">
             <div class="title-box text-center mb-4">
-                <h2 class="bex-title-a">What Our Clients Say</h2>
+                <h2 class="bex-title-a homepage-section-heading">What Our Clients Say</h2>
             </div>
             <div id="clientssay" class="owl-carousel owl-theme">
                 @foreach($testimonials as $testimonial)
@@ -1125,6 +1125,164 @@
         background-color: #f3d6b8;
         color: #000;
         text-decoration: none;
+    }
+
+    .industry-section-compact {
+        padding: 6px 12px;
+    }
+
+    .industry-section-compact h3 {
+        font-size: 16px;
+        margin-bottom: 10px !important;
+    }
+
+    .industry-section-compact .industry-btn {
+        font-size: 13px;
+        padding: 5px 10px;
+        border-radius: 6px;
+        margin: 3px;
+    }
+
+    .homepage-section-heading {
+        font-size: 26px !important;
+        font-weight: 500 !important;
+        line-height: 1.2 !important;
+    }
+
+    .homepage-section-subheading {
+        font-size: 15px !important;
+        font-weight: 400 !important;
+        line-height: 1.3 !important;
+    }
+
+    .group-companies h3 {
+        font-size: 26px;
+        font-weight: 500;
+    }
+
+    .why-business-grid {
+        display: grid;
+        gap: 28px 20px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .why-business-grid-item,
+    .why-business-grid-item .business-ex-box {
+        margin: 0;
+    }
+
+    .why-business-grid-item .bex-bussiness-section {
+        height: 100%;
+    }
+
+    .why-business-section {
+        background: #fff;
+    }
+
+    .why-business-section .homepage-section-heading {
+        font-size: 26px !important;
+        font-weight: 500 !important;
+    }
+
+    .why-business-section .homepage-section-subheading {
+        font-size: 15px !important;
+        font-weight: 400 !important;
+    }
+
+    .why-business-section .bex-bussiness-section h4 {
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.25;
+    }
+
+    .why-business-section .bex-bussiness-section p {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.45;
+    }
+
+    .business-sale-section .card-body p {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.35;
+    }
+
+    .business-sale-section .card-body h6 {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.3;
+    }
+
+    .business-sale-section .card-body .btn {
+        font-size: 12px;
+        font-weight: 500;
+        padding: 6px 10px;
+    }
+
+    .startup-growth-section .homepage-section-heading {
+        font-size: 24px !important;
+        font-weight: 400 !important;
+    }
+
+    .startup-growth-section .homepage-section-subheading {
+        font-size: 14px !important;
+        font-weight: 400 !important;
+    }
+
+    .startup-growth-section .card-body p {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 1.35;
+    }
+
+    .startup-growth-section .card-body h6 {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.3;
+    }
+
+    .startup-growth-section .card-body .btn {
+        font-size: 12px;
+        font-weight: 500;
+        padding: 6px 10px;
+    }
+
+    .upcoming-events-section {
+        margin-top: 0 !important;
+        padding-top: 10px !important;
+    }
+
+    @media (max-width: 767.98px) {
+        .why-business-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .why-business-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .homepage-main > section:not(#hero) {
+        margin-bottom: 25px !important;
+        margin-top: 25px !important;
+        padding-bottom: 25px !important;
+        padding-top: 25px !important;
+    }
+
+    .homepage-main > section .title-box > h1,
+    .homepage-main > section .title-box > h2,
+    .homepage-main > section .title-box > h3 {
+        font-size: 26px !important;
+        font-weight: 500 !important;
+        line-height: 1.2 !important;
+    }
+
+    .homepage-main > section .title-box > h5 {
+        font-size: 15px !important;
+        font-weight: 400 !important;
+        line-height: 1.3 !important;
     }
 </style>
 @endpush

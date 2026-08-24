@@ -94,8 +94,7 @@
 
 @auth
 <!-- User Profile Sidebar -->
-<div id="userSidebar" class="sidebar bg-white shadow-lg p-3" style="width:300px; position:fixed; top:0; right:-300px; height:100%;
-            overflow-y:auto; transition:right 0.3s; z-index:1050;">
+<div id="userSidebar" class="user-sidebar bg-white shadow-lg" aria-hidden="true">
     <div class="d-flex justify-content-between align-items-center mb-3">
         <a href="{{ route('myaccount') }}" class="btn-user-sidebar">
             Dashboard
@@ -135,78 +134,5 @@
 </div>
 @endauth
 
-<style>
-    .userpro-fallback {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #2563eb, #7c3aed);
-        color: #fff;
-        font-weight: 700;
-        font-size: 16px;
-        vertical-align: middle;
-    }
-    .btn-user-sidebar {
-        background: #1f4e79;
-        color: #fff;
-        border: none;
-        border-radius: 6px;
-        padding: 7px 16px;
-        font-size: 13px;
-        font-weight: 600;
-        text-decoration: none;
-    }
-    .btn-user-sidebar:hover {
-        background: #163a5c;
-        color: #fff;
-    }
-    .user-sidebar-photo {
-        width: 120px;
-        height: 120px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 3px solid #eef1f6;
-    }
-    .user-sidebar-photo-fallback {
-        width: 120px;
-        height: 120px;
-        margin: 0 auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #2563eb, #7c3aed);
-        color: #fff;
-        font-size: 44px;
-        font-weight: 700;
-    }
-    .user-sidebar-info {
-        background: #f7f9fb;
-        border: 1px solid #eef1f6;
-    }
-    .user-sidebar-social {
-        color: #1f4e79;
-    }
-    .user-sidebar-social:hover {
-        color: #163a5c;
-    }
-</style>
-
 <!-- Overlay -->
-<div id="sidebarOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-     background:rgba(0,0,0,0.5); z-index:1040;" onclick="closeSidebar()"></div>
-
-<!-- Sidebar Toggle Script -->
-<script>
-    function openSidebar() {
-        document.getElementById('userSidebar').style.right = '0';
-        document.getElementById('sidebarOverlay').style.display = 'block';
-    }
-    function closeSidebar() {
-        document.getElementById('userSidebar').style.right = '-300px';
-        document.getElementById('sidebarOverlay').style.display = 'none';
-    }
-</script>
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>

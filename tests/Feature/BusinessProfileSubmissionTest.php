@@ -12,9 +12,9 @@ class BusinessProfileSubmissionTest extends TestCase
 
     public function test_business_profile_employee_and_entity_fields_are_stored_as_strings(): void
     {
-        $this->assertSame('string', Schema::getColumnType('profile_business', 'emp_count'));
-        $this->assertSame('string', Schema::getColumnType('profile_business', 'entity_type'));
-        $this->assertSame('string', Schema::getColumnType('profile_business', 'business_type'));
+        $this->assertTrue(in_array(Schema::getColumnType('profile_business', 'emp_count'), ['string', 'varchar'], true));
+        $this->assertTrue(in_array(Schema::getColumnType('profile_business', 'entity_type'), ['string', 'varchar'], true));
+        $this->assertTrue(in_array(Schema::getColumnType('profile_business', 'business_type'), ['string', 'varchar'], true));
 
         $response = $this->post('/registration/create-business-profile', [
             'user_id' => 1,

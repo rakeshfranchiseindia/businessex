@@ -43,9 +43,10 @@ img {
    Navigation / Header
    ============================================ */
 .navbar {
-    background-color: var(--dark-bg) !important;
+    background-color: var(--white) !important;
     padding: 12px 0;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-color: black;
 }
 
 .navbar-brand img {
@@ -609,8 +610,8 @@ img {
 .category-links a {
     color: rgba(255, 255, 255, 0.7);
     margin-right: 20px;
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 10px;
+    font-weight: 150;
 }
 
 .category-links a:hover {
@@ -618,8 +619,16 @@ img {
 }
 
 .footer-categories {
-    background: #16213e;
+    background: #fff;
     padding: 45px 0;
+}
+
+.footer-categories h6{
+    color:black !important;
+    font-weight: 150;
+}
+.footer-category-col h6{
+    font-weight: 400 !important;
 }
 
 .footer-categories h5 {

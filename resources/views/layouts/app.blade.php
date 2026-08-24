@@ -14,7 +14,7 @@
     <link rel="apple-touch-icon" href="{{ asset('assets/img/apple-touch-icon.png') }}">
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet"
@@ -39,11 +39,14 @@
     <link href="{{ asset('assets/css/article-style.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/article-detail.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/services.styles.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
 
     @stack('styles')
 </head>
 
 <body>
+
+    <script>window.BX_IS_LOGGED_IN = @json(auth()->check());</script>
 
     <!-- Navbar -->
     @include('partials.navbar')
@@ -61,431 +64,77 @@
     <!-- LOGIN / REGISTER MODAL -->
     <!-- ========================================================= -->
 
-    <div class="modal fade"
-        id="login"
-        tabindex="-1"
-        role="dialog"
-        aria-labelledby="loginLabel"
-        aria-hidden="true">
-
+    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-
             <div class="modal-content">
-
-                <button type="button"
-                    class="close"
-                    data-dismiss="modal"
-                    aria-label="Close">
-
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
-
                 </button>
-
                 <div class="modal-body">
-
-                    <!-- LEFT SIDE -->
                     <div class="popimgleft">
-
                         <div class="textblk">
-
                             <div class="innertextblk">
-
-                                <!-- Login text -->
                                 <div class="loginblk">
                                     <div class="h2bg">Welcome Back!</div>
-
-                                    <p class="txt">
-                                        To keep connected with us,
-                                        please login with your personal info.
-                                    </p>
+                                    <p class="txt">To keep connected with us, please login with your personal info.</p>
                                 </div>
-
-                                <!-- Register text -->
                                 <div class="regidterblk">
-
-                                    <div class="h2bg">
-                                        Why should I register?
-                                    </div>
-
-                                    <p class="txt">
-                                        BusinessEx is a platform for everyone in
-                                        the Business community to move ahead on
-                                        their expansion path. Register today to
-                                        unveil the Business opportunity of your
-                                        dreams!
-
-                                        Your basic information will only be used
-                                        to create Login profile and will never be
-                                        used for any other purposes.
-                                    </p>
-
+                                    <div class="h2bg">Why should I register?</div>
+                                    <p class="txt">BusinessEx is a platform for everyone in the Business community to move ahead on their expansion path. Register today to unveil the Business opportunity of your dreams! Your basic information will only be used to create Login profile and will never be used for any other purposes.</p>
                                 </div>
-
                             </div>
-
                         </div>
-
                     </div>
 
-
-                    <!-- RIGHT SIDE -->
                     <div class="poptxtright">
-
-                        <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
-
-                            <li class="nav-item">
-
-                                <a class="nav-link active"
-                                    id="login-tab"
-                                    data-toggle="tab"
-                                    href="#Login"
-                                    role="tab"
-                                    aria-controls="Login"
-                                    aria-selected="true">
-
-                                    Login
-
-                                </a>
-
-                            </li>
-
-                            <li class="nav-item">
-
-                                <a class="nav-link"
-                                    id="register-tab"
-                                    data-toggle="tab"
-                                    href="#Register"
-                                    role="tab"
-                                    aria-controls="Register"
-                                    aria-selected="false">
-
-                                    Register
-
-                                </a>
-
-                            </li>
-
+                            <li class="nav-item"><a class="nav-link active" id="login-tab" data-toggle="tab" href="#Login" role="tab" aria-controls="Login" aria-selected="true">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" id="register-tab" data-toggle="tab" href="#Register" role="tab" aria-controls="Register" aria-selected="false">Register</a></li>
                         </ul>
-
-
-                        <!-- Tab Content -->
                         <div class="tab-content">
-
-                            <!-- ================================================= -->
-                            <!-- LOGIN TAB -->
-                            <!-- ================================================= -->
-
-                            <div class="tab-pane fade show active"
-                                id="Login"
-                                role="tabpanel"
-                                aria-labelledby="login-tab">
-
-                                <!-- Social Login -->
+                            <div class="tab-pane fade show active" id="Login" role="tabpanel" aria-labelledby="login-tab">
                                 <div class="soc">
-
-                                    <div class="innsoc">
-                                        <a href="#" aria-label="Login with Google">
-                                            <img src="{{ asset('assets/img/google.svg') }}"
-                                                alt="Google">
-                                        </a>
-                                    </div>
-
-                                    <div class="innsoc">
-                                        <a href="#" aria-label="Login with Facebook">
-                                            <img src="{{ asset('assets/img/fb.svg') }}"
-                                                alt="Facebook">
-                                        </a>
-                                    </div>
-
-                                    <div class="innsoc">
-                                        <a href="#" aria-label="Login with LinkedIn">
-                                            <img src="{{ asset('assets/img/linkedins.svg') }}"
-                                                alt="LinkedIn">
-                                        </a>
-                                    </div>
-
+                                    <div class="innsoc"><a href="#" aria-label="Login with Google"><img src="{{ asset('assets/img/google.svg') }}" alt="Google"></a></div>
+                                    <div class="innsoc"><a href="#" aria-label="Login with Facebook"><img src="{{ asset('assets/img/fb.svg') }}" alt="Facebook"></a></div>
+                                    <div class="innsoc"><a href="#" aria-label="Login with LinkedIn"><img src="{{ asset('assets/img/linkedins.svg') }}" alt="LinkedIn"></a></div>
                                 </div>
-
-                                <div class="emaishow">
-                                    Or use your email account
-                                </div>
-
-
-                                <!-- Login Form -->
+                                <div class="emaishow">Or use your email account</div>
                                 <form action="{{ route('login') }}" method="POST">
-
                                     @csrf
-
                                     <div class="frmblk">
-
-                                        <!-- Email -->
-                                        <div class="input-group mb-4">
-
-                                            <div class="input-group-prepend">
-
-                                                <span class="input-group-text">
-                                                    <img src="{{ asset('assets/img/email-iconnew.svg') }}"
-                                                        alt="Email">
-                                                </span>
-
-                                            </div>
-
-                                            <input
-                                                id="login_email"
-                                                name="email"
-                                                type="email"
-                                                class="form-control @error('email') is-invalid @enderror"
-                                                placeholder="Enter Your Email ID"
-                                                value="{{ old('email') }}"
-                                                autocomplete="email"
-                                                required>
-
-                                        </div>
-
-                                        @error('email')
-                                            <small class="text-danger d-block mb-3">
-                                                {{ $message }}
-                                            </small>
-                                        @enderror
-
-
-                                        <!-- Password -->
-                                        <div class="input-group mb-4">
-
-                                            <div class="input-group-prepend">
-
-                                                <span class="input-group-text">
-                                                    <img src="{{ asset('assets/img/lock-icon.svg') }}"
-                                                        alt="Password">
-                                                </span>
-
-                                            </div>
-
-                                            <input
-                                                id="login_password"
-                                                type="password"
-                                                name="password"
-                                                class="form-control @error('password') is-invalid @enderror"
-                                                placeholder="Enter Your Password"
-                                                autocomplete="current-password"
-                                                required>
-
-                                        </div>
-
-                                        @error('password')
-                                            <small class="text-danger d-block mb-3">
-                                                {{ $message }}
-                                            </small>
-                                        @enderror
-
-
-                                        <!-- Remember / Forgot -->
-                                        <div class="ffull">
-
-                                            <div class="pleft">
-
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        name="remember"
-                                                        value="1">
-
-                                                    Keep me Logged In
-                                                </label>
-
-                                            </div>
-
-                                            <div class="pright">
-
-                                                <a href="{{ route('forgot.password') }}">
-                                                    Forgot Password?
-                                                </a>
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <!-- Submit -->
-                                        <input
-                                            type="submit"
-                                            value="Login"
-                                            class="popbtn">
-
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/email-iconnew.svg') }}" alt="Email"></span></div><input id="login_email" name="email" type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Enter Your Email ID" value="{{ old('email') }}" autocomplete="email" required></div>
+                                        @error('email')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/lock-icon.svg') }}" alt="Password"></span></div><input id="login_password" type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Enter Your Password" autocomplete="current-password" required></div>
+                                        @error('password')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
+                                        <div class="ffull"><div class="pleft"><label><input type="checkbox" name="remember" value="1"> Keep me Logged In</label></div><div class="pright"><a href="{{ route('forgot.password') }}">Forgot Password?</a></div></div>
+                                        <input type="submit" value="Login" class="popbtn">
                                     </div>
-
                                 </form>
-
                             </div>
 
-
-                            <!-- ================================================= -->
-                            <!-- REGISTER TAB -->
-                            <!-- ================================================= -->
-
-                            <div class="tab-pane fade"
-                                id="Register"
-                                role="tabpanel"
-                                aria-labelledby="register-tab">
-
-                                <!-- Social Register -->
+                            <div class="tab-pane fade" id="Register" role="tabpanel" aria-labelledby="register-tab">
                                 <div class="soc">
-
-                                    <div class="innsoc">
-                                        <a href="#" aria-label="Register with Google">
-                                            <img src="{{ asset('assets/img/google.svg') }}"
-                                                alt="Google">
-                                        </a>
-                                    </div>
-
-                                    <div class="innsoc">
-                                        <a href="#" aria-label="Register with Facebook">
-                                            <img src="{{ asset('assets/img/fb.svg') }}"
-                                                alt="Facebook">
-                                        </a>
-                                    </div>
-
-                                    <div class="innsoc">
-                                        <a href="#" aria-label="Register with LinkedIn">
-                                            <img src="{{ asset('assets/img/linkedins.svg') }}"
-                                                alt="LinkedIn">
-                                        </a>
-                                    </div>
-
+                                    <div class="innsoc"><a href="#" aria-label="Register with Google"><img src="{{ asset('assets/img/google.svg') }}" alt="Google"></a></div>
+                                    <div class="innsoc"><a href="#" aria-label="Register with Facebook"><img src="{{ asset('assets/img/fb.svg') }}" alt="Facebook"></a></div>
+                                    <div class="innsoc"><a href="#" aria-label="Register with LinkedIn"><img src="{{ asset('assets/img/linkedins.svg') }}" alt="LinkedIn"></a></div>
                                 </div>
-
-                                <div class="emaishow">
-                                    Or use your email account
-                                </div>
-
-
-                                <!-- Register Form -->
-                                <form
-                                    action="{{ route('quick.register') }}"
-                                    method="POST">
-
+                                <div class="emaishow">Or use your email account</div>
+                                <form action="{{ route('quick.register') }}" method="POST">
                                     @csrf
-
                                     <div class="frmblk">
-
-                                        <!-- Email -->
-                                        <div class="input-group mb-4">
-
-                                            <div class="input-group-prepend">
-
-                                                <span class="input-group-text">
-                                                    <img
-                                                        src="{{ asset('assets/img/email-iconnew.svg') }}"
-                                                        alt="Email">
-                                                </span>
-
-                                            </div>
-
-                                            <input
-                                                id="register_email"
-                                                type="email"
-                                                name="email"
-                                                class="form-control"
-                                                placeholder="Enter Your Email ID"
-                                                value="{{ old('email') }}"
-                                                autocomplete="email"
-                                                required>
-
-                                        </div>
-
-
-                                        <!-- Password -->
-                                        <div class="input-group mb-4">
-
-                                            <div class="input-group-prepend">
-
-                                                <span class="input-group-text">
-                                                    <img
-                                                        src="{{ asset('assets/img/lock-icon.svg') }}"
-                                                        alt="Password">
-                                                </span>
-
-                                            </div>
-
-                                            <input
-                                                id="register_password"
-                                                type="password"
-                                                name="password"
-                                                class="form-control"
-                                                placeholder="Enter Your Password"
-                                                autocomplete="new-password"
-                                                required>
-
-                                        </div>
-
-
-                                        <!-- Confirm Password -->
-                                        <div class="input-group mb-4">
-
-                                            <div class="input-group-prepend">
-
-                                                <span class="input-group-text">
-                                                    <img
-                                                        src="{{ asset('assets/img/lock-icon.svg') }}"
-                                                        alt="Confirm Password">
-                                                </span>
-
-                                            </div>
-
-                                            <input
-                                                id="register_password_confirmation"
-                                                type="password"
-                                                name="password_confirmation"
-                                                class="form-control"
-                                                placeholder="Enter Confirm Password"
-                                                autocomplete="new-password"
-                                                required>
-
-                                        </div>
-
-
-                                        <!-- Newsletter -->
-                                        <div class="ffull">
-
-                                            <div class="pleft">
-
-                                                <label>
-                                                    <input
-                                                        type="checkbox"
-                                                        name="subscribe"
-                                                        value="1">
-
-                                                    Subscribe for Daily Updates
-                                                </label>
-
-                                            </div>
-
-                                        </div>
-
-
-                                        <!-- Submit -->
-                                        <input
-                                            type="submit"
-                                            value="Submit"
-                                            class="popbtn">
-
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/email-iconnew.svg') }}" alt="Email"></span></div><input id="register_email" type="email" name="email" class="form-control" placeholder="Enter Your Email ID" value="{{ old('email') }}" autocomplete="email" required></div>
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/lock-icon.svg') }}" alt="Password"></span></div><input id="register_password" type="password" name="password" class="form-control" placeholder="Enter Your Password" autocomplete="new-password" required></div>
+                                        <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/lock-icon.svg') }}" alt="Confirm Password"></span></div><input id="register_password_confirmation" type="password" name="password_confirmation" class="form-control" placeholder="Enter Confirm Password" autocomplete="new-password" required></div>
+                                        <div class="ffull"><div class="pleft"><label><input type="checkbox" name="subscribe" value="1"> Subscribe for Daily Updates</label></div></div>
+                                        <input type="submit" value="Submit" class="popbtn">
                                     </div>
-
                                 </form>
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
 
@@ -708,6 +357,12 @@
                 return;
             }
 
+            if (form.dataset.newsletterBound === 'true') {
+                return;
+            }
+
+            form.dataset.newsletterBound = 'true';
+
 
             form.addEventListener('submit', function (e) {
 
@@ -765,6 +420,12 @@
             const input = form.querySelector('[name="' + key + '"]');
             if (!input) return;
 
+                input.parentElement
+                    .querySelectorAll('.newsletter-error')
+                    .forEach(function (element) {
+                        element.remove();
+                    });
+
             const errorElement = document.createElement('small');
             errorElement.className = 'text-danger d-block newsletter-error';
             errorElement.innerText = data.errors[key][0];
@@ -806,6 +467,8 @@
         });
     </script>
 
+
+    <script src="{{ asset('assets/js/custom.js') }}"></script>
 
     @stack('scripts')
 

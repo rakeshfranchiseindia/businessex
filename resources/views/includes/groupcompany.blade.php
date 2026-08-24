@@ -1,7 +1,7 @@
 <!-- ========== OUR GROUP COMPANIES ========== -->
   <section class="group-companies">
     <div class="container">
-      <h3>Our Group Companies</h3>
+      <h3 class="homepage-section-heading">Our Group Companies</h3>
       
       <div class="companies-logos">
         <div class="company-logo-item">

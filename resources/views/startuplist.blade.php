@@ -125,7 +125,11 @@
                                     </div>
 
                                     <div class="inbtn startup-contact-button">
-                                        <a href="mailto:{{ $startup['contact_email'] }}">Contact Startup</a>
+                                        @auth
+                                            <a href="{{ route('startup.detail', $startup['startup_id']) }}">Contact Startup</a>
+                                        @else
+                                            <a href="#login" data-toggle="modal" data-target="#login">Contact Startup</a>
+                                        @endauth
                                     </div>
                                 </li>
                             @endforeach
