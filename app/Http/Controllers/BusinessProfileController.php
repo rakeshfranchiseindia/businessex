@@ -73,7 +73,7 @@ class BusinessProfileController extends Controller
         ]);
 
         $sellerProfileStr = CommonController::profileUniqueStr();
-        $userId = $request->input('user_id', Auth::id());
+        $userId = Auth::id();
 
         if (!$userId) {
             $user = UserAccount::firstOrCreate(

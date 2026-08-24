@@ -651,13 +651,13 @@ img {
 }
 
 .footer-categories ul li a {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-muted, #5f6b7a);
     font-size: 14px;
     transition: all 0.3s;
 }
 
 .footer-categories ul li a:hover {
-    color: var(--white);
+    color: var(--secondary-color, #f58220);
     padding-left: 5px;
 }
 

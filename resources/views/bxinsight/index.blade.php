@@ -86,7 +86,7 @@
 
                 <!-- Pagination -->
                 <div class="pagination-wrapper">
-                    {{ $articles->links() }}
+                    {{ $articles->links('pagination::bootstrap-4') }}
                 </div>
             </div>
 

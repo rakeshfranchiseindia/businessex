@@ -141,7 +141,7 @@ class StartupProfileController extends Controller
             DB::beginTransaction();
 
             // Get user ID from authenticated user or create/fetch one from the submitted email
-            $userId = Auth::check() ? Auth::user()->user_id : $request->input('user_id');
+            $userId = Auth::id();
             if (!$userId) {
                 $user = UserAccount::firstOrCreate(
                     ['email' => $validated['email']],

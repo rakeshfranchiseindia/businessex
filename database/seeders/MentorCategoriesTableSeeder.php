@@ -7,34 +7,30 @@ use Illuminate\Support\Facades\DB;
 
 class MentorCategoriesTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        DB::table('mentor_categories')->insert([
-            'mentor_category_id' => 1,
-            'mentor_category_name' => 'Sample string data',
-            'category_slug' => 'sample-slug-1',
-            'mentor_parent_id' => 1,
-            'mentor_category_status' => 0
-        ]);
+        $now = now();
+        $categories = collect(config('mentorCategoriesConfig', []))
+            ->map(fn (array $category): array => [
+                'mentor_category_id' => (int) $category['cat_id'],
+                'mentor_category_name' => $category['category_name'],
+                'category_slug' => $category['category_slug'],
+                'mentor_parent_id' => (int) ($category['parent_id'] ?? 0),
+                'mentor_category_status' => 1,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ])
+            ->values()
+            ->all();
 
-        DB::table('mentor_categories')->insert([
-            'mentor_category_id' => 2,
-            'mentor_category_name' => 'Another sample entry',
-            'category_slug' => 'sample-slug-2',
-            'mentor_parent_id' => 2,
-            'mentor_category_status' => 1
-        ]);
+        foreach (array_chunk($categories, 100) as $chunk) {
+            DB::table('mentor_categories')->upsert(
+                $chunk,
+                ['mentor_category_id'],
+                ['mentor_category_name', 'category_slug', 'mentor_parent_id', 'mentor_category_status', 'updated_at']
+            );
+        }
 
-        DB::table('mentor_categories')->insert([
-            'mentor_category_id' => 3,
-            'mentor_category_name' => 'Third sample value',
-            'category_slug' => 'sample-slug-3',
-            'mentor_parent_id' => 3,
-            'mentor_category_status' => 0
-        ]);
-
+        $this->command?->info('Seeded '.count($categories).' mentor categories.');
     }
 }

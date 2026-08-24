@@ -260,15 +260,15 @@
             <!-- Carousel -->
             <div id="businessSaleCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
     <div class="carousel-inner">
-        <!-- Slide 1 -->
-        <div class="carousel-item active">
+    @foreach(collect($salesOpportunitiesData)->chunk(4) as $slideIndex => $opportunities)
+        <div class="carousel-item {{ $slideIndex === 0 ? 'active' : '' }}">
             <div class="row">
-    @foreach($salesOpportunitiesData as $opportunity)
+    @foreach($opportunities as $opportunity)
     <?php //print_r($opportunity); die;?>
         <div class="col-md-3 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="position-relative">
-                    <img src="{{ $opportunity['seller_prof_pic'] ?? asset('assets/img/default.jpg') }}" 
+                    <img src="{{ !empty($opportunity['seller_prof_pic']) ? $opportunity['seller_prof_pic'] : asset('assets/img/default-business.jpg') }}"
                          class="card-img-top" 
                          alt="{{ $opportunity['seller_company'] ?? 'Business Opportunity' }}">
                     @if(!empty($opportunity['membership_plan']))
@@ -304,12 +304,7 @@
 
         </div>
 
-        <!-- Slide 2 (duplicate or dynamic data) -->
-        <div class="carousel-item">
-            <div class="row">
-                <!-- Add more cards or loop dynamically -->
-            </div>
-        </div>
+    @endforeach
     </div>
 
 </div>
@@ -573,13 +568,13 @@
             <!-- Carousel -->
             <div id="startupCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
                 <div class="carousel-inner">
-                    <!-- Slide 1 -->
-                    <div class="carousel-item active">
+                    @foreach(collect($highGrowthStartups)->chunk(4) as $slideIndex => $startups)
+                    <div class="carousel-item {{ $slideIndex === 0 ? 'active' : '' }}">
                         <div class="row">
-                            @foreach($highGrowthStartups as $startup)
+                            @foreach($startups as $startup)
                                 <div class="col-md-3">
                                     <div class="card shadow-sm h-100">
-                                        <img src="{{ $startup->images[0]->startup_img_name ?? asset('images/default_startup.jpg') }}"
+                                        <img src="{{ !empty($startup->images[0]?->startup_img_name) ? $startup->images[0]->startup_img_name : asset('images/default_startup.jpg') }}"
                                             class="card-img-top"
                                             alt="Commercial Real Estate Rental Solutions">
                                         <div class="card-body">
@@ -604,7 +599,7 @@
                             @endforeach
                         </div>
                     </div>
-
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -637,14 +632,14 @@
             <!-- Carousel -->
             <div id="mentorCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
                 <div class="carousel-inner">
-                    <!-- Slide 1 -->
-                    <div class="carousel-item active">
+                    @foreach(collect($worldClassMentors)->chunk(4) as $slideIndex => $mentors)
+                    <div class="carousel-item {{ $slideIndex === 0 ? 'active' : '' }}">
                         <div class="row">
-                            @foreach($worldClassMentors as $mentor)
+                            @foreach($mentors as $mentor)
                                 <div class="col-md-3">
                                     <div class="card shadow-sm h-100 text-center">
                                         <span class="badge badge-primary position-absolute" style="top:10px;left:10px;">Platinum</span>
-                                        <img src="{{ $mentor->mentor_profile_pic ?: asset('images/default-mentor.jpg') }}"
+                                        <img src="{{ !empty($mentor->mentor_profile_pic) ? $mentor->mentor_profile_pic : asset('images/default-mentor.jpg') }}"
                                             class="rounded-circle mx-auto mt-3" width="100"
                                             alt="{{ $mentor->mentor_name }}">
                                         <div class="card-body">
@@ -669,13 +664,7 @@
                             @endforeach
                         </div>
                     </div>
-
-                    <!-- Slide 2 -->
-                    <div class="carousel-item">
-                        <div class="row">
-                            <!-- Add more mentor cards here or loop dynamically -->
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
             </div>

@@ -54,7 +54,7 @@ class LenderProfileController extends Controller
 
             DB::beginTransaction();
 
-            $userId = Auth::check() ? Auth::user()->user_id : $request->input('user_id');
+            $userId = Auth::id();
             if (!$userId) {
                 throw new \Exception('User must be authenticated or user_id must be provided.');
             }

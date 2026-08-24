@@ -37,6 +37,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
             return back()
+                ->withErrors($validator)
                 ->withErrors($validator, 'quickProfileRegister')
                 ->withInput()
                 ->with('quick_profile_registration_failed', true);
@@ -57,7 +58,9 @@ class AuthController extends Controller
         // Send custom verification email
         try {
             Mail::to($user->email)->send(new VerifyEmailMail($token));
-            return redirect()->back()->with('quick_profile_success', 'Registration submitted successfully!');
+            return redirect()->back()
+                ->with('quick_profile_success', 'Registration submitted successfully!')
+                ->with('success', 'Registration submitted successfully!');
 
         } catch (\Exception $e) {
             return redirect()->back()->with('quick_profile_email_error', 'Failed to send verification email. Please try again later.');

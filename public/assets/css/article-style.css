@@ -382,9 +382,55 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
   margin-top: 40px;
   padding: 20px 0;
+}
+
+.pagination-wrapper nav {
+  width: 100%;
+}
+
+.pagination-wrapper .pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+
+.pagination-wrapper .page-item .page-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 38px;
+  height: 38px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--text-dark);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.pagination-wrapper .page-item.active .page-link,
+.pagination-wrapper .page-item .page-link:hover,
+.pagination-wrapper .page-item .page-link:focus {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: #fff;
+}
+
+.pagination-wrapper .page-item.disabled .page-link {
+  background: #f5f5f5;
+  color: var(--text-light);
+  opacity: 0.7;
+}
+
+.pagination-wrapper svg {
+  width: 16px !important;
+  height: 16px !important;
+  max-width: 16px !important;
 }
 
 .pagination-btn {

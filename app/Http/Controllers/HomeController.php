@@ -55,7 +55,15 @@ class HomeController extends Controller
         $featuredInvestors = $this->getFeaturedInvestors();
         $homePageLocation = BxCity::selectRaw('MIN(id) as id, state')
                             ->groupBy('state')
-                            ->get();
+                            ->get()
+                            ->map(function ($location) {
+                                $location->state = config(
+                                    'constants.statesIndia.' . $location->state,
+                                    $location->state
+                                );
+
+                                return $location;
+                            });
         //dd($featuredInvestors);
         $highGrowthStartups = ProfileStartup::with(['management', 'fundraising','industrySector','images'])
             ->where('startup_profile_status', config('constants.ProfileStatus.Active'))
@@ -247,10 +255,6 @@ class HomeController extends Controller
                 'membership_paid','membership_plan','last_login_at'
             )
             ->where('business_profile_status', config('constants.ProfileStatus.Active'))
-            ->whereIn('business_profile_str', [
-                '5l1xvp','jcahys','zuiizc','kmebfr','h0un4g','r7unm0',
-                'nwyawl','4idnbw','sucyej','zpjzfi','n29zph','6zhvhj'
-            ])
             ->orderByDesc('last_login_at')
             ->orderByDesc('activated_at')
             ->limit(12)
@@ -265,12 +269,9 @@ class HomeController extends Controller
                 'totalSalesOpportunities'  => $totalSalesOpportunities,
             ];
         }
-
-
-
-    /*
-   *  Get featured business/seller according to Geo Location for home page
-   */
+        /*
+         * Get featured business/seller according to Geo Location for home page
+         */
     public function getGeoFeaturedSellersRegion(Request $request)
     {
         $userCurrentLocation = [];

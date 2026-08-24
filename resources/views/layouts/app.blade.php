@@ -210,6 +210,33 @@
 
             }
 
+            const owlCarouselOptions = {
+                loop: false,
+                margin: 20,
+                nav: true,
+                dots: false,
+                autoplay: false,
+                responsive: {
+                    0: { items: 1 },
+                    576: { items: 2 },
+                    992: { items: 4 }
+                }
+            };
+
+            const $featuredInvestors = $('#bex-featured-investors-carousel');
+            if ($featuredInvestors.length && typeof $.fn.owlCarousel === 'function') {
+                $featuredInvestors.owlCarousel({
+                    ...owlCarouselOptions,
+                    navContainer: '#featured-investors-carousel-nav'
+                });
+            }
+
+            $('#bex-upcoming-past-events-carousel').each(function () {
+                if (typeof $.fn.owlCarousel === 'function') {
+                    $(this).owlCarousel(owlCarouselOptions);
+                }
+            });
+
         });
     </script>
 

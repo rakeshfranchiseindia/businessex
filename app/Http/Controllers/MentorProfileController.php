@@ -66,7 +66,7 @@ class MentorProfileController extends Controller
             'mentor_email.required' => 'Your email is required.',
         ]);
 
-        $userId = $request->input('user_id', Auth::id());
+        $userId = Auth::id();
         if (!$userId) {
             $user = UserAccount::firstOrCreate(
                 ['email' => $mentorEmail],
