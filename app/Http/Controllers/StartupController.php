@@ -34,7 +34,23 @@ class StartupController extends Controller
 
         // Apply location filter
         if (!empty($locationIds)) {
-            $query->whereIn('ofc_city', $locationIds);
+            $locationNames = BxCity::query()
+                ->whereIn('id', $locationIds)
+                ->get(['city', 'state'])
+                ->flatMap(fn ($location) => [$location->city, $location->state])
+                ->filter()
+                ->unique()
+                ->values();
+
+            if ($locationNames->isEmpty()) {
+                $query->whereRaw('1 = 0');
+            } else {
+                $query->where(function ($locationQuery) use ($locationNames) {
+                    $locationQuery
+                        ->whereIn('ofc_city', $locationNames)
+                        ->orWhereIn('ofc_state', $locationNames);
+                });
+            }
         }
 
         // Apply industry filter (through industry_sector field)
@@ -44,10 +60,10 @@ class StartupController extends Controller
 
         // Apply investment range filter
         if ($minInvestment !== null && $minInvestment !== '') {
-            $query->where('inv_asking_price', '>=', (float)$minInvestment);
+            $query->whereRaw('CAST(inv_asking_price AS DECIMAL(20, 2)) >= ?', [(float) $minInvestment]);
         }
         if ($maxInvestment !== null && $maxInvestment !== '') {
-            $query->where('inv_asking_price', '<=', (float)$maxInvestment);
+            $query->whereRaw('CAST(inv_asking_price AS DECIMAL(20, 2)) <= ?', [(float) $maxInvestment]);
         }
 
         // Get paginated results

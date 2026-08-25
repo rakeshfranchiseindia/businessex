@@ -3,6 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\BusinessexContact;
+use App\Models\BxCity;
+use App\Models\IndPrefInvestor;
+use App\Models\LocPrefInvestor;
+use App\Models\ProfileInvestor;
+use App\Models\ProfileMentor;
+use App\Models\ProfileStartup;
 use App\Models\UserAccount;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
@@ -42,6 +48,95 @@ class ApplicationWorkflowTest extends TestCase
         foreach ($routes as $route) {
             $this->get($route)->assertSuccessful();
         }
+    }
+
+    public function test_startup_listing_filters_by_sidebar_industry_and_location_ids(): void
+    {
+        $city = BxCity::create([
+            'city' => 'Mumbai',
+            'state' => 'MH',
+        ]);
+
+        ProfileStartup::create([
+            'startup_profile_str' => 'startup-filter-test',
+            'user_id' => 1,
+            'startup_name' => 'Filtered Startup',
+            'industry_sector' => 16,
+            'ofc_city' => 'Mumbai',
+            'ofc_state' => 'MH',
+            'inv_asking_price' => '250000',
+            'startup_profile_status' => 1,
+        ]);
+
+        $this->assertDatabaseHas('profile_startups', [
+            'industry_sector' => 16,
+            'ofc_city' => 'Mumbai',
+            'ofc_state' => 'MH',
+            'startup_profile_status' => 1,
+        ]);
+        $this->get('/startuplisting?business_type=all&min_investment=0&max_investment=1000000000&industry[]=16&location[]=' . $city->id)
+            ->assertSuccessful()
+            ->assertSee('Filtered Startup');
+    }
+
+    public function test_investor_listing_applies_all_sidebar_filters(): void
+    {
+        $investor = ProfileInvestor::create([
+            'inv_profile_str' => 'investor-filter-test',
+            'user_id' => 1,
+            'inv_name' => 'Filtered Investor',
+            'inv_type' => 1,
+            'inv_city' => 'Delhi',
+            'inv_state' => 'DL',
+            'invest_size_min' => '100000',
+            'invest_size_max' => '500000',
+            'inv_profile_status' => 1,
+        ]);
+
+        IndPrefInvestor::create([
+            'investor_profile_id' => $investor->investor_id,
+            'user_id' => 1,
+            'parent_category_id' => 1,
+            'sub_category_id' => 16,
+            'profile_status' => 1,
+        ]);
+
+        LocPrefInvestor::create([
+            'investor_profile_id' => $investor->investor_id,
+            'user_id' => 1,
+            'place_id' => 'city-1',
+            'location_name' => 'Mumbai, Maharashtra',
+            'loc_state' => 'Maharashtra',
+            'loc_country' => 'India',
+            'loc_latitude' => '',
+            'loc_longitude' => '',
+            'profile_status' => 1,
+        ]);
+
+        $this->get('/investorlisting?investorType[]=1&city[]=Mumbai&industrysub[]=16&minInvestment=200000&maxInvestment=300000')
+            ->assertSuccessful()
+            ->assertSee('Filtered Investor');
+    }
+
+    public function test_mentor_listing_filters_by_sidebar_location_id(): void
+    {
+        $city = BxCity::create([
+            'city' => 'Mumbai',
+            'state' => 'MH',
+        ]);
+
+        ProfileMentor::create([
+            'mentor_profile_str' => 'mentor-filter-test',
+            'user_id' => 1,
+            'mentor_name' => 'Filtered Mentor',
+            'mentor_city' => 'Mumbai',
+            'mentor_state' => 'MH',
+            'mentor_profile_status' => 1,
+        ]);
+
+        $this->get('/mentorlisting?location[]=' . $city->id)
+            ->assertSuccessful()
+            ->assertSee('Filtered Mentor');
     }
 
     public function test_guest_listing_pages_render_login_modal_target_for_contact_actions(): void

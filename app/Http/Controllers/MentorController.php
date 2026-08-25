@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use App\Models\ProfileMentor;
+use App\Models\BxCity;
 use App\Models\IndPrefMentor;
 use App\Models\MobileVerification;
 use App\Models\ProfileMentorProfExp;
@@ -34,9 +35,25 @@ class MentorController extends Controller
         $mentorQuery->whereIn('mentor_state', $states);
     }
 
-    // City filter
-    if (!empty($selectedLocations) && count($selectedLocations) > 0) {
-        $mentorQuery->whereIn('mentor_city', $selectedLocations);
+    // Location sidebar values are bx_cities IDs; mentor profiles store names.
+    if (!empty($selectedLocations)) {
+        $locationNames = BxCity::query()
+            ->whereIn('id', array_map('intval', $selectedLocations))
+            ->get(['city', 'state'])
+            ->flatMap(fn ($location) => [$location->city, $location->state])
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($locationNames->isEmpty()) {
+            $mentorQuery->whereRaw('1 = 0');
+        } else {
+            $mentorQuery->where(function ($locationQuery) use ($locationNames) {
+                $locationQuery
+                    ->whereIn('mentor_city', $locationNames)
+                    ->orWhereIn('mentor_state', $locationNames);
+            });
+        }
     }
 
     // Occupation filter
@@ -47,7 +64,7 @@ class MentorController extends Controller
     // Sorting
     if (empty($sortby)) {
         $mentorQuery->orderBy('membership_paid', 'desc')
-                    ->orderByRaw("FIELD(membership_plan, 3, 2, 1, 5, 0)")
+                    ->orderByRaw("CASE membership_plan WHEN 3 THEN 1 WHEN 2 THEN 2 WHEN 1 THEN 3 WHEN 5 THEN 4 WHEN 0 THEN 5 ELSE 6 END")
                     ->orderBy('created_at', 'DESC');
     } elseif ($sortby === 'asc') {
         $mentorQuery->orderBy('created_at', 'ASC');

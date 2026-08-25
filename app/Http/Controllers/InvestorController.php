@@ -35,42 +35,32 @@ class InvestorController extends Controller
             });
         }
 
-        // State filter
-        if (!empty($state)) {
-            if (count($state) > 1) {
-                $invquery->whereIn('profile_investor.inv_state', $state);
-            } else {
-                $invquery->where('profile_investor.inv_state', 'LIKE', '%' . $state[0] . '%');
-            }
-        }
-
-        // City filter
-        if (!empty($city)) {
-            if (count($city) > 1) {
-                $invquery->whereIn('profile_investor.inv_city', $city);
-            } else {
-                $invquery->where('profile_investor.inv_city', 'LIKE', '%' . $city[0] . '%');
-            }
+        // Location filter uses the investor's preferred locations from the sidebar.
+        $locationFilters = array_values(array_unique(array_merge($state, $city)));
+        if (!empty($locationFilters)) {
+            $invquery->whereHas('locationPreferences', function ($query) use ($locationFilters) {
+                $query->where(function ($locationQuery) use ($locationFilters) {
+                    foreach ($locationFilters as $location) {
+                        $locationQuery->orWhere('location_name', 'LIKE', '%' . $location . '%')
+                            ->orWhere('loc_state', 'LIKE', '%' . $location . '%');
+                    }
+                });
+            });
         }
 
         // Investment size filter
         $maxInvestment = (int) $request->input('maxInvestment', 1000000000);
         $minInvestment = (int) $request->input('minInvestment', 0);
         if ($minInvestment > 0 || $maxInvestment < 1000000000) {
-            $investmentColumns = [
-                'profile_investor.invest_size_min',
-                'profile_investor.purchase_capacity_min',
-            ];
-
-            $invquery->where(function ($query) use ($investmentColumns, $minInvestment, $maxInvestment) {
-                foreach ($investmentColumns as $column) {
-                    $query->orWhere(function ($rangeQuery) use ($column, $minInvestment, $maxInvestment) {
-                        if ($minInvestment > 0) {
-                            $rangeQuery->where($column, '>=', $minInvestment);
-                        }
-                        if ($maxInvestment < 1000000000) {
-                            $rangeQuery->where($column, '<=', $maxInvestment);
-                        }
+            $invquery->where(function ($query) use ($minInvestment, $maxInvestment) {
+                foreach ([
+                    ['min' => 'invest_size_min', 'max' => 'invest_size_max'],
+                    ['min' => 'purchase_capacity_min', 'max' => 'purchase_capacity_max'],
+                ] as $range) {
+                    $query->orWhere(function ($rangeQuery) use ($range, $minInvestment, $maxInvestment) {
+                        $rangeQuery
+                            ->whereRaw('CAST(profile_investor.' . $range['max'] . ' AS DECIMAL(20, 2)) >= ?', [$minInvestment])
+                            ->whereRaw('CAST(profile_investor.' . $range['min'] . ' AS DECIMAL(20, 2)) <= ?', [$maxInvestment]);
                     });
                 }
             });
@@ -98,7 +88,7 @@ class InvestorController extends Controller
             $invquery->orderBy('profile_investor.created_at', 'DESC');
         }
 
-        $invquery->orderByRaw("FIELD(profile_investor.membership_plan, 3, 2, 1, 5, 0)");
+        $invquery->orderByRaw("CASE profile_investor.membership_plan WHEN 3 THEN 1 WHEN 2 THEN 2 WHEN 1 THEN 3 WHEN 5 THEN 4 WHEN 0 THEN 5 ELSE 6 END");
 
         // Paginate after all filters and sorting have been applied.
         $investors = $invquery->paginate($itemsPerPage, ['*'], 'currentPage', $currentPage);

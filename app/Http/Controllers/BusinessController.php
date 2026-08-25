@@ -69,21 +69,21 @@ class BusinessController extends Controller
     // Price range filter
 
     if (!empty($selectedRange_min) && !empty($selectedRange_max)) {
-    $query->whereBetween('buyer_sell_price', [(float)$selectedRange_min, (float)$selectedRange_max]);
+    $query->whereRaw('CAST(buyer_sell_price AS DECIMAL(20, 2)) BETWEEN ? AND ?', [(float) $selectedRange_min, (float) $selectedRange_max]);
     } elseif (!empty($selectedRange_min)) {
-        $query->where('buyer_sell_price', '>=', (float)$selectedRange_min);
+        $query->whereRaw('CAST(buyer_sell_price AS DECIMAL(20, 2)) >= ?', [(float) $selectedRange_min]);
     } elseif (!empty($selectedRange_max)) {
-        $query->where('buyer_sell_price', '<=', (float)$selectedRange_max);
+        $query->whereRaw('CAST(buyer_sell_price AS DECIMAL(20, 2)) <= ?', [(float) $selectedRange_max]);
     }
 
     
     // Annual Sale range filter
     if (!is_null($annualSaleMin) && !is_null($annualSaleMax)) {
-    $query->whereBetween('annual_sales', [(float)$annualSaleMin, (float)$annualSaleMax]);
+    $query->whereRaw('CAST(annual_sales AS DECIMAL(20, 2)) BETWEEN ? AND ?', [(float) $annualSaleMin, (float) $annualSaleMax]);
     } elseif (!empty($annualSaleMin)) {
-        $query->where('annual_sales', '>=', (float)$annualSaleMin);
+        $query->whereRaw('CAST(annual_sales AS DECIMAL(20, 2)) >= ?', [(float) $annualSaleMin]);
     } elseif (!empty($annualSaleMax)) {
-        $query->where('annual_sales', '<=', (float)$annualSaleMax);
+        $query->whereRaw('CAST(annual_sales AS DECIMAL(20, 2)) <= ?', [(float) $annualSaleMax]);
     }
     
      

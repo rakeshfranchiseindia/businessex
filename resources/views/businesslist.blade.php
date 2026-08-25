@@ -82,6 +82,11 @@
                                     $businessImage = $business->images()->first();
                                     $imageUrl = !empty($businessImage?->image_path) ? $businessImage->image_path : asset('assets/img/default-business.jpg');
                                     $headline = $business->advmt_headline ?: $business->seller_company ?: 'Business Listing';
+                                    $industryFilterItem = collect($industrySeller ?? [])->first(function ($item) use ($business) {
+                                        return (int) ($item['subIndustryid'] ?? 0) === (int) $business->industry_sector;
+                                    });
+                                    $industryCategory = $industryFilterItem['subindustry']
+                                        ?? config('industryCategoriesConfig.' . $business->industry_sector . '.category_name', $business->industry_sector ?: 'Business');
                                     $location = trim(($business->ofc_city ?? '') . (empty($business->ofc_city) || empty($business->ofc_state) ? '' : ', ') . stateDisplayName($business->ofc_state ?? ''));
                                     $annualSales = $business->annual_sales ? number_format((float) $business->annual_sales / 10000000, 2) . ' cr' : 'N/A';
                                     $askingAmount = $business->buyer_sell_price ? number_format((float) $business->buyer_sell_price / 10000000, 2) . ' Crores' : 'N/A';
@@ -98,6 +103,7 @@
                                     </div>
 
                                     <div class="fullb cattxt business-card-title">
+                                        <div class="business-card-category">{{ $industryCategory }}</div>
                                         <span>{{ $business->seller_company ?: 'Business' }}</span>
                                         <h3>{{ $headline }}</h3>
                                     </div>
@@ -172,6 +178,15 @@
         display: block;
         margin-bottom: 5px;
         text-align: left;
+    }
+
+    .business-card-category {
+        color: #16a085;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 5px;
+        text-align: left;
+        text-transform: uppercase;
     }
 
     .business-card-title h3 {
