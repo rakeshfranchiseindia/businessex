@@ -553,7 +553,7 @@
                     </h5>
                 </div>
                 <div class="business-sale-section-actions text-right">
-                    <a href="{{ url('/startupslisting') }}" class="text-success font-weight-bold d-block">View All</a>
+                    <a href="{{ url('/startuplisting') }}" class="text-success font-weight-bold d-block">View All</a>
                     <div class="business-sale-carousel-controls home-carousel-controls">
                         <a class="business-sale-carousel-control" href="#startupCarousel" role="button" data-slide="prev" aria-label="Previous startups">
                             <i class="fa fa-chevron-left" aria-hidden="true"></i>

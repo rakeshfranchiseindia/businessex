@@ -74,6 +74,7 @@ class AuthController extends Controller
     public function userRegister(Request $request)
     {
         $validator = Validator::make($request->all(), [
+            'name' => 'nullable|string|max:255',
             'email' => 'required|email|unique:user_account,email',
             'password' => 'required|string|min:8|confirmed',
         ]);
@@ -86,16 +87,21 @@ class AuthController extends Controller
         }
 
         $token = Str::random(32);
-        $user = UserAccount::create([
-            'email' => $request->email,
-            'verify_token' => $token,
-            'user_rand_id' => strtolower(Str::random(6)),
-            'password' => Hash::make($request->password),
-        ]);
+        $user_account = new UserAccount();
+        $user_account->name = $request->filled('name') ? $request->input('name') : null;
+        $user_account->email = $request->email;
+        $user_account->verify_token = $token;
+        $user_account->user_rand_id = strtolower(Str::random(6));
+        $user_account->password = Hash::make($request->password);
+
+        // company_name defaults to '' in schema, but you can override:
+        $user_account->company_name = $request->input('company_name') ?? '';
+
+        $user_account->save();
 
         // Send custom verification email
         try {
-            Mail::to($user->email)->send(new VerifyEmailMail($token));
+            Mail::to($user_account->email)->send(new VerifyEmailMail($token));
             return redirect()->back()->with('user_registration_success', 'Registration submitted successfully!');
 
         } catch (\Exception $e) {
