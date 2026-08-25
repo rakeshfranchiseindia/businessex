@@ -21,7 +21,7 @@ class BusinessController extends Controller
    
     public function edit($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findBusiness($user_rand_id, $user->user_id);
 
         $teamMembers = collect();
@@ -60,7 +60,7 @@ class BusinessController extends Controller
         }
 
         return view('account_dashboard.businessConfidentials', compact(
-            'user', 'business', 'teamMembers', 'mentorSectors', 'incubatorSectors', 'images', 'documents', 'categories', 'currentCities', 'availableStates'
+            'user', 'user_rand_id', 'business', 'teamMembers', 'mentorSectors', 'incubatorSectors', 'images', 'documents', 'categories', 'currentCities', 'availableStates'
         ));
     }
 
@@ -80,7 +80,7 @@ class BusinessController extends Controller
 
     public function getConfidentialInfo($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findBusiness($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -96,12 +96,12 @@ class BusinessController extends Controller
     public function updateConfidentialInfo(Request $request, $user_rand_id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z .\'-]+$/'],
             'designation' => 'required|string|max:255',
-            'mobile' => 'required|string|max:15',
+            'mobile' => 'required|digits:10',
             'email' => 'required|email|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findOrNewBusiness($user_rand_id, $user);
         $business->seller_name = $request->name;
         $business->seller_designation = $request->designation;
@@ -118,7 +118,7 @@ class BusinessController extends Controller
 
     public function getAdvertisementDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findBusiness($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -135,7 +135,7 @@ class BusinessController extends Controller
             'advmt_headline' => 'required|string|max:255',
             'seller_intro' => 'nullable|string|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findOrNewBusiness($user_rand_id, $user);
         $business->advmt_headline = $request->advmt_headline;
         $business->seller_intro = $request->seller_intro ?? '';
@@ -150,7 +150,7 @@ class BusinessController extends Controller
 
     public function getBusinessInfo($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findBusiness($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -179,7 +179,7 @@ class BusinessController extends Controller
             'industry_sector' => 'required',
             'business_website' => 'nullable|url|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findOrNewBusiness($user_rand_id, $user);
 
         $business->seller_company = $request->seller_company;
@@ -198,7 +198,7 @@ class BusinessController extends Controller
 
     public function getFinancialDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findBusiness($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -215,7 +215,19 @@ class BusinessController extends Controller
 
     public function updateFinancialDetails(Request $request, $user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        // These fields used to fall back to 0 with no validation at all, so a
+        // malformed/empty submission would silently zero out real saved figures
+        // while still reporting success.
+        $request->validate([
+            'annual_sales' => 'nullable|numeric|min:0',
+            'inventory_value' => 'nullable|numeric|min:0',
+            'gross_profit' => 'nullable|numeric',
+            'ebitda' => 'nullable|numeric',
+            'ebitda_margin' => 'nullable|numeric',
+            'rentals' => 'nullable|numeric|min:0',
+        ]);
+
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findOrNewBusiness($user_rand_id, $user);
 
         $business->annual_sales = $request->input('annual_sales') ?: 0;
@@ -231,7 +243,7 @@ class BusinessController extends Controller
 
     public function getTeamDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findBusiness($user_rand_id, $user->user_id);
         $teamMembers = collect();
         if ($business) {
@@ -256,7 +268,7 @@ class BusinessController extends Controller
             'director_email' => 'required|email|max:255',
             'director_designation' => 'required',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findOrNewBusiness($user_rand_id, $user);
 
         $business->director_name = $request->director_name;
@@ -289,7 +301,7 @@ class BusinessController extends Controller
 
     public function getHeadquarters($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findBusiness($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -310,7 +322,7 @@ class BusinessController extends Controller
             'ofc_city' => 'required|string|max:255',
             'ofc_pincode' => 'required|string|max:15',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findOrNewBusiness($user_rand_id, $user);
 
         $business->ofc_address = $request->ofc_address;
@@ -325,7 +337,7 @@ class BusinessController extends Controller
 
     public function getRequirement($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findBusiness($user_rand_id, $user->user_id);
 
         $mentorSectors = collect();
@@ -372,7 +384,7 @@ class BusinessController extends Controller
 
     public function updateRequirement(Request $request, $user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findOrNewBusiness($user_rand_id, $user);
 
         $seekingInvestors = $request->boolean('seeking_investors');
@@ -431,7 +443,7 @@ class BusinessController extends Controller
 
     public function getAttachments($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findBusiness($user_rand_id, $user->user_id);
         $images = collect();
         $documents = collect();
@@ -460,7 +472,7 @@ class BusinessController extends Controller
             'business_photos.*' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:5120',
             'business_documents.*' => 'nullable|mimes:doc,docx,xls,xlsx,pdf|max:10240',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $business = $this->findOrNewBusiness($user_rand_id, $user);
         $business->save();
 
@@ -539,6 +551,26 @@ class BusinessController extends Controller
             $business = ProfileBusiness::where('user_id', $userId)->first();
         }
         return $business;
+    }
+
+    /**
+     * Every Manage route/tab here is keyed by a route segment that's meant to
+     * double as either the account's own user_rand_id (old, single-profile
+     * behaviour) OR a *specific* business profile's own business_profile_str
+     * (needed now that a user can have several Business profiles — the
+     * dropdown passes THAT profile's str so Manage opens the right one).
+     * Resolve the owning account whichever way the value was meant.
+     */
+    private function resolveUserAccount($user_rand_id)
+    {
+        $business = ProfileBusiness::where('business_profile_str', $user_rand_id)->first();
+        if ($business) {
+            $user = UserAccount::find($business->user_id);
+            if ($user) {
+                return $user;
+            }
+        }
+        return UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
     }
 
     private function findOrNewBusiness($user_rand_id, UserAccount $user)

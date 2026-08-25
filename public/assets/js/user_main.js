@@ -23,6 +23,26 @@ function initSidebarToggle() {
   }
 }
 
+// Off-canvas "User Profile Sidebar" (partials/navbar.blade.php's #userSidebar) —
+// opened via the header avatar's onclick="openSidebar()" and closed via its own
+// close button / overlay, both wired to onclick="closeSidebar()". Toggles the
+// classes custom.css keys off of (.is-open / .is-visible / body.sidebar-open).
+function openSidebar() {
+  const sidebar = document.getElementById('userSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (sidebar) sidebar.classList.add('is-open');
+  if (overlay) overlay.classList.add('is-visible');
+  document.body.classList.add('sidebar-open');
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('userSidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (sidebar) sidebar.classList.remove('is-open');
+  if (overlay) overlay.classList.remove('is-visible');
+  document.body.classList.remove('sidebar-open');
+}
+
 // Submenu Toggle
 // Skips links that already have an inline onclick="toggleSubmenu(this)" handler
 // (used by account_dashboard/dashboardSidebar.blade.php and partials/sidebar.blade.php) —
@@ -367,19 +387,24 @@ function switchTab(tabId) {
 }
 
 // Profile Type Change Handler
+// The dropdown now lists one <option> per profile INSTANCE (a user can have
+// several Business/Startup/etc profiles), value = that profile's own
+// profile_str, with a data-type attribute for which type it belongs to.
 function changeProfileType(select) {
-  const value = select.value;
+  const option = select.options[select.selectedIndex];
+  const type = (option && option.getAttribute('data-type')) || select.value;
+  const profileStr = option ? option.value : select.value;
 
   // Pages that want the profile-type switch to happen without a full page
   // reload (currently only the dashboard home / "Top 5 Recommendations"
   // widget) can register window.__handleProfileTypeChange. Every other
   // page falls through to the original full-navigation behaviour, unchanged.
   if (typeof window.__handleProfileTypeChange === 'function') {
-    window.__handleProfileTypeChange(value);
+    window.__handleProfileTypeChange(type, profileStr);
     return;
   }
 
-  window.location.href = '/set-profile-type/' + value;
+  window.location.href = '/set-profile-type/' + encodeURIComponent(type) + '/' + encodeURIComponent(profileStr);
 }
 
 // Load More Functionality

@@ -67,7 +67,7 @@
 
         {{-- TAB 1 : CONFIDENTIAL INFORMATION --}}
         <div id="conf-tab1" class="tab-content active">
-            <form action="{{ route('mentor.confidential.ajax.update', $user->user_rand_id) }}" method="POST" id="confidentialForm">
+            <form action="{{ route('mentor.confidential.ajax.update', $user_rand_id) }}" method="POST" id="confidentialForm">
                 @csrf
                 <div class="form-group">
                     <label>Your Name <span class="text-danger">*</span></label>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="form-group">
                     <label>Mobile Number <span class="text-danger">*</span></label>
-                    <input type="tel" name="mobile" class="form-control" value="{{ $mentor->mentor_mobile ?? '' }}" required>
+                    <input type="tel" name="mobile" class="form-control" value="{{ $mentor->mentor_mobile ?? '' }}" pattern="[0-9]{10}" maxlength="10" inputmode="numeric" title="Enter a 10-digit mobile number" required>
                 </div>
                 <div class="form-group">
                     <label>Email ID <span class="text-danger">*</span></label>
@@ -91,7 +91,7 @@
 
         {{-- TAB 2 : ADVERTISEMENT DETAILS --}}
         <div id="conf-tab2" class="tab-content">
-            <form action="{{ route('mentor.advertisement.ajax.update', $user->user_rand_id) }}" method="POST" id="advertisementForm">
+            <form action="{{ route('mentor.advertisement.ajax.update', $user_rand_id) }}" method="POST" id="advertisementForm">
                 @csrf
                 <div class="form-group">
                     <label>Advertisement Headline <span class="text-danger">*</span></label>
@@ -107,7 +107,7 @@
 
         {{-- TAB 3 : PROFILE INFORMATION (FOR MENTOR) --}}
         <div id="conf-tab3" class="tab-content">
-            <form action="{{ route('mentor.profile.ajax.update', $user->user_rand_id) }}" method="POST" enctype="multipart/form-data" id="mentorProfileForm">
+            <form action="{{ route('mentor.profile.ajax.update', $user_rand_id) }}" method="POST" enctype="multipart/form-data" id="mentorProfileForm">
                 @csrf
                 <div class="form-group">
                     <label>Occupation <span class="text-danger">*</span></label>
@@ -158,7 +158,7 @@
 
         {{-- TAB 4 : PREFERENCES --}}
         <div id="conf-tab4" class="tab-content">
-            <form action="{{ route('mentor.preferences.ajax.update', $user->user_rand_id) }}" method="POST" id="preferencesForm">
+            <form action="{{ route('mentor.preferences.ajax.update', $user_rand_id) }}" method="POST" id="preferencesForm">
                 @csrf
 
                 <div class="form-group">
@@ -344,14 +344,14 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const urls = {
-        confidentialGet: @json(route('mentor.confidential.ajax.get', $user->user_rand_id)),
-        confidentialUpdate: @json(route('mentor.confidential.ajax.update', $user->user_rand_id)),
-        advertisementGet: @json(route('mentor.advertisement.ajax.get', $user->user_rand_id)),
-        advertisementUpdate: @json(route('mentor.advertisement.ajax.update', $user->user_rand_id)),
-        profileGet: @json(route('mentor.profile.ajax.get', $user->user_rand_id)),
-        profileUpdate: @json(route('mentor.profile.ajax.update', $user->user_rand_id)),
-        preferencesGet: @json(route('mentor.preferences.ajax.get', $user->user_rand_id)),
-        preferencesUpdate: @json(route('mentor.preferences.ajax.update', $user->user_rand_id)),
+        confidentialGet: @json(route('mentor.confidential.ajax.get', $user_rand_id)),
+        confidentialUpdate: @json(route('mentor.confidential.ajax.update', $user_rand_id)),
+        advertisementGet: @json(route('mentor.advertisement.ajax.get', $user_rand_id)),
+        advertisementUpdate: @json(route('mentor.advertisement.ajax.update', $user_rand_id)),
+        profileGet: @json(route('mentor.profile.ajax.get', $user_rand_id)),
+        profileUpdate: @json(route('mentor.profile.ajax.update', $user_rand_id)),
+        preferencesGet: @json(route('mentor.preferences.ajax.get', $user_rand_id)),
+        preferencesUpdate: @json(route('mentor.preferences.ajax.update', $user_rand_id)),
         sectorSearch: @json(route('preferences.ajax.sectors')),
         expertiseSearch: @json(route('mentor.categories.ajax.search'))
     };

@@ -27,7 +27,7 @@ class StartupController extends Controller
      */
     public function edit($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
 
         $teamMembers = collect();
@@ -68,7 +68,7 @@ class StartupController extends Controller
         }
 
         return view('account_dashboard.startupConfidentials', compact(
-            'user', 'startup', 'teamMembers', 'fundRaising', 'mentorSectors', 'incubatorSectors', 'images', 'documents', 'categories', 'currentCities', 'availableStates'
+            'user', 'user_rand_id', 'startup', 'teamMembers', 'fundRaising', 'mentorSectors', 'incubatorSectors', 'images', 'documents', 'categories', 'currentCities', 'availableStates'
         ));
     }
 
@@ -88,7 +88,7 @@ class StartupController extends Controller
 
     public function getConfidentialInfo($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -103,11 +103,11 @@ class StartupController extends Controller
     public function updateConfidentialInfo(Request $request, $user_rand_id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'mobile' => 'required|string|max:15',
+            'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z .\'-]+$/'],
+            'mobile' => 'required|digits:10',
             'email' => 'required|email|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findOrNewStartup($user_rand_id, $user);
         $startup->startup_name = $request->name;
         $startup->startup_mobile = $request->mobile;
@@ -123,7 +123,7 @@ class StartupController extends Controller
 
     public function getAdvertisementDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -140,7 +140,7 @@ class StartupController extends Controller
             'advmt_headline' => 'required|string|max:255',
             'startup_intro' => 'nullable|string|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findOrNewStartup($user_rand_id, $user);
         $startup->advmt_headline = $request->advmt_headline;
         $startup->startup_intro = $request->startup_intro ?? '';
@@ -155,7 +155,7 @@ class StartupController extends Controller
 
     public function getBusinessInfo($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -189,7 +189,7 @@ class StartupController extends Controller
             'twitter_profile' => 'nullable|url|max:255',
             'linkedin_profile' => 'nullable|url|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findOrNewStartup($user_rand_id, $user);
 
         $startup->name_of_entity = $request->name_of_entity;
@@ -210,7 +210,7 @@ class StartupController extends Controller
 
     public function getFinancialDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
         $fundRaising = collect();
         if ($startup) {
@@ -233,7 +233,7 @@ class StartupController extends Controller
 
     public function updateFinancialDetails(Request $request, $user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findOrNewStartup($user_rand_id, $user);
 
         $startup->annual_sales = $request->input('annual_sales') ?: 0;
@@ -266,7 +266,7 @@ class StartupController extends Controller
 
     public function getHeadquarters($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -287,7 +287,7 @@ class StartupController extends Controller
             'ofc_city' => 'required|string|max:255',
             'ofc_pincode' => 'required|string|max:15',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findOrNewStartup($user_rand_id, $user);
 
         $startup->ofc_address = $request->ofc_address;
@@ -302,7 +302,7 @@ class StartupController extends Controller
 
     public function getTeamDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
         $teamMembers = collect();
         if ($startup) {
@@ -327,7 +327,7 @@ class StartupController extends Controller
             'director_email' => 'required|email|max:255',
             'director_designation' => 'required',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findOrNewStartup($user_rand_id, $user);
 
         $startup->director_name = $request->director_name;
@@ -360,7 +360,7 @@ class StartupController extends Controller
 
     public function getBusinessPlan($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -388,7 +388,7 @@ class StartupController extends Controller
             'customer_segment' => 'required|string',
             'target_market' => 'required|string',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findOrNewStartup($user_rand_id, $user);
 
         $startup->company_stage = $request->company_stage;
@@ -408,7 +408,7 @@ class StartupController extends Controller
 
     public function getRequirement($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
 
         $mentorSectors = collect();
@@ -454,7 +454,7 @@ class StartupController extends Controller
 
     public function updateRequirement(Request $request, $user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findOrNewStartup($user_rand_id, $user);
 
         $seekingInvestors = $request->boolean('seeking_investors');
@@ -511,7 +511,7 @@ class StartupController extends Controller
 
     public function getAttachments($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findStartup($user_rand_id, $user->user_id);
         $images = collect();
         $documents = collect();
@@ -540,7 +540,7 @@ class StartupController extends Controller
             'business_photos.*' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:5120',
             'business_documents.*' => 'nullable|mimes:doc,docx,xls,xlsx,pdf|max:10240',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $startup = $this->findOrNewStartup($user_rand_id, $user);
         $startup->save();
 
@@ -619,6 +619,25 @@ class StartupController extends Controller
             $startup = ProfileStartup::where('user_id', $userId)->first();
         }
         return $startup;
+    }
+
+    /**
+     * Every Manage route/tab here is keyed by a route segment that's meant to
+     * double as either the account's own user_rand_id (old, single-profile
+     * behaviour) OR a *specific* startup profile's own startup_profile_str
+     * (needed now that a user can have several Startup profiles — the
+     * dropdown passes THAT profile's str so Manage opens the right one).
+     */
+    private function resolveUserAccount($user_rand_id)
+    {
+        $startup = ProfileStartup::where('startup_profile_str', $user_rand_id)->first();
+        if ($startup) {
+            $user = UserAccount::find($startup->user_id);
+            if ($user) {
+                return $user;
+            }
+        }
+        return UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
     }
 
     private function findOrNewStartup($user_rand_id, UserAccount $user)

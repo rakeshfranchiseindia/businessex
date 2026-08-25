@@ -67,7 +67,7 @@ use Illuminate\Support\Facades\Auth;
 
     <script>
         var membershipPlanLabels = { 1: 'Premium', 2: 'Gold', 3: 'Platinum' };
-        var fallbackRecoImage = '{{ asset("assets/images/category/small/6.jpg") }}';
+        var fallbackRecoImage = '{{ asset("assets/img/default.jpg") }}';
 
         function renderRecommendations(data) {
             var list = document.getElementById('topRecommendationsList');
@@ -85,7 +85,7 @@ use Illuminate\Support\Facades\Auth;
                 var isLast = idx === items.length - 1;
                 var title = item.title ? item.title.substring(0, 20) + (item.title.length > 20 ? '...' : '') : 'Untitled';
                 var img = document.createElement('img');
-                img.src = item.thumbimage;
+                img.src = item.thumbimage || fallbackRecoImage;
                 img.className = 'mr-3 rounded';
                 img.width = 60;
                 img.alt = 'Recommendation';
@@ -131,8 +131,10 @@ use Illuminate\Support\Facades\Auth;
         // Registered so changeProfileType() (public/assets/js/user_main.js) updates
         // this widget in place instead of doing its normal full-page navigation --
         // this is the "no reload on profile type switch" behaviour for this page only.
-        window.__handleProfileTypeChange = function (value) {
-            fetch('{{ url("/set-profile-type") }}/' + value, {
+        window.__handleProfileTypeChange = function (value, profileStr) {
+            var url = '{{ url("/set-profile-type") }}/' + encodeURIComponent(value)
+                + (profileStr ? '/' + encodeURIComponent(profileStr) : '');
+            fetch(url, {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
                 .then(function () { fetchRecommendations(value); })
@@ -170,8 +172,8 @@ use Illuminate\Support\Facades\Auth;
                     ? '<p><strong>' + item.price + '</strong>' + (item.priceLabel ? ' &mdash; ' + item.priceLabel : '') + '</p>'
                     : (item.investmentRange ? '<p><strong>' + item.investmentRange + '</strong> Investment Size</p>' : '');
                 var img = document.createElement('img');
-                img.src = item.thumbimage || '{{ asset("assets/images/category/small/6.jpg") }}';
-                var imgHtml = '<img src="' + img.src + '" class="mr-3 rounded" width="100" alt="' + (item.profileTypeStr || 'Listing') + '" onerror="this.src=\'{{ asset("assets/images/category/small/6.jpg") }}\'">';
+                img.src = item.thumbimage || fallbackRecoImage;
+                var imgHtml = '<img src="' + img.src + '" class="mr-3 rounded" width="100" alt="' + (item.profileTypeStr || 'Listing') + '" onerror="this.src=\'' + fallbackRecoImage + '\'">';
                 return '' +
                     '<div class="media mb-4">' +
                         imgHtml +

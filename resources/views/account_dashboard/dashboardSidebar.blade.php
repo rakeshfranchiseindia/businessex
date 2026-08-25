@@ -20,6 +20,30 @@ if (empty($availableProfileTypes[$profileType])) {
     session(['profile_type' => $profileType]);
 }
 
+// Every profile instance the user has, per type — a user can register more
+// than one Business/Startup/etc, so the PROFILE TYPE dropdown needs one entry
+// per instance (not just per type), each pointing at that instance's own
+// profile_str so Manage/My Profile load that exact profile.
+$profileInstances = getUserProfileInstances($user_id);
+$typeInstances = $profileInstances[$profileType] ?? [];
+
+$activeProfileStr = session('active_profile_str');
+$activeInstance = null;
+foreach ($typeInstances as $instance) {
+    if ($instance['profile_str'] === $activeProfileStr) {
+        $activeInstance = $instance;
+        break;
+    }
+}
+if (!$activeInstance && !empty($typeInstances)) {
+    $activeInstance = $typeInstances[0];
+    $activeProfileStr = $activeInstance['profile_str'];
+    session(['active_profile_str' => $activeProfileStr]);
+}
+// Falls back to the account's own rand id only when this type has no
+// profile instance at all (shouldn't normally happen once activated).
+$activeProfileId = $activeProfileStr ?? $user->user_rand_id;
+
 $confidentialRoutes = [
     'mentor' => 'mentor.confidential.edit',
     'lender' => 'lender.confidential.edit',
@@ -535,22 +559,29 @@ $socialLinks = getProfileSocialLinks($user_id, $profileType);
             PROFILE TYPE
           </label>
 
+          <?php
+            // One <option> per profile INSTANCE, not per type — a user with
+            // several Business/Startup/etc profiles gets that type listed once
+            // per profile, labelled with that profile's own name so they can
+            // tell them apart (matches the multi-profile dropdown design).
+            $typeLabels = [
+                'investor' => 'Investor',
+                'mentor' => 'Mentor',
+                'lender' => 'Lender',
+                'startup' => 'Startup',
+                'business' => 'Business',
+            ];
+          ?>
           <select onchange="changeProfileType(this)">
-            @if($availableProfileTypes['investor'])
-              <option value="investor" {{ $profileType === 'investor' ? 'selected' : '' }}>Investor</option>
-            @endif
-            @if($availableProfileTypes['mentor'])
-              <option value="mentor" {{ $profileType === 'mentor' ? 'selected' : '' }}>Mentor</option>
-            @endif
-            @if($availableProfileTypes['lender'])
-              <option value="lender" {{ $profileType === 'lender' ? 'selected' : '' }}>Lender</option>
-            @endif
-            @if($availableProfileTypes['startup'])
-              <option value="startup" {{ $profileType === 'startup' ? 'selected' : '' }}>Startup</option>
-            @endif
-            @if($availableProfileTypes['business'])
-              <option value="business" {{ $profileType === 'business' ? 'selected' : '' }}>Business</option>
-            @endif
+            @foreach($typeLabels as $typeKey => $typeLabel)
+              @foreach(($profileInstances[$typeKey] ?? []) as $instance)
+                <option
+                  value="{{ $instance['profile_str'] }}"
+                  data-type="{{ $typeKey }}"
+                  {{ ($profileType === $typeKey && $instance['profile_str'] === $activeProfileStr) ? 'selected' : '' }}
+                >{{ $typeLabel }} ({{ $instance['label'] }})</option>
+              @endforeach
+            @endforeach
           </select>
 
         </div>
@@ -666,7 +697,7 @@ $socialLinks = getProfileSocialLinks($user_id, $profileType);
 
           <!-- Manage (just Confidential Info under the hood, so it's one flat link instead of an expandable submenu) -->
           <li>
-            <a href="{{ route($confidentialRouteName, ['user_rand_id' => auth()->user()->user_rand_id]) }}">
+            <a href="{{ route($confidentialRouteName, ['user_rand_id' => $activeProfileId]) }}">
               <i class="fas fa-sliders-h"></i>
               <span>Manage</span>
             </a>
@@ -679,8 +710,10 @@ $socialLinks = getProfileSocialLinks($user_id, $profileType);
 
     <script>
       function changeProfileType(select) {
-    let type = select.value;
-    window.location.href = "/set-profile-type/" + type;
+    let option = select.options[select.selectedIndex];
+    let type = option.getAttribute('data-type') || select.value;
+    let profileStr = option.value;
+    window.location.href = "/set-profile-type/" + encodeURIComponent(type) + "/" + encodeURIComponent(profileStr);
 }
 
       function toggleSubmenu(element) {

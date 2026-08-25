@@ -158,7 +158,7 @@ class RecommendationController extends Controller
                 'price' => getAskingPrice($arr),
                 'priceLabel' => priceLabelStartup($arr),
                 'thumbimage' => !empty($startup->startup_prof_thumb_pic)
-                    ? $startup->startup_prof_thumb_pic
+                    ? config('constants.ImageCDN') . '/' . $startup->startup_prof_thumb_pic
                     : randomSubCategoryImage($startup->industry_sector, '70', '55'),
                 'profileurl' => '/startup/' . Str::slug(trim(strtolower(cleanSpecialChar((string) $startup->advmt_headline))), '-') . '/' . strtolower($startup->startup_profile_str),
                 'membership_paid' => (bool) $startup->membership_paid,

@@ -73,12 +73,12 @@
 
         {{-- TAB 1: CONFIDENTIAL INFORMATION --}}
         <div id="tab1" class="tab-content active">
-            <form action="{{ route('startup.confidential.ajax.update', $user->user_rand_id) }}" method="POST" id="confidentialForm">
+            <form action="{{ route('startup.confidential.ajax.update', $user_rand_id) }}" method="POST" id="confidentialForm">
                 @csrf
                 <div class="form-group"><label>Your Name <span class="text-danger">*</span></label>
                     <input type="text" name="name" class="form-control" value="{{ $startup->startup_name ?? '' }}" required></div>
                 <div class="form-group"><label>Mobile Number <span class="text-danger">*</span></label>
-                    <input type="tel" name="mobile" class="form-control" value="{{ $startup->startup_mobile ?? '' }}" required></div>
+                    <input type="tel" name="mobile" class="form-control" value="{{ $startup->startup_mobile ?? '' }}" pattern="[0-9]{10}" maxlength="10" inputmode="numeric" title="Enter a 10-digit mobile number" required></div>
                 <div class="form-group"><label>Email ID <span class="text-danger">*</span></label>
                     <input type="email" name="email" class="form-control" value="{{ $startup->startup_email ?? '' }}" required></div>
                 <button type="submit" class="btn-submit">SUBMIT</button>
@@ -87,7 +87,7 @@
 
         {{-- TAB 2: ADVERTISEMENT DETAILS --}}
         <div id="tab2" class="tab-content">
-            <form action="{{ route('startup.advertisement.ajax.update', $user->user_rand_id) }}" method="POST" id="advertisementForm">
+            <form action="{{ route('startup.advertisement.ajax.update', $user_rand_id) }}" method="POST" id="advertisementForm">
                 @csrf
                 <div class="form-group"><label>Advertisement Headline <span class="text-danger">*</span></label>
                     <input type="text" id="advmt_headline" name="advmt_headline" class="form-control" value="{{ $startup->advmt_headline ?? '' }}" required></div>
@@ -99,7 +99,7 @@
 
         {{-- TAB 3: BUSINESS INFORMATION --}}
         <div id="tab3" class="tab-content">
-            <form action="{{ route('startup.business.ajax.update', $user->user_rand_id) }}" method="POST" id="businessInfoForm">
+            <form action="{{ route('startup.business.ajax.update', $user_rand_id) }}" method="POST" id="businessInfoForm">
                 @csrf
                 <div class="form-group"><label>Name of Entity <span class="text-danger">*</span></label>
                     <input type="text" id="name_of_entity" name="name_of_entity" class="form-control" value="{{ $startup->name_of_entity ?? '' }}" required></div>
@@ -155,7 +155,7 @@
 
         {{-- TAB 4: FINANCIAL DETAILS --}}
         <div id="tab4" class="tab-content">
-            <form action="{{ route('startup.financial.ajax.update', $user->user_rand_id) }}" method="POST" id="financialForm">
+            <form action="{{ route('startup.financial.ajax.update', $user_rand_id) }}" method="POST" id="financialForm">
                 @csrf
                 <div class="row">
                     <div class="col-md-4 form-group"><label>Annual Sales <span class="text-danger">*</span></label>
@@ -197,7 +197,7 @@
 
         {{-- TAB 5: HEADQUARTERS --}}
         <div id="tab5" class="tab-content">
-            <form action="{{ route('startup.headquarters.ajax.update', $user->user_rand_id) }}" method="POST" id="headquartersForm">
+            <form action="{{ route('startup.headquarters.ajax.update', $user_rand_id) }}" method="POST" id="headquartersForm">
                 @csrf
                 <div class="form-group"><label>Address <span class="text-danger">*</span></label>
                     <textarea id="ofc_address" name="ofc_address" class="form-control" rows="3" placeholder="Enter Office Address" required>{{ $startup->ofc_address ?? '' }}</textarea></div>
@@ -232,7 +232,7 @@
 
         {{-- TAB 6: TEAM DETAILS --}}
         <div id="tab6" class="tab-content">
-            <form action="{{ route('startup.team.ajax.update', $user->user_rand_id) }}" method="POST" id="teamForm">
+            <form action="{{ route('startup.team.ajax.update', $user_rand_id) }}" method="POST" id="teamForm">
                 @csrf
                 <div class="form-group"><label>Name <span class="text-danger">*</span></label>
                     <input type="text" id="director_name" name="director_name" class="form-control" placeholder="Enter Your Name" value="{{ $startup->director_name ?? '' }}" required></div>
@@ -272,7 +272,7 @@
 
         {{-- TAB 7: BUSINESS PLAN --}}
         <div id="tab7" class="tab-content">
-            <form action="{{ route('startup.plan.ajax.update', $user->user_rand_id) }}" method="POST" id="planForm">
+            <form action="{{ route('startup.plan.ajax.update', $user_rand_id) }}" method="POST" id="planForm">
                 @csrf
                 <div class="form-group"><label>Select your Company stage <span class="text-danger">*</span></label>
                     <select id="company_stage" name="company_stage" class="form-control" required>
@@ -305,7 +305,7 @@
 
         {{-- TAB 8: REQUIREMENT --}}
         <div id="tab8" class="tab-content">
-            <form action="{{ route('startup.requirement.ajax.update', $user->user_rand_id) }}" method="POST" id="requirementForm">
+            <form action="{{ route('startup.requirement.ajax.update', $user_rand_id) }}" method="POST" id="requirementForm">
                 @csrf
                 <div class="form-group">
                     <label>I am looking for</label>
@@ -696,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         setButtonLoading(this, true);
         try {
-            const response = await fetch(@json(route('startup.attachments.ajax.update', $user->user_rand_id)), {
+            const response = await fetch(@json(route('startup.attachments.ajax.update', $user_rand_id)), {
                 method: 'POST',
                 headers: { 'X-CSRF-TOKEN': csrfToken, 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                 body: formData
@@ -718,7 +718,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     async function loadAttachments() {
-        const data = await getData(@json(route('startup.attachments.ajax.get', $user->user_rand_id)));
+        const data = await getData(@json(route('startup.attachments.ajax.get', $user_rand_id)));
         if (!data) return;
         const imageList = document.getElementById('imageList');
         const documentList = document.getElementById('documentList');

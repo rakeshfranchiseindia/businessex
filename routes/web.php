@@ -129,7 +129,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard/change-password', [ProfileController::class, 'changePassword'])->name('change.password');
     Route::post('dashboard/change-password', [ProfileController::class, 'updatePassword'])->name('update.password');
     Route::get('/dashboard/investor-account', [ProfileController::class, 'getUserProfileDetails'])->name('get.user.details');
-    Route::get('/set-profile-type/{type}', [ProfileController::class, 'setProfileType'])->name('set.profile.type');
+    Route::get('/set-profile-type/{type}/{profileStr?}', [ProfileController::class, 'setProfileType'])->name('set.profile.type');
     Route::get('/dashboard/recommendations/{profileType}', [RecommendationController::class, 'getRecommendations'])->name('dashboard.recommendations');
     Route::get('/dashboard/myprofiles/new-listings', [MyProfilesController::class, 'newListings'])->name('myprofiles.new-listings');
     Route::get('/dashboard/myprofiles/saved-searches', [MyProfilesController::class, 'savedSearches'])->name('myprofiles.saved-searches');
@@ -146,13 +146,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/investorConfidentials/{user_rand_id}/preferences',[ProfileController::class, 'getInvestorPreferenceDetails'])->name('preferences.ajax.get');
     Route::post('/dashboard/investorConfidentials/{user_rand_id}/preferences-update',[ProfileController::class, 'updateInvestorPreferenceDetails'])->name('preferences.ajax.update');
     Route::get('/preferences/sectors/search',[ProfileController::class, 'searchInvestorSectors'])->name('preferences.ajax.sectors');
-    Route::get('/dashboard/investorAdvertisement/{user_rand_id?}', [ProfileController::class, 'getInvestorAdvertisementDetails'])->name('confidential.advert_detail');
+    Route::get('/dashboard/investorAdvertisement/{user_rand_id?}', [ProfileController::class, 'getAdvertisementDetails'])->name('confidential.advert_detail');
     Route::post('/dashboard/investorAdvertisement/{user_rand_id?}', [ProfileController::class, 'updateInvestorProfileDetails'])->name('advertisement.save');
     Route::post('/dashboard/preferences/save', [ProfileController::class, 'savePreferences'])->name('preferences.save');
     Route::get('/dashboard/investorMultipref/{user_rand_id}',[ProfileController::class, 'getInvestorPreferenceDetails'])->name('preferences.edit');
     Route::get('/dashboard/profileview', [ProfileController::class, 'getVisitor'])->name('profileview');
     Route::get('/dashboard/profileinfo/{user_rand_id}', [ProfileController::class, 'profileInfo'])->name('profileinfo');
-    Route::post('/dashboard/investorUpdate', [ProfileController::class, 'investorUpdate'])->name('investor.update');
+    Route::post('/dashboard/investorUpdate/{user_rand_id}', [ProfileController::class, 'investorUpdate'])->name('investor.update');
 
     // ================= MENTOR DASHBOARD =================
     Route::get('/dashboard/mentor-account', [DashboardMentorController::class, 'getUserProfileDetails'])->name('mentor.get.user.details');
