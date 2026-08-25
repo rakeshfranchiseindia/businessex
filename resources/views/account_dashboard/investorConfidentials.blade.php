@@ -408,7 +408,7 @@
                      class="tab-content active">
 
                     <form
-                        action="{{ route('confidential.ajax.update', $user->user_rand_id) }}"
+                        action="{{ route('confidential.ajax.update', $user_rand_id) }}"
                         method="POST"
                         id="confidentialForm">
 
@@ -445,6 +445,10 @@
                                 name="mobile"
                                 class="form-control"
                                 value="{{ $investor->inv_mobile ?? '' }}"
+                                pattern="[0-9]{10}"
+                                maxlength="10"
+                                inputmode="numeric"
+                                title="Enter a 10-digit mobile number"
                                 required
                             >
 
@@ -540,7 +544,7 @@
                      class="tab-content">
 
                     <form
-                        action="{{ route('advertisement.ajax.update', $user->user_rand_id) }}"
+                        action="{{ route('advertisement.ajax.update', $user_rand_id) }}"
                         method="POST"
                         id="advertisementForm">
 
@@ -605,7 +609,7 @@
                      class="tab-content">
 
                     <form
-                        action="{{ route('investor.ajax.update', $user->user_rand_id) }}"
+                        action="{{ route('investor.ajax.update', $user_rand_id) }}"
                         method="POST"
                         enctype="multipart/form-data"
                         id="investorProfileForm">
@@ -969,7 +973,7 @@
                      class="tab-content">
 
                     <form
-                        action="{{ route('preferences.ajax.update', $user->user_rand_id) }}"
+                        action="{{ route('preferences.ajax.update', $user_rand_id) }}"
                         method="POST"
                         id="preferencesForm">
 
@@ -1078,7 +1082,7 @@ document.addEventListener('DOMContentLoaded', function () {
     */
 
     const userRandId =
-        @json($user->user_rand_id);
+        @json($user_rand_id);
 
     const csrfToken =
         document.querySelector(
@@ -1098,52 +1102,52 @@ document.addEventListener('DOMContentLoaded', function () {
         confidentialGet:
             @json(route(
                 'confidential.ajax.get',
-                $user->user_rand_id
+                $user_rand_id
             )),
 
         confidentialUpdate:
             @json(route(
                 'confidential.ajax.update',
-                $user->user_rand_id
+                $user_rand_id
             )),
 
 
         advertisementGet:
             @json(route(
                 'advertisement.ajax.get',
-                $user->user_rand_id
+                $user_rand_id
             )),
 
         advertisementUpdate:
             @json(route(
                 'advertisement.ajax.update',
-                $user->user_rand_id
+                $user_rand_id
             )),
 
 
         profileGet:
             @json(route(
                 'investor.ajax.get',
-                $user->user_rand_id
+                $user_rand_id
             )),
 
         profileUpdate:
             @json(route(
                 'investor.ajax.update',
-                $user->user_rand_id
+                $user_rand_id
             )),
 
 
         preferencesGet:
             @json(route(
                 'preferences.ajax.get',
-                $user->user_rand_id
+                $user_rand_id
             )),
 
         preferencesUpdate:
             @json(route(
                 'preferences.ajax.update',
-                $user->user_rand_id
+                $user_rand_id
             ))
     };
 

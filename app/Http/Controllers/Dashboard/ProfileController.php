@@ -128,6 +128,32 @@ class ProfileController extends Controller
         }
         return Carbon::parse($user->reset_token_created_at)->addMinutes(60)->isPast();
     }
+
+    /**
+     * Every investor Manage route/tab here is keyed by a route segment that's
+     * meant to double as either the account's own user_rand_id (old,
+     * single-profile behaviour) OR a *specific* investor profile's own
+     * inv_profile_str (needed now that a user can have several Investor
+     * profiles — the dropdown passes THAT profile's str so Manage opens the
+     * right one).
+     */
+    private function resolveUserAccount($user_rand_id)
+    {
+        return $this->resolveUserAccountOrNull($user_rand_id)
+            ?? UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+    }
+
+    private function resolveUserAccountOrNull($user_rand_id)
+    {
+        $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
+        if ($investor) {
+            $user = UserAccount::find($investor->user_id);
+            if ($user) {
+                return $user;
+            }
+        }
+        return UserAccount::where('user_rand_id', $user_rand_id)->first();
+    }
     public function getUserProfileDetails(Request $request)
     {
         $user_id = Auth::id();
@@ -166,7 +192,7 @@ class ProfileController extends Controller
     }
     public function edit($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
         if (!$investor) {
             $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
@@ -185,11 +211,11 @@ class ProfileController extends Controller
         $locations = BxCity::orderBy('state')->orderBy('city')->get();
         // State filter only lists states that actually have cities in bx_cities.
         $availableStates = getAvailableStatesFromCities();
-        return view('account_dashboard.investorConfidentials', compact('user', 'investor', 'invPreference', 'indPref', 'locationPref', 'locations', 'availableStates'));
+        return view('account_dashboard.investorConfidentials', compact('user', 'user_rand_id', 'investor', 'invPreference', 'indPref', 'locationPref', 'locations', 'availableStates'));
     }
     public function getConfidentialInfo($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
         if (!$investor) {
             $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
@@ -211,12 +237,12 @@ class ProfileController extends Controller
     {
         // basic validation
         $request->validate([
-            'name' => 'required|string|max:255',
-            'mobile' => 'required|string|max:15',
+            'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z .\'-]+$/'],
+            'mobile' => 'required|digits:10',
             'email' => 'required|email|max:255',
             'inv_city' => 'required|string|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
         if (!$investor) {
             $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
@@ -241,9 +267,13 @@ class ProfileController extends Controller
         ]);
     }
 
-    public function getAdvertisementDetails($user_rand_id)
+    public function getAdvertisementDetails($user_rand_id = null)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        // confidential.advert_detail (dashboard/investorAdvertisement) hits this
+        // with an optional route param — fall back to the logged-in user's own
+        // id so that legacy no-id link keeps working instead of erroring.
+        $user_rand_id = $user_rand_id ?? Auth::user()->user_rand_id;
+        $user = $this->resolveUserAccount($user_rand_id);
         $profile = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
         if (!$profile) {
             $profile = ProfileInvestor::where('user_id', $user->user_id)->first();
@@ -260,7 +290,7 @@ class ProfileController extends Controller
     public function updateInvestorProfileDetails(Request $request, $user_rand_id)
     {
         $request->validate(['inv_headline' => 'required|string|max:255', 'inv_intro' => 'nullable|string',]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $profile = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
         if (!$profile) {
             $profile = ProfileInvestor::where('user_id', $user->user_id)->first();
@@ -325,7 +355,7 @@ class ProfileController extends Controller
     }
     public function getInvestorProfileDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
         if (!$investor) {
             $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
@@ -376,7 +406,7 @@ class ProfileController extends Controller
                 ]
             ], 422);
         }
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $investor = ProfileInvestor::where('inv_profile_str', $user_rand_id)->first();
         if (!$investor) {
             $investor = ProfileInvestor::where('user_id', $user->user_id)->first();
@@ -459,7 +489,7 @@ class ProfileController extends Controller
     public function getInvestorPreferenceDetails($user_rand_id)
     {
         // Find user
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->first();
+        $user = $this->resolveUserAccountOrNull($user_rand_id);
 
         if (!$user) {
             return response()->json([
@@ -534,10 +564,31 @@ class ProfileController extends Controller
     }
     public function updateInvestorPreferenceDetails(Request $request, $user_rand_id)
     {
+        $request->validate([
+            'sectors' => 'nullable',
+            'sectors.*' => 'nullable|string|max:100',
+            'location_preference' => 'nullable|array',
+            'location_preference.*' => 'nullable|integer',
+        ]);
+
+        // Same fallback getInvestorPreferenceDetails() (the GET counterpart) already
+        // uses — inv_profile_str alone doesn't match $user_rand_id for real users
+        // (it only did here by coincidence in seeded test data), so this always
+        // 404'd once real profile strings were involved.
         $investorCount = ProfileInvestor::query()
             ->select('inv_profile_str', 'investor_id', 'user_id')
             ->where('inv_profile_str', '=', $user_rand_id)
             ->first();
+
+        if (!$investorCount) {
+            $user = UserAccount::where('user_rand_id', $user_rand_id)->first();
+            if ($user) {
+                $investorCount = ProfileInvestor::query()
+                    ->select('inv_profile_str', 'investor_id', 'user_id')
+                    ->where('user_id', $user->user_id)
+                    ->first();
+            }
+        }
 
         if (!$investorCount) {
             return response()->json([
@@ -669,6 +720,18 @@ class ProfileController extends Controller
         ], 200);
     }
 
+    // preferences.save (dashboard/preferences/save) named a method that didn't
+    // exist — 500 on every call. Route has no {user_rand_id} of its own, so this
+    // delegates to the logged-in user's own investor preferences.
+    public function savePreferences(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user || empty($user->user_rand_id)) {
+            return response()->json(['status' => false, 'message' => 'User not found.'], 404);
+        }
+        return $this->updateInvestorPreferenceDetails($request, $user->user_rand_id);
+    }
+
 
     public function searchInvestorSectors(Request $request)
     {
@@ -699,15 +762,24 @@ class ProfileController extends Controller
     {
         $user_id = auth()->user()->user_id;
 
-        // Only show messages that were sent to the currently-selected profile type
-        // (e.g. switching to "Mentor" in the sidebar shows only messages the user
-        // received as a mentor, not as an investor/lender). A request_id belongs to
-        // this profile type if that's the type the current user was contacted as.
+        // Scoped to the specific active profile (a user can own more than one
+        // profile of the same type, e.g. several Businesses) — same granularity
+        // as Manage: receiver side via profile_str (the contacted listing's own
+        // string), sender side via sender_profile_str (which of the user's own
+        // profiles sent it). Falls back to type-only when there's no active
+        // instance yet, so older rows without this context still show.
         $myProfileTypeCode = config('constants.profileTypes.' . ucfirst(session('profile_type', 'investor')));
-        $matchingRequestIds = RequestContact::where(function ($q) use ($user_id, $myProfileTypeCode) {
+        $activeProfileStr = session('active_profile_str');
+        $matchingRequestIds = RequestContact::where(function ($q) use ($user_id, $myProfileTypeCode, $activeProfileStr) {
             $q->where('receiver', $user_id)->where('receiver_profile_type', $myProfileTypeCode);
-        })->orWhere(function ($q) use ($user_id, $myProfileTypeCode) {
+            if ($activeProfileStr) {
+                $q->where('profile_str', $activeProfileStr);
+            }
+        })->orWhere(function ($q) use ($user_id, $myProfileTypeCode, $activeProfileStr) {
             $q->where('sender', $user_id)->where('sender_profile_type', $myProfileTypeCode);
+            if ($activeProfileStr) {
+                $q->where('sender_profile_str', $activeProfileStr);
+            }
         })->pluck('request_id');
 
         $query = ConversationReply::where('to_id', $user_id)->whereIn('request_id', $matchingRequestIds);
@@ -791,10 +863,20 @@ class ProfileController extends Controller
         $user_id = auth()->user()->user_id;
         $myProfileTypeCode = config('constants.profileTypes.' . ucfirst(session('profile_type', 'investor')));
 
-        $requests = RequestContact::where('receiver', $user_id)
-            ->where('receiver_profile_type', $myProfileTypeCode)
-            ->orderBy('timestamp', 'desc')
-            ->get();
+        $requestsQuery = RequestContact::where('receiver', $user_id)
+            ->where('receiver_profile_type', $myProfileTypeCode);
+
+        // Scope to the specific active profile (a user can own more than one
+        // profile of the same type) — same granularity as Manage. profile_str
+        // already identifies which exact listing was contacted. Skipped when
+        // there's no active instance yet, so older rows without this context
+        // still show.
+        $activeProfileStr = session('active_profile_str');
+        if ($activeProfileStr) {
+            $requestsQuery->where('profile_str', $activeProfileStr);
+        }
+
+        $requests = $requestsQuery->orderBy('timestamp', 'desc')->get();
 
         $proposals = $this->buildProposalList($requests, 'sender', 'sender_profile_type');
 
@@ -820,12 +902,21 @@ class ProfileController extends Controller
         $profileType = session('profile_type', 'investor');
         $senderProfileTypeCode = config('constants.profileTypes.' . ucfirst($profileType));
 
-        $contactHistory = RequestContact::select('profile_str', 'receiver', 'receiver_profile_type', 'status', 'viewed_status')
+        $contactHistoryQuery = RequestContact::select('profile_str', 'receiver', 'receiver_profile_type', 'status', 'viewed_status')
             ->where('sender', $userId)
             ->where('sender_profile_type', $senderProfileTypeCode)
-            ->where('status', config('constants.ProfileStatus.Active'))
-            ->orderBy('request_id', 'desc')
-            ->get();
+            ->where('status', config('constants.ProfileStatus.Active'));
+
+        // Scope to the specific active profile the request was sent AS (a user
+        // can own more than one profile of the same type) — same granularity
+        // as Manage. Skipped when there's no active instance yet, so older
+        // rows without this context still show.
+        $activeProfileStr = session('active_profile_str');
+        if ($activeProfileStr) {
+            $contactHistoryQuery->where('sender_profile_str', $activeProfileStr);
+        }
+
+        $contactHistory = $contactHistoryQuery->orderBy('request_id', 'desc')->get();
 
         $proposals = [];
         foreach ($contactHistory as $row) {
@@ -992,16 +1083,41 @@ class ProfileController extends Controller
 
         return [$profileName, $profilelink, $category, $contactStatus, $listingLink];
     }
-    public function setProfileType($type, \Illuminate\Http\Request $request)
+    public function setProfileType(\Illuminate\Http\Request $request, $type, $profileStr = null)
     {
         session(['profile_type' => $type]);
-        $userRandId = Auth::user()->user_rand_id ?? null;
+
+        // A user can have more than one profile of the same type (multiple
+        // Business/Startup/etc registrations) — resolve which specific one is
+        // now active, falling back to that type's first instance when the
+        // caller didn't pass one (or passed something that doesn't belong to
+        // this user), so every other code path keyed off active_profile_str
+        // always has a valid value once the user has any profile of this type.
+        $instances = getUserProfileInstances(Auth::id())[$type] ?? [];
+        $activeInstance = null;
+        if ($profileStr) {
+            foreach ($instances as $instance) {
+                if ($instance['profile_str'] === $profileStr) {
+                    $activeInstance = $instance;
+                    break;
+                }
+            }
+        }
+        if (!$activeInstance && !empty($instances)) {
+            $activeInstance = $instances[0];
+        }
+        $activeProfileStr = $activeInstance['profile_str'] ?? null;
+        session(['active_profile_str' => $activeProfileStr]);
+
+        // Fall back to the user's own rand id (old single-profile-per-type
+        // behaviour) only if this type has no resolved instance at all.
+        $userRandId = $activeProfileStr ?? (Auth::user()->user_rand_id ?? null);
 
         // AJAX callers (e.g. the dashboard-home "Top 5 Recommendations" switcher)
         // just want the session updated without navigating away — everyone else
         // (plain links) keeps the existing full-page redirect behaviour below.
         if ($request->ajax() || $request->wantsJson()) {
-            return response()->json(['status' => 'ok', 'profile_type' => $type]);
+            return response()->json(['status' => 'ok', 'profile_type' => $type, 'active_profile_str' => $activeProfileStr]);
         }
 
         // If the dropdown was changed while on one of the "My Interactions" tabs

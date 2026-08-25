@@ -54,7 +54,7 @@
 
         {{-- TAB 1 : CONFIDENTIAL INFO --}}
         <div id="conf-tab1" class="tab-content active">
-            <form action="{{ route('lender.confidential.ajax.update', $user->user_rand_id) }}" method="POST" id="confidentialForm">
+            <form action="{{ route('lender.confidential.ajax.update', $user_rand_id) }}" method="POST" id="confidentialForm">
                 @csrf
                 <div class="form-group">
                     <label>Your Name <span class="text-danger">*</span></label>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="form-group">
                     <label>Mobile Number <span class="text-danger">*</span></label>
-                    <input type="tel" name="mobile" class="form-control" value="{{ $lender->lender_mobile ?? '' }}" required>
+                    <input type="tel" name="mobile" class="form-control" value="{{ $lender->lender_mobile ?? '' }}" pattern="[0-9]{10}" maxlength="10" inputmode="numeric" title="Enter a 10-digit mobile number" required>
                 </div>
                 <div class="form-group">
                     <label>Email ID <span class="text-danger">*</span></label>
@@ -78,7 +78,7 @@
 
         {{-- TAB 2 : ADVERTISEMENT DETAILS --}}
         <div id="conf-tab2" class="tab-content">
-            <form action="{{ route('lender.advertisement.ajax.update', $user->user_rand_id) }}" method="POST" id="advertisementForm">
+            <form action="{{ route('lender.advertisement.ajax.update', $user_rand_id) }}" method="POST" id="advertisementForm">
                 @csrf
                 <div class="form-group">
                     <label>Advertisement Headline <span class="text-danger">*</span></label>
@@ -94,7 +94,7 @@
 
         {{-- TAB 3 : PREFERENCES --}}
         <div id="conf-tab3" class="tab-content">
-            <form action="{{ route('lender.preferences.ajax.update', $user->user_rand_id) }}" method="POST" id="preferencesForm">
+            <form action="{{ route('lender.preferences.ajax.update', $user_rand_id) }}" method="POST" id="preferencesForm">
                 @csrf
                 <div class="form-group">
                     <label>Sector Preference <span class="text-danger">*</span></label>
@@ -234,12 +234,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const urls = {
-        confidentialGet: @json(route('lender.confidential.ajax.get', $user->user_rand_id)),
-        confidentialUpdate: @json(route('lender.confidential.ajax.update', $user->user_rand_id)),
-        advertisementGet: @json(route('lender.advertisement.ajax.get', $user->user_rand_id)),
-        advertisementUpdate: @json(route('lender.advertisement.ajax.update', $user->user_rand_id)),
-        preferencesGet: @json(route('lender.preferences.ajax.get', $user->user_rand_id)),
-        preferencesUpdate: @json(route('lender.preferences.ajax.update', $user->user_rand_id)),
+        confidentialGet: @json(route('lender.confidential.ajax.get', $user_rand_id)),
+        confidentialUpdate: @json(route('lender.confidential.ajax.update', $user_rand_id)),
+        advertisementGet: @json(route('lender.advertisement.ajax.get', $user_rand_id)),
+        advertisementUpdate: @json(route('lender.advertisement.ajax.update', $user_rand_id)),
+        preferencesGet: @json(route('lender.preferences.ajax.get', $user_rand_id)),
+        preferencesUpdate: @json(route('lender.preferences.ajax.update', $user_rand_id)),
         sectorSearch: @json(route('preferences.ajax.sectors'))
     };
 

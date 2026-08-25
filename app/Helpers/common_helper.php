@@ -448,6 +448,99 @@ if (!function_exists('getAvailableProfileTypes')) {
 }
 
 
+if (!function_exists('getUserProfileInstances')) {
+    /**
+     * Every individual profile this user has, per type — a user can register
+     * more than one Business/Startup/Investor/etc profile, and each one needs
+     * its own dropdown entry (labelled with the contact person's own name on
+     * that profile — seller_name/startup_name/inv_name/mentor_name/lender_name,
+     * not the company/entity name) rather than collapsing to "the type
+     * exists". Queried straight from each profile_* table by user_id (not
+     * user_profiles, which can carry more than one registry row per actual
+     * profile).
+     *
+     * Only profiles with that type's own status column = Active (1) are
+     * included — an awaiting/rejected/inactive registration isn't a real
+     * selectable profile yet.
+     *
+     * Returns ['business' => [['profile_str'=>.., 'id'=>.., 'label'=>..], ...], 'startup' => [...], ...]
+     * — a type key is only present if the user has at least one instance of it.
+     */
+    function getUserProfileInstances($userId)
+    {
+        $instances = [];
+        $active = config('constants.ProfileStatus.Active');
+
+        $business = \App\Models\ProfileBusiness::where('user_id', $userId)
+            ->where('business_profile_status', $active)
+            ->get(['business_id', 'business_profile_str', 'seller_name']);
+        if ($business->isNotEmpty()) {
+            $instances['business'] = $business->map(function ($row) {
+                return [
+                    'profile_str' => $row->business_profile_str,
+                    'id' => $row->business_id,
+                    'label' => $row->seller_name ?: $row->business_profile_str,
+                ];
+            })->all();
+        }
+
+        $startup = \App\Models\ProfileStartup::where('user_id', $userId)
+            ->where('startup_profile_status', $active)
+            ->get(['startup_id', 'startup_profile_str', 'startup_name']);
+        if ($startup->isNotEmpty()) {
+            $instances['startup'] = $startup->map(function ($row) {
+                return [
+                    'profile_str' => $row->startup_profile_str,
+                    'id' => $row->startup_id,
+                    'label' => $row->startup_name ?: $row->startup_profile_str,
+                ];
+            })->all();
+        }
+
+        $investor = \App\Models\ProfileInvestor::where('user_id', $userId)
+            ->where('inv_profile_status', $active)
+            ->get(['investor_id', 'inv_profile_str', 'inv_name']);
+        if ($investor->isNotEmpty()) {
+            $instances['investor'] = $investor->map(function ($row) {
+                return [
+                    'profile_str' => $row->inv_profile_str,
+                    'id' => $row->investor_id,
+                    'label' => $row->inv_name ?: $row->inv_profile_str,
+                ];
+            })->all();
+        }
+
+        $mentor = \App\Models\ProfileMentor::where('user_id', $userId)
+            ->where('mentor_profile_status', $active)
+            ->get(['mentor_id', 'mentor_profile_str', 'mentor_name']);
+        if ($mentor->isNotEmpty()) {
+            $instances['mentor'] = $mentor->map(function ($row) {
+                return [
+                    'profile_str' => $row->mentor_profile_str,
+                    'id' => $row->mentor_id,
+                    'label' => $row->mentor_name ?: $row->mentor_profile_str,
+                ];
+            })->all();
+        }
+
+        $lender = \App\Models\ProfileLender::where('user_id', $userId)
+            ->where('lender_profile_status', $active)
+            ->get(['lender_id', 'lender_profile_str', 'lender_name']);
+        if ($lender->isNotEmpty()) {
+            $instances['lender'] = $lender->map(function ($row) {
+                return [
+                    'profile_str' => $row->lender_profile_str,
+                    'id' => $row->lender_id,
+                    'label' => $row->lender_name ?: $row->lender_profile_str,
+                ];
+            })->all();
+        }
+
+        return $instances;
+    }
+}
+
+
 if (!function_exists('isProfileTypeActivated')) {
     /**
      * A profile type is activated when BOTH:

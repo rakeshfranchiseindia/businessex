@@ -32,9 +32,13 @@ class InstantResponseController extends Controller
 
         $revealedCount = 0;
         if ($modelClass) {
-            $revealedCount = $modelClass::where('profile_id', $userId)
-                ->where('contact_viewed', config('constants.ProfileStatus.Active'))
-                ->count();
+            $revealedCountQuery = $modelClass::where('user_id', $userId)
+                ->where('contact_viewed', config('constants.ProfileStatus.Active'));
+            $activeInstanceId = $this->activeProfileInstanceId();
+            if ($activeInstanceId) {
+                $revealedCountQuery->where('profile_id', $activeInstanceId);
+            }
+            $revealedCount = $revealedCountQuery->count();
         }
 
         $totalCredits = ProfileMembership::where('user_id', $userId)
@@ -88,10 +92,12 @@ class InstantResponseController extends Controller
             $columns[] = 'contact_investment';
         }
 
-        $rows = $modelClass::select($columns)
-            ->where('profile_id', $userId)
-            ->orderBy('contact_id', 'desc')
-            ->get();
+        $rowsQuery = $modelClass::select($columns)->where('user_id', $userId);
+        $activeInstanceId = $this->activeProfileInstanceId();
+        if ($activeInstanceId) {
+            $rowsQuery->where('profile_id', $activeInstanceId);
+        }
+        $rows = $rowsQuery->orderBy('contact_id', 'desc')->get();
 
         if ($rows->count() == 0) {
             return response(['code' => 200, 'message' => 'No Insta Response Found'], 200);
@@ -126,6 +132,30 @@ class InstantResponseController extends Controller
     private function currentProfileTypeCode()
     {
         return config('constants.profileTypes.' . ucfirst(session('profile_type', 'investor')));
+    }
+
+    /**
+     * Numeric id (investor_id/lender_id/mentor_id) of the currently-active
+     * profile instance, resolved from session('active_profile_str') — a user
+     * can own more than one profile of the same type, so contact_investors/
+     * contact_lender/contact_mentor.profile_id (which identifies the SPECIFIC
+     * profile a contact was made against) needs to be filtered by this, not
+     * just the type. Returns null when there's no active instance yet.
+     */
+    private function activeProfileInstanceId()
+    {
+        $type = session('profile_type', 'investor');
+        $activeProfileStr = session('active_profile_str');
+        if (!$activeProfileStr) {
+            return null;
+        }
+        $instances = getUserProfileInstances(Auth::id())[$type] ?? [];
+        foreach ($instances as $instance) {
+            if ($instance['profile_str'] === $activeProfileStr) {
+                return $instance['id'];
+            }
+        }
+        return null;
     }
 
     private function contactModelFor($profileTypeCode)

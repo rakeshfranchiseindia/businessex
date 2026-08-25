@@ -14,6 +14,7 @@ class RequestContact extends \Illuminate\Database\Eloquent\Model
         'sender',
         'receiver_profile_type',
         'sender_profile_type',
+        'sender_profile_str',
         'status',
         'viewed_status',
         'msg',

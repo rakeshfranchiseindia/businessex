@@ -22,7 +22,7 @@ class MentorController extends Controller
      */
     public function edit($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $mentor = $this->findMentor($user_rand_id, $user->user_id);
 
         $indPref = collect();
@@ -48,12 +48,12 @@ class MentorController extends Controller
 
         $categories = IndustryCategory::select('cat_id', 'category_name', 'parent_id')->orderBy('category_name')->get();
 
-        return view('account_dashboard.mentorConfidentials', compact('user', 'mentor', 'indPref', 'expertisePref', 'experience', 'categories'));
+        return view('account_dashboard.mentorConfidentials', compact('user', 'user_rand_id', 'mentor', 'indPref', 'expertisePref', 'experience', 'categories'));
     }
 
     public function getConfidentialInfo($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $mentor = $this->findMentor($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -69,12 +69,12 @@ class MentorController extends Controller
     public function updateConfidentialInfo(Request $request, $user_rand_id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'mobile' => 'required|string|max:15',
+            'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z .\'-]+$/'],
+            'mobile' => 'required|digits:10',
             'email' => 'required|email|max:255',
             'location' => 'required|string|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $mentor = $this->findOrNewMentor($user_rand_id, $user);
         $mentor->mentor_name = $request->name;
         $mentor->mentor_mobile = $request->mobile;
@@ -91,7 +91,7 @@ class MentorController extends Controller
 
     public function getAdvertisementDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $mentor = $this->findMentor($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -108,7 +108,7 @@ class MentorController extends Controller
             'mentor_adv_headline' => 'required|string|max:255',
             'mentor_intro' => 'nullable|string|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $mentor = $this->findOrNewMentor($user_rand_id, $user);
 
         $mentor->mentor_adv_headline = $request->mentor_adv_headline;
@@ -128,7 +128,7 @@ class MentorController extends Controller
 
     public function getMentorProfileDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $mentor = $this->findMentor($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -153,7 +153,7 @@ class MentorController extends Controller
             'mentor_linkedin' => 'nullable|url|max:500',
             'mentor_profile_pic' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:5120',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $mentor = $this->findOrNewMentor($user_rand_id, $user);
 
         $mentor->mentor_occupation = $request->mentor_occupation;
@@ -201,7 +201,7 @@ class MentorController extends Controller
 
     public function getMentorPreferenceDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->first();
+        $user = $this->resolveUserAccountOrNull($user_rand_id);
         if (!$user) {
             return response()->json([
                 'status' => false,
@@ -245,7 +245,18 @@ class MentorController extends Controller
 
     public function updateMentorPreferenceDetails(Request $request, $user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->first();
+        $request->validate([
+            'sectors' => 'nullable',
+            'sectors.*' => 'nullable|string|max:100',
+            'expertise' => 'nullable',
+            'expertise.*' => 'nullable|string|max:100',
+            'exp_years' => 'nullable|array',
+            'exp_years.*' => 'nullable|integer|min:0|max:80',
+            'exp_sectors' => 'nullable|array',
+            'exp_sectors.*' => 'nullable|integer',
+        ]);
+
+        $user = $this->resolveUserAccountOrNull($user_rand_id);
         if (!$user) {
             return response()->json(['status' => false, 'message' => 'User not found.'], 404);
         }
@@ -337,6 +348,31 @@ class MentorController extends Controller
             $mentor = ProfileMentor::where('user_id', $userId)->first();
         }
         return $mentor;
+    }
+
+    /**
+     * Every Manage route/tab here is keyed by a route segment that's meant to
+     * double as either the account's own user_rand_id (old, single-profile
+     * behaviour) OR a *specific* mentor profile's own mentor_profile_str
+     * (needed now that a user can have several Mentor profiles — the
+     * dropdown passes THAT profile's str so Manage opens the right one).
+     */
+    private function resolveUserAccount($user_rand_id)
+    {
+        return $this->resolveUserAccountOrNull($user_rand_id)
+            ?? UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+    }
+
+    private function resolveUserAccountOrNull($user_rand_id)
+    {
+        $mentor = ProfileMentor::where('mentor_profile_str', $user_rand_id)->first();
+        if ($mentor) {
+            $user = UserAccount::find($mentor->user_id);
+            if ($user) {
+                return $user;
+            }
+        }
+        return UserAccount::where('user_rand_id', $user_rand_id)->first();
     }
 
     /**

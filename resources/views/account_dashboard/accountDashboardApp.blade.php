@@ -26,6 +26,7 @@
    <link href="{{ asset('assets/css/article-style.css') }}" rel="stylesheet">
    <link href="{{ asset('assets/css/article-detail.css') }}" rel="stylesheet">
    <link href="{{ asset('assets/css/services.styles.css') }}" rel="stylesheet">
+   <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet">
    <style>
       /* The navbar (partials.navbar) renders with Bootstrap's .fixed-top, taking it
          out of normal document flow. Public/marketing pages get away with it because
@@ -95,13 +96,13 @@
                      <div class="tab-pane container active" id="Login">
                         <div class="soc">
                            <div class="innsoc">
-                              <a href="#"><img src="./assets/img/google.svg"></a>
+                              <a href="#"><img src="{{ asset('assets/img/google.svg') }}"></a>
                            </div>
                            <div class="innsoc">
-                              <a href="#"><img src="./assets/img/fb.svg"></a>
+                              <a href="#"><img src="{{ asset('assets/img/fb.svg') }}"></a>
                            </div>
                            <div class="innsoc">
-                              <a href="#"><img src="./assets/img/linkedins.svg"></a>
+                              <a href="#"><img src="{{ asset('assets/img/linkedins.svg') }}"></a>
                            </div>
                         </div>
                         <div class="emaishow">Or use your email account</div>
@@ -112,7 +113,7 @@
                               <div class="input-group mb-4">
                                  <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><img
-                                          src="./assets/img/email-iconnew.svg"></span>
+                                          src="{{ asset('assets/img/email-iconnew.svg') }}"></span>
                                  </div>
                                  <input id="email" name="email" type="email" class="form-control"
                                     placeholder="Enter Your Email ID" aria-label="Username"
@@ -125,7 +126,7 @@
                               <div class="input-group mb-4">
                                  <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><img
-                                          src="./assets/img/lock-icon.svg"></span>
+                                          src="{{ asset('assets/img/lock-icon.svg') }}"></span>
                                  </div>
                                  <input type="password" name="password" class="form-control"
                                     placeholder="Enter Your Password" aria-label="Username"
@@ -145,13 +146,13 @@
                      <div class="tab-pane container fade" id="Register">
                         <div class="soc">
                            <div class="innsoc">
-                              <a href="#"><img src="./assets/img/google.svg"></a>
+                              <a href="#"><img src="{{ asset('assets/img/google.svg') }}"></a>
                            </div>
                            <div class="innsoc">
-                              <a href="#"><img src="./assets/img/fb.svg"></a>
+                              <a href="#"><img src="{{ asset('assets/img/fb.svg') }}"></a>
                            </div>
                            <div class="innsoc">
-                              <a href="#"><img src="./assets/img/linkedins.svg"></a>
+                              <a href="#"><img src="{{ asset('assets/img/linkedins.svg') }}"></a>
                            </div>
                         </div>
                         <div class="emaishow">Or use your email account</div>
@@ -160,7 +161,7 @@
                               <div class="input-group mb-4">
                                  <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><img
-                                          src="./assets/img/email-iconnew.svg"></span>
+                                          src="{{ asset('assets/img/email-iconnew.svg') }}"></span>
                                  </div>
                                  <input type="email" class="form-control" placeholder="Enter Your Email ID"
                                     aria-label="Username" aria-describedby="basic-addon1">
@@ -168,7 +169,7 @@
                               <div class="input-group mb-4">
                                  <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><img
-                                          src="./assets/img/lock-icon.svg"></span>
+                                          src="{{ asset('assets/img/lock-icon.svg') }}"></span>
                                  </div>
                                  <input type="password" class="form-control" placeholder="Enter Your Password"
                                     aria-label="Username" aria-describedby="basic-addon1">
@@ -176,7 +177,7 @@
                               <div class="input-group mb-4">
                                  <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1"><img
-                                          src="./assets/img/lock-icon.svg"></span>
+                                          src="{{ asset('assets/img/lock-icon.svg') }}"></span>
                                  </div>
                                  <input type="password" class="form-control" placeholder="Enter Confirm Password"
                                     aria-label="Username" aria-describedby="basic-addon1">

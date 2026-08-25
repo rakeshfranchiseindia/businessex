@@ -20,7 +20,7 @@ class LenderController extends Controller
      */
     public function edit($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $lender = $this->findLender($user_rand_id, $user->user_id);
 
         $indPref = collect();
@@ -37,12 +37,12 @@ class LenderController extends Controller
                 ->orderBy('inv_loc_id', 'desc')->get();
         }
 
-        return view('account_dashboard.lenderConfidentials', compact('user', 'lender', 'indPref', 'locationPref'));
+        return view('account_dashboard.lenderConfidentials', compact('user', 'user_rand_id', 'lender', 'indPref', 'locationPref'));
     }
 
     public function getConfidentialInfo($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $lender = $this->findLender($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -58,12 +58,12 @@ class LenderController extends Controller
     public function updateConfidentialInfo(Request $request, $user_rand_id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'mobile' => 'required|string|max:15',
+            'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z .\'-]+$/'],
+            'mobile' => 'required|digits:10',
             'email' => 'required|email|max:255',
             'location' => 'required|string|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $lender = $this->findOrNewLender($user_rand_id, $user);
         $lender->lender_name = $request->name;
         $lender->lender_mobile = $request->mobile;
@@ -80,7 +80,7 @@ class LenderController extends Controller
 
     public function getAdvertisementDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $lender = $this->findLender($user_rand_id, $user->user_id);
         return response()->json([
             'status' => true,
@@ -97,7 +97,7 @@ class LenderController extends Controller
             'lender_adv_headline' => 'required|string|max:255',
             'lender_intro' => 'nullable|string|max:255',
         ]);
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+        $user = $this->resolveUserAccount($user_rand_id);
         $lender = $this->findOrNewLender($user_rand_id, $user);
 
         $lender->lender_adv_headline = $request->lender_adv_headline;
@@ -117,7 +117,7 @@ class LenderController extends Controller
 
     public function getLenderPreferenceDetails($user_rand_id)
     {
-        $user = UserAccount::where('user_rand_id', $user_rand_id)->first();
+        $user = $this->resolveUserAccountOrNull($user_rand_id);
         if (!$user) {
             return response()->json([
                 'status' => false,
@@ -154,8 +154,19 @@ class LenderController extends Controller
 
     public function updateLenderPreferenceDetails(Request $request, $user_rand_id)
     {
-        $lenderCount = ProfileLender::query()->select('lender_profile_str', 'lender_id', 'user_id')
-            ->where('lender_profile_str', $user_rand_id)->first();
+        $request->validate([
+            'sectors' => 'nullable',
+            'sectors.*' => 'nullable|string|max:100',
+            'location_preference' => 'nullable',
+            'location_preference.*' => 'nullable|string|max:255',
+        ]);
+
+        // Was matching lender_profile_str against $user_rand_id only — that's the
+        // UserAccount's random id, not the lender profile's own str, so this always
+        // 404'd for real users. Resolve the same way findLender()/getLenderPreferenceDetails
+        // do: try the profile str first, then fall back to the account's user_id.
+        $user = $this->resolveUserAccountOrNull($user_rand_id);
+        $lenderCount = $user ? $this->findLender($user_rand_id, $user->user_id) : null;
 
         if (!$lenderCount) {
             return response()->json([
@@ -288,6 +299,31 @@ class LenderController extends Controller
             $lender = ProfileLender::where('user_id', $userId)->first();
         }
         return $lender;
+    }
+
+    /**
+     * Every Manage route/tab here is keyed by a route segment that's meant to
+     * double as either the account's own user_rand_id (old, single-profile
+     * behaviour) OR a *specific* lender profile's own lender_profile_str
+     * (needed now that a user can have several Lender profiles — the
+     * dropdown passes THAT profile's str so Manage opens the right one).
+     */
+    private function resolveUserAccount($user_rand_id)
+    {
+        return $this->resolveUserAccountOrNull($user_rand_id)
+            ?? UserAccount::where('user_rand_id', $user_rand_id)->firstOrFail();
+    }
+
+    private function resolveUserAccountOrNull($user_rand_id)
+    {
+        $lender = ProfileLender::where('lender_profile_str', $user_rand_id)->first();
+        if ($lender) {
+            $user = UserAccount::find($lender->user_id);
+            if ($user) {
+                return $user;
+            }
+        }
+        return UserAccount::where('user_rand_id', $user_rand_id)->first();
     }
 
     /**
