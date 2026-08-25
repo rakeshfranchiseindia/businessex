@@ -17,7 +17,7 @@ class ConversationReplyTableSeeder extends Seeder
             'reply' => 'This is a sample description providing enough detail to be realistic for testing and development purposes.',
             'from_id' => 1,
             'to_id' => 1,
-            'timestamp' => '1720000000',
+            'timestamp' => '2024-07-03 09:46:40',
             'request_id' => 1,
             'readstatus' => '1'
         ]);
@@ -27,7 +27,7 @@ class ConversationReplyTableSeeder extends Seeder
             'reply' => 'A comprehensive overview of business strategies, growth opportunities, and market trends in the current landscape.',
             'from_id' => 2,
             'to_id' => 2,
-            'timestamp' => '1720001000',
+            'timestamp' => '2024-07-03 10:03:20',
             'request_id' => 2,
             'readstatus' => '2'
         ]);
@@ -37,7 +37,7 @@ class ConversationReplyTableSeeder extends Seeder
             'reply' => 'Detailed analysis covering key aspects of business operations, market competition, and potential areas for expansion.',
             'from_id' => 3,
             'to_id' => 3,
-            'timestamp' => '1720002000',
+            'timestamp' => '2024-07-03 10:20:00',
             'request_id' => 3,
             'readstatus' => '1'
         ]);

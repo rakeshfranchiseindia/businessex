@@ -48,10 +48,6 @@ class BxServicePaymentController extends Controller
         $planName = config('constants.businessServices.' . $serviceType, 'Business Service');
         $gatewayCharge = (float) config('hdfcpg.charges.' . $paymentMode, 0);
         $amount = $planAmount + round(($gatewayCharge * $planAmount) / 100);
-        if ((int) $request->input('user_id') === 4141) {
-            $amount = 1;
-        }
-
         $orderNo = $this->onlinePayUniqueOrder();
         $payment = BxService::create([
             'order_no' => $orderNo,

@@ -4,10 +4,10 @@
     $mentorTitle = $mentor->mentor_adv_headline ?: 'Mentor Profile';
     $mentorLocation = collect([
         $mentor->mentor_city,
-        config('constants.statesIndia.' . $mentor->mentor_state),
+        stateDisplayName($mentor->mentor_state),
         $mentor->mentor_country,
     ])->filter()->implode(', ');
-    $mentorImage = $mentor->mentor_profile_pic
+    $mentorImage = !empty($mentor->mentor_profile_pic)
         ? rtrim(config('constants.ImageCDN'), '/') . '/' . ltrim($mentor->mentor_profile_pic, '/')
         : asset('assets/img/defaultProfile.jpg');
     $mentorOccupation = config('constants.mentorOccupation.' . $mentor->mentor_occupation, $mentor->mentor_occupation ?: 'N/A');

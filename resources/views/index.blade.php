@@ -38,19 +38,22 @@
                         <div class="bex-card-main">
                             <div class="bex-form-section-main">
                                 <h5>REGISTER FOR FREE</h5>
-                                @if(session('email_error'))
-                                    <div class="text-danger">{{ session('email_error') }}</div>
+                                @if(session('quick_profile_email_error'))
+                                    <div class="text-danger">{{ session('quick_profile_email_error') }}</div>
                                 @endif
-                                @if(session('success'))
+                                @if(session('quick_profile_success'))
                                     <div class="alert alert-success">
-                                        {{ session('success') }}
+                                        {{ session('quick_profile_success') }}
                                     </div>
+                                @endif
+                                @if($errors->quickProfileRegister->any())
+                                    <div class="alert alert-danger">Please correct the highlighted fields.</div>
                                 @endif
                             </div>
                         </div>
                         <div>
                             <div class="bex-form-section">
-                                <form id="quick-registration" name="quick-registration" method="POST" action="{{ route('quick.register') }}">
+                                <form id="quick-registration" name="quick-registration" method="POST" action="{{ route('quick.profile.register') }}">
                                     @csrf
 
                                     <!-- Profile -->
@@ -68,7 +71,7 @@
                                             <option value="4">Mentor | Looking To Guide/Coach</option>
                                         </select>
                                     </div>
-                                    @error('profile')
+                                    @error('profile', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 
@@ -79,9 +82,9 @@
                                                 <img src="./assets/img/person.png" alt="Name">
                                             </span>
                                         </div>
-                                        <input name="name" type="text" class="form-control" placeholder="Enter Your Name" required>
+                                        <input name="name" type="text" class="form-control" placeholder="Enter Your Name" pattern="^[A-Za-z\s]+$" title="Only letters and spaces are allowed" required>
                                     </div>
-                                    @error('name')
+                                    @error('name', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 
@@ -94,7 +97,7 @@
                                         </div>
                                         <input name="phone_number" type="tel" class="form-control" placeholder="Enter Your Mobile No." required>
                                     </div>
-                                    @error('phone_number')
+                                    @error('phone_number', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 
@@ -107,7 +110,7 @@
                                         </div>
                                         <input name="email" type="email" class="form-control" placeholder="Enter Your Email ID" required>
                                     </div>
-                                    @error('email')
+                                    @error('email', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 
@@ -120,7 +123,7 @@
                                         </div>
                                         <input name="company" type="text" class="form-control" placeholder="Enter Company Name" required>
                                     </div>
-                                    @error('company')
+                                    @error('company', 'quickProfileRegister')
                                         <div class="text-danger">{{ $message }}</div>
                                     @enderror
 
@@ -132,6 +135,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
         </div>
@@ -233,28 +237,38 @@
     <!-- ======= Business For Sale Opportunities Section ======= -->
     <section class="py-5 bg-light business-sale-section">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-4">
                 <div>
                     <h2 class="font-weight-bold mb-0 homepage-section-heading">Business For Sale Opportunities</h2>
                     <h5 class="text-muted mb-0 homepage-section-subheading">
                         BusinessEx offers 1863 businesses in 16 industries as on Jul 27, 2026
                     </h5>
                 </div>
-                <a href="{{ url('/businesslisting') }}" class="text-success font-weight-bold">View All</a>
+                <div class="business-sale-section-actions text-right">
+                    <a href="{{ url('/businesslisting') }}" class="text-success font-weight-bold d-block">View All</a>
+                    <div class="business-sale-carousel-controls home-carousel-controls">
+                        <a class="business-sale-carousel-control" href="#businessSaleCarousel" role="button" data-slide="prev" aria-label="Previous business opportunities">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </a>
+                        <a class="business-sale-carousel-control" href="#businessSaleCarousel" role="button" data-slide="next" aria-label="Next business opportunities">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Carousel -->
             <div id="businessSaleCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
     <div class="carousel-inner">
-        <!-- Slide 1 -->
-        <div class="carousel-item active">
+    @foreach(collect($salesOpportunitiesData)->chunk(4) as $slideIndex => $opportunities)
+        <div class="carousel-item {{ $slideIndex === 0 ? 'active' : '' }}">
             <div class="row">
-    @foreach($salesOpportunitiesData as $opportunity)
+    @foreach($opportunities as $opportunity)
     <?php //print_r($opportunity); die;?>
         <div class="col-md-3 mb-4">
             <div class="card shadow-sm h-100">
                 <div class="position-relative">
-                    <img src="{{ $opportunity['seller_prof_pic'] ?? asset('assets/img/default.jpg') }}" 
+                    <img src="{{ !empty($opportunity['seller_prof_pic']) ? $opportunity['seller_prof_pic'] : asset('assets/img/default-business.jpg') }}"
                          class="card-img-top" 
                          alt="{{ $opportunity['seller_company'] ?? 'Business Opportunity' }}">
                     @if(!empty($opportunity['membership_plan']))
@@ -263,6 +277,7 @@
                         </span>
                     @endif
                 </div>
+                <?php //print_r($opportunity); die;?>
                 <div class="card-body">
                     <p class="text-muted mb-1">{{ $opportunity['industry_sector'] ?? 'N/A' }}</p>
                     <h6 class="font-weight-bold">{{ $opportunity['advmt_headline'] ?? 'No headline available' }}</h6>
@@ -272,9 +287,15 @@
                         <i class="fa fa-envelope"></i> Email
                         <i class="fa fa-map-marker"></i> {{ $opportunity['ofc_city'] ?? ''  }}
                     </p>
-                    <a href="{{ url('/opportunity/'."sdfdf") }}" target="_blank" class="btn btn-outline-success btn-block">
-                        Contact Business
-                    </a>
+                    @auth
+                        <a href="{{ route('business.detail', ['business_profile' => $opportunity['business_id']]) }}" target="_blank" class="btn btn-outline-success btn-block">
+                            Contact Business
+                        </a>
+                    @else
+                        <a href="#login" data-toggle="modal" data-target="#login" class="btn btn-outline-success btn-block">
+                            Contact Business
+                        </a>
+                    @endauth
                 </div>
             </div>
         </div>
@@ -283,23 +304,9 @@
 
         </div>
 
-        <!-- Slide 2 (duplicate or dynamic data) -->
-        <div class="carousel-item">
-            <div class="row">
-                <!-- Add more cards or loop dynamically -->
-            </div>
-        </div>
+    @endforeach
     </div>
 
-    <!-- Controls -->
-    <a class="carousel-control-prev" href="#businessSaleCarousel" role="button" data-slide="prev">
-        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#businessSaleCarousel" role="button" data-slide="next">
-        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
 </div>
 
         </div>
@@ -374,7 +381,10 @@
                         <div class="title-box">
                             <h2 class="bex-title-a homepage-section-heading">Featured Investors</h2>
                             <h5 class="homepage-section-subheading">Business-Ex Offers 511 Start-Ups In 13 Various Industries</h5>
-                            <a href="/investorlisting" class="bex-view-all-section">View All</a>
+                        </div>
+                        <div class="featured-investors-section-actions text-right">
+                            <a href="/investorlisting" class="bex-view-all-section d-block">View All</a>
+                            <div id="featured-investors-carousel-nav" class="featured-investors-carousel-nav"></div>
                         </div>
                     </div>
                 </div>
@@ -416,14 +426,18 @@
                                                     </div>
                                                     <p>
                                                         <a href="#">{{ $investor['investorCity'] }}</a>,
-                                                        <a href="#">{{ $investor['investorState'] }}</a>
+                                                        <a href="#">{{ stateDisplayName($investor['investorState']) }}</a>
                                                     </p>
                                                     <ul class="bex-service-tags">
-                                                        <li>{{ $investor['investorCity'] }}, {{ $investor['investorState'] }}</li>
+                                                        <li>{{ $investor['investorCity'] }}, {{ stateDisplayName($investor['investorState']) }}</li>
                                                     </ul>
                                                 </div>
                                                 <div class="bex-primary-btn">
-                                                    <a href="#">Send Proposal</a>
+                                                    @auth
+                                                        <a href="{{ route('investor.detail', ['investor_profile' => $investor['investor_id']]) }}">Send Proposal</a>
+                                                    @else
+                                                        <a href="#login" data-toggle="modal" data-target="#login">Send Proposal</a>
+                                                    @endauth
                                                 </div>
                                             </div>
                                         </div>
@@ -531,26 +545,36 @@
     <!-- ======= High Growth Potential Startups Section ======= -->
     <section class="py-5 bg-light startup-growth-section">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-4">
                 <div>
                     <h2 class="font-weight-bold mb-0 homepage-section-heading">High Growth Potential Startups</h2>
                     <h5 class="text-muted mb-0 homepage-section-subheading">
                         BusinessEx offers 678 startups in 16 industries as on Jul 27, 2026
                     </h5>
                 </div>
-                <a href="{{ url('/startupslisting') }}" class="text-success font-weight-bold">View All</a>
+                <div class="business-sale-section-actions text-right">
+                    <a href="{{ url('/startupslisting') }}" class="text-success font-weight-bold d-block">View All</a>
+                    <div class="business-sale-carousel-controls home-carousel-controls">
+                        <a class="business-sale-carousel-control" href="#startupCarousel" role="button" data-slide="prev" aria-label="Previous startups">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </a>
+                        <a class="business-sale-carousel-control" href="#startupCarousel" role="button" data-slide="next" aria-label="Next startups">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Carousel -->
             <div id="startupCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
                 <div class="carousel-inner">
-                    <!-- Slide 1 -->
-                    <div class="carousel-item active">
+                    @foreach(collect($highGrowthStartups)->chunk(4) as $slideIndex => $startups)
+                    <div class="carousel-item {{ $slideIndex === 0 ? 'active' : '' }}">
                         <div class="row">
-                            @foreach($highGrowthStartups as $startup)
+                            @foreach($startups as $startup)
                                 <div class="col-md-3">
                                     <div class="card shadow-sm h-100">
-                                        <img src="{{ $startup->images[0]->startup_img_name ?? asset('images/default_startup.jpg') }}"
+                                        <img src="{{ !empty($startup->images[0]?->startup_img_name) ? $startup->images[0]->startup_img_name : asset('images/default_startup.jpg') }}"
                                             class="card-img-top"
                                             alt="Commercial Real Estate Rental Solutions">
                                         <div class="card-body">
@@ -562,24 +586,20 @@
                                                 <i class="fa fa-envelope"></i> Email
                                                 <i class="fa fa-map-marker"></i> Mumbai
                                             </p>
-                                            <a href="{{ url('/startup/looking-for-an-investor-for-commercial-real-estate-rental-solutions/jm3ak7') }}"
-                                                class="btn btn-outline-success btn-block">Enquire Now</a>
+                                            @auth
+                                                <a href="{{ route('startup.detail', ['startup_profile' => $startup->startup_id]) }}"
+                                                    class="btn btn-outline-success btn-block">Enquire Now</a>
+                                            @else
+                                                <a href="#login" data-toggle="modal" data-target="#login"
+                                                    class="btn btn-outline-success btn-block">Enquire Now</a>
+                                            @endauth
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     </div>
-
-                    <!-- Controls -->
-                    <a class="carousel-control-prev" href="#startupCarousel" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#startupCarousel" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -589,27 +609,37 @@
     <!-- ======= World Class Mentors Section ======= -->
     <section class="py-5 bg-light">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex justify-content-between align-items-start mb-4">
                 <div>
                     <h2 class="font-weight-bold mb-0 homepage-section-heading">World Class Mentors</h2>
                     <h5 class="text-muted mb-0 homepage-section-subheading">
                         BusinessEx offers 194 mentors as on Jul 27, 2026
                     </h5>
                 </div>
-                <a href="{{ url('/mentorlisting') }}" class="text-success font-weight-bold">View All</a>
+                <div class="business-sale-section-actions text-right">
+                    <a href="{{ url('/mentorlisting') }}" class="text-success font-weight-bold d-block">View All</a>
+                    <div class="business-sale-carousel-controls home-carousel-controls">
+                        <a class="business-sale-carousel-control" href="#mentorCarousel" role="button" data-slide="prev" aria-label="Previous mentors">
+                            <i class="fa fa-chevron-left" aria-hidden="true"></i>
+                        </a>
+                        <a class="business-sale-carousel-control" href="#mentorCarousel" role="button" data-slide="next" aria-label="Next mentors">
+                            <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Carousel -->
             <div id="mentorCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
                 <div class="carousel-inner">
-                    <!-- Slide 1 -->
-                    <div class="carousel-item active">
+                    @foreach(collect($worldClassMentors)->chunk(4) as $slideIndex => $mentors)
+                    <div class="carousel-item {{ $slideIndex === 0 ? 'active' : '' }}">
                         <div class="row">
-                            @foreach($worldClassMentors as $mentor)
+                            @foreach($mentors as $mentor)
                                 <div class="col-md-3">
                                     <div class="card shadow-sm h-100 text-center">
                                         <span class="badge badge-primary position-absolute" style="top:10px;left:10px;">Platinum</span>
-                                        <img src="{{ $mentor->mentor_profile_pic ?: asset('images/default-mentor.jpg') }}"
+                                        <img src="{{ !empty($mentor->mentor_profile_pic) ? $mentor->mentor_profile_pic : asset('images/default-mentor.jpg') }}"
                                             class="rounded-circle mx-auto mt-3" width="100"
                                             alt="{{ $mentor->mentor_name }}">
                                         <div class="card-body">
@@ -621,32 +651,22 @@
                                                 <i class="fa fa-map-marker"></i> Location
                                             </p>
                                             <p class="small">{{ $mentor->mentor_profile_summary }}</p>
-                                            <a href="{{ url('/mentor/moving-your-business-from-good-to-awesome/kyu1as') }}"
-                                                class="btn btn-outline-success btn-block">Send Proposal</a>
+                                            @auth
+                                                <a href="{{ route('mentor.detail', ['mentor_profile' => $mentor->mentor_id]) }}"
+                                                    class="btn btn-outline-success btn-block">Send Proposal</a>
+                                            @else
+                                                <a href="#login" data-toggle="modal" data-target="#login"
+                                                    class="btn btn-outline-success btn-block">Send Proposal</a>
+                                            @endauth
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
                     </div>
-
-                    <!-- Slide 2 -->
-                    <div class="carousel-item">
-                        <div class="row">
-                            <!-- Add more mentor cards here or loop dynamically -->
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
-                <!-- Controls -->
-                <a class="carousel-control-prev" href="#mentorCarousel" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#mentorCarousel" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
             </div>
         </div>
     </section>
@@ -697,7 +717,7 @@
                     @foreach($homePageLocation as $location)
                         <li>
                             <a href="{{ url('/businesslisting/?business_type=all&location='.$location->id) }}"
-                                class="industry-btn">{{ $location->state }}</a>
+                                class="industry-btn">{{ stateDisplayName($location->state) }}</a>
                         </li>
                     @endforeach
                 </ul>
@@ -1219,6 +1239,86 @@
         padding: 6px 10px;
     }
 
+    .business-sale-section-actions {
+        min-width: 90px;
+    }
+
+    .business-sale-carousel-controls {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .business-sale-carousel-control {
+        align-items: center;
+        border: 1px solid #d9dee5;
+        border-radius: 4px;
+        display: inline-flex;
+        height: 34px;
+        justify-content: center;
+        color: #555;
+        font-size: 16px;
+        line-height: 1;
+        width: 34px;
+    }
+
+    .business-sale-carousel-control:hover,
+    .business-sale-carousel-control:focus {
+        color: #198754;
+        text-decoration: none;
+    }
+
+    .business-sale-carousel-control.disabled,
+    .business-sale-carousel-control[aria-disabled="true"] {
+        display: none;
+    }
+
+    .featured-investors-section-actions {
+        min-width: 90px;
+    }
+
+    .featured-investors-carousel-nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 10px;
+        color: #555;
+        font-size: 24px;
+        line-height: 1;
+    }
+
+    .featured-investors-carousel-nav .owl-prev,
+    .featured-investors-carousel-nav .owl-next {
+        align-items: center;
+        border: 1px solid #d9dee5;
+        border-radius: 4px;
+        display: inline-flex;
+        height: 34px;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        color: #555;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+        width: 34px;
+    }
+
+    .featured-investors-carousel-nav .owl-prev:hover,
+    .featured-investors-carousel-nav .owl-next:hover,
+    .featured-investors-carousel-nav .owl-prev:focus,
+    .featured-investors-carousel-nav .owl-next:focus {
+        color: #198754;
+    }
+
+    .featured-investors-carousel-nav .owl-prev.disabled,
+    .featured-investors-carousel-nav .owl-next.disabled,
+    .owl-nav .owl-prev.disabled,
+    .owl-nav .owl-next.disabled {
+        display: none;
+    }
+
     .startup-growth-section .homepage-section-heading {
         font-size: 24px !important;
         font-weight: 400 !important;
@@ -1293,6 +1393,71 @@
     window.isLoggedIn = {{ auth()->check() ? 'true' : 'false' }};
 
     document.addEventListener('DOMContentLoaded', function () {
+        function setControlState(control, disabled) {
+            control.classList.toggle('disabled', disabled);
+            control.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+            control.setAttribute('tabindex', disabled ? '-1' : '0');
+        }
+
+        function updateBootstrapCarouselControls(carousel) {
+            const items = Array.from(carousel.querySelectorAll('.carousel-item'));
+            const activeIndex = items.findIndex(item => item.classList.contains('active'));
+            const hasData = item => item.querySelector('.row')?.children.length > 0;
+            const controls = document.querySelectorAll(
+                `.business-sale-carousel-controls a[href="#${carousel.id}"]`
+            );
+            const hasPrevious = activeIndex >= 0 && items.slice(0, activeIndex).some(hasData);
+            const hasNext = activeIndex >= 0 && items.slice(activeIndex + 1).some(hasData);
+
+            Array.from(controls).filter(control => control.dataset.slide === 'prev').forEach(control => {
+                setControlState(control, !hasPrevious);
+            });
+            Array.from(controls).filter(control => control.dataset.slide === 'next').forEach(control => {
+                setControlState(control, !hasNext);
+            });
+        }
+
+        document.querySelectorAll('.carousel[id]').forEach(carousel => {
+            updateBootstrapCarouselControls(carousel);
+        });
+
+        document.querySelectorAll('.business-sale-carousel-controls a').forEach(control => {
+            control.addEventListener('click', function (event) {
+                if (control.classList.contains('disabled')) {
+                    event.preventDefault();
+                }
+            });
+        });
+
+        if (window.jQuery) {
+            $(document).on('slid.bs.carousel', '.carousel[id]', function () {
+                updateBootstrapCarouselControls(this);
+            });
+
+            $(document).on('initialized.owl.carousel changed.owl.carousel translated.owl.carousel refreshed.owl.carousel', '.owl-carousel', function (event) {
+                const page = event.page;
+                const settings = event.relatedTarget?.settings;
+                const nav = this.id === 'bex-featured-investors-carousel'
+                    ? document.querySelector('#featured-investors-carousel-nav')
+                    : this.querySelector('.owl-nav');
+                const nextControl = nav?.querySelector('.owl-next');
+
+                if (!nav || !page || settings?.loop) {
+                    return;
+                }
+
+                if (nextControl) {
+                    setControlState(nextControl, page.index + page.size >= page.count);
+                }
+                const previousControl = nav.querySelector('.owl-prev');
+                if (previousControl) {
+                    setControlState(previousControl, page.index <= 0);
+                }
+
+                nav.style.display = page.count > page.size ? 'flex' : 'none';
+            });
+        }
+
         const createProfileBtn = document.getElementById('createProfileBtn');
         const profileSelect = document.getElementById('profileSelect');
 

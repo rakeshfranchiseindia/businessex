@@ -1,5 +1,14 @@
 <?php
 
+if (!function_exists('stateDisplayName')) {
+    function stateDisplayName($state): string
+    {
+        $state = trim((string) $state);
+
+        return config('constants.statesIndia.' . $state, $state);
+    }
+}
+
 if (!function_exists('getInvestmentRange')) {
     function getInvestmentRange($investorDetails)
     {

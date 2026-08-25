@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\VerifyEmailMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Route;
 
@@ -19,11 +20,11 @@ class AuthController extends Controller
         return view('register');
     }
 
-    // Handle registration
-    public function quickRegister(Request $request)
+    // Handle profile registration
+    public function quickProfileRegister(Request $request)
     {
 
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'profile' => 'required|in:1,2,3,4',
             'name' => 'required|string|max:255',
             'phone_number' => [
@@ -33,6 +34,15 @@ class AuthController extends Controller
             'email' => 'required|email|unique:user_account,email',
             'company' => 'nullable|string|max:255',
         ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withErrors($validator, 'quickProfileRegister')
+                ->withInput()
+                ->with('quick_profile_registration_failed', true);
+        }
+
         $token = Str::random(32);
         $password = Str::random(10);
         $user = UserAccount::create([
@@ -48,28 +58,81 @@ class AuthController extends Controller
         // Send custom verification email
         try {
             Mail::to($user->email)->send(new VerifyEmailMail($token));
-            return redirect()->back()->with('success', 'Registration submitted successfully!');
+            return redirect()->back()
+                ->with('quick_profile_success', 'Registration submitted successfully!')
+                ->with('success', 'Registration submitted successfully!');
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('email_error', 'Failed to send verification email. Please try again later.');
+            return redirect()->back()->with('quick_profile_email_error', 'Failed to send verification email. Please try again later.');
 
         }
 
     }
+
+
+
+    public function userRegister(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|unique:user_account,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator, 'userRegister')
+                ->withInput()
+                ->with('user_registration_failed', true);
+        }
+
+        $token = Str::random(32);
+        $user = UserAccount::create([
+            'email' => $request->email,
+            'verify_token' => $token,
+            'user_rand_id' => strtolower(Str::random(6)),
+            'password' => Hash::make($request->password),
+        ]);
+
+        // Send custom verification email
+        try {
+            Mail::to($user->email)->send(new VerifyEmailMail($token));
+            return redirect()->back()->with('user_registration_success', 'Registration submitted successfully!');
+
+        } catch (\Exception $e) {
+            return redirect()->back()->with('user_registration_email_error', 'Failed to send verification email. Please try again later.');
+
+        }
+    }
+
     // Handle login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ]);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors([
+                    'login_email' => $validator->errors()->first('email'),
+                    'login_password' => $validator->errors()->first('password'),
+                ])
+                ->withInput()
+                ->with('login_failed', true);
+        }
+
+        $credentials = $validator->validated();
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
             return redirect('/dashboard/myaccount');
         }
 
-        return back()->withErrors(['login_email' => 'Invalid email address or password'])->onlyInput('email');
+        return back()
+            ->withErrors(['login_email' => 'Invalid email address or password'])
+            ->onlyInput('email')
+            ->with('login_failed', true);
     }
 
     // My Account

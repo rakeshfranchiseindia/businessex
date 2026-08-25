@@ -858,14 +858,16 @@
                             </label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input 
-                                    type="text" 
-                                    name="city" 
-                                    id="city"
-                                    class="form-control modysel"
-                                    placeholder="Enter City" 
-                                    value="{{ old('city') }}"
-                                >
+                                <select name="city" id="city" class="form-control modysel">
+                                    <option value="">Select City</option>
+                                    @foreach(collect($locations ?? [])->groupBy('state')->sortKeys() as $stateName => $cities)
+                                        <optgroup label="{{ stateDisplayName($stateName) }}">
+                                            @foreach($cities as $cityOption)
+                                                <option value="{{ $cityOption->city }}" {{ old('city') === $cityOption->city ? 'selected' : '' }}>{{ $cityOption->city }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
@@ -883,6 +885,9 @@
                                     class="form-control modysel {{ $errors->has('pin_code') ? 'is-invalid' : '' }}"
                                     placeholder="Enter Pin Code" 
                                     value="{{ old('pin_code') }}"
+                                    inputmode="numeric"
+                                    pattern="[0-9]{6}"
+                                    maxlength="6"
                                 >
                                 @error('pin_code')
                                     <span class="invalid-feedback" role="alert">
@@ -1159,6 +1164,7 @@
   @include('includes.groupcompany')
   @include('includes.newsletter')
   @include('includes.categorylinkfooter')
+@include('includes.google-location-autocomplete')
 
 @push('scripts')
 <script>

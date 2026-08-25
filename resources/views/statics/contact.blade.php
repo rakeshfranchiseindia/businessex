@@ -88,28 +88,28 @@
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label">Your Name<span class="text-danger">*</span>:</label>
                         <div class="col-md-7">
-                            <input type="text" name="contact_name" class="form-control" placeholder="Enter Your Name" required>
+                            <input type="text" name="contact_name" class="form-control" placeholder="Enter Your Name" minlength="5" maxlength="55" pattern="[A-Za-z][A-Za-z .'-]*" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label">Email Address<span class="text-danger">*</span>:</label>
                         <div class="col-md-7">
-                            <input type="email" name="contact_email" class="form-control" placeholder="Enter Your Email ID" required>
+                            <input type="email" name="contact_email" class="form-control" placeholder="Enter Your Email ID" maxlength="255" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label">Mobile Number<span class="text-danger">*</span>:</label>
                         <div class="col-md-7">
-                            <input type="text" name="contact_mobile" class="form-control" placeholder="Enter Your Mobile Number" pattern="[56789][0-9]{9}" required>
+                            <input type="tel" name="contact_mobile" class="form-control" placeholder="Enter Your Mobile Number" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-md-4 col-form-label">Comments<span class="text-danger">*</span>:</label>
                         <div class="col-md-7">
-                            <textarea name="contact_comment" class="form-control" rows="3" minlength="15" maxlength="150" placeholder="Enter Your Message" required></textarea>
+                            <textarea name="contact_comment" class="form-control" rows="3" minlength="15" maxlength="255" placeholder="Enter Your Message" required></textarea>
                         </div>
                     </div>
 

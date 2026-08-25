@@ -1,7 +1,7 @@
 @extends('layouts.app');
 @php
     $businessTitle = $business->advmt_headline ?: $business->seller_company ?: 'Business Listing';
-    $businessLocation = trim(($business->ofc_city ?? '') . (empty($business->ofc_city) || empty($business->ofc_state) ? '' : ', ') . ($business->ofc_state ?? ''));
+    $businessLocation = trim(($business->ofc_city ?? '') . (empty($business->ofc_city) || empty($business->ofc_state) ? '' : ', ') . stateDisplayName($business->ofc_state ?? ''));
     $businessImages = $business->images->filter(fn ($image) => !empty($image->business_img_path));
 @endphp
 

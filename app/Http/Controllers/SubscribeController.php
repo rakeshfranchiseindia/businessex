@@ -13,10 +13,9 @@ class SubscribeController extends Controller
      */
     public function newsLetterSubscribe(Request $request)
     {
-        // Validate input
         $validator = Validator::make($request->all(), [
-            'newsletter_name'   => 'required|string|max:255',
-            'newsletter_email'  => 'required|email',
+            'newsletter_name'   => ['required', 'string', 'regex:/^[A-Za-z][A-Za-z .\'-]*$/', 'max:255'],
+            'newsletter_email'  => ['required', 'email', 'not_regex:/@(test\.com|sample\.com|example\.com)$/i'],
             'newsletter_phone'  => 'required|regex:/^[0-9]{10}$/',
             'newsletter_city'   => 'required|string|max:255',
         ]);

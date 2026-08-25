@@ -36,6 +36,9 @@
             </ul>
           </div>
         @endforeach
+        @if($groupedIndustries->isEmpty())
+          <div class="col-12 text-muted">No opportunity categories are available.</div>
+        @endif
       </div>
     </div>
 
@@ -60,6 +63,9 @@
             </ul>
           </div>
         @endforeach
+        @if($groupedIndustries->isEmpty())
+          <div class="col-12 text-muted">No opportunity categories are available.</div>
+        @endif
       </div>
     </div>
 
@@ -84,6 +90,9 @@
             </ul>
           </div>
         @endforeach
+        @if($groupedIndustries->isEmpty())
+          <div class="col-12 text-muted">No opportunity categories are available.</div>
+        @endif
       </div>
     </div>
   </div>

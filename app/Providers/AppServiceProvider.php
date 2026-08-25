@@ -13,6 +13,11 @@ use App\Models\BxCity;
 use App\Http\Controllers\CommonController; 
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Support\Facades\Schema;
+use SocialiteProviders\LinkedIn\Provider as LinkedInProvider;
+use SocialiteProviders\Manager\SocialiteWasCalled;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +35,26 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        RateLimiter::for('auth', function ($request) {
+            return Limit::perMinute(10)->by(strtolower((string) $request->input('email')).'|'.$request->ip());
+        });
+
+        RateLimiter::for('password-reset', function ($request) {
+            return Limit::perMinute(5)->by(strtolower((string) $request->input('email')).'|'.$request->ip());
+        });
+
+        RateLimiter::for('newsletter', function ($request) {
+            return Limit::perMinute(10)->by($request->ip());
+        });
+
+        RateLimiter::for('payment-initiation', function ($request) {
+            return Limit::perMinute(5)->by($request->user()?->user_id ?: $request->ip());
+        });
+
+        Event::listen(function (SocialiteWasCalled $event) {
+            $event->extendSocialite('linkedin', LinkedInProvider::class);
+        });
+
         $testimonials = Schema::hasTable('testimonials') ? Testimonial::all() : collect();
         $locations    = Schema::hasTable('bx_cities') ? BxCity::all() : collect();
         

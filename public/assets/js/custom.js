@@ -158,7 +158,6 @@
         initializeRange('investmentMinRange', 'investmentMaxRange', 'minInvestmentInput', 'maxInvestmentInput', 'investmentMinLabel', 'investmentMaxLabel');
         initializeRange('investorMinRange', 'investorMaxRange', 'investorMinInput', 'investorMaxInput', 'investorMinLabel', 'investorMaxLabel');
         initializeRange('businessAnnualMinRange', 'businessAnnualMaxRange', 'businessAnnualMinInput', 'businessAnnualMaxInput', 'businessAnnualMinLabel', 'businessAnnualMaxLabel');
-        initializeNewsletter();
         initializeProfileGate();
 
         if (window.jQuery && jQuery.fn.owlCarousel) {

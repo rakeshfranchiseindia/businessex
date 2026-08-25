@@ -80,9 +80,9 @@
                             @foreach($businesses as $business)
                                 @php
                                     $businessImage = $business->images()->first();
-                                    $imageUrl = $businessImage && $businessImage->image_path ? $businessImage->image_path : asset('assets/img/default-business.jpg');
+                                    $imageUrl = !empty($businessImage?->image_path) ? $businessImage->image_path : asset('assets/img/default-business.jpg');
                                     $headline = $business->advmt_headline ?: $business->seller_company ?: 'Business Listing';
-                                    $location = trim(($business->ofc_city ?? '') . (empty($business->ofc_city) || empty($business->ofc_state) ? '' : ', ') . ($business->ofc_state ?? ''));
+                                    $location = trim(($business->ofc_city ?? '') . (empty($business->ofc_city) || empty($business->ofc_state) ? '' : ', ') . stateDisplayName($business->ofc_state ?? ''));
                                     $annualSales = $business->annual_sales ? number_format((float) $business->annual_sales / 10000000, 2) . ' cr' : 'N/A';
                                     $askingAmount = $business->buyer_sell_price ? number_format((float) $business->buyer_sell_price / 10000000, 2) . ' Crores' : 'N/A';
                                 @endphp

@@ -2,12 +2,12 @@
 
 @php
     $investorTitle = $investor->inv_headline ?: 'Investor Profile';
-    $investorLocation = trim(collect([$investor->inv_city, config('constants.statesIndia.' . $investor->inv_state), $investor->inv_country])->filter()->implode(', '));
-    $companyLocation = trim(collect([$investor->company_city, config('constants.statesIndia.' . $investor->company_state), $investor->company_country])->filter()->implode(', '));
-    $investorImage = $investor->inv_profile_pic_path
+    $investorLocation = trim(collect([$investor->inv_city, stateDisplayName($investor->inv_state), $investor->inv_country])->filter()->implode(', '));
+    $companyLocation = trim(collect([$investor->company_city, stateDisplayName($investor->company_state), $investor->company_country])->filter()->implode(', '));
+    $investorImage = !empty($investor->inv_profile_pic_path)
         ? rtrim(config('constants.ImageCDN'), '/') . '/' . ltrim($investor->inv_profile_pic_path, '/')
         : asset('assets/img/profile-dflt.jpg');
-    $companyLogo = $investor->company_logo_path
+    $companyLogo = !empty($investor->company_logo_path)
         ? rtrim(config('constants.ImageCDN'), '/') . '/' . ltrim($investor->company_logo_path, '/')
         : asset('assets/img/profile-dflt.jpg');
     $industryPreferences = $investor->industryPreferences

@@ -28,6 +28,7 @@ use App\Http\Controllers\BxInsightController;
 use App\Http\Controllers\SubscribeController;
 use App\Http\Controllers\LenderProfileController;
 use App\Http\Controllers\BxServicePaymentController;
+use App\Http\Controllers\SocialLoginController;
 
 
 
@@ -36,16 +37,24 @@ use App\Http\Controllers\BxServicePaymentController;
 // })->name('home');
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubscribe'])->name('newsLetterSubscribe')->withoutMiddleware('auth');
+Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubscribe'])->middleware('throttle:newsletter')->name('newsLetterSubscribe')->withoutMiddleware('auth');
 
-Route::get('/businesslisting', [BusinessController::class, 'businessListing'])->name('business.listing');
-Route::get('/businesslisting/{business_profile}', [BusinessController::class, 'businessDetail'])->name('business.detail');
-Route::get('/investorlisting', [InvestorController::class, 'investorListing'])->name('investor.listing');
-Route::get('/investorlisting/{investor_profile}', [InvestorController::class, 'investorDetail'])->name('investor.detail');
-Route::get('/mentorlisting', [MentorController::class, 'mentorListing'])->name('mentor.listing');
-Route::get('/mentorlisting/{mentor_profile}', [MentorController::class, 'mentorDetail'])->name('mentor.detail');
-Route::get('/startuplisting', [StartupController::class, 'startupListing'])->name('startup.listing');
-Route::get('/startuplisting/{startup_profile}', [StartupController::class, 'startupDetail'])->name('startup.detail');
+Route::get('/businesslisting', [BusinessController::class, 'businessListing'])
+    ->middleware('query.allow:business-listing')->name('business.listing');
+Route::get('/businesslisting/{business_profile}', [BusinessController::class, 'businessDetail'])
+    ->middleware('query.allow:detail')->name('business.detail');
+Route::get('/investorlisting', [InvestorController::class, 'investorListing'])
+    ->middleware('query.allow:investor-listing')->name('investor.listing');
+Route::get('/investorlisting/{investor_profile}', [InvestorController::class, 'investorDetail'])
+    ->middleware('query.allow:detail')->name('investor.detail');
+Route::get('/mentorlisting', [MentorController::class, 'mentorListing'])
+    ->middleware('query.allow:mentor-listing')->name('mentor.listing');
+Route::get('/mentorlisting/{mentor_profile}', [MentorController::class, 'mentorDetail'])
+    ->middleware('query.allow:detail')->name('mentor.detail');
+Route::get('/startuplisting', [StartupController::class, 'startupListing'])
+    ->middleware('query.allow:startup-listing')->name('startup.listing');
+Route::get('/startuplisting/{startup_profile}', [StartupController::class, 'startupDetail'])
+    ->middleware('query.allow:detail')->name('startup.detail');
 
 
 Route::get('/registration/create-mentor-profile', [MentorProfileController::class, 'createMentorProfile'])->name('register.create-mentor-profile');
@@ -66,7 +75,7 @@ Route::get('/articles/{id}', [BxInsightController::class, 'show'])->name('bxinsi
 Route::post('/articles/{id}/comments', [BxInsightController::class, 'storeComment'])->name('bxinsight.comments.store');
 
 Route::get('/service/business-valuation', [ServiceListingController::class, 'businessValuation'])->name('service.business-valuation');
-Route::post('/service/payment/initiate', [BxServicePaymentController::class, 'initiateServicePayment'])->name('service.payment.initiate');
+Route::post('/service/payment/initiate', [BxServicePaymentController::class, 'initiateServicePayment'])->middleware('throttle:payment-initiation')->name('service.payment.initiate');
 Route::post('/service/payment/payu/success', [BxServicePaymentController::class, 'verifyServicePayment'])
     ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])
     ->name('service.payment.payu.success');
@@ -82,8 +91,12 @@ Route::get('/service/certified-business-broker', [ServiceListingController::clas
 
 
 
-Route::post('/quick-register', [AuthController::class, 'quickRegister'])->name('quick.register');
-Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/quick-profile-register', [AuthController::class, 'quickProfileRegister'])->middleware('throttle:auth')->name('quick.profile.register');
+Route::post('/quick-register', [AuthController::class, 'quickProfileRegister'])->middleware('throttle:auth')->name('quick.register.legacy');
+Route::post('/user-register', [AuthController::class, 'userRegister'])->middleware('throttle:auth')->name('user.register');
+Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:auth')->name('login');
+Route::get('/auth/{provider}', [SocialLoginController::class, 'redirect'])->name('social.redirect');
+Route::get('/auth/{provider}/callback', [SocialLoginController::class, 'callback'])->name('social.callback');
 Route::get('/dashboard/myaccount', [AuthController::class, 'myaccount'])->middleware('auth')->name('myaccount');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -91,7 +104,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/verify-email/{token}', [AuthController::class, 'verifyEmail']);
 //Shivani
 Route::get('/forgot-password', [ProfileController::class, 'forgotPassword'])->name('forgot.password');
-Route::post('/forgot-password-submit', [ProfileController::class, 'forgotPasswordSubmit'])->name('forgot.password.submit');
+Route::post('/forgot-password-submit', [ProfileController::class, 'forgotPasswordSubmit'])->middleware('throttle:password-reset')->name('forgot.password.submit');
 Route::get('/reset-password/{token}', [ProfileController::class, 'showResetPasswordForm'])->name('reset.password');
 Route::post('/reset-password-submit', [ProfileController::class, 'resetPasswordSubmit'])->name('reset.password.submit');
 // routing for static pages start here
@@ -100,7 +113,7 @@ Route::view('/disclaimer', 'statics.disclaimer');
 Route::view('/privacy-policy', 'statics.privacy');
 Route::view('/terms', 'statics.terms');
 Route::view('/contact-us', 'statics.contact');
-Route::post('/contact-us', [ContactUsController::class, 'submitContactForm'])->name('contact.submit');
+Route::post('/contact-us', [ContactUsController::class, 'submitContactForm'])->middleware('throttle:newsletter')->name('contact.submit');
 Route::view('/sitemap', 'statics.sitemap');
 //Shivani Chauhan
 Route::middleware(['auth', 'verified'])->group(function () {

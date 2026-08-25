@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProfileBusiness;
+use App\Models\BxCity;
 use Illuminate\Http\Request;
 
 class BusinessController extends Controller
@@ -41,12 +42,28 @@ class BusinessController extends Controller
 
     // Location filter
     if (!empty($selectedLocations)) {
-        $query->whereIn('business_location', $selectedLocations);
+        $locationNames = BxCity::query()
+            ->whereIn('id', $selectedLocations)
+            ->get(['city', 'state'])
+            ->flatMap(fn ($location) => [$location->city, $location->state])
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($locationNames->isEmpty()) {
+            $query->whereRaw('1 = 0');
+        } else {
+            $query->where(function ($locationQuery) use ($locationNames) {
+                $locationQuery
+                    ->whereIn('ofc_city', $locationNames)
+                    ->orWhereIn('ofc_state', $locationNames);
+            });
+        }
     }
 
     // Industry filter
     if (!empty($selectedIndustries)) {
-        $query->whereIn('business_industry', $selectedIndustries);
+        $query->whereIn('industry_sector', $selectedIndustries);
     }
 
     // Price range filter

@@ -101,6 +101,29 @@ class ApplicationWorkflowTest extends TestCase
         ]);
     }
 
+    public function test_contact_us_enforces_requested_field_formats_and_lengths(): void
+    {
+        $payload = [
+            'contact_name' => 'Valid Visitor',
+            'contact_email' => 'visitor@sample.com',
+            'contact_mobile' => '1234567890',
+            'contact_comment' => str_repeat('A', 255),
+        ];
+
+        $this->from('/contact-us')->post('/contact-us', $payload)
+            ->assertRedirect('/contact-us')
+            ->assertSessionHasErrors('contact_email');
+
+        $payload['contact_email'] = 'visitor@business.test';
+        $payload['contact_name'] = 'John';
+        $payload['contact_mobile'] = '123456789';
+        $payload['contact_comment'] = 'Too short';
+
+        $this->from('/contact-us')->post('/contact-us', $payload)
+            ->assertRedirect('/contact-us')
+            ->assertSessionHasErrors(['contact_name', 'contact_mobile', 'contact_comment']);
+    }
+
     public function test_newsletter_returns_json_validation_errors_for_ajax_requests(): void
     {
         $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest'])->postJson('/newsLetterSubscribe', [
@@ -126,6 +149,18 @@ class ApplicationWorkflowTest extends TestCase
         ])->assertStatus(404)->assertJson([
             'error' => 'User does not exist',
         ]);
+    }
+
+    public function test_newsletter_rejects_numeric_names_and_placeholder_email_domains(): void
+    {
+        foreach (['visitor@test.com', 'visitor@sample.com', 'visitor@example.com'] as $email) {
+            $this->withHeaders(['X-Requested-With' => 'XMLHttpRequest'])->postJson('/newsLetterSubscribe', [
+                'newsletter_name' => '12345',
+                'newsletter_email' => $email,
+                'newsletter_phone' => '9876543210',
+                'newsletter_city' => 'Delhi',
+            ])->assertStatus(422)->assertJsonValidationErrors(['newsletter_name', 'newsletter_email']);
+        }
     }
 
     public function test_newsletter_subscribes_an_existing_user(): void

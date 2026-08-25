@@ -31,6 +31,8 @@ use Database\Seeders\ContactInvestorsTableSeeder;
 use Database\Seeders\ContactLenderTableSeeder;
 use Database\Seeders\ContactMentorTableSeeder;
 use Database\Seeders\ContactStartupTableSeeder;
+use Database\Seeders\DemoContentTableSeeder;
+use Database\Seeders\DemoProfilesTableSeeder;
 use Database\Seeders\ContentTagsTableSeeder;
 use Database\Seeders\ContentTagsAssignedTableSeeder;
 use Database\Seeders\ConversationReplyTableSeeder;
@@ -111,6 +113,7 @@ class DatabaseSeeder extends Seeder
         $this->call([BxDfpBannerTableSeeder::class]);
         $this->call([BxIndustryreportsTableSeeder::class]);
         $this->call([BxNewsTableSeeder::class]);
+        $this->call([DemoContentTableSeeder::class]);
         $this->call([BxServicesTableSeeder::class]);
         $this->call([ContactBrokerTableSeeder::class]);
         $this->call([ContactBusinessTableSeeder::class]);
@@ -172,6 +175,7 @@ class DatabaseSeeder extends Seeder
         $this->call([SeoTableSeeder::class]);
         $this->call([StartupImagesTableSeeder::class]);
         $this->call([UserAccountTableSeeder::class]);
+        $this->call([DemoProfilesTableSeeder::class]);
         $this->call([UserProfilesTableSeeder::class]);
     }
 }
