@@ -40,7 +40,7 @@
         
         <div class="col-lg-7 hero-content">
           <div style="color: white; text-align: center;">
-            <h2 style="font-size: 32px; font-weight: 700; line-height: 1.4;">It's NEVER AS BAD AS THEY SAY,<br>It's NEVER AS GOOD AS THEY SAY!</h2>
+            <h2 style="color:white" font-size: 32px; font-weight: 700; line-height: 1.4;">It's NEVER AS BAD AS THEY SAY,<br>It's NEVER AS GOOD AS THEY SAY!</h2>
             <p style="font-size: 20px; margin-top: 25px; font-weight: 500;">Decide For Yourself. Do Your Due Diligence!</p>
           </div>
         </div>

@@ -865,7 +865,7 @@
                         <div class="card bex-card-padding-tblr">
                             <div class="card-box-b card-shadow news-box">
                                 <div class="img-box-b">
-                                    <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
+                                    <img src="assets/img/hvalue.jpg" alt="" class="img-b img-fluid">
                                 </div>
                                 <div class="card-overlay">
                                     <div class="card-header-b bse-btn-overlay-w">
@@ -893,7 +893,7 @@
                         <div class="card bex-card-padding-tblr">
                             <div class="card-box-b card-shadow news-box">
                                 <div class="img-box-b">
-                                    <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
+                                    <img src="assets/img/hplan.jpg" alt="" class="img-b img-fluid">
                                 </div>
                                 <div class="card-overlay">
                                     <div class="card-header-b bse-btn-overlay-w">
@@ -921,7 +921,7 @@
                         <div class="card bex-card-padding-tblr">
                             <div class="card-box-b card-shadow news-box">
                                 <div class="img-box-b">
-                                    <img src="assets/img/post-4.jpg" alt="" class="img-b img-fluid">
+                                    <img src="assets/img/hdiligence.jpg" alt="" class="img-b img-fluid">
                                 </div>
                                 <div class="card-overlay">
                                     <div class="card-header-b bse-btn-overlay-w">

@@ -193,22 +193,22 @@ body {
 
 /* Hero specific styles per page */
 .hero-valuation {
-  background-image: url('../images/hero-valuation.jpg');
+  background-image: url('../img/intro-bg.png');
   background-position: center right;
 }
 
 .hero-plan {
-  background-image: url('../images/hero-plan.jpg');
+  background-image: url('../img/headerplan.jpg');
   background-position: center center;
 }
 
 .hero-due-diligence {
-  background-image: url('../images/hero-due-diligence.jpg');
+  background-image: url('../img/diligencebg.jpg');
   background-position: center center;
 }
 
 .hero-broker {
-  background-image: url('../images/hero-broker.jpg');
+  background-image: url('../img/cbb.jpg');
   background-position: center center;
 }
 

@@ -5,7 +5,7 @@
     <div class="container">
       <div class="row align-items-center w-100">
         <div class="col-lg-7 broker-hero-content mb-5 mb-lg-0">
-          <h1>Certified Business Broker (CBB)</h1>
+          <h1 style="color:white">Certified Business Broker (CBB)</h1>
           <p>A Professional Certification Program On Business Brokerage</p>
         </div>
         <div class="col-lg-5">
