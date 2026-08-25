@@ -78,6 +78,7 @@
               @foreach($locationGroups as $stateName => $cities)
                 @php
                   $stateKey = Str::slug($stateName . '-' . $loop->index);
+                  $stateLabel = stateDisplayName($stateName);
                   $cityList = collect($cities)->map(fn ($item) => trim((string) ($item->city ?? $item['city'] ?? '')))->filter()->unique()->values();
                 @endphp
                 <div class="card border-0 mb-2">
@@ -86,7 +87,7 @@
                       <div class="d-flex align-items-center">
                            <input type="checkbox" class="mr-2 parent-location-filter" data-parent-group="location-{{ $stateKey }}"
                              {{ $cityList->isNotEmpty() && $cityList->every(fn ($cityName) => in_array($cityName, $selectedCities, true)) ? 'checked' : '' }}>
-                        {{ $stateName }}
+                        {{ $stateLabel }}
                       </div>
                       <a class="text-dark" data-toggle="collapse" href="#collapseInvestorState-{{ $stateKey }}" aria-expanded="false">
                         <span class="arrow">&#9662;</span>

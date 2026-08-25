@@ -426,10 +426,10 @@
                                                     </div>
                                                     <p>
                                                         <a href="#">{{ $investor['investorCity'] }}</a>,
-                                                        <a href="#">{{ $investor['investorState'] }}</a>
+                                                        <a href="#">{{ stateDisplayName($investor['investorState']) }}</a>
                                                     </p>
                                                     <ul class="bex-service-tags">
-                                                        <li>{{ $investor['investorCity'] }}, {{ $investor['investorState'] }}</li>
+                                                        <li>{{ $investor['investorCity'] }}, {{ stateDisplayName($investor['investorState']) }}</li>
                                                     </ul>
                                                 </div>
                                                 <div class="bex-primary-btn">
@@ -717,7 +717,7 @@
                     @foreach($homePageLocation as $location)
                         <li>
                             <a href="{{ url('/businesslisting/?business_type=all&location='.$location->id) }}"
-                                class="industry-btn">{{ $location->state }}</a>
+                                class="industry-btn">{{ stateDisplayName($location->state) }}</a>
                         </li>
                     @endforeach
                 </ul>

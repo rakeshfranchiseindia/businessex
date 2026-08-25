@@ -32,18 +32,19 @@ class LenderProfileController extends Controller
     {
         try {
             $validated = $request->validate([
-                'name'                   => 'required|string|max:255',
-                'email'                  => 'required|email|max:100|unique:profile_lenders,lender_email',
-                'mobile'                 => 'required|string|max:20',
+                'name'                   => ['required', 'string', 'regex:/^[A-Za-z][A-Za-z .\'-]*$/', 'max:255'],
+                'email'                  => ['required', 'email', 'not_regex:/@(sample\.com|example\.com|test\.com)$/i', 'max:100', 'unique:profile_lenders,lender_email'],
+                'mobile'                 => 'required|digits:10',
                 'location'               => 'required|string|max:255',
-                'advertisement_headline' => 'required|string|max:255',
-                'introduction'           => 'required|string',
+                'location_place_id'      => 'required|string|max:255',
+                'advertisement_headline' => 'required|string|min:25|max:255',
+                'introduction'           => 'required|string|min:25|max:255',
                 'lender_type'            => 'required|in:Private Lender,NBFC Personnel',
                 'occupation'             => 'nullable|string',
                 'lending_interest_rate'  => 'nullable|numeric|min:0|max:100',
                 'sector_preference'      => 'nullable|string|max:255',
                 'profile_pictures'       => 'nullable|file|mimes:png,jpeg,jpg,gif|max:2048',
-                'professional_summary'   => 'nullable|string',
+                'professional_summary'   => 'nullable|string|min:15|max:255',
                 'location_preference'    => 'nullable|string|max:255',
             ], [
                 'email.unique' => 'This email is already registered as a lender.',

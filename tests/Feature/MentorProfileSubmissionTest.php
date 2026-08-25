@@ -15,7 +15,7 @@ class MentorProfileSubmissionTest extends TestCase
     {
         UserAccount::create([
             'name' => 'Test Mentor',
-            'email' => 'mentor@example.com',
+            'email' => 'mentor@business-ex.in',
             'password' => Hash::make('secret123'),
             'mobile' => '9999999999',
             'location' => 'Delhi',
@@ -27,13 +27,14 @@ class MentorProfileSubmissionTest extends TestCase
             'user_id' => 1,
             'mentor_name' => 'John Doe',
             'mentor_mobile' => '9999999999',
-            'mentor_email' => 'mentor@example.com',
+            'mentor_email' => 'mentor@business-ex.in',
             'mentor_location' => 'Delhi',
+            'mentor_location_place_id' => 'ChIJ_PLACE_ID_FOR_TEST',
             'mentor_city' => 'Delhi',
             'mentor_state' => 'Delhi',
             'mentor_country' => 'India',
-            'mentor_adv_headline' => 'Helping startups scale',
-            'mentor_intro' => 'I help founders with GTM strategy.',
+            'mentor_adv_headline' => 'Helping early-stage startups scale sustainably',
+            'mentor_intro' => 'I help founders build repeatable go-to-market strategies and stronger teams.',
             'mentor_occupation' => 'Corporate Professional',
             'mentor_company' => 'Acme Business',
             'mentor_designation' => 'Director',
@@ -48,7 +49,7 @@ class MentorProfileSubmissionTest extends TestCase
         $response->assertRedirect();
         $this->assertDatabaseHas('profile_mentors', [
             'mentor_name' => 'John Doe',
-            'mentor_email' => 'mentor@example.com',
+            'mentor_email' => 'mentor@business-ex.in',
         ]);
     }
 }

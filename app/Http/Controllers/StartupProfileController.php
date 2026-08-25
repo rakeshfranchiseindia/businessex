@@ -31,34 +31,34 @@ class StartupProfileController extends Controller
             // ✅ COMPREHENSIVE VALIDATION
             $validated = $request->validate([
                 // Confidential Information
-                'your_name'                 => 'required|string|max:255',
-                'email'                     => 'required|email|max:100',
-                'mobile_no'                 => 'required|string|max:20',
+                'your_name'                 => ['required', 'string', 'regex:/^[A-Za-z][A-Za-z .\'-]*$/', 'max:255'],
+                'email'                     => ['required', 'email', 'not_regex:/@(sample\.com|example\.com|test\.com)$/i', 'max:100'],
+                'mobile_no'                 => 'required|digits:10',
                 'designation'               => 'required|string|max:100',
 
                 // Advertisement Details
-                'advertisement_headline'    => 'required|string|max:255',
-                'introduction'              => 'required|string',
+                'advertisement_headline'    => 'required|string|min:25|max:255',
+                'introduction'              => 'required|string|min:25|max:255',
 
                 // Company Information
                 'name_of_entity'            => 'required|string|max:255',
                 'business_type'             => 'required|string',
-                'nature_of_entity'          => 'nullable|string',
+                'nature_of_entity'          => 'required|string',
                 'industry_sector'           => 'required|string',
                 'establishment_year'        => 'required|integer|min:1900|max:' . date('Y'),
                 'number_of_employees'       => 'required|string',
-                'certification_incorporation' => 'nullable|file|mimes:png,jpeg,jpg,gif|max:2048',
-                'website'                   => 'nullable|url',
-                'facilities'                => 'nullable|string',
-                'company_summary'           => 'nullable|string',
+                'certification_incorporation' => 'required|file|mimes:png,jpeg,jpg,gif|max:2048',
+                'website'                   => 'required|url|max:255',
+                'facilities'                => 'required|string|min:25|max:55',
+                'company_summary'           => 'required|string|min:15|max:255',
 
                 // Financial Details
-                'annual_sales'              => 'nullable|numeric|min:0',
-                'inventory_value'           => 'nullable|numeric|min:0',
-                'gross_income'              => 'nullable|numeric|min:0',
-                'ebitda'                    => 'nullable|numeric',
-                'ebitda_margin'             => 'nullable|string',
-                'rentals'                   => 'nullable|numeric|min:0',
+                'annual_sales'              => 'nullable|integer|min:0',
+                'inventory_value'           => 'nullable|integer|min:0',
+                'gross_income'             => 'nullable|integer|min:0',
+                'ebitda'                    => 'nullable|integer',
+                'ebitda_margin'            => 'nullable|integer',
+                'rentals'                   => 'nullable|integer|min:0',
 
                 // Social Media Links
                 'facebook_url'              => 'nullable|url',
@@ -68,7 +68,7 @@ class StartupProfileController extends Controller
                 // Headquarters
                 'address'                   => 'required|string',
                 'city'                      => 'nullable|string|max:100',
-                'pin_code'                  => 'required|string|max:20',
+                'pin_code'                  => 'required|digits:6',
 
                 // Director Information
                 'director_name'             => 'nullable|string|max:255',
@@ -84,11 +84,11 @@ class StartupProfileController extends Controller
                 'team_member_email.*'       => 'nullable|email',
 
                 // Business Plan
-                'company_stage'             => 'nullable|string',
-                'customer_problem_solution' => 'nullable|string',
-                'startup_product'           => 'nullable|string',
-                'target_customer_segment'   => 'nullable|string',
-                'target_market'             => 'nullable|string',
+                'company_stage'             => 'required|string',
+                'customer_problem_solution' => 'required|string',
+                'startup_product'           => 'required|string',
+                'target_customer_segment'   => 'required|string',
+                'target_market'             => 'required|string',
                 'competitors'               => 'nullable|string',
                 'competitive_advantage'     => 'nullable|string',
                 'sales_marketing_strategy'  => 'nullable|string',

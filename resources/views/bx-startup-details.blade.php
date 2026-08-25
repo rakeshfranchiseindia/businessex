@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @php
     $startupTitle = $startup->advmt_headline ?: $startup->startup_name ?: 'Startup Profile';
-    $startupLocation = trim(collect([$startup->ofc_city, $startup->ofc_state, $startup->ofc_country])->filter()->implode(', '));
+    $startupLocation = trim(collect([$startup->ofc_city, stateDisplayName($startup->ofc_state), $startup->ofc_country])->filter()->implode(', '));
     $startupImages = $startup->images->filter(fn ($image) => $image->type == 1 && $image->is_active && !empty($image->startup_img_path));
     $industryName = config('industryCategoriesConfig.' . $startup->industry_sector . '.category_name', 'N/A');
     $entityName = config('constants.entityType.' . $startup->nature_of_entity, $startup->nature_of_entity ?: 'N/A');

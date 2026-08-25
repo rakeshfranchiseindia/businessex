@@ -78,7 +78,7 @@
                             <label class="col-md-4 frmtxt mandatory">Mobile No.</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="mobile" class="form-control modysel @error('mobile') is-invalid @enderror" placeholder="Enter Mobile" value="{{ old('mobile') }}" required>
+                                <input type="tel" name="mobile" class="form-control modysel @error('mobile') is-invalid @enderror" placeholder="Enter Mobile" value="{{ old('mobile') }}" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
                                 @error('mobile')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -89,7 +89,8 @@
                             <label class="col-md-4 frmtxt mandatory">Location</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="location" class="form-control modysel @error('location') is-invalid @enderror" placeholder="Enter Location" value="{{ old('location') }}" required>
+                                <input type="text" name="location" class="form-control modysel @error('location') is-invalid @enderror" placeholder="Select Location from Google" value="{{ old('location') }}" data-google-location data-place-id-field="#investor_location_place_id" required>
+                                <input type="hidden" name="location_place_id" id="investor_location_place_id" value="{{ old('location_place_id') }}">
                                 @error('location')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -103,7 +104,7 @@
                             <label class="col-md-4 frmtxt">Advertisement Headline</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="headline" class="form-control modysel @error('headline') is-invalid @enderror" placeholder="Enter Advertisement Headline" value="{{ old('headline') }}">
+                                <input type="text" name="headline" class="form-control modysel @error('headline') is-invalid @enderror" placeholder="Enter Advertisement Headline" value="{{ old('headline') }}" minlength="25" maxlength="255">
                                 @error('headline')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -118,7 +119,7 @@
                             <label class="col-md-4 frmtxt">Introduction</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <textarea name="introduction" class="form-control modysel height70 @error('introduction') is-invalid @enderror" placeholder="Tell about yourself...">{{ old('introduction') }}</textarea>
+                                <textarea name="introduction" class="form-control modysel height70 @error('introduction') is-invalid @enderror" placeholder="Tell about yourself..." minlength="25" maxlength="255">{{ old('introduction') }}</textarea>
                                 @error('introduction')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -164,7 +165,7 @@
                             <div class="col-md-6">
                                 <select name="location_preference[]" class="form-control modysel @error('location_preference') is-invalid @enderror" multiple>
                                     @foreach(collect($locations ?? [])->groupBy(fn ($location) => $location->state ?? $location['state'] ?? '')->sortKeys() as $stateName => $cities)
-                                        <optgroup label="{{ $stateName }}">
+                                        <optgroup label="{{ stateDisplayName($stateName) }}">
                                             @foreach($cities as $city)
                                                 <option value="{{ $city->id ?? $city['id'] }}" {{ in_array((string) ($city->id ?? $city['id']), array_map('strval', (array) old('location_preference', [])), true) ? 'selected' : '' }}>{{ $city->city ?? $city['city'] }}</option>
                                             @endforeach
@@ -410,3 +411,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endsection
+@include('includes.google-location-autocomplete')

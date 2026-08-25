@@ -13,20 +13,26 @@ class ContactUsController extends Controller
      */
     public function submitContactForm(Request $request)
     {
-        // Validation rules
         $validator = Validator::make($request->all(), [
-            'contact_name'    => 'required|string|max:100',
+            'contact_name'    => [
+                'required',
+                'string',
+                'min:5',
+                'max:55',
+                'regex:/^[A-Za-z][A-Za-z .\'-]*$/',
+            ],
             'contact_email'   => [
                 'required',
                 'email',
+                'max:255',
                 function (string $attribute, mixed $value, \Closure $fail): void {
-                    if (preg_match('/@(example\.com|test\.com|sample)$/i', (string) $value)) {
+                    if (preg_match('/@(example\.com|test\.com|sample\.com)$/i', (string) $value)) {
                         $fail('Please provide a valid contact email address.');
                     }
                 },
             ],
-            'contact_mobile'  => 'required|regex:/^[56789][0-9]{9}$/|max:12',
-            'contact_comment' => 'required|string|min:15|max:150',
+            'contact_mobile'  => 'required|digits:10',
+            'contact_comment' => 'required|string|min:15|max:255',
             //'subscribe'       => 'nullable|boolean',
         ]);
 

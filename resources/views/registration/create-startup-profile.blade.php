@@ -85,7 +85,7 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="mobile_no">Mobile No.</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="text" name="mobile_no" id="mobile_no" class="form-control modysel {{ $errors->has('mobile_no') ? 'is-invalid' : '' }}" placeholder="Enter Mobile" value="{{ old('mobile_no') }}">
+                                <input type="tel" name="mobile_no" id="mobile_no" class="form-control modysel {{ $errors->has('mobile_no') ? 'is-invalid' : '' }}" placeholder="Enter Mobile" value="{{ old('mobile_no') }}" inputmode="numeric" pattern="[0-9]{10}" maxlength="10">
                                 @error('mobile_no')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                 @enderror
@@ -128,7 +128,7 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="introduction">Introduction</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6"> 
-                                <textarea name="introduction" id="introduction" class="form-control modysel height70 {{ $errors->has('introduction') ? 'is-invalid' : '' }}">{{ old('introduction', 'Introduction') }}</textarea>
+                                <textarea name="introduction" id="introduction" class="form-control modysel height70 {{ $errors->has('introduction') ? 'is-invalid' : '' }}" minlength="25" maxlength="255">{{ old('introduction') }}</textarea>
                                 @error('introduction')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                 @enderror
@@ -274,7 +274,7 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="facilities">Facilities</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6"> 
-                                <textarea name="facilities" id="facilities" class="form-control modysel height70">{{ old('facilities', 'Facilities') }}</textarea>
+                                <textarea name="facilities" id="facilities" class="form-control modysel height70" minlength="25" maxlength="55">{{ old('facilities') }}</textarea>
                             </div>
                         </div>
                         {{-- Company Summary --}}
@@ -303,7 +303,7 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="annual_sales">Annual Sales</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="text" name="annual_sales" id="annual_sales" class="form-control modysel" placeholder="Enter Annual Sales" value="{{ old('annual_sales') }}">
+                                <input type="number" name="annual_sales" id="annual_sales" class="form-control modysel" placeholder="Enter Annual Sales" value="{{ old('annual_sales') }}" step="1">
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -316,7 +316,7 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="inventory_value">Inventory Value</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="text" name="inventory_value" id="inventory_value" class="form-control modysel" placeholder="Enter Inventory Value" value="{{ old('inventory_value') }}">
+                                <input type="number" name="inventory_value" id="inventory_value" class="form-control modysel" placeholder="Enter Inventory Value" value="{{ old('inventory_value') }}" step="1">
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -329,7 +329,7 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="gross_income">Gross Income</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="text" name="gross_income" id="gross_income" class="form-control modysel" placeholder="Enter Gross Income" value="{{ old('gross_income') }}">
+                                <input type="number" name="gross_income" id="gross_income" class="form-control modysel" placeholder="Enter Gross Income" value="{{ old('gross_income') }}" step="1">
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -342,7 +342,7 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="ebitda">EBITDA</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="text" name="ebitda" id="ebitda" class="form-control modysel" placeholder="Enter EBITDA" value="{{ old('ebitda') }}">
+                                <input type="number" name="ebitda" id="ebitda" class="form-control modysel" placeholder="Enter EBITDA" value="{{ old('ebitda') }}" step="1">
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -356,7 +356,7 @@
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
                                 
-                                <input type="text" name="ebitda_margin" id="ebitda_margin" class="form-control modysel" placeholder="Enter EBITDA Margin" value="{{ old('ebitda_margin') }}">
+                                <input type="number" name="ebitda_margin" id="ebitda_margin" class="form-control modysel" placeholder="Enter EBITDA Margin" value="{{ old('ebitda_margin') }}" step="1">
                                 
                             </div>
                             <div class="tooltipfrm">
@@ -370,7 +370,7 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="rentals">Rentals</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="text" name="rentals" id="rentals" class="form-control modysel" placeholder="Enter Rentals" value="{{ old('rentals') }}">
+                                <input type="number" name="rentals" id="rentals" class="form-control modysel" placeholder="Enter Rentals" value="{{ old('rentals') }}" step="1">
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -431,7 +431,16 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="city">City</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="text" name="city" id="city" class="form-control modysel" placeholder="Enter City" value="{{ old('city') }}">
+                                <select name="city" id="city" class="form-control modysel">
+                                    <option value="">Select City</option>
+                                    @foreach(collect($locations ?? [])->groupBy('state')->sortKeys() as $stateName => $cities)
+                                        <optgroup label="{{ stateDisplayName($stateName) }}">
+                                            @foreach($cities as $cityOption)
+                                                <option value="{{ $cityOption->city }}" {{ old('city') === $cityOption->city ? 'selected' : '' }}>{{ $cityOption->city }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
@@ -440,7 +449,7 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="pin_code">Pin Code</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="text" name="pin_code" id="pin_code" class="form-control modysel {{ $errors->has('pin_code') ? 'is-invalid' : '' }}" placeholder="Enter Pin Code" value="{{ old('pin_code') }}">
+                                <input type="text" name="pin_code" id="pin_code" class="form-control modysel {{ $errors->has('pin_code') ? 'is-invalid' : '' }}" placeholder="Enter Pin Code" value="{{ old('pin_code') }}" inputmode="numeric" pattern="[0-9]{6}" maxlength="6">
                                 @error('pin_code')
                                     <span class="invalid-feedback" role="alert">{{ $message }}</span>
                                 @enderror
@@ -996,4 +1005,5 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 </script>
+@include('includes.google-location-autocomplete')
                     @endsection

@@ -1025,7 +1025,7 @@
 
                             <select name="location_preference[]" id="location_preference" class="form-control modysel" multiple>
                                 @foreach(collect($locations ?? [])->groupBy(fn ($location) => $location->state ?? '')->sortKeys() as $stateName => $cities)
-                                    <optgroup label="{{ $stateName ?: 'Other' }}">
+                                    <optgroup label="{{ stateDisplayName($stateName) ?: 'Other' }}">
                                         @foreach($cities as $city)
                                             <option value="{{ $city->id }}">{{ $city->city }}</option>
                                         @endforeach

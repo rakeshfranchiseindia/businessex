@@ -70,7 +70,7 @@
                             <label class="col-md-4 frmtxt mandatory">Mobile No.</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="mentor_mobile" class="form-control modysel" placeholder="Enter Mobile" required>
+                                <input type="tel" name="mentor_mobile" class="form-control modysel" placeholder="Enter Mobile" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
                             </div>
                         </div>
 
@@ -79,7 +79,8 @@
                             <label class="col-md-4 frmtxt mandatory">Location</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="mentor_location" class="form-control modysel" placeholder="Enter Location" required>
+                                <input type="text" name="mentor_location" class="form-control modysel" placeholder="Select Location from Google" data-google-location data-place-id-field="#mentor_location_place_id" required>
+                                <input type="hidden" name="mentor_location_place_id" id="mentor_location_place_id" value="{{ old('mentor_location_place_id') }}">
                             </div>
                         </div>
 
@@ -88,7 +89,16 @@
                             <label class="col-md-4 frmtxt mandatory">City</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="mentor_city" class="form-control modysel" placeholder="Enter City" required>
+                                <select name="mentor_city" class="form-control modysel" required>
+                                    <option value="">Select City</option>
+                                    @foreach(collect($locations ?? [])->groupBy('state')->sortKeys() as $stateName => $cities)
+                                        <optgroup label="{{ stateDisplayName($stateName) }}">
+                                            @foreach($cities as $cityOption)
+                                                <option value="{{ $cityOption->city }}" {{ old('mentor_city') === $cityOption->city ? 'selected' : '' }}>{{ $cityOption->city }}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
@@ -99,7 +109,7 @@
                             <label class="col-md-4 frmtxt mandatory">Advertisement Headline</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="mentor_adv_headline" class="form-control modysel" placeholder="Enter Advertisement Headline" required>
+                                <input type="text" name="mentor_adv_headline" class="form-control modysel" placeholder="Enter Advertisement Headline" minlength="25" maxlength="255" required>
                             </div>
                         </div>
 
@@ -108,7 +118,7 @@
                             <label class="col-md-4 frmtxt mandatory">Introduction</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <textarea name="mentor_intro" class="form-control modysel height70" placeholder="Introduction"></textarea>
+                                <textarea name="mentor_intro" class="form-control modysel height70" placeholder="Introduction" minlength="25" maxlength="255" required></textarea>
                             </div>
                         </div>
 
@@ -254,6 +264,7 @@
   @include('includes.groupcompany')
   @include('includes.newsletter')
   @include('includes.categorylinkfooter')
+    @include('includes.google-location-autocomplete')
 
 @push('scripts')
 <script>

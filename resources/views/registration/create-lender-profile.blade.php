@@ -68,7 +68,7 @@
                             <label class="col-md-4 frmtxt mandatory" for="mobile">Mobile No.</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="mobile" id="mobile" class="form-control modysel {{ $errors->has('mobile') ? 'is-invalid' : '' }}" placeholder="Enter Mobile" value="{{ old('mobile') }}" required>
+                                <input type="tel" name="mobile" id="mobile" class="form-control modysel {{ $errors->has('mobile') ? 'is-invalid' : '' }}" placeholder="Enter Mobile" value="{{ old('mobile') }}" inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
                                 @error('mobile')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -92,7 +92,8 @@
                             <label class="col-md-4 frmtxt mandatory" for="location">Location</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="location" id="location" class="form-control modysel {{ $errors->has('location') ? 'is-invalid' : '' }}" placeholder="Enter Location" value="{{ old('location') }}" required>
+                                <input type="text" name="location" id="location" class="form-control modysel {{ $errors->has('location') ? 'is-invalid' : '' }}" placeholder="Select Location from Google" value="{{ old('location') }}" data-google-location data-place-id-field="#lender_location_place_id" required>
+                                <input type="hidden" name="location_place_id" id="lender_location_place_id" value="{{ old('location_place_id') }}">
                                 @error('location')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -106,7 +107,7 @@
                             <label class="col-md-4 frmtxt mandatory" for="advertisement_headline">Advertisement Headline</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <input type="text" name="advertisement_headline" id="advertisement_headline" class="form-control modysel {{ $errors->has('advertisement_headline') ? 'is-invalid' : '' }}" placeholder="Enter Advertisement Headline" value="{{ old('advertisement_headline') }}" required>
+                                <input type="text" name="advertisement_headline" id="advertisement_headline" class="form-control modysel {{ $errors->has('advertisement_headline') ? 'is-invalid' : '' }}" placeholder="Enter Advertisement Headline" value="{{ old('advertisement_headline') }}" minlength="25" maxlength="255" required>
                                 @error('advertisement_headline')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -118,7 +119,7 @@
                             <label class="col-md-4 frmtxt mandatory" for="introduction">Introduction</label>
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-md-6">
-                                <textarea name="introduction" id="introduction" class="form-control modysel height70 {{ $errors->has('introduction') ? 'is-invalid' : '' }}" placeholder="Introduction" required>{{ old('introduction') }}</textarea>
+                                <textarea name="introduction" id="introduction" class="form-control modysel height70 {{ $errors->has('introduction') ? 'is-invalid' : '' }}" placeholder="Introduction" minlength="25" maxlength="255" required>{{ old('introduction') }}</textarea>
                                 @error('introduction')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
@@ -245,3 +246,4 @@
   @include('includes.categorylinkfooter')
 
 @endsection
+@include('includes.google-location-autocomplete')

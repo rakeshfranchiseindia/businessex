@@ -38,12 +38,13 @@ class InvestorProfileController extends Controller
     {
         // ✅ Validate form input
         $validated = $request->validate([
-            'name'                  => 'required|string|max:255',
-            'email'                 => 'required|email|max:100|unique:profile_investor,inv_email',
-            'mobile'                => 'required|string|max:20',
+            'name'                  => ['required', 'string', 'regex:/^[A-Za-z][A-Za-z .\'-]*$/', 'max:255'],
+            'email'                 => ['required', 'email', 'not_regex:/@(sample\.com|example\.com|test\.com)$/i', 'max:100', 'unique:profile_investor,inv_email'],
+            'mobile'                => 'required|digits:10',
             'location'              => 'required|string|max:255',
-            'headline'              => 'nullable|string|max:500',
-            'introduction'          => 'nullable|string',
+            'location_place_id'     => 'required|string|max:255',
+            'headline'              => 'nullable|string|min:25|max:255',
+            'introduction'          => 'nullable|string|min:25|max:255',
             'inv_type'              => 'required|in:Individual Investor,Investment Firm',
             'linkedin_profile'      => 'nullable|url|max:255',
             'location_preference'   => 'nullable|array',
@@ -57,7 +58,7 @@ class InvestorProfileController extends Controller
             'purchase_capacity_min' => 'nullable|numeric|min:0',
             'purchase_capacity_max' => 'nullable|numeric|min:0',
             'inv_abt_urself'       => 'nullable|string',
-            'company_name'          => 'nullable|string|max:255',
+            'company_name'          => 'nullable|string|min:15|max:50',
             'company_designation'   => 'nullable|string|max:100',
         ]);
 

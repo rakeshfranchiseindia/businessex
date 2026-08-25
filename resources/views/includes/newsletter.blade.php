@@ -26,25 +26,25 @@
           <form id="newsletterForm" name="newsletterForm" method="POST" action="{{ route('newsLetterSubscribe') }}" class="newsletter-form row">
             @csrf
             <div class="col-sm-6">
-              <input name="newsletter_name" type="text" class="form-control" placeholder="Name">
+              <input name="newsletter_name" type="text" class="form-control" placeholder="Name" pattern="[A-Za-z][A-Za-z .'-]*" maxlength="255" required>
               @error('newsletter_name')
                 <small class="text-danger d-block newsletter-error">{{ $message }}</small>
               @enderror
             </div>
             <div class="col-sm-6">
-              <input name="newsletter_email" type="email" class="form-control" placeholder="Email">
+              <input name="newsletter_email" type="email" class="form-control" placeholder="Email" maxlength="255" required>
               @error('newsletter_email')
                 <small class="text-danger d-block newsletter-error">{{ $message }}</small>
               @enderror
             </div>
             <div class="col-sm-6 mt-3">
-              <input name="newsletter_phone" type="tel" class="form-control" placeholder="Contact No.">
+              <input name="newsletter_phone" type="tel" class="form-control" placeholder="Contact No." inputmode="numeric" pattern="[0-9]{10}" maxlength="10" required>
               @error('newsletter_phone')
                   <small class="text-danger d-block newsletter-error">{{ $message }}</small>
               @enderror
             </div>
             <div class="col-sm-6 mt-3">
-              <input name="newsletter_city" type="text" class="form-control" placeholder="City">
+              <input name="newsletter_city" type="text" class="form-control" placeholder="City" maxlength="255" required>
               @error('newsletter_city')
                 <small class="text-danger d-block newsletter-error">{{ $message }}</small>
               @enderror

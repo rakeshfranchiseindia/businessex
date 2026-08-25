@@ -117,6 +117,7 @@
                       @foreach($locationGroups as $stateName => $cities)
                           @php
                               $stateKey = \Illuminate\Support\Str::slug($stateName . '-' . $loop->index);
+                              $stateLabel = stateDisplayName($stateName);
                               $cityList = collect($cities)->map(function ($item) {
                                   $cityName = trim((string) ($item->city ?? $item['city'] ?? ''));
                                   $cityId = (int) ($item->id ?? $item['id'] ?? 0);
@@ -136,7 +137,7 @@
                                       <a class="d-flex justify-content-between align-items-center text-dark py-2 px-2"
                                          data-toggle="collapse" href="#collapseLocation-{{ $stateKey }}" aria-expanded="false" aria-controls="collapseLocation-{{ $stateKey }}">
                                           <div>
-                                              <input type="checkbox" class="mr-2 parent-location-filter" data-parent-group="location-{{ $stateKey }}" {{ collect($cityList)->every(function ($city) use ($selectedLocations) { return in_array((int) $city['id'], $selectedLocations, true); }) ? 'checked' : '' }}> {{ $stateName }}
+                                              <input type="checkbox" class="mr-2 parent-location-filter" data-parent-group="location-{{ $stateKey }}" {{ collect($cityList)->every(function ($city) use ($selectedLocations) { return in_array((int) $city['id'], $selectedLocations, true); }) ? 'checked' : '' }}> {{ $stateLabel }}
                                           </div>
                                           <span class="arrow">&#9662;</span>
                                       </a>

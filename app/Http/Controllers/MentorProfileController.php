@@ -54,11 +54,18 @@ class MentorProfileController extends Controller
         }
 
         $request->validate([
-            'mentor_name' => ['required', 'string', 'max:100'],
-            'mentor_mobile' => ['required', 'string', 'max:20'],
-            'mentor_email' => ['required', 'email', 'max:100', 'unique:profile_mentors,mentor_email'],
-            'mentor_location' => ['nullable', 'string', 'max:155'],
-            'mentor_occupation' => ['nullable', 'string', 'max:255'],
+            'mentor_name' => ['required', 'string', 'regex:/^[A-Za-z][A-Za-z .\'-]*$/', 'max:100'],
+            'mentor_mobile' => ['required', 'digits:10'],
+            'mentor_email' => ['required', 'email', 'not_regex:/@(sample\.com|example\.com|test\.com)$/i', 'max:100', 'unique:profile_mentors,mentor_email'],
+            'mentor_location' => ['required', 'string', 'max:155'],
+            'mentor_location_place_id' => ['required', 'string', 'max:255'],
+            'mentor_city' => ['required', 'string', 'max:100'],
+            'mentor_adv_headline' => ['required', 'string', 'min:25', 'max:255'],
+            'mentor_intro' => ['required', 'string', 'min:25', 'max:255'],
+            'mentor_occupation' => ['required', 'string', 'max:255'],
+            'mentor_company' => ['nullable', 'string', 'max:255'],
+            'mentor_designation' => ['nullable', 'string', 'max:255'],
+            'mentor_profile_summary' => ['nullable', 'string', 'min:15', 'max:255'],
             'mentor_linkedin' => ['nullable', 'url', 'max:255'],
         ], [
             'mentor_name.required' => 'Your name is required.',

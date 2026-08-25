@@ -84,6 +84,7 @@
               @foreach($locationGroups as $stateName => $cities)
                 @php
                     $stateKey = Str::slug($stateName . '-' . $loop->index);
+                  $stateLabel = stateDisplayName($stateName);
                     $cityList = collect($cities)->map(fn($item) => [
                         'id' => (int) ($item->id ?? $item['id'] ?? 0),
                         'name' => trim((string) ($item->city ?? $item['city'] ?? ''))
@@ -97,7 +98,7 @@
                         <input type="checkbox" class="mr-2 parent-location-filter"
                             data-parent-group="location-{{ $stateKey }}"
                             {{ $cityList->every(fn($city) => in_array($city['id'], $selectedLocations ?? [])) ? 'checked' : '' }}>
-                        {{ $stateName }}
+                        {{ $stateLabel }}
                     </div>
                     <!-- Arrow is the only collapse trigger -->
                     <a class="text-dark" data-toggle="collapse" href="#collapseState-{{ $stateKey }}" aria-expanded="false">

@@ -4,7 +4,7 @@
     $mentorTitle = $mentor->mentor_adv_headline ?: 'Mentor Profile';
     $mentorLocation = collect([
         $mentor->mentor_city,
-        config('constants.statesIndia.' . $mentor->mentor_state),
+        stateDisplayName($mentor->mentor_state),
         $mentor->mentor_country,
     ])->filter()->implode(', ');
     $mentorImage = !empty($mentor->mentor_profile_pic)
