@@ -6003,10 +6003,10 @@ display:block;
 float: right;
 }
 
-
+/*
 .faqcirplusminus.add { background: url(../img/faqscirplus.svg)  no-repeat; top:-3px; }
 .faqcirplusminus.minus { background: url(../img/faqscirminus.svg) no-repeat; }
-
+*/
 
 .faqs_head { font-size: 14px;  line-height: 16px;
  color: #000; font-weight: 400; margin:0px 0 0px 0; cursor: pointer;

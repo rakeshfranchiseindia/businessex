@@ -810,7 +810,7 @@
                                 </div>
                             </div>
 
-                            <div class="row marsettop">
+                            {{--<div class="row marsettop">
                                 <label class="col-12 col-sm-6 col-md-4 frmtxt"></label> 
                                 <div class="d-none d-md-block col-md-1"></div>
                                 <div class="col-12 col-sm-6 col-md-6">
@@ -823,7 +823,7 @@
                                         <img src="{{ asset('assets/img/addmem.svg') }}" alt="Remove Member"> Remove Member
                                     </button>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
 
                         {{-- =============================== --}}

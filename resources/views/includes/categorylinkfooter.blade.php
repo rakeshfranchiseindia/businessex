@@ -32,7 +32,13 @@
                   </a>
                 </li>
               @endforeach
-              <li><a href="{{ url('businesslisting/' . $sub['parentCatId']) }}">View All »</a></li>
+              @php
+                // Collect all subIndustry IDs for this parent category
+                $ids = $subIndustries->pluck('subIndustryid')->toArray();
+                // Build query string like industry[]=24&industry[]=25&industry[]=26
+                $query = http_build_query(['business_type' => 'all', 'annual_sale_min'=>0,'annual_sale_max' => 1000000000, 'industry' => $ids]);
+              @endphp
+              <li><a href="{{ url('businesslisting?'. $query) }}">View All »</a></li>
             </ul>
           </div>
         @endforeach
@@ -59,7 +65,14 @@
                   </a>
                 </li>
               @endforeach
-              <li><a href="{{ url('industry/'.$subIndustries->first()['industrySlug']) }}">View All »</a></li>
+              @php
+                // Collect all subIndustry IDs for this parent category
+                $ids = $subIndustries->pluck('subIndustryid')->toArray();
+                // Build query string like industry[]=24&industry[]=25&industry[]=26
+                $query = http_build_query(['business_type' => 'all', 'min_investment'=>0,'max_investment' => 1000000000, 'industry' => $ids]);
+              @endphp
+
+              <li><a href="{{ url('startuplisting?'. $query) }}">View All »</a></li>
             </ul>
           </div>
         @endforeach
@@ -86,7 +99,13 @@
                   </a>
                 </li>
               @endforeach
-              <li><a href="{{ url('industry/'.$subIndustries->first()['industrySlug']) }}">View All »</a></li>
+              @php
+                // Collect all subIndustry IDs for this parent category
+                $ids = $subIndustries->pluck('subIndustryid')->toArray();
+                // Build query string like industry[]=24&industry[]=25&industry[]=26
+                $query = http_build_query(['minInvestment' => 0, 'maxInvestment' => 1000000, 'industrysub' => $ids]);
+              @endphp
+              <li><a href="{{ url('investorlisting?' . $query) }}">View All »</a></li>
             </ul>
           </div>
         @endforeach
