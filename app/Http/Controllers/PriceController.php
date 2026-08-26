@@ -62,6 +62,7 @@ class PriceController extends Controller
 
     public function initiatePayment(Request $request): View|RedirectResponse
     {
+        
         $validated = $request->validate([
             'your_name' => ['required', 'string', 'regex:/^[A-Za-z][A-Za-z .\'-]*$/', 'min:2', 'max:150'],
             'email_id' => ['required', 'email', 'max:150'],
@@ -74,6 +75,7 @@ class PriceController extends Controller
         ]);
 
         $baseAmount = self::PLAN_AMOUNTS[$validated['selected_plan']];
+        
         $promoCode = $validated['promo_code'] ?? null;
         $coupon = $promoCode
             ? $this->activeCoupon($promoCode, $validated['profile_type'], $validated['selected_plan'])
@@ -85,9 +87,10 @@ class PriceController extends Controller
 
         $discount = $coupon ? $this->discountFor($coupon, $baseAmount) : 0;
         $netAmount = max(1, $baseAmount - $discount);
+        
         $paymentMode = $validated['payment_mode'];
-        $gatewayCharge = (float) config('hdfcpg.charges.' . $paymentMode, 0);
-        $amount = $netAmount + round(($gatewayCharge * $netAmount) / 100);
+        //$gatewayCharge = (float) config('hdfcpg.charges.' . $paymentMode, 0);
+        $amount = $netAmount + round((18 * $netAmount) / 100);
         $orderNo = $this->onlinePayUniqueOrder();
         $productInfo = ucfirst($validated['selected_plan']) . ' ' . $validated['profile_type'] . ' Membership';
 
