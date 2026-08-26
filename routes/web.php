@@ -65,6 +65,11 @@ Route::get('/registration/create-lender-profile', [LenderProfileController::clas
 Route::post('/registration/create-lender-profile', [LenderProfileController::class, 'createLender'])->name('register.create-lender');
 
 Route::get('/pricing', [PriceController::class, 'priceListing'])->name('pricing.listing');
+Route::post('/pricing/promo/validate', [PriceController::class, 'validatePromo'])->name('pricing.validate-promo');
+Route::post('/pricing/payment/initiate', [PriceController::class, 'initiatePayment'])->middleware('throttle:payment-initiation')->name('pricing.payment.initiate');
+Route::post('/pricing/payment/success', [PriceController::class, 'paymentResult'])->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])->defaults('result', 'success')->name('pricing.payment.success');
+Route::post('/pricing/payment/failure', [PriceController::class, 'paymentResult'])->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])->defaults('result', 'failed')->name('pricing.payment.failure');
+Route::post('/pricing/payment/cancel', [PriceController::class, 'paymentResult'])->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class])->defaults('result', 'cancelled')->name('pricing.payment.cancel');
 
 Route::get('/articles', [BxInsightController::class, 'index'])->name('bxinsight.index');
 Route::get('/articles/{id}', [BxInsightController::class, 'show'])->name('bxinsight.show');

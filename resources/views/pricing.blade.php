@@ -31,7 +31,7 @@
         {{-- ==================== PRICING FORM ==================== --}}
         <form
             class="frmall"
-            action="{{-- route('pricing.purchase') --}}"
+            action="{{ route('pricing.payment.initiate') }}"
             method="POST"
             id="pricingForm"
         >
@@ -229,6 +229,9 @@
                                 class="form-control modysel @error('company_name') is-invalid @enderror"
                                 placeholder="Enter Company Name"
                                 value="{{ old('company_name') }}"
+                                pattern="[A-Za-z][A-Za-z ]*"
+                                title="Company name must contain letters and spaces only."
+                                required
                             >
 
                             @error('company_name')
@@ -338,16 +341,6 @@
                                 <option value="OPTNBK"
                                     {{ old('payment_mode') === 'OPTNBK' ? 'selected' : '' }}>
                                     Net Banking
-                                </option>
-
-                                <option value="Paytm"
-                                    {{ old('payment_mode') === 'Paytm' ? 'selected' : '' }}>
-                                    Paytm
-                                </option>
-
-                                <option value="UPI"
-                                    {{ old('payment_mode') === 'UPI' ? 'selected' : '' }}>
-                                    UPI
                                 </option>
 
                             </select>
@@ -1085,8 +1078,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             selectPlan(planName);
 
-            // Submit form after selecting plan
-            form.submit();
+            form.requestSubmit();
 
         });
 
@@ -1164,7 +1156,7 @@ document.addEventListener('DOMContentLoaded', function () {
         promoButton.disabled = true;
         promoButton.innerText = 'Checking...';
 
-        fetch('{{-- route("pricing.validate-promo") --}}', {
+        fetch('{{ route("pricing.validate-promo") }}', {
 
             method: 'POST',
 

@@ -181,14 +181,19 @@ class BxServicePaymentController extends Controller
         string $firstName,
         string $email
     ): string {
-        $hashSequence = config('payu.merchantKey') . '|'
-            . $transactionId . '|'
-            . $amount . '|'
-            . $productInfo . '|'
-            . $firstName . '|'
-            . $email
-            . '|||||||||||'
-            . config('payu.salt');
+        $hashSequence = implode('|', [
+            config('payu.merchantKey'),
+            $transactionId,
+            $amount,
+            $productInfo,
+            $firstName,
+            $email,
+            '',
+            '',
+            '',
+            '',
+            '',
+        ]) . '||||||' . config('payu.salt');
 
         return strtolower(hash('sha512', $hashSequence));
     }
