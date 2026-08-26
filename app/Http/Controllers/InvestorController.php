@@ -19,7 +19,7 @@ class InvestorController extends Controller
         $state          = collect((array) $request->input('state', []))->filter()->values()->all();
         $city           = collect((array) $request->input('city', []))->filter()->values()->all();
         $currentPage    = max(1, (int) $request->input('currentPage', 1));
-        $itemsPerPage   = 3;
+        $itemsPerPage   = config('constants.pagination.items_per_page');
 
         $industryMain   = collect((array) $request->input('industrymain', []))->map(fn ($value) => (int) $value)->filter()->values()->all();
         $industrySub    = collect((array) $request->input('industrysub', []))->map(fn ($value) => (int) $value)->filter()->values()->all();

@@ -74,7 +74,8 @@ class MentorController extends Controller
     }
 
     // Paginate
-    $mentors = $mentorQuery->paginate($itemsPerPage);
+    $perPage = config('constants.pagination.items_per_page');
+    $mentors = $mentorQuery->paginate($perPage);
 
     // Transform collection while preserving pagination
     $mentorListData = $mentors->getCollection()->map(function ($mentor) use ($selectedOccupations) {

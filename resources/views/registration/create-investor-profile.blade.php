@@ -12,13 +12,13 @@
         @endif
 
         @if($errors->any())
-            <div class="alert alert-danger mt-3">
+            {{--<div class="alert alert-danger mt-3">
                 <ul class="mb-0">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-            </div>
+            </div>--}}
         @endif
 
         <!-- Breadcrumb -->
@@ -344,6 +344,8 @@
   @include('includes.newsletter')
   @include('includes.categorylinkfooter')
 
+@include('includes.google-location-autocomplete')
+
 <script>
 // Toggle visibility of profile picture and company logo based on investor type
 document.addEventListener('DOMContentLoaded', function() {
@@ -411,4 +413,3 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 @endsection
-@include('includes.google-location-autocomplete')

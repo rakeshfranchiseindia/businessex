@@ -12,13 +12,13 @@
         @endif
 
         @if($errors->any())
-            <div class="alert alert-danger mt-3">
+            {{--<div class="alert alert-danger mt-3">
                 <ul class="mb-0">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
-            </div>
+            </div>--}}
         @endif
 
         {{-- Breadcrumb --}}
@@ -486,6 +486,9 @@
                                     placeholder="Enter Annual Sales" 
                                     value="{{ old('annual_sales') }}"
                                 >
+                                @error('annual_sales')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -510,6 +513,9 @@
                                     placeholder="Enter Inventory Value" 
                                     value="{{ old('inventory_value') }}"
                                 >
+                                @error('inventory_value')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -534,6 +540,9 @@
                                     placeholder="Enter Gross Income" 
                                     value="{{ old('gross_income') }}"
                                 >
+                                @error('gross_income')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -558,6 +567,9 @@
                                     placeholder="Enter EBITDA" 
                                     value="{{ old('ebitda') }}"
                                 >
+                                @error('ebitda')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -583,6 +595,9 @@
                                     placeholder="Enter EBITDA Margin" 
                                     value="{{ old('ebitda_margin') }}"
                                 >
+                                @error('ebitda_margin')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -607,6 +622,9 @@
                                     placeholder="Enter Rentals" 
                                     value="{{ old('rentals') }}"
                                 >
+                                @error('rentals')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>

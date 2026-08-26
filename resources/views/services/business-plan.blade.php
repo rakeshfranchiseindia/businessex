@@ -17,11 +17,11 @@
             @if(session('error'))
               <div class="alert alert-danger">{{ session('error') }}</div>
             @endif
-            <form class="hero-form" method="POST" action="{{ route('service.payment.initiate') }}">
+            <form name="business-plan-form" class="hero-form" method="POST" action="{{ route('service.payment.initiate') }}">
               @csrf
               <input type="hidden" name="service_type" value="2">
               <div class="form-group">
-                <input type="text" name="name" class="form-control" placeholder="Your Name" value="{{ old('name') }}" required>
+                <input type="text" name="your_name" class="form-control" placeholder="Your Name" value="{{ old('name') }}" required>
               </div>
               <div class="form-group">
                 <input type="email" name="email" class="form-control" placeholder="Your Email" value="{{ old('email') }}" required>

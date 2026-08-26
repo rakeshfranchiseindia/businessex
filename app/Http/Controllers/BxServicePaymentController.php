@@ -17,14 +17,16 @@ class BxServicePaymentController extends Controller
 {
     public function initiateServicePayment(Request $request): View|RedirectResponse
     {
+        
         $validated = $request->validate([
-            'name' => ['required', 'string', 'min:2', 'max:150'],
-            'mobile' => ['required', 'string', 'regex:/^[0-9+() -]{10,20}$/'],
-            'email' => ['required', 'email', 'max:150'],
-            'company' => ['required', 'string', 'min:2', 'max:255'],
+            'your_name'    => ['required', 'regex:/^[A-Za-z\s]+$/', 'min:2', 'max:150'],
+            'mobile' => ['required', 'regex:/^[7-9][0-9]{9}$/'], // only 10 digits
+            'email'        => ['required', 'email', 'max:150'],
+            'company'      => ['required', 'regex:/^[A-Za-z\s]+$/', 'min:2', 'max:255'],
             'payment_mode' => ['required', 'in:OPTCRDC,OPTDBCRD,OPTNBK'],
             'service_type' => ['nullable', 'integer', 'in:1,2,3,4,5'],
         ]);
+
 
         $serviceType = (int) ($validated['service_type'] ?? 1);
 
@@ -52,7 +54,7 @@ class BxServicePaymentController extends Controller
         $payment = BxService::create([
             'order_no' => $orderNo,
             'user_id' => $request->user('web')?->user_id ?: null,
-            'name' => $validated['name'],
+            'name' => $validated['your_name'],
             'email' => $validated['email'],
             'phone' => $validated['mobile'],
             'company' => $validated['company'],
@@ -75,7 +77,7 @@ class BxServicePaymentController extends Controller
                 $orderNo,
                 $amount,
                 $planName,
-                $validated['name'],
+                $validated['your_name'],
                 $validated['email']
             ),
             'txnid' => $orderNo,
@@ -84,7 +86,7 @@ class BxServicePaymentController extends Controller
             'furl' => route('service.payment.payu.failure'),
             'curl' => route('service.payment.payu.cancel'),
             'amount' => $amount,
-            'firstname' => $validated['name'],
+            'firstname' => $validated['your_name'],
             'email' => $validated['email'],
             'phone' => $validated['mobile'],
             'productinfo' => $planName,

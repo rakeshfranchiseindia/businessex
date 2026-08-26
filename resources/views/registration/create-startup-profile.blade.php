@@ -12,7 +12,8 @@
         @endif
 
         @if($errors->any())
-            <div class="alert alert-danger mt-3">
+            <div class="alert alert-danger mt-3" role="alert">
+                <strong>Please correct the highlighted fields.</strong>
                 <ul class="mb-0">
                     @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -274,7 +275,10 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt mandatory" for="facilities">Facilities</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6"> 
-                                <textarea name="facilities" id="facilities" class="form-control modysel height70" minlength="25" maxlength="55">{{ old('facilities') }}</textarea>
+                                <textarea name="facilities" id="facilities" class="form-control modysel height70 {{ $errors->has('facilities') ? 'is-invalid' : '' }}" minlength="25" maxlength="55">{{ old('facilities') }}</textarea>
+                                @error('facilities')
+                                    <span class="invalid-feedback" role="alert">{{ $message }}</span>
+                                @enderror
                             </div>
                         </div>
                         {{-- Company Summary --}}
@@ -303,7 +307,8 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="annual_sales">Annual Sales</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="number" name="annual_sales" id="annual_sales" class="form-control modysel" placeholder="Enter Annual Sales" value="{{ old('annual_sales') }}" step="1">
+                                <input type="number" name="annual_sales" id="annual_sales" class="form-control modysel {{ $errors->has('annual_sales') ? 'is-invalid' : '' }}" placeholder="Enter Annual Sales" value="{{ old('annual_sales') }}" step="1">
+                                @error('annual_sales')<span class="invalid-feedback d-block" role="alert">{{ $message }}</span>@enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -316,7 +321,8 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="inventory_value">Inventory Value</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="number" name="inventory_value" id="inventory_value" class="form-control modysel" placeholder="Enter Inventory Value" value="{{ old('inventory_value') }}" step="1">
+                                <input type="number" name="inventory_value" id="inventory_value" class="form-control modysel {{ $errors->has('inventory_value') ? 'is-invalid' : '' }}" placeholder="Enter Inventory Value" value="{{ old('inventory_value') }}" step="1">
+                                @error('inventory_value')<span class="invalid-feedback d-block" role="alert">{{ $message }}</span>@enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -329,7 +335,8 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="gross_income">Gross Income</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="number" name="gross_income" id="gross_income" class="form-control modysel" placeholder="Enter Gross Income" value="{{ old('gross_income') }}" step="1">
+                                <input type="number" name="gross_income" id="gross_income" class="form-control modysel {{ $errors->has('gross_income') ? 'is-invalid' : '' }}" placeholder="Enter Gross Income" value="{{ old('gross_income') }}" step="1">
+                                @error('gross_income')<span class="invalid-feedback d-block" role="alert">{{ $message }}</span>@enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -342,7 +349,8 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="ebitda">EBITDA</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="number" name="ebitda" id="ebitda" class="form-control modysel" placeholder="Enter EBITDA" value="{{ old('ebitda') }}" step="1">
+                                <input type="number" name="ebitda" id="ebitda" class="form-control modysel {{ $errors->has('ebitda') ? 'is-invalid' : '' }}" placeholder="Enter EBITDA" value="{{ old('ebitda') }}" step="1">
+                                @error('ebitda')<span class="invalid-feedback d-block" role="alert">{{ $message }}</span>@enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -356,7 +364,8 @@
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
                                 
-                                <input type="number" name="ebitda_margin" id="ebitda_margin" class="form-control modysel" placeholder="Enter EBITDA Margin" value="{{ old('ebitda_margin') }}" step="1">
+                                <input type="number" name="ebitda_margin" id="ebitda_margin" class="form-control modysel {{ $errors->has('ebitda_margin') ? 'is-invalid' : '' }}" placeholder="Enter EBITDA Margin" value="{{ old('ebitda_margin') }}" step="1">
+                                @error('ebitda_margin')<span class="invalid-feedback d-block" role="alert">{{ $message }}</span>@enderror
                                 
                             </div>
                             <div class="tooltipfrm">
@@ -370,7 +379,8 @@
                             <label class="col-12 col-sm-6 col-md-4 frmtxt" for="rentals">Rentals</label> 
                             <div class="d-none d-md-block col-md-1">:</div>
                             <div class="col-12 col-sm-6 col-md-6">
-                                <input type="number" name="rentals" id="rentals" class="form-control modysel" placeholder="Enter Rentals" value="{{ old('rentals') }}" step="1">
+                                <input type="number" name="rentals" id="rentals" class="form-control modysel {{ $errors->has('rentals') ? 'is-invalid' : '' }}" placeholder="Enter Rentals" value="{{ old('rentals') }}" step="1">
+                                @error('rentals')<span class="invalid-feedback d-block" role="alert">{{ $message }}</span>@enderror
                             </div>
                             <div class="tooltipfrm">
                                 <i class="fas fa-info-circle"></i>
@@ -1004,6 +1014,32 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+const validationErrors = @json($errors->messages());
+Object.entries(validationErrors).forEach(([fieldName, messages]) => {
+    const arrayFieldName = fieldName.replace(/\.\d+$/, '[]');
+    const field = document.querySelector(`[name="${fieldName}"], [name="${arrayFieldName}"]`);
+
+    if (!field) {
+        return;
+    }
+
+    field.classList.add('is-invalid');
+    const fieldContainer = field.closest('.col-12, .management-team-col') || field.parentElement;
+
+    if (!fieldContainer.querySelector('.invalid-feedback')) {
+        const feedback = document.createElement('span');
+        feedback.className = 'invalid-feedback d-block';
+        feedback.setAttribute('role', 'alert');
+        feedback.textContent = messages[0];
+        fieldContainer.appendChild(feedback);
+    }
+
+    const conditionalSection = field.closest('.conditional-section');
+    if (conditionalSection) {
+        conditionalSection.style.display = 'block';
+    }
+});
 </script>
 @include('includes.google-location-autocomplete')
                     @endsection

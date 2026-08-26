@@ -117,7 +117,7 @@
                                         <div class="inblk">Annual sale <span>{{ $annualSales }}</span></div>
                                         <div class="inblk">Establishment year <span>{{ $business->estb_year ?: 'N/A' }}</span></div>
                                         <div class="inblk">Employee count <span>{{ $business->emp_count ?: 'N/A' }}</span></div>
-                                        <div class="inblk">Entity type <span>{{ $business->entity_type ?: 'N/A' }}</span></div>
+                                        <div class="inblk">Entity type <span>{{ $business->entity_type ? config('constants.businessEntity.' . $business->entity_type) : 'N/A' }}</span></div>
                                         <div class="inblk">Business type <span>{{ $business->business_type ? config('constants.businessType.' . $business->business_type) : 'N/A' }}</span></div>
                                     </div>
 

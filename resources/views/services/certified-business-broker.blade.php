@@ -13,10 +13,10 @@
             <h3>Become a Certified Business Broker</h3>
             @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
             @if(session('error'))<div class="alert alert-danger">{{ session('error') }}</div>@endif
-            <form class="hero-form" method="POST" action="{{ route('service.payment.initiate') }}">
+            <form name="certified-business-broker" class="hero-form" method="POST" action="{{ route('service.payment.initiate') }}">
               @csrf
               <input type="hidden" name="service_type" value="5">
-              <div class="form-group"><input type="text" name="name" class="form-control" placeholder="Your Name" value="{{ old('name') }}" required></div>
+              <div class="form-group"><input type="text" name="your_name" class="form-control" placeholder="Your Name" value="{{ old('name') }}" required></div>
               <div class="form-group"><input type="email" name="email" class="form-control" placeholder="Your Email" value="{{ old('email') }}" required></div>
               <div class="form-group"><input type="tel" name="mobile" class="form-control" placeholder="Your Mobile" value="{{ old('mobile') }}" required></div>
               <div class="form-group"><input type="text" name="company" class="form-control" placeholder="Your Company" value="{{ old('company') }}" required></div>

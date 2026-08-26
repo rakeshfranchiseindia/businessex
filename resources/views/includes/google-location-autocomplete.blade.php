@@ -1,4 +1,5 @@
-@if(config('services.google.maps_api_key'))
+@php($googleMapsApiKey = config('services.google.maps_api_key'))
+@if($googleMapsApiKey)
     @push('scripts')
         <script>
             window.initBusinessExLocationAutocomplete = function () {
@@ -46,6 +47,6 @@
                 });
             };
         </script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ urlencode(config('services.google.maps_api_key')) }}&libraries=places&callback=initBusinessExLocationAutocomplete"></script>
+        <script async src="https://maps.googleapis.com/maps/api/js?key={{ urlencode($googleMapsApiKey) }}&libraries=places&loading=async&callback=initBusinessExLocationAutocomplete"></script>
     @endpush
 @endif

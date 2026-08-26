@@ -10,6 +10,8 @@ class BusinessController extends Controller
 {
     public function businessListing(Request $request)
 {
+    $perPage = config('constants.pagination.items_per_page');
+    
     $businessType = $request->input('business_type', 'all');
     $selectedLocations  = array_filter(array_map('intval', (array) $request->input('location', [])));
     $selectedIndustries = array_filter(array_map('intval', (array) $request->input('industry', [])));
@@ -93,7 +95,7 @@ class BusinessController extends Controller
     $businesses = $query
         ->orderByDesc('activated_at')
         ->orderByDesc('last_login_at')
-        ->paginate(2)
+        ->paginate($perPage)
         ->appends($request->except('page'));
 
     return view('businesslist', compact('businesses', 'businessType'));

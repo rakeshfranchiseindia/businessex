@@ -67,7 +67,7 @@ class StartupController extends Controller
         }
 
         // Get paginated results
-        $itemsPerPage = 2;//config('constants.pagination.items_per_page', 10);
+        $itemsPerPage = config('constants.pagination.items_per_page');
         $startups = $query->paginate($itemsPerPage)->appends($request->except('page'));
 
         // Transform the startup data for view
