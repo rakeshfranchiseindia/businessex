@@ -132,7 +132,12 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect('/dashboard/myaccount');
+            $returnUrl = $request->input('return_url');
+            $returnHost = $returnUrl ? parse_url($returnUrl, PHP_URL_HOST) : null;
+            $profileUrl = $returnHost === $request->getHost()
+                ? $returnUrl
+                : $request->session()->pull('profile_intended_url');
+            return redirect($profileUrl ?: '/dashboard/myaccount');
         }
 
         return back()

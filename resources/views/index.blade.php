@@ -18,15 +18,15 @@
                         <div class="col-xl-6 offset-xs-12 offset-md-12 offset-lg-12 offset-xl-3 align-self-center bex-form-control">
                             <form>
                                 <div class="input-group input-group-hero-main mb-3">
-                                    <select id="inputState" class="form-control">
-                                        <option selected>Select a profile...</option>
-                                        <option value="1">Business | Looking To Sell</option>
-                                        <option value="2">Startup | Looking For Funds</option>
-                                        <option value="3">Investor | Looking To Invest/Buy</option>
-                                        <option value="4">Mentor | Looking To Guide/Coach</option>
+                                    <select id="heroProfileSelect" class="form-control" aria-label="Select profile type">
+                                        <option value="" selected>Select a profile...</option>
+                                        <option value="{{ route('register.create-business-profile') }}">Business | Looking To Sell</option>
+                                        <option value="{{ route('register.create-startup-profile') }}">Startup | Looking For Funds</option>
+                                        <option value="{{ route('register.create-investor-profile') }}">Investor | Looking To Invest/Buy</option>
+                                        <option value="{{ route('register.create-mentor-profile') }}">Mentor | Looking To Guide/Coach</option>
                                     </select>
                                     <div class="input-group-append">
-                                        <button class="btn bex-btn-primary" type="button" id="button-addon2">CREATE PROFILE</button>
+                                        <button class="btn bex-btn-primary" type="button" id="heroCreateProfileBtn">CREATE PROFILE</button>
                                     </div>
                                 </div>
                             </form>
@@ -1075,10 +1075,10 @@
                             <div class="input-group">
                                 <select class="custom-select" id="profileSelect" aria-label="Select profile type">
                                     <option value="" selected>Select a profile...</option>
-                                    <option value="business">Business | Looking To Sell</option>
-                                    <option value="startup">Startup | Looking For Funds</option>
-                                    <option value="investor">Investor | Looking To Invest/Buy</option>
-                                    <option value="mentor">Mentor | Looking To Guide/Coach</option>
+                                    <option value="{{ route('register.create-business-profile') }}">Business | Looking To Sell</option>
+                                    <option value="{{ route('register.create-startup-profile') }}">Startup | Looking For Funds</option>
+                                    <option value="{{ route('register.create-investor-profile') }}">Investor | Looking To Invest/Buy</option>
+                                    <option value="{{ route('register.create-mentor-profile') }}">Mentor | Looking To Guide/Coach</option>
                                 </select>
                                 <div class="input-group-append">
                                     <button class="btn btn-success-main" type="button" id="createProfileBtn">
@@ -1466,40 +1466,29 @@
 
         const createProfileBtn = document.getElementById('createProfileBtn');
         const profileSelect = document.getElementById('profileSelect');
+        const heroCreateProfileBtn = document.getElementById('heroCreateProfileBtn');
+        const heroProfileSelect = document.getElementById('heroProfileSelect');
 
-        if (!createProfileBtn || !profileSelect) {
-            return;
+        function redirectToSelectedProfile(select) {
+            if (!select.value) {
+                select.focus();
+                return;
+            }
+
+            window.location.assign(select.value);
         }
 
-        createProfileBtn.addEventListener('click', function () {
-            const selected = profileSelect.value;
+        if (createProfileBtn && profileSelect) {
+            createProfileBtn.addEventListener('click', function () {
+                redirectToSelectedProfile(profileSelect);
+            });
+        }
 
-            if (!window.isLoggedIn) {
-                const loginModal = new bootstrap.Modal(document.getElementById('login'));
-                loginModal.show();
-            } else {
-                let url = '/registration/create-startup-profile';
-
-                switch (selected) {
-                    case 'startup':
-                        url = '/registration/create-startup-profile';
-                        break;
-                    case 'business':
-                        url = '/registration/create-business-profile';
-                        break;
-                    case 'investor':
-                        url = '/registration/create-investor-profile';
-                        break;
-                    case 'mentor':
-                        url = '/registration/create-mentor-profile';
-                        break;
-                    default:
-                        url = '/registration/create-startup-profile';
-                }
-
-                window.location.href = url;
-            }
-        });
+        if (heroCreateProfileBtn && heroProfileSelect) {
+            heroCreateProfileBtn.addEventListener('click', function () {
+                redirectToSelectedProfile(heroProfileSelect);
+            });
+        }
     });
 </script>
 @endpush

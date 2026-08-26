@@ -64,10 +64,10 @@
     <!-- LOGIN / REGISTER MODAL -->
     <!-- ========================================================= -->
 
-    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
+    <div class="modal fade" id="login" tabindex="-1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close modal-close-control" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <div class="modal-body">
@@ -104,6 +104,7 @@
                                 <div class="emaishow">Or use your email account</div>
                                 <form action="{{ route('login') }}" method="POST">
                                     @csrf
+                                    <input type="hidden" name="return_url" value="{{ url()->current() }}">
                                     <div class="frmblk">
                                         <div class="input-group mb-4"><div class="input-group-prepend"><span class="input-group-text"><img src="{{ asset('assets/img/email-iconnew.svg') }}" alt="Email"></span></div><input id="login_email" name="email" type="email" class="form-control @error('login_email') is-invalid @enderror" placeholder="Enter Your Email ID" value="{{ old('email') }}" autocomplete="email" required></div>
                                         @error('login_email')<small class="text-danger d-block mb-3">{{ $message }}</small>@enderror
@@ -266,10 +267,11 @@
             const currentPath = window.location.pathname.replace(/\/$/, '');
 
             const profileUrls = [
-                '/registration/create-startup-profile',
                 '/registration/create-business-profile',
                 '/registration/create-investor-profile',
-                '/registration/create-mentor-profile'
+                '/registration/create-startup-profile',
+                '/registration/create-mentor-profile',
+                '/registration/create-lender-profile'
             ];
 
             if (!profileUrls.includes(currentPath)) {
@@ -279,6 +281,12 @@
             if (isLoggedIn) {
                 return;
             }
+
+            $('.modal-close-control').hide();
+            $('#login').on('hide.bs.modal', function (event) {
+                event.preventDefault();
+                return false;
+            });
 
             // Bootstrap 4
             $('#login').modal('show');

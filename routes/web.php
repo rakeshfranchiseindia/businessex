@@ -54,15 +54,15 @@ Route::get('/startuplisting/{startup_profile}', [StartupController::class, 'star
 
 
 Route::get('/registration/create-mentor-profile', [MentorProfileController::class, 'createMentorProfile'])->name('register.create-mentor-profile');
-Route::post('/registration/create-mentor-profile', [MentorProfileController::class, 'createMentor'])->name('register.create-mentor');
+Route::post('/registration/create-mentor-profile', [MentorProfileController::class, 'createMentor'])->middleware('profile.auth')->name('register.create-mentor');
 Route::get('/registration/create-business-profile', [BusinessProfileController::class, 'createBusinessProfile'])->name('register.create-business-profile');
-Route::post('/registration/create-business-profile', [BusinessProfileController::class, 'storeBusinessProfile'])->name('register.create-business');
+Route::post('/registration/create-business-profile', [BusinessProfileController::class, 'storeBusinessProfile'])->middleware('profile.auth')->name('register.create-business');
 Route::get('/registration/create-investor-profile', [InvestorProfileController::class, 'createInvestorProfile'])->name('register.create-investor-profile');
-Route::post('/registration/create-investor-profile', [InvestorProfileController::class, 'createInvestor'])->name('register.create-investor');
+Route::post('/registration/create-investor-profile', [InvestorProfileController::class, 'createInvestor'])->middleware('profile.auth')->name('register.create-investor');
 Route::get('/registration/create-startup-profile', [StartupProfileController::class, 'createStartupProfile'])->name('register.create-startup-profile');
-Route::post('/registration/create-startup-profile', [StartupProfileController::class, 'createStartup'])->name('register.create-startup');
+Route::post('/registration/create-startup-profile', [StartupProfileController::class, 'createStartup'])->middleware('profile.auth')->name('register.create-startup');
 Route::get('/registration/create-lender-profile', [LenderProfileController::class, 'createLenderProfile'])->name('register.create-lender-profile');
-Route::post('/registration/create-lender-profile', [LenderProfileController::class, 'createLender'])->name('register.create-lender');
+Route::post('/registration/create-lender-profile', [LenderProfileController::class, 'createLender'])->middleware('profile.auth')->name('register.create-lender');
 
 Route::get('/pricing', [PriceController::class, 'priceListing'])->name('pricing.listing');
 Route::post('/pricing/promo/validate', [PriceController::class, 'validatePromo'])->name('pricing.validate-promo');
