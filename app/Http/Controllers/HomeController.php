@@ -53,17 +53,26 @@ class HomeController extends Controller
         $businessSalesOpportunities = $this->getBusinessSalesOpportunities();
         
         $featuredInvestors = $this->getFeaturedInvestors();
-        $homePageLocation = BxCity::selectRaw('MIN(id) as id, state')
-                            ->groupBy('state')
-                            ->get()
-                            ->map(function ($location) {
-                                $location->state = config(
-                                    'constants.statesIndia.' . $location->state,
-                                    $location->state
-                                );
+        $homePageLocation = BxCity::select('state')
+    ->groupBy('state')
+    ->get()
+    ->map(function($location) {
+        $location->ids = BxCity::where('state', $location->state)->pluck('id')->toArray();
+        return $location;
+    });
 
-                                return $location;
-                            });
+    
+        // $homePageLocation = BxCity::selectRaw('MIN(id) as id, state')
+        //                     ->groupBy('state')
+        //                     ->get()
+        //                     ->map(function ($location) {
+        //                         $location->state = config(
+        //                             'constants.statesIndia.' . $location->state,
+        //                             $location->state
+        //                         );
+
+        //                         return $location;
+        //                     });
         //dd($featuredInvestors);
         $highGrowthStartups = ProfileStartup::with(['management', 'fundraising','industrySector','images'])
             ->where('startup_profile_status', config('constants.ProfileStatus.Active'))

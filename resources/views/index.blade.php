@@ -694,10 +694,15 @@
                               $industryId  = $firstItem['industryid'] ?? '';
                               $industrySlug = $firstItem['industrySlug'] ?? '';
                            @endphp
+                           @php 
+                           $ids = $subIndustries->pluck('subIndustryid')->toArray();
+                
+                            $query = http_build_query(['business_type' => 'sale', 'annual_sale_min'=>0,'annual_sale_max' => 1000000000, 'industry' => $ids]);
+                           @endphp
 
                            @if($industryId && $industrySlug)
                               <li>
-                                 <a href="{{ url('/businesslisting?business_type=all&industry='.$industryId.'&slug='.$industrySlug) }}"
+                                 <a href="{{ url('/businesslisting?'.$query.'&slug='.$industrySlug) }}"
                                     class="industry-btn">
                                        {{ $industryName }}
                                  </a>
@@ -716,28 +721,29 @@
                 <ul class="list-unstyled d-flex flex-wrap gap-2">
                     @foreach($homePageLocation as $location)
                         <li>
-                            <a href="{{ url('/businesslisting/?business_type=all&location='.$location->id) }}"
-                                class="industry-btn">{{ stateDisplayName($location->state) }}</a>
+                            <a href="{{ url('/businesslisting?business_type=sale&'.http_build_query(['location' => $location->ids])) }}"
+                            class="industry-btn">{{ stateDisplayName($location->state) }}</a>
                         </li>
                     @endforeach
                 </ul>
             </div>
 
+
             <!-- View Opportunities By Investment -->
          <div class="industry-section industry-section-compact">
             <h3 class="h5 font-weight-bold mb-3 homepage-section-heading">View Opportunities By Investment</h3>
             <ul class="list-unstyled d-flex flex-wrap gap-2">
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=50000&max=200000') }}" class="industry-btn">₹50K - ₹2Lakh</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=200000&max=500000') }}" class="industry-btn">₹2Lakh - ₹5Lakh</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=500000&max=1000000') }}" class="industry-btn">₹5Lakh - ₹10Lakh</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=1000000&max=2000000') }}" class="industry-btn">₹10Lakh - ₹20Lakh</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=2000000&max=3000000') }}" class="industry-btn">₹20Lakh - ₹30Lakh</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=3000000&max=5000000') }}" class="industry-btn">₹30Lakh - ₹50Lakh</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=5000000&max=10000000') }}" class="industry-btn">₹50Lakh - ₹1Cr</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=10000000&max=20000000') }}" class="industry-btn">₹1Cr - ₹2Cr</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=20000000&max=50000000') }}" class="industry-btn">₹2Cr - ₹5Cr</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=50000000&max=100000000') }}" class="industry-btn">₹5Cr - ₹10Cr</a></li>
-               <li><a href="{{ url('/businesslisting?business_type=sale&min=100000000&max=200000000') }}" class="industry-btn">₹10Cr - ₹20Cr</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=50000&annual_sale_max=200000') }}" class="industry-btn">₹50K - ₹2Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=200000&annual_sale_max=500000') }}" class="industry-btn">₹2Lakh - ₹5Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=500000&annual_sale_max=1000000') }}" class="industry-btn">₹5Lakh - ₹10Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=1000000&annual_sale_max=2000000') }}" class="industry-btn">₹10Lakh - ₹20Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=2000000&annual_sale_max=3000000') }}" class="industry-btn">₹20Lakh - ₹30Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=3000000&annual_sale_max=5000000') }}" class="industry-btn">₹30Lakh - ₹50Lakh</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=5000000&annual_sale_max=10000000') }}" class="industry-btn">₹50Lakh - ₹1Cr</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=10000000&annual_sale_max=20000000') }}" class="industry-btn">₹1Cr - ₹2Cr</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=20000000&annual_sale_max=50000000') }}" class="industry-btn">₹2Cr - ₹5Cr</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=50000000&annual_sale_max=100000000') }}" class="industry-btn">₹5Cr - ₹10Cr</a></li>
+               <li><a href="{{ url('/businesslisting?business_type=sale&annual_sale_min=100000000&annual_sale_max=200000000') }}" class="industry-btn">₹10Cr - ₹20Cr</a></li>
             </ul>
          </div>
 

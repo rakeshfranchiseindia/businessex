@@ -32,10 +32,6 @@ use App\Http\Controllers\SocialLoginController;
 
 
 
-// Route::get('/', function () {
-//     return view('index');
-// })->name('home');
-
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::post('/newsLetterSubscribe', [SubscribeController::class, 'newsLetterSubscribe'])->middleware('throttle:newsletter')->name('newsLetterSubscribe')->withoutMiddleware('auth');
 
